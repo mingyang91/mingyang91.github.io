@@ -112,7 +112,9 @@ theme: yinwang
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: git
+  repo: git@github.com:mingyang91/mingyang91.github.io.git
+  branch: gh-pages
 
 google_analytics:
   tracking_id: UA-72173137-1
