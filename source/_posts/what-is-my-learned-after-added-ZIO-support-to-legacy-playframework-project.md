@@ -1,7 +1,11 @@
 ---
-title: what is my learned after added ZIO support to legacy playframework project
+title: What is my learned after added ZIO support to legacy playframework project
 date: 2021-05-13 18:37:55
-tags: ZIO Scala PlayFramework Architecture-design
+tags: 
+  - ZIO
+  - Scala
+  - Play Framework
+  - Architecture design
 ---
 
 # 起因
