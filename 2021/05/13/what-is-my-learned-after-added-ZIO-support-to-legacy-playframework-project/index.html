@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"famer.me","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="起因Scala Meetup 演讲 当下社区中的几种方案… 进化 1PlayRunner 进化 2ZController + ZRunner 进化 3ZController + Runtime.Managed 结论">
+  <meta name="description" content="CauseIn 2020, I participated in the China Scala Meetup as a speaker and shared “Introduction to ZIO”. The content is, what is my learned from “I spend 3 months for migration from Future to ZIO in lega">
 <meta property="og:type" content="article">
 <meta property="og:title" content="What is my learned after added ZIO support to legacy playframework project">
 <meta property="og:url" content="https://famer.me/2021/05/13/what-is-my-learned-after-added-ZIO-support-to-legacy-playframework-project/index.html">
 <meta property="og:site_name" content="My Space">
-<meta property="og:description" content="起因Scala Meetup 演讲 当下社区中的几种方案… 进化 1PlayRunner 进化 2ZController + ZRunner 进化 3ZController + Runtime.Managed 结论">
+<meta property="og:description" content="CauseIn 2020, I participated in the China Scala Meetup as a speaker and shared “Introduction to ZIO”. The content is, what is my learned from “I spend 3 months for migration from Future to ZIO in lega">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-13T10:37:55.000Z">
-<meta property="article:modified_time" content="2021-05-14T10:02:19.315Z">
+<meta property="article:modified_time" content="2021-05-14T11:22:55.756Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="Scala">
 <meta property="article:tag" content="Architecture design">
@@ -193,7 +193,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-14 18:02:19" itemprop="dateModified" datetime="2021-05-14T18:02:19+08:00">2021-05-14</time>
+                <time title="Modified: 2021-05-14 19:22:55" itemprop="dateModified" datetime="2021-05-14T19:22:55+08:00">2021-05-14</time>
               </span>
 
           
@@ -207,7 +207,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>Scala Meetup 演讲</p>
+        <h1 id="Cause"><a href="#Cause" class="headerlink" title="Cause"></a>Cause</h1><p>In 2020, I participated in the China Scala Meetup as a speaker and shared <a target="_blank" rel="noopener" href="https://github.com/scalacn/scala-meetup/blob/master/2020/09/Zio%20%E5%85%A5%E9%97%A8%E5%88%86%E4%BA%AB--by%20%E6%98%8E%E6%89%AC.pptx">“Introduction to ZIO”</a>. The content is, what is my learned from “I spend 3 months for migration from <code>Future</code> to <code>ZIO</code> in legacy playframework project.</p>
 <h1 id="当下"><a href="#当下" class="headerlink" title="当下"></a>当下</h1><p>社区中的几种方案…</p>
 <h1 id="进化-1"><a href="#进化-1" class="headerlink" title="进化 1"></a>进化 1</h1><p>PlayRunner</p>
 <h1 id="进化-2"><a href="#进化-2" class="headerlink" title="进化 2"></a>进化 2</h1><p>ZController + ZRunner</p>
@@ -295,7 +295,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B5%B7%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BD%93%E4%B8%8B"><span class="nav-number">2.</span> <span class="nav-text">当下</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%8C%96-1"><span class="nav-number">3.</span> <span class="nav-text">进化 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%8C%96-2"><span class="nav-number">4.</span> <span class="nav-text">进化 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%8C%96-3"><span class="nav-number">5.</span> <span class="nav-text">进化 3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">6.</span> <span class="nav-text">结论</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cause"><span class="nav-number">1.</span> <span class="nav-text">Cause</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BD%93%E4%B8%8B"><span class="nav-number">2.</span> <span class="nav-text">当下</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%8C%96-1"><span class="nav-number">3.</span> <span class="nav-text">进化 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%8C%96-2"><span class="nav-number">4.</span> <span class="nav-text">进化 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%8C%96-3"><span class="nav-number">5.</span> <span class="nav-text">进化 3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">6.</span> <span class="nav-text">结论</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
