@@ -170,7 +170,7 @@ trait ZController[Z, R[_], B] {
 ```scala
 object ExampleController {
   case class Config(endpoint: String)
-  val flow: ZIO[Has[WSClient], Throwable, String] = ???
+  def flow(endpoint: String, url: String, body: RawBuffer): ZIO[Has[WSClient], Throwable, String] = ???
 }
 
 class ExampleController(cc: ControllerComponents,
@@ -181,7 +181,7 @@ class ExampleController(cc: ControllerComponents,
   extends AbstractController(cc) with ZController[Has[WSClient], MemberRequest, RawBuffer] {
 
   def handle(url: String): Action[RawBuffer] = MAction(parse.raw) zio { request: MemberRequest[RawBuffer] =>
-    flow
+    flow(config.endpoint, url, request.body)
       .map(name => Ok(name))
       .mapError(e => InternalServerError("Oh no!\n" + e.getMessage))
       .merge
