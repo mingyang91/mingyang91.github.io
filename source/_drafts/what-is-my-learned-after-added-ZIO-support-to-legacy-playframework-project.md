@@ -19,6 +19,7 @@ In 2020, I participated in the China Scala Meetup as a speaker and shared ["Intr
 但想在遗留项目中实现这个愿景并不容易，主要挑战来自遗留项目的代码耦合，依赖耦合。
 参见[反面教材](https://github.com/mingyang91/scala-meetup/tree/master/src/main/scala/meetup/di/legacy)。
 仅仅想测试其中一小部分功能，却需要构所有依赖的实例
+
 ```scala
 package meetup.di.legacy
 
@@ -55,7 +56,10 @@ object djx314 extends App with Demo {
 
 }
 ```
+Why do I have to do so much preparation to test this simple function.
 为什么会这样？因为他是类的方法，而这个类有太多的构造参数，这些构造参数对于我们要测试的函数来说是不必要的。
+
+[反面教材](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java)
 
 若想让工程代码最大程度上可移植、可测试，一个容易的方法是”不要将与对象无关(不使用 this)的函数放在类中，将他们移动到 object(or java static) 去。“
 当然，尽可能编写纯函数、引用透明也对达成这一目标有正面作用。
