@@ -117,7 +117,7 @@ The whole system is like a balls made up of strings and knots.
 # Current Situation
 
 社区中的方案...
-zio layer 每次 unsafeRun 都会重新生成，这很纯函数式，但这不符合 web 服务。例如连接池
+zio layer 每次 unsafeRun 都会重新生成，这很纯函数式，但这不适合 web 服务。例如连接池
 
 遇到的问题
 * 连接池
