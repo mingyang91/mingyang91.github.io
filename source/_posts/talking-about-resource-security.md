@@ -194,44 +194,45 @@ C++ 提出了 RAII 这一先进概念，几乎解决了资源安全问题。但�
 using namespace std;
 
 class A{
-	public:
-		A(const string& str, int* arr):_str(str),_arr(arr){cout << "parameter ctor" << endl;}
-		A(A&& obj):_str(std::move(obj._str)),_arr(std::move(obj._arr)){cout << "move ctor" << endl;}
-		A& operator =(A&& rhs){
-			_str = std::move(rhs._str);
-			_arr = std::move(rhs._arr);
-			rhs._arr = nullptr;
-			cout << "move assignment operation" << endl;
-			return *this;
-		}
-		void print(){
-			cout << _str << endl;
-		}
-		~A(){
-			delete[] _arr;
-			cout << "dtor" << endl;
-		}
-	private:
-		string _str;
-		int* _arr;
+    public:
+        A(const string& str, int* arr):_str(str),_arr(arr){cout << "parameter ctor" << endl;}
+        A(A&& obj):_str(std::move(obj._str)),_arr(std::move(obj._arr)){cout << "move ctor" << endl;}
+        A& operator =(A&& rhs){
+            _str = std::move(rhs._str);
+            _arr = std::move(rhs._arr);
+            rhs._arr = nullptr;
+            cout << "move assignment operation" << endl;
+            return *this;
+        }
+        void print(){
+            cout << _str << endl;
+        }
+        ~A(){
+            delete[] _arr;
+            cout << "dtor" << endl;
+        }
+    private:
+        string _str;
+        int* _arr;
 };
 
 int main(){
-	int* arr = new int[6] {1,1,4,5,1,4};
-	A a("Yajuu Senpai", std::move(arr)); // parameter ctor
-	A b(std::move(a));   // move ctor
+    int* arr = new int[6] {1,1,4,5,1,4};
+    A a("Yajuu Senpai", std::move(arr)); // 错误的栈指针移动 --> STUPID MOVE!!
+    A b(std::move(a));   // move ctor
 
-	cout << "print a: ";
-	a.print();           // a 失去所有权  --> CORRECT!!
-	cout << "print b: ";
-	b.print();           // b 获得所有权  --> CORRECT!!
+    cout << "print a: ";
+    a.print();           // a 失去所有权  --> CORRECT!!
+    cout << "print b: ";
+    b.print();           // b 获得所有权  --> CORRECT!!
 
-	b = std::move(a);    // 二次移动
+    b = std::move(a);    // 二次移动
 
-	cout << "print a: "; 
-	a.print();           // ???
-	cout << "print b: "; 
-	b.print();           // ???
+    cout << "print a: "; 
+    a.print();           // ???
+    cout << "print b: "; 
+    b.print();           // ???
+}
 ```
 
 ### Rust
