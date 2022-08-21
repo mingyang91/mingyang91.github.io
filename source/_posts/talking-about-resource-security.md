@@ -138,7 +138,7 @@ use((res) -> {
 
 ```java
 static HttpEntity fileEntity(String filename) throws IOException {
-	try (FileReader fr = new FileReader(path);
+  try (FileReader fr = new FileReader(path);
        BufferedReader br = new BufferedReader(fr)) {
     return new HttpEntity(br);
   }
@@ -153,7 +153,7 @@ static HttpEntity fileEntity(String filename) throws IOException {
 
 // 伪代码
 static HttpEntity fileEntity(String filename) throws IOException {
-	final FileReader fr = new FileReader(path);
+  final FileReader fr = new FileReader(path);
   final BufferedReader br = new BufferedReader(fr);
   return new HttpEntity(br) {
     public void close() {
