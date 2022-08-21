@@ -196,7 +196,7 @@ using namespace std;
 class A{
     public:
         A(const string& str, int* arr):_str(str),_arr(arr){cout << "parameter ctor" << endl;}
-        A(A&& obj):_str(std::move(obj._str)),_arr(std::move(obj._arr)){cout << "move ctor" << endl;}
+        A(A&& obj):_str(std::move(obj._str)),_arr(std::move(obj._arr)){obj._arr = nullptr;cout << "move ctor" << endl;}
         A& operator =(A&& rhs){
             _str = std::move(rhs._str);
             _arr = std::move(rhs._arr);
@@ -218,7 +218,7 @@ class A{
 
 int main(){
     int* arr = new int[6] {1,1,4,5,1,4};
-    A a("Yajuu Senpai", std::move(arr)); // 错误的栈指针移动 --> STUPID MOVE!!
+    A a("Yajuu Senpai", std::move(arr)); // 错误的指针移动 --> STUPID MOVE!!
     A b(std::move(a));   // move ctor
 
     cout << "print a: ";
