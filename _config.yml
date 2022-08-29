@@ -119,3 +119,14 @@ deploy:
 google_analytics:
   tracking_id: UA-72173137-1
   localhost_ignored: true
+
+# Demo: https://utteranc.es/  http://trumandu.github.io/about/
+utteranc:
+  enable: true
+  repo: mingyang91/mingyang91.github.io
+  pathname: pathname
+  # theme: github-light,github-dark,github-dark-orange
+  theme: github-light
+  cdn: https://utteranc.es/client.js
+  # If you want to modify priority, please config in **hexo**
+  #priority:
