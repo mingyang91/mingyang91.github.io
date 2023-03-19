@@ -5,8 +5,6 @@ tags:
   - System design
   - PostgreSQL
 ---
-# Implement the file tree in PostgreSQL using ltree
-
 # Background
 
 A file tree is a hierarchical structure used to organize files and directories on a computer. It allows users to easily navigate and access their files and folders, and is commonly used in operating systems and file management software.
