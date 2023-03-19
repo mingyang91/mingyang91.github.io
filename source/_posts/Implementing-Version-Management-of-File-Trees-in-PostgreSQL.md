@@ -7,7 +7,7 @@ tags:
 ---
 # Overview
 
-In the [previous post](https://www.notion.so/Implement-the-file-tree-in-PostgreSQL-using-ltree-126700c6ec7446a7b10762351418f71c), we discussed how to implement a file tree in PostgreSQL using `ltree`. Now, let's talk about how to integrate version control management for the file tree.
+In the [previous post](/2023/03/19/Implement-the-file–tree-in-PostgreSQL-using-ltree/), we discussed how to implement a file tree in PostgreSQL using `ltree`. Now, let's talk about how to integrate version control management for the file tree.
 
 Version control is a process for managing changes made to a file tree over time. This allows for the tracking of its history and the ability to revert to previous versions, making it an essential tool for file management.
 
