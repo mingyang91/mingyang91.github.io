@@ -103,7 +103,7 @@ PostgreSQL's LTREE data type allows you to use a sequence of alphanumeric charac
 
 **Slashes(`/`)** will be **replaced** with **dots(`.`)**. I think it does not require further explanation.
 
-Initially, I attempted to encode all non-alphabetic characters into their Unicode hex format. However, after receiving advice from @Juchao Song , I discovered that using **base64** encoding can be more efficient in terms of information entropy. Ultimately, I decided to use **base62** encoding instead to ensure that no illegal characters are produced and to achieve the maximum possible information entropy.
+Initially, I attempted to encode all non-alphabetic characters into their Unicode hex format. However, after receiving advice from other guys, I discovered that using **base64** encoding can be more efficient in terms of information entropy. Ultimately, I decided to use **base62** encoding instead to ensure that no illegal characters are produced and to achieve the maximum possible information entropy.
 
 This is the final representation of the physical data that will be stored in the index of PostgreSQL.
 
