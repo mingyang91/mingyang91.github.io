@@ -53,7 +53,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt install pandoc
+          sudo apt install pandoc
           npm install -g pnpm
           pnpm install
 
