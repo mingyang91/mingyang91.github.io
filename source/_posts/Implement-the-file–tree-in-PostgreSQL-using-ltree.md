@@ -205,3 +205,35 @@ $$ LANGUAGE plpgsql
 ## Util: base62 encode function
 
 By using the base62_encode function, we can create a string that meets the requirements of LTREE and achieves maximum information entropy.
+
+```sql
+CREATE OR REPLACE FUNCTION base62_encode(data TEXT) RETURNS TEXT AS $$
+DECLARE
+    ALPHABET CHAR(62)[] := ARRAY[
+        '0','1','2','3','4','5','6','7','8','9',
+        'A','B','C','D','E','F','G','H','I','J',
+        'K','L','M','N','O','P','Q','R','S','T',
+        'U','V','W','X','Y','Z','a','b','c','d',
+        'e','f','g','h','i','j','k','l','m','n',
+        'o','p','q','r','s','t','u','v','w','x',
+        'y','z'
+    ];
+    BASE BIGINT := 62;
+    result TEXT := '';
+    val numeric := 0;
+    bytes bytea := data::bytea;
+    len INT := length(data::bytea);
+BEGIN
+    FOR i IN 0..(len - 1) LOOP
+        val := (val * 256) + get_byte(bytes, i);
+    END LOOP;
+
+    WHILE val > 0 LOOP
+        result := ALPHABET[val % BASE + 1] || result;
+        val := floor(val / BASE);
+    END LOOP;
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+```
