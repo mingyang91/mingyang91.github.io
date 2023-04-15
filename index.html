@@ -189,7 +189,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-04-15 00:31:35 / Modified: 00:41:36" itemprop="dateCreated datePublished" datetime="2023-04-15T00:31:35+08:00">2023-04-15</time>
+              <time title="Created: 2023-04-15 00:31:35 / Modified: 11:34:25" itemprop="dateCreated datePublished" datetime="2023-04-15T00:31:35+08:00">2023-04-15</time>
             </span>
 
           
@@ -230,9 +230,71 @@
 <li>Events will be filtered using content filtering mode, ensuring that only events that meet the specified conditions are sent to subscribers.</li>
 </ul>
 <h1 id="architecture">Architecture</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">  Hub([Hub])</span><br><span class="line">  Buffer0[\&quot;Buffer drop oldest&quot;/]</span><br><span class="line">  Buffer1[\&quot;Buffer1 drop oldest&quot;/]</span><br><span class="line">  Buffer2[\&quot;Buffer2 drop oldest&quot;/]</span><br><span class="line">  Buffer3[\&quot;Buffer3 drop oldest&quot;/]</span><br><span class="line">  Filter1[\&quot;File(Record = 111)&quot;/]</span><br><span class="line">  Filter2[\&quot;Workflow(Project = 222)&quot;/]</span><br><span class="line">  Filter3[\&quot;File(Project = 333)&quot;/]</span><br><span class="line">  Broadcast((Broadcast))</span><br><span class="line">  Client1(Client1)</span><br><span class="line">  Client2(Client2)</span><br><span class="line">  Client3(Client3)</span><br><span class="line">  Hub --&gt; Buffer0</span><br><span class="line">  subgraph Server</span><br><span class="line">    Buffer0 --&gt; Broadcast</span><br><span class="line">    Broadcast --&gt; Filter1 --&gt; Buffer1 --&gt; Observer1</span><br><span class="line">    Broadcast --&gt; Filter2 --&gt; Buffer2 --&gt; Observer2</span><br><span class="line">    Broadcast --&gt; Filter3 --&gt; Buffer3 --&gt; Observer3</span><br><span class="line">  end</span><br><span class="line">  subgraph Clients</span><br><span class="line">    Observer1 -.-&gt; Client1</span><br><span class="line">    Observer2 -.-&gt; Client2</span><br><span class="line">    Observer3 -.-&gt; Client3</span><br><span class="line">  end</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+  Hub([Hub])
+  Buffer0[\&quot;Buffer drop oldest&quot;/]
+  Buffer1[\&quot;Buffer1 drop oldest&quot;/]
+  Buffer2[\&quot;Buffer2 drop oldest&quot;/]
+  Buffer3[\&quot;Buffer3 drop oldest&quot;/]
+  Filter1[\&quot;File(Record = 111)&quot;/]
+  Filter2[\&quot;Workflow(Project = 222)&quot;/]
+  Filter3[\&quot;File(Project = 333)&quot;/]
+  Broadcast((Broadcast))
+  Client1(Client1)
+  Client2(Client2)
+  Client3(Client3)
+  Hub --&gt; Buffer0
+  subgraph Server
+    Buffer0 --&gt; Broadcast
+    Broadcast --&gt; Filter1 --&gt; Buffer1 --&gt; Observer1
+    Broadcast --&gt; Filter2 --&gt; Buffer2 --&gt; Observer2
+    Broadcast --&gt; Filter3 --&gt; Buffer3 --&gt; Observer3
+  end
+  subgraph Clients
+    Observer1 -.-&gt; Client1
+    Observer2 -.-&gt; Client2
+    Observer3 -.-&gt; Client3
+  end</code></pre>
 <h2 id="high-level-overview">High-Level Overview</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">  Pipe#a[[...Pipe...]]</span><br><span class="line">  Pipe#b[[...Pipe...]]</span><br><span class="line">  subgraph Hub</span><br><span class="line">  direction LR</span><br><span class="line">  Event1((Event1))</span><br><span class="line">	Event2((Event2))</span><br><span class="line">  Event3((Event3))</span><br><span class="line">  Event4((Event4))</span><br><span class="line">  Event5((Event5))</span><br><span class="line">  Event6((Event6))</span><br><span class="line">  Event7((Event7))</span><br><span class="line">  Event8((Event8))</span><br><span class="line">  Event1 -.-&gt; Event2 -.-&gt; Event3 -.-&gt; Event4 -.-&gt; Event5 -.-&gt; Event6 -.-&gt; Event7 -.-&gt; Event8</span><br><span class="line">  end</span><br><span class="line">	Pipe#a -.-&gt; Event1</span><br><span class="line">  Event8 -.-&gt; Pipe#b</span><br><span class="line">  subgraph Client1</span><br><span class="line">  direction LR</span><br><span class="line">  C1Subscribe((Start))</span><br><span class="line">  C1Cancel((End))</span><br><span class="line">  Event2 -.-&gt; C1Listen2</span><br><span class="line">  Event3 -.-&gt; C1Listen3</span><br><span class="line">  Event4 -.-&gt; C1Listen4</span><br><span class="line">  Event5 -.-&gt; C1Listen5</span><br><span class="line">  C1Subscribe -.-&gt; C1Listen2 -.-&gt; C1Listen3 -.-&gt; C1Listen4 -.-&gt; C1Listen5 -.-&gt; C1Cancel</span><br><span class="line">  end</span><br><span class="line">  subgraph Client2</span><br><span class="line">  direction LR</span><br><span class="line">  C2Subscribe((Start))</span><br><span class="line">  C2Cancel((End))</span><br><span class="line">  Lag((&quot;❌&quot;))</span><br><span class="line">  C2Subscribe -.-&gt; C2Listen1 -- &quot;Poor Network&quot; ---&gt; Lag --&quot;Packet loss&quot;---&gt; C2Listen5 -.-&gt; C2Listen6 -.-&gt; C2Listen7 -.-&gt; C2Listen8 -.-&gt; C2Cancel</span><br><span class="line">  Event1 -.-&gt; C2Listen1</span><br><span class="line">  Event5 -.-&gt; C2Listen5</span><br><span class="line">  Event6 -.-&gt; C2Listen6</span><br><span class="line">  Event7 -.-&gt; C2Listen7</span><br><span class="line">  Event8 -.-&gt; C2Listen8</span><br><span class="line">  end</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+  Pipe#a[[...Pipe...]]
+  Pipe#b[[...Pipe...]]
+  subgraph Hub
+  direction LR
+  Event1((Event1))
+	Event2((Event2))
+  Event3((Event3))
+  Event4((Event4))
+  Event5((Event5))
+  Event6((Event6))
+  Event7((Event7))
+  Event8((Event8))
+  Event1 -.-&gt; Event2 -.-&gt; Event3 -.-&gt; Event4 -.-&gt; Event5 -.-&gt; Event6 -.-&gt; Event7 -.-&gt; Event8
+  end
+	Pipe#a -.-&gt; Event1
+  Event8 -.-&gt; Pipe#b
+  subgraph Client1
+  direction LR
+  C1Subscribe((Start))
+  C1Cancel((End))
+  Event2 -.-&gt; C1Listen2
+  Event3 -.-&gt; C1Listen3
+  Event4 -.-&gt; C1Listen4
+  Event5 -.-&gt; C1Listen5
+  C1Subscribe -.-&gt; C1Listen2 -.-&gt; C1Listen3 -.-&gt; C1Listen4 -.-&gt; C1Listen5 -.-&gt; C1Cancel
+  end
+  subgraph Client2
+  direction LR
+  C2Subscribe((Start))
+  C2Cancel((End))
+  Lag((&quot;❌&quot;))
+  C2Subscribe -.-&gt; C2Listen1 -- &quot;Poor Network&quot; ---&gt; Lag --&quot;Packet loss&quot;---&gt; C2Listen5 -.-&gt; C2Listen6 -.-&gt; C2Listen7 -.-&gt; C2Listen8 -.-&gt; C2Cancel
+  Event1 -.-&gt; C2Listen1
+  Event5 -.-&gt; C2Listen5
+  Event6 -.-&gt; C2Listen6
+  Event7 -.-&gt; C2Listen7
+  Event8 -.-&gt; C2Listen8
+  end</code></pre>
 <p>Clients should follow these steps:</p>
 <ul>
 <li>Upon entering the page, subscribe as necessary.</li>
@@ -246,7 +308,27 @@
 <li>When the client cancels the subscription, the server should also cancel the broadcast to the client.</li>
 </ul>
 <h2 id="application-component-level-design-lld"><strong>Application / Component Level Design (LLD)</strong></h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">  Server([Server])</span><br><span class="line">  Client([Client: Web...])</span><br><span class="line">  MQ[Kafka or other]</span><br><span class="line">  Broadcast((Broadcast))</span><br><span class="line">  subgraph ExternalHub</span><br><span class="line">    direction LR</span><br><span class="line">    Receiver --&gt; MQ --&gt; Sender</span><br><span class="line">  end</span><br><span class="line">  subgraph InMemoryHub</span><br><span class="line">    direction LR</span><br><span class="line">    Emit -.-&gt; OnEach</span><br><span class="line">  end</span><br><span class="line">  Server -.-&gt; Emit</span><br><span class="line">  Sender --&gt; Broadcast</span><br><span class="line">  OnEach -.-&gt; Broadcast</span><br><span class="line">  Broadcast -.-&gt; gRPC</span><br><span class="line">  Broadcast -.-&gt; gRPC</span><br><span class="line">  Broadcast -.-&gt; gRPC</span><br><span class="line">  Server --  &quot;if horizon scale is needed&quot; --&gt; Receiver</span><br><span class="line">  gRPC --Stream--&gt; Client</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart LR
+  Server([Server])
+  Client([Client: Web...])
+  MQ[Kafka or other]
+  Broadcast((Broadcast))
+  subgraph ExternalHub
+    direction LR
+    Receiver --&gt; MQ --&gt; Sender
+  end
+  subgraph InMemoryHub
+    direction LR
+    Emit -.-&gt; OnEach
+  end
+  Server -.-&gt; Emit
+  Sender --&gt; Broadcast
+  OnEach -.-&gt; Broadcast
+  Broadcast -.-&gt; gRPC
+  Broadcast -.-&gt; gRPC
+  Broadcast -.-&gt; gRPC
+  Server --  &quot;if horizon scale is needed&quot; --&gt; Receiver
+  gRPC --Stream--&gt; Client</code></pre>
 <p>For a single-node server, a simple Hub can be implemented using an in-memory queue.</p>
 <p>For multi-node servers, an external Hub implementation such as Kafka, MQ, or Knative eventing should be considered. The broadcasting logic is no different from that of a single machine.</p>
 <h2 id="failure-modes"><strong>Failure Modes</strong></h2>
@@ -307,7 +389,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 00:41:36" itemprop="dateModified" datetime="2023-04-15T00:41:36+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 11:34:25" itemprop="dateModified" datetime="2023-04-15T11:34:25+08:00">2023-04-15</time>
               </span>
 
           
@@ -412,7 +494,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 00:41:36" itemprop="dateModified" datetime="2023-04-15T00:41:36+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 11:34:25" itemprop="dateModified" datetime="2023-04-15T11:34:25+08:00">2023-04-15</time>
               </span>
 
           
@@ -528,7 +610,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 00:41:36" itemprop="dateModified" datetime="2023-04-15T00:41:36+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 11:34:25" itemprop="dateModified" datetime="2023-04-15T11:34:25+08:00">2023-04-15</time>
               </span>
 
           
@@ -689,7 +771,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 00:41:36" itemprop="dateModified" datetime="2023-04-15T00:41:36+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 11:34:25" itemprop="dateModified" datetime="2023-04-15T11:34:25+08:00">2023-04-15</time>
               </span>
 
           
@@ -767,7 +849,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 00:41:36" itemprop="dateModified" datetime="2023-04-15T00:41:36+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 11:34:25" itemprop="dateModified" datetime="2023-04-15T11:34:25+08:00">2023-04-15</time>
               </span>
 
           
@@ -832,7 +914,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 00:41:36" itemprop="dateModified" datetime="2023-04-15T00:41:36+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 11:34:25" itemprop="dateModified" datetime="2023-04-15T11:34:25+08:00">2023-04-15</time>
               </span>
 
           
@@ -897,7 +979,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 00:41:36" itemprop="dateModified" datetime="2023-04-15T00:41:36+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 11:34:25" itemprop="dateModified" datetime="2023-04-15T11:34:25+08:00">2023-04-15</time>
               </span>
 
           
@@ -978,7 +1060,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 00:41:36" itemprop="dateModified" datetime="2023-04-15T00:41:36+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 11:34:25" itemprop="dateModified" datetime="2023-04-15T11:34:25+08:00">2023-04-15</time>
               </span>
 
           
