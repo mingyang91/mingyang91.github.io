@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="起因 这个月（2022年8月）于Rust二群与某人辩论，因为某人坚持认为 Rust 的所有权 Ownership 机制仅仅是等同于垃圾回收 Garbage Collection ，而我认为 Ownership 还解决了另一个困扰无数码农的问题：资源安全 定义 常见资源可以分为三大类：  文件  Socket  TCP HTTP JDBC  文件系统  锁  本地 远程（Redis，RDBMS）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈资源安全">
+<meta property="og:url" content="https://famer.me/2022/08/21/talking-about-resource-security/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="起因 这个月（2022年8月）于Rust二群与某人辩论，因为某人坚持认为 Rust 的所有权 Ownership 机制仅仅是等同于垃圾回收 Garbage Collection ，而我认为 Ownership 还解决了另一个困扰无数码农的问题：资源安全 定义 常见资源可以分为三大类：  文件  Socket  TCP HTTP JDBC  文件系统  锁  本地 远程（Redis，RDBMS）">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://famer.me/images/rust-drop.png">
+<meta property="article:published_time" content="2022-08-21T04:12:43.000Z">
+<meta property="article:modified_time" content="2025-06-30T03:30:49.734Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="Rust">
+<meta property="article:tag" content="Programming language">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://famer.me/images/rust-drop.png">
+
+
+<link rel="canonical" href="https://famer.me/2022/08/21/talking-about-resource-security/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2022/08/21/talking-about-resource-security/","path":"2022/08/21/talking-about-resource-security/","title":"浅谈资源安全"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>浅谈资源安全 | My Space</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B5%B7%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E7%9A%84%E5%8E%86%E5%8F%B2"><span class="nav-number">3.</span> <span class="nav-text">资源管理的历史</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B2%E5%89%8D"><span class="nav-number">3.1.</span> <span class="nav-text">史前</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c"><span class="nav-number">3.1.1.</span> <span class="nav-text">C</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E7%BB%93%E6%9E%84language-constructs"><span class="nav-number">3.2.</span> <span class="nav-text">语言结构(Language constructs)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%80%E6%AF%81%E6%A8%A1%E5%BC%8Fdispose-pattern"><span class="nav-number">3.3.</span> <span class="nav-text">销毁模式(Dispose pattern)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#resource-monad-%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.4.</span> <span class="nav-text">Resource Monad 模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#raii"><span class="nav-number">3.5.</span> <span class="nav-text">RAII</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-1"><span class="nav-number">3.5.1.</span> <span class="nav-text">C++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rust"><span class="nav-number">3.5.2.</span> <span class="nav-text">Rust</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2022/08/21/talking-about-resource-security/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="浅谈资源安全 | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浅谈资源安全
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-08-21 12:12:43" itemprop="dateCreated datePublished" datetime="2022-08-21T12:12:43+08:00">2022-08-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-06-30 11:30:49" itemprop="dateModified" datetime="2025-06-30T11:30:49+08:00">2025-06-30</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="起因">起因</h1>
+<p>这个月（2022年8月）于Rust二群与某人辩论，因为某人坚持认为 Rust
+的所有权 <code>Ownership</code> 机制仅仅是等同于垃圾回收
+<code>Garbage Collection</code> ，而我认为 <code>Ownership</code>
+还解决了另一个困扰无数码农的问题：<strong>资源安全</strong></p>
+<h1 id="定义">定义</h1>
+<p>常见资源可以分为三大类：</p>
+<ul>
+<li>文件
+<ul>
+<li>Socket
+<ul>
+<li>TCP</li>
+<li>HTTP</li>
+<li>JDBC</li>
+</ul></li>
+<li>文件系统</li>
+</ul></li>
+<li>锁
+<ul>
+<li>本地</li>
+<li>远程（Redis，RDBMS）</li>
+</ul></li>
+<li>逻辑资源
+<ul>
+<li>Stream（背后可能是文件）</li>
+<li>日志区块或长链接起止符</li>
+<li>临时文件删除</li>
+</ul></li>
+</ul>
+<p>而资源管理总共分三步，分别是：</p>
+<ol type="1">
+<li>资源申请</li>
+<li>资源使用</li>
+<li>资源释放</li>
+</ol>
+<p>这三个事件需要严格按顺序发生。</p>
+<p>而资源安全关注的是:</p>
+<ul>
+<li>在使用前已经正确初始化</li>
+<li>使用后能被正确释放</li>
+<li>释放后不能被再次使用</li>
+</ul>
+<p>语言（语法）提供的资源管理有什么用呢？它给程序员一个强有力的保证，非极端情况下（断电等），资源释放逻辑必定会被执行。</p>
+<h1 id="资源管理的历史">资源管理的历史</h1>
+<h2 id="史前">史前</h2>
+<h3 id="c">C</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="type">int</span> num;</span><br><span class="line">   FILE *fptr;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> ((fptr = fopen(<span class="string">&quot;C:\\program.txt&quot;</span>,<span class="string">&quot;r&quot;</span>)) == <span class="literal">NULL</span>)&#123;</span><br><span class="line">       <span class="built_in">printf</span>(<span class="string">&quot;Error! opening file&quot;</span>);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// Program exits if the file pointer returns NULL.</span></span><br><span class="line">       <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="built_in">fscanf</span>(fptr,<span class="string">&quot;%d&quot;</span>, &amp;num);</span><br><span class="line"></span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;Value of n=%d&quot;</span>, num);</span><br><span class="line">   fclose(fptr); </span><br><span class="line">  </span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>早期的计算机语言并没有意识到资源管理问题，依然是指令式编码风格，需要程序员自己保证资源的申请与释放。同时那个年代软件系统并不复杂，再加上从业者素质普遍较高，所以资源管理问题不像今天这么突出。</p>
+<h2 id="语言结构language-constructs">语言结构(Language constructs)</h2>
+<p>后来，有些语言引入了异常机制，允许程序无视控制流语句自行中断并跳出，资源管理也变得复杂起来。支持抛出异常的语言通常使用
+<code>try &#123;&#125; catch &#123;&#125; finally &#123;&#125;</code> 约束资源作用范围，
+<code>try</code> 关键字表示资源作用范围，无论程序以任何形式跳出，
+<code>finally</code>
+关键字标记代码块都应当被确保执行，资源正确释放，代表语法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line"><span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> br.readLine();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    br.close();</span><br><span class="line">    fr.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="销毁模式dispose-pattern">销毁模式(Dispose pattern)</h2>
+<p>这个模式也是当今大部分有 GC 语言所支持的，比如 Java 语法关键字
+<code>try</code></p>
+<p>据我所知 Java 所谓的资源安全只有 Java7 时代引入的
+try-with-resource，资源需继承自<code>AutoCloseable</code>，可以在
+<code>try(...) &#123; ... code block ... &#125;</code>
+内放心使用，也就意味着异步代码没有任何保障。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> String <span class="title function_">readFirstLineFromFile</span><span class="params">(String path)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">try</span> (<span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line">         <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr)) &#123;</span><br><span class="line">        <span class="keyword">return</span> br.readLine();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="resource-monad-模式">Resource Monad 模式</h2>
+<p>后续发展中诞生的较为安全的设计模式，将使用资源的同步或异步代码包裹在一个代码块中，使用结束后释放，这样可以避免在每次使用资源后手动关闭。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;R&gt; CompletionStage&lt;R&gt; <span class="title function_">use</span> <span class="params">(Function&lt;Resource, CompletionStage&lt;R&gt;&gt; f)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> Resource.make()</span><br><span class="line">    .thenCompose((res) -&gt; f.apply(res)</span><br><span class="line">      .handle((r, e) -&gt; &#123;</span><br><span class="line">        res.close();</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="literal">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">      &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">use((res) -&gt; &#123;</span><br><span class="line">  System.out.println(res);</span><br><span class="line">  <span class="comment">// 将业务逻辑编写到 CompletableFuture 内部执行</span></span><br><span class="line">  <span class="keyword">return</span> CompletableFuture.failedStage(<span class="keyword">new</span> <span class="title class_">Exception</span>(<span class="string">&quot;error&quot;</span>));</span><br><span class="line">&#125;).handle((r, e) -&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">    System.out.println(e.getMessage());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> r;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>以上方案都有一个缺陷，在使用过程中误将资源变量共享给其他代码段（闭包，回调，外部变量，无意中发送给队列
+HTTP Response，例如如下 Java 代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> HttpEntity <span class="title function_">fileEntity</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">  <span class="keyword">try</span> (<span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line">       <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HttpEntity</span>(br);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果 <code>HttpEntity</code> 类并不是在创建时消费 <code>Reader</code>
+，而是会等待 HTTP Body
+传输时才开始读取字节流，那毫无疑问，这会造成访问已关闭资源，可能引起应用程序崩溃。</p>
+<p>正确的写法如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 伪代码</span></span><br><span class="line"><span class="keyword">static</span> HttpEntity <span class="title function_">fileEntity</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line">  <span class="keyword">final</span> <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HttpEntity</span>(br) &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">      br.close();</span><br><span class="line">      fr.close();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="raii">RAII</h2>
+<h3 id="c-1">C++</h3>
+<blockquote>
+<p>Move semantics make it possible to safely transfer resource ownership
+between objects, across scopes, and in and out of threads, while
+maintaining resource safety. — (since C++11)</p>
+</blockquote>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void <span class="title function_ invoke__">f</span>()</span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;string&gt; <span class="title function_ invoke__">vs</span>(<span class="number">100</span>);   <span class="comment">// not std::vector: valid() added</span></span><br><span class="line">    <span class="keyword">if</span> (!vs.<span class="title function_ invoke__">valid</span>()) &#123;</span><br><span class="line">        <span class="comment">// handle error or exit</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ifstream <span class="title function_ invoke__">fs</span>(<span class="string">&quot;foo&quot;</span>);   <span class="comment">// not std::ifstream: valid() added</span></span><br><span class="line">    <span class="keyword">if</span> (!fs.<span class="title function_ invoke__">valid</span>()) &#123;</span><br><span class="line">        <span class="comment">// handle error or exit</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125; <span class="comment">// destructors clean up as usual</span></span><br></pre></td></tr></table></figure>
+<p>C++ 提出了 RAII 这一先进概念，几乎解决了资源安全问题。但是受限于 C++
+诞生年代，早期 C++ 为了保证资源安全，只支持左值引用(LValue Reference) +
+Clone(Deep Copy)
+语义，使得赋值操作会频繁深拷贝整个对象与频繁构造/析构资源，浪费了很多操作。C++11
+开始支持右值引用，但是仍然需要实现右值引用(RValue Reference)的
+Move(Shallow Copy)。同时，C++ 无法检查多次 move 的问题和 move
+后原始变量仍然可用的问题。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">A</span>(<span class="type">const</span> string&amp; str, <span class="type">int</span>* arr):_str(str),_arr(arr)&#123;cout &lt;&lt; <span class="string">&quot;parameter ctor&quot;</span> &lt;&lt; endl;&#125;</span><br><span class="line">        <span class="built_in">A</span>(A&amp;&amp; obj):_str(std::<span class="built_in">move</span>(obj._str)),_arr(std::<span class="built_in">move</span>(obj._arr))&#123;obj._arr = <span class="literal">nullptr</span>;cout &lt;&lt; <span class="string">&quot;move ctor&quot;</span> &lt;&lt; endl;&#125;</span><br><span class="line">        A&amp; <span class="keyword">operator</span> =(A&amp;&amp; rhs)&#123;</span><br><span class="line">            _str = std::<span class="built_in">move</span>(rhs._str);</span><br><span class="line">            _arr = std::<span class="built_in">move</span>(rhs._arr);</span><br><span class="line">            rhs._arr = <span class="literal">nullptr</span>;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;move assignment operation&quot;</span> &lt;&lt; endl;</span><br><span class="line">            <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;</span><br><span class="line">            cout &lt;&lt; _str &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        ~<span class="built_in">A</span>()&#123;</span><br><span class="line">            <span class="keyword">delete</span>[] _arr;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;dtor&quot;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">        string _str;</span><br><span class="line">        <span class="type">int</span>* _arr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="type">int</span>* arr = <span class="keyword">new</span> <span class="type">int</span>[<span class="number">6</span>] &#123;<span class="number">1</span>,<span class="number">1</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">4</span>&#125;;</span><br><span class="line">    <span class="function">A <span class="title">a</span><span class="params">(<span class="string">&quot;Yajuu Senpai&quot;</span>, std::move(arr))</span></span>; <span class="comment">// 错误的指针移动 --&gt; STUPID MOVE!!</span></span><br><span class="line">    <span class="function">A <span class="title">b</span><span class="params">(std::move(a))</span></span>;   <span class="comment">// move ctor</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;print a: &quot;</span>;</span><br><span class="line">    a.<span class="built_in">print</span>();           <span class="comment">// a 失去所有权  --&gt; CORRECT!!</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;print b: &quot;</span>;</span><br><span class="line">    b.<span class="built_in">print</span>();           <span class="comment">// b 获得所有权  --&gt; CORRECT!!</span></span><br><span class="line"></span><br><span class="line">    b = std::<span class="built_in">move</span>(a);    <span class="comment">// 二次移动</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;print a: &quot;</span>; </span><br><span class="line">    a.<span class="built_in">print</span>();           <span class="comment">// ???</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;print b: &quot;</span>; </span><br><span class="line">    b.<span class="built_in">print</span>();           <span class="comment">// ???</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="rust">Rust</h3>
+<p>继承自 <strong>C++ RAII
+，</strong>当创建资源和使用资源不在同一个领域时，Rust 的
+<code>move</code> / <code>borrow</code>
+依然可以安心睡觉，这种语言级别的保证让我一个写 Scala 的看了都羡慕。</p>
+<p>在Rust 中<code>move</code> 给别人就是别人负责 <code>drop</code>，
+<code>borrow</code> 给别人还是自己负责
+<code>drop</code>，且编译器会根据生命周期检查，确保不会发生多次
+<code>move</code>，也不会有超出拥有者(<code>owner</code>)的借用(<code>&amp;borrow</code>)发生。责任划分很清晰，只要自己脑子清醒，完全不担心异步的时候会泄漏。</p>
+<p>程序员无法显式 <code>delete</code>，只能遵守 Rust
+语法，编译器依据变量生命周期将相关变量的 <code>drop</code>
+插入到正确位置，通常是离开块级作用域的位置。</p>
+<figure>
+<img src="/images/rust-drop.png" alt="Rust Drop" />
+<figcaption aria-hidden="true">Rust Drop</figcaption>
+</figure>
+<p><a
+target="_blank" rel="noopener" href="https://doc.rust-lang.org/rust-by-example/scope/raii.html">https://doc.rust-lang.org/rust-by-example/scope/raii.html</a></p>
+<p>同步示例如下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Entity</span> &#123;</span><br><span class="line">  connection: &amp;Connection</span><br><span class="line">  file: File</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">Drop</span> <span class="keyword">for</span> <span class="title class_">Entity</span> &#123;</span><br><span class="line">  <span class="keyword">fn</span> <span class="title function_">drop</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) &#123;</span><br><span class="line">    file.<span class="title function_ invoke__">write</span>(EOF); <span class="comment">// &lt;- 文件关闭前写入终止符</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">conn</span> = <span class="title function_ invoke__">makeConnection</span>();</span><br><span class="line"><span class="keyword">let</span> <span class="variable">file</span> = <span class="title function_ invoke__">openFile</span>();</span><br><span class="line"><span class="keyword">let</span> <span class="variable">entity</span> = Entity &#123;</span><br><span class="line">  connection: &amp;conn, <span class="comment">// &lt;- 将 conn 借用给 entity</span></span><br><span class="line">  file: file <span class="comment">// &lt;- 将 file 所有权转移给 entity</span></span><br><span class="line">&#125; <span class="comment">// &lt;- 从此以后，file 将不可被访问</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">send</span>(entity: Entity) &#123;</span><br><span class="line">  <span class="comment">// logic</span></span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">  <span class="comment">// &lt;- 编译器会在此处插入释放 entity</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_ invoke__">send</span>(entity) <span class="comment">// &lt;- 将 entity 所有权移交给 send 函数</span></span><br><span class="line"><span class="comment">// &lt;- 编译器会在此处插入释放 conn</span></span><br><span class="line"><span class="comment">// &lt;- 因 entity 与 file 所有权已转移，此处不会重复释放 entity 与 file</span></span><br></pre></td></tr></table></figure>
+<p>异步示例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fn <span class="title function_">move_block</span><span class="params">()</span> -&gt; impl Future&lt;Output = ()&gt; &#123;</span><br><span class="line">    <span class="type">let</span> <span class="variable">my_string</span> <span class="operator">=</span> <span class="string">&quot;foo&quot;</span>.to_string();</span><br><span class="line">    async move &#123; <span class="comment">// &lt;- my_string 被 move 到此 block scope</span></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        println!(<span class="string">&quot;&#123;&#125;&quot;</span>, my_string); <span class="comment">// &lt;- my_string 在此处可以见</span></span><br><span class="line">        <span class="comment">// &lt;- 编译器将在此处插入 my_string drop 代码 </span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// &lt;- my_string 将不再可见，本函数失去 my_string 所有权，不再插入 drop 代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>闭包捕获</strong>造成的资源逃逸与将引用赋值给<strong>类/结构体</strong>帮助资源逃逸在语言本质上是同一个问题，所以
+Rust 可以用相同的方法来处理它们。</p>
+<h1 id="总结">总结</h1>
+<p>理论上来说垃圾回收器(<strong>Garbage
+collector</strong>)无法解决资源安全问题，可能有人会认为：</p>
+<blockquote>
+<p>“给 Java 语言添加 <code>Destructor</code>
+，这样开发者就可以在析构函数中实现资源释放逻辑，交给 GC
+在回收内存时自动调用 <code>destory()/dispose()</code>
+，问题不就解决了吗？“</p>
+</blockquote>
+<p>实际上这条路是走不通的，GC
+根据算法不同，所参考的策略也不同，其收集(<code>collect</code>)/释放(<code>free</code>)动作必定会执行，但没有保证什么时候会执行，以什么顺序执行。因为考察
+GC 性能指标时，更关注的是吞吐量而不是回收实时性，如果内存没有压力，GC
+倾向于不回收。</p>
+<p>这一行为可能会导致意想不到的后果，比如业务逻辑 A
+结束时，文件资源对象的引用计数已经为零，通知下一个逻辑 B
+可以处理此文件，而 B
+尝试打开文件时却发现文件不完整，因为关闭文件的系统调用尚未被 GC
+执行😵。</p>
+<p>Rust
+给出了一套完善的解决方案，它不仅解决了诸多内存安全问题，还顺带解决了资源安全问题。基于所有权机制和严格的编译器检查，强迫程序员写出资源安全的代码，仅需要程序员正确实现
+<code>impl Drop for [...]</code> 。</p>
+<p>我认为 Rust 实现的所有权与 RAII 是当下最完善的资源管理机制。</p>
+<ul>
+<li>与 <code>try-catch-finally</code>
+相比，不需要在每次使用资源时，都格外小心是否双重释放(<code>double delete</code>
+这在 Java 中是个很常见且令人头痛的问题)。</li>
+<li>与 <code>ResourceMonad</code> 相比，不会产生资源逃逸。</li>
+<li>是一门全新的语言，不像 C++ 一样有沉重的历史包袱。</li>
+</ul>
+<p>即使不使用 Rust
+编码，依然可以借鉴它的思想，因为其语法本身就是资源管理的最佳实践，学习它可以帮助自己在其他语言中避开错误的写法。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Rust/" rel="tag"># Rust</a>
+              <a href="/tags/Programming-language/" rel="tag"># Programming language</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/17/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-chevron-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/03/19/Implement-the-file%E2%80%93tree-in-PostgreSQL-using-ltree/" rel="next" title="Implement the file tree in PostgreSQL using ltree">
+                  Implement the file tree in PostgreSQL using ltree <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

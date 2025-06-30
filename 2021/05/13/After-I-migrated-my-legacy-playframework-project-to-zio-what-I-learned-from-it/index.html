@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Foreword What is R What are the problems caused by DI tools? Current Situation Evolution Stage 1 Evolution Stage 2 Evolution Stage 3 Conclusion References  Foreword On April 17, 2020, I start a huge">
+<meta property="og:type" content="article">
+<meta property="og:title" content="After I migrated my legacy playframework project to zio, what I learned from it.">
+<meta property="og:url" content="https://famer.me/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="Foreword What is R What are the problems caused by DI tools? Current Situation Evolution Stage 1 Evolution Stage 2 Evolution Stage 3 Conclusion References  Foreword On April 17, 2020, I start a huge">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-05-13T10:37:55.000Z">
+<meta property="article:modified_time" content="2025-06-30T03:30:49.733Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="ZIO">
+<meta property="article:tag" content="Scala">
+<meta property="article:tag" content="Play Framework">
+<meta property="article:tag" content="Architecture design">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/","path":"2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/","title":"After I migrated my legacy playframework project to zio, what I learned from it."}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>After I migrated my legacy playframework project to zio, what I learned from it. | My Space</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#foreword"><span class="nav-number">1.</span> <span class="nav-text">Foreword</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#what-is-r"><span class="nav-number">2.</span> <span class="nav-text">What is R</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#what-are-the-problems-caused-by-di-tools"><span class="nav-number">3.</span> <span class="nav-text">What are the problems
+caused by DI tools?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#current-situation"><span class="nav-number">4.</span> <span class="nav-text">Current Situation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#evolution-stage-1"><span class="nav-number">5.</span> <span class="nav-text">Evolution Stage 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#evolution-stage-2"><span class="nav-number">6.</span> <span class="nav-text">Evolution Stage 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#evolution-stage-3"><span class="nav-number">7.</span> <span class="nav-text">Evolution Stage 3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conclusion"><span class="nav-number">8.</span> <span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#references"><span class="nav-number">9.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="After I migrated my legacy playframework project to zio, what I learned from it. | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          After I migrated my legacy playframework project to zio, what I learned from it.
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-13 18:37:55" itemprop="dateCreated datePublished" datetime="2021-05-13T18:37:55+08:00">2021-05-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-06-30 11:30:49" itemprop="dateModified" datetime="2025-06-30T11:30:49+08:00">2025-06-30</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <ul>
+<li><a href="#foreword">Foreword</a></li>
+<li><a href="#what-is-r">What is <code>R</code></a></li>
+<li><a href="#what-are-the-problems-caused-by-di-tools">What are the
+problems caused by DI tools?</a></li>
+<li><a href="#current-situation">Current Situation</a></li>
+<li><a href="#evolution-stage-1">Evolution Stage 1</a></li>
+<li><a href="#evolution-stage-2">Evolution Stage 2</a></li>
+<li><a href="#evolution-stage-3">Evolution Stage 3</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<h1 id="foreword">Foreword</h1>
+<p>On April 17, 2020, I start a huge project to migrate the
+<code>Future[T]</code> from legacy playframework project to
+<code>ZIO</code>. Three months later, after tens of thousands of lines
+of code modification, the migration was a complete success. In
+September, I used this experience as the background to share in the
+Chinese Scala Meetup community with the title <a
+target="_blank" rel="noopener" href="https://www.slideshare.net/ssuser81d309/scala-meetup-248313493">"Introduction
+to ZIO"</a>. In this share, I explained a fanatic imageation,
+在这次分享中，我展望了一个美好的愿景，借由 <code>ZIO</code> 的类型参数
+<code>R</code>
+提供的抽象能力来实现代码的可移植性，和提高可测试性。但想在遗留项目中实现这个愿景并不容易，主要挑战来自遗留项目的代码耦合，和开发者的思维惯性。如今，这个愿景已经达成。我会在这篇
+Post 中与你分享我的进化之路。</p>
+<h1 id="what-is-r">What is <code>R</code></h1>
+<blockquote>
+<p>A <code>ZIO[R, E, A]</code> value is an immutable value that lazily
+describes a workflow or job. The workflow requires some environment
+<code>R</code>, and may fail with an error of type <code>E</code>, or
+succeed with a value of type <code>A</code>.</p>
+</blockquote>
+<p>上面这段来自 <code>ZIO</code> 源码中的注释，其中指出 <code>R</code>
+是 workflow
+所需要的环境参数的类型。我们可以借助这个环境参数，来抽象出过程对环境的依赖。
+这听起来非常像依赖注入，实际上确实如此。不同的是，常见的控制反转框架，注入入口都是业务逻辑类的成员以及其构造函数（比如：<a
+target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-autowire">spring
+autowire</a>、 <a target="_blank" rel="noopener" href="https://github.com/google/guice">guice</a>、 <a
+target="_blank" rel="noopener" href="https://github.com/softwaremill/macwire">macwire</a> 等）；而
+<code>ZIO</code> 的做法是，在运行时提供环对象的实例。</p>
+<p>Example:</p>
+<p>Spring <code>@Autowired</code>: Inject the dependent instance into
+the object as a member of the class <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MovieRecommender</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CustomerPreferenceDao customerPreferenceDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MovieRecommender</span><span class="params">(CustomerPreferenceDao customerPreferenceDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.customerPreferenceDao = customerPreferenceDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> ZIO <code>R</code>:
+Treat the instance as part of the environment, and provide it on demand
+at runtime <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">MovieRecommender</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recommend</span></span>(): <span class="type">ZIO</span>[<span class="type">CustomerPreferenceDao</span>, <span class="type">Throwable</span>, <span class="type">RecommendResult</span>] = &#123;</span><br><span class="line">      ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="what-are-the-problems-caused-by-di-tools">What are the problems
+caused by DI tools?</h1>
+<p>I want to ask the reader a question: <strong><em>How much does it
+cost to test a small feature in your software system?</em></strong></p>
+<p>See: <a
+target="_blank" rel="noopener" href="https://github.com/mingyang91/scala-meetup/tree/master/src/main/scala/meetup/di/legacy">Negative
+example</a>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> meetup.di.legacy</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> meetup.di.legacy.member.&#123;<span class="type">Accountant</span>, <span class="type">Baker</span>, <span class="type">CandyMaker</span>, <span class="type">Cashier</span>, <span class="type">Decorator</span>, <span class="type">HunanChef</span>, <span class="type">Logistic</span>, <span class="type">Manager</span>, <span class="type">Security</span>, <span class="type">SichuanChef</span>, <span class="type">Waiter</span>, <span class="type">Washer</span>&#125;</span><br><span class="line"><span class="keyword">import</span> meetup.di.legacy.tools.&#123;<span class="type">Mixer</span>, <span class="type">Oven</span>, <span class="type">PipingTip</span>, <span class="type">Turntable</span>&#125;</span><br><span class="line"><span class="keyword">import</span> meetup.di.legacy.utils.<span class="type">Demo</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">djx314</span> <span class="keyword">extends</span> <span class="title">App</span> <span class="keyword">with</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">  <span class="keyword">val</span> mixer = <span class="keyword">new</span> <span class="type">Mixer</span>()</span><br><span class="line">  <span class="keyword">val</span> oven = <span class="keyword">new</span> <span class="type">Oven</span>()</span><br><span class="line">  <span class="keyword">val</span> pipingTip = <span class="keyword">new</span> <span class="type">PipingTip</span>()</span><br><span class="line">  <span class="keyword">val</span> turntable = <span class="keyword">new</span> <span class="type">Turntable</span>()</span><br><span class="line">  <span class="keyword">val</span> baker = <span class="keyword">new</span> <span class="type">Baker</span>(oven, mixer)</span><br><span class="line">  <span class="keyword">val</span> decorator = <span class="keyword">new</span> <span class="type">Decorator</span>(mixer, pipingTip, turntable)</span><br><span class="line">  <span class="keyword">val</span> candyMaker = <span class="keyword">new</span> <span class="type">CandyMaker</span></span><br><span class="line">  <span class="keyword">val</span> scChef = <span class="keyword">new</span> <span class="type">SichuanChef</span></span><br><span class="line">  <span class="keyword">val</span> hnChef = <span class="keyword">new</span> <span class="type">HunanChef</span></span><br><span class="line">  <span class="keyword">val</span> cashier = <span class="keyword">new</span> <span class="type">Cashier</span></span><br><span class="line">  <span class="keyword">val</span> waiter = <span class="keyword">new</span> <span class="type">Waiter</span></span><br><span class="line">  <span class="keyword">val</span> washer = <span class="keyword">new</span> <span class="type">Washer</span></span><br><span class="line">  <span class="keyword">val</span> logistic = <span class="keyword">new</span> <span class="type">Logistic</span></span><br><span class="line">  <span class="keyword">val</span> security = <span class="keyword">new</span> <span class="type">Security</span></span><br><span class="line">  <span class="keyword">val</span> accountant = <span class="keyword">new</span> <span class="type">Accountant</span></span><br><span class="line">  <span class="keyword">val</span> manager = <span class="keyword">new</span> <span class="type">Manager</span></span><br><span class="line">  <span class="keyword">val</span> cs = <span class="keyword">new</span> <span class="type">CakeShop</span>(</span><br><span class="line">    baker, decorator, candyMaker,</span><br><span class="line">    scChef, hnChef, cashier,</span><br><span class="line">    waiter, washer, logistic,</span><br><span class="line">    security, accountant, manager</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  cs.simpleCake()</span><br><span class="line">    .onComplete(println)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>I just want to test a small part of the functions, why do I need to
+construct all dependent instances. Why do I have to do so much
+preparation to test this simple function. Because it belongs to the
+method of the class, and this class has too many construction
+parameters, these construction parameters are unnecessary for the
+function we want to test</p>
+<p>若想让工程代码最大程度上可移植、可测试，一个简单易行的方法是：<strong><em>不要在类中编写与对象无关(no
+use <code>this</code>)的函数，将他们移动到 <code>object</code> 中(in
+java: mark method
+<code>static</code>)。</em></strong>同时，编写引用透明的代码对达成这一目标有正面作用。</p>
+<p>但是，在遗留项目中实现这一点有些困难,
+因为大多数开发者都把依赖注入框架错用了，就像上面的反面教材一样。Even
+Spring contributors made the same mistake. See: <a
+target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java">Spring's
+sample project</a></p>
+<p>Too many irrelevant dependencies have brought huge obstacles to the
+portability of codes, turning them into ad hoc codes that are difficult
+to test.</p>
+<p>The whole system is like a balls made up of strings and knots. <img
+src="/images/mass-string-ball.jpeg"
+alt="Software System like a ball made up of strings and knots" /></p>
+<h1 id="current-situation">Current Situation</h1>
+<p>社区中的方案... zio layer 每次 unsafeRun
+都会重新生成，这很纯函数式，但这不适合 web 服务。例如连接池</p>
+<p>遇到的问题 * 连接池 * 信号量</p>
+<p>所以，我只能自己尝试：</p>
+<h1 id="evolution-stage-1">Evolution Stage 1</h1>
+<p>ZioController + PlayRunner</p>
+<h1 id="evolution-stage-2">Evolution Stage 2</h1>
+<p>ZController + ZRunner <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">```scala</span><br></pre></td></tr></table></figure></p>
+<h1 id="evolution-stage-3">Evolution Stage 3</h1>
+<p>ZController + Runtime.Managed <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">ZController</span>[<span class="type">Z</span>, <span class="type">R</span>[_], <span class="title">B</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">runtime</span></span>: <span class="type">Runtime</span>.<span class="type">Managed</span>[<span class="type">Z</span>]</span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">ActionBuilderOps</span>(<span class="params">actionBuilder: <span class="type">ActionBuilder</span>[<span class="type">R</span>, <span class="type">B</span>]</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">zio</span></span>[<span class="type">E</span>](zioActionBody: =&gt; <span class="type">ZIO</span>[<span class="type">Z</span>, <span class="type">Throwable</span>, <span class="type">Result</span>]): <span class="type">Action</span>[<span class="type">AnyContent</span>] = actionBuilder.async &#123;</span><br><span class="line">      runtime.unsafeRunToFuture(zioActionBody.resurrect)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">zio</span></span>[<span class="type">E</span>](zioActionBody: <span class="type">R</span>[<span class="type">B</span>] =&gt; <span class="type">ZIO</span>[<span class="type">Z</span>, <span class="type">Throwable</span>, <span class="type">Result</span>]): <span class="type">Action</span>[<span class="type">B</span>] = actionBuilder.async &#123; req =&gt;</span><br><span class="line">      runtime.unsafeRunToFuture(zioActionBody(req).resurrect)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * A runtime that can be shutdown to release resources allocated to it.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Managed</span>[+<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">Runtime</span>[<span class="type">R</span>] </span>&#123; <span class="comment">/* ... */</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>使用起来</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ExampleController</span> </span>&#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Config</span>(<span class="params">endpoint: <span class="type">String</span></span>)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">flow</span></span>(endpoint: <span class="type">String</span>, url: <span class="type">String</span>, body: <span class="type">RawBuffer</span>): <span class="type">ZIO</span>[<span class="type">Has</span>[<span class="type">WSClient</span>], <span class="type">Throwable</span>, <span class="type">String</span>] = ???</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleController</span>(<span class="params">cc: <span class="type">ControllerComponents</span>,</span></span></span><br><span class="line"><span class="params"><span class="class">                        config: <span class="type">ExampleController</span>.<span class="type">Config</span>,</span></span></span><br><span class="line"><span class="params"><span class="class">                        <span class="type">MAction</span>: <span class="type">MemberAction</span></span>)</span></span><br><span class="line">                       (<span class="keyword">implicit</span> <span class="keyword">val</span> runtime: <span class="type">Runtime</span>.<span class="type">Managed</span>[<span class="type">Has</span>[<span class="type">WSClient</span>]],</span><br><span class="line">                        <span class="keyword">val</span> ec: <span class="type">ExecutionContext</span>)</span><br><span class="line">  <span class="keyword">extends</span> <span class="type">AbstractController</span>(cc) <span class="keyword">with</span> <span class="type">ZController</span>[<span class="type">Has</span>[<span class="type">WSClient</span>], <span class="type">MemberRequest</span>, <span class="type">RawBuffer</span>] &#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">handle</span></span>(url: <span class="type">String</span>): <span class="type">Action</span>[<span class="type">RawBuffer</span>] = <span class="type">MAction</span>(parse.raw) zio &#123; request: <span class="type">MemberRequest</span>[<span class="type">RawBuffer</span>] =&gt;</span><br><span class="line">    flow(config.endpoint, url, request.body)</span><br><span class="line">      .map(name =&gt; <span class="type">Ok</span>(name))</span><br><span class="line">      .mapError(e =&gt; <span class="type">InternalServerError</span>(<span class="string">&quot;Oh no!\n&quot;</span> + e.getMessage))</span><br><span class="line">      .merge</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="conclusion">Conclusion</h1>
+<h1 id="references">References</h1>
+<p><a
+target="_blank" rel="noopener" href="https://www.markopapic.com/dependency-injection-tradeoffs/">Dependency
+Injection Trade-offs</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ZIO/" rel="tag"># ZIO</a>
+              <a href="/tags/Scala/" rel="tag"># Scala</a>
+              <a href="/tags/Play-Framework/" rel="tag"># Play Framework</a>
+              <a href="/tags/Architecture-design/" rel="tag"># Architecture design</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/05/14/Webhook-system-design-base-ZIO/" rel="next" title="Webhook system design - base ZIO">
+                  Webhook system design - base ZIO <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

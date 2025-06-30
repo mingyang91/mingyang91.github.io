@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Overview In the previous post, we discussed how to implement a file tree in PostgreSQL using ltree. Now, let&#39;s talk about how to integrate version control management for the file tree. Version control">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Implementing Version Management of File Trees in PostgreSQL">
+<meta property="og:url" content="https://famer.me/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="Overview In the previous post, we discussed how to implement a file tree in PostgreSQL using ltree. Now, let&#39;s talk about how to integrate version control management for the file tree. Version control">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-03-19T12:37:00.000Z">
+<meta property="article:modified_time" content="2025-06-30T03:30:49.733Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="System design">
+<meta property="article:tag" content="PostgreSQL">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/","path":"2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/","title":"Implementing Version Management of File Trees in PostgreSQL"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Implementing Version Management of File Trees in PostgreSQL | My Space</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#terminologies-and-context"><span class="nav-number">2.</span> <span class="nav-text">Terminologies and Context</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#non-functional-requirements"><span class="nav-number">2.1.</span> <span class="nav-text">Non Functional Requirements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scalability"><span class="nav-number">2.2.</span> <span class="nav-text">Scalability</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latency"><span class="nav-number">2.3.</span> <span class="nav-text">Latency</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#architecture"><span class="nav-number">3.</span> <span class="nav-text">Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#database-design"><span class="nav-number">3.1.</span> <span class="nav-text">Database Design</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tech-details"><span class="nav-number">3.2.</span> <span class="nav-text">Tech Details</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#performance"><span class="nav-number">3.2.1.</span> <span class="nav-text">Performance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-datasets"><span class="nav-number">3.2.2.</span> <span class="nav-text">Test Datasets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#schema"><span class="nav-number">3.2.3.</span> <span class="nav-text">Schema</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#further-improvements"><span class="nav-number">4.</span> <span class="nav-text">Further Improvements</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Implementing Version Management of File Trees in PostgreSQL | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Implementing Version Management of File Trees in PostgreSQL
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-03-19 20:37:00" itemprop="dateCreated datePublished" datetime="2023-03-19T20:37:00+08:00">2023-03-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-06-30 11:30:49" itemprop="dateModified" datetime="2025-06-30T11:30:49+08:00">2025-06-30</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="overview">Overview</h1>
+<p>In the <a
+href="/2023/03/19/Implement-the-file–tree-in-PostgreSQL-using-ltree/">previous
+post</a>, we discussed how to implement a file tree in PostgreSQL using
+<code>ltree</code>. Now, let's talk about how to integrate version
+control management for the file tree.</p>
+<p>Version control is a process for managing changes made to a file tree
+over time. This allows for the tracking of its history and the ability
+to revert to previous versions, making it an essential tool for file
+management.</p>
+<p>With version control, users have access to the most up-to-date
+version of a file, and changes are tracked and documented in a
+systematic manner. This ensures that there is a clear record of what has
+been done, making it much easier to manage files and their versions.</p>
+<h1 id="terminologies-and-context">Terminologies and Context</h1>
+<p>One <strong>flawed</strong> implementation involves storing all file
+metadata for every commit, including files that have not changed but are
+recorded as <code>NO_CHANGE</code>. However, this approach has a
+significant problem.</p>
+<p>The problem with the simple and naive implementation of storing all
+file metadata for every commit is that it leads to significant write
+amplification, as even files that have not changed are recorded as
+<code>NO_CHANGE</code>. One way to address this is to avoid storing
+<code>NO_CHANGE</code> transformations when creating new versions, which
+can significantly reduce the write amplification.</p>
+<p>This is good for querying, but bad for writing. When we need to fetch
+a specific version, the PostgreSQL engine only needs to scan the index
+with the condition <code>file.version = ?</code>. This is a very cheap
+cost in modern database systems. However, when a new version needs to be
+created, the engine must write <span class="math inline">\(N\)</span>
+rows of records into the log table (where <span
+class="math inline">\(N\)</span> is the number of current files). This
+will cause a write peak in the database and is unacceptable.</p>
+<p>In theory, all we need to do is write the changed file. If we can
+find a way to fetch an arbitrary version of the file tree in <span
+class="math inline">\(O(log(n))\)</span> time, we can reduce unnecessary
+write amplification.</p>
+<h2 id="non-functional-requirements">Non Functional Requirements</h2>
+<h2 id="scalability">Scalability</h2>
+<p>Consider the worst-case scenario: a file tree with more than 1,000
+files that is committed to more than 10,000 times. The scariest
+possibility is that every commit changes all files, causing a decrease
+in write performance compared to the efficient implementation. Storing
+more than 10 million rows in a single table can make it difficult to
+separate them into partitioned tables.</p>
+<p>Suppose <span class="math inline">\(N\)</span> is the number of
+files, and <span class="math inline">\(M\)</span> is the number of
+commits. We need to ensure that the time complexity of fetching a
+snapshot of an arbitrary version is less than <span
+class="math inline">\(O(N\cdot log(M))\)</span>. This is theoretically
+possible.</p>
+<h2 id="latency">Latency</h2>
+<p>In the worst case, the query can still respond in less than
+100ms.</p>
+<h1 id="architecture">Architecture</h1>
+<h2 id="database-design">Database Design</h2>
+<p>Illustration of data structures.</p>
+<figure>
+<img
+src="/images/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/file-tree-version-rdbms.png"
+alt="Illustration of data structures." />
+<figcaption aria-hidden="true">Illustration of data
+structures.</figcaption>
+</figure>
+<h2 id="tech-details">Tech Details</h2>
+<blockquote>
+<p>Subqueries appearing in <code>FROM</code> can be preceded by the key
+word <code>LATERAL</code>. This allows them to reference columns
+provided by preceding <code>FROM</code> items.
+(Without <code>LATERAL</code>, each subquery is evaluated independently
+and so cannot cross-reference any other <code>FROM</code> item.) — <a
+target="_blank" rel="noopener" href="https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-LATERAL">https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-LATERAL</a></p>
+</blockquote>
+<p>PostgreSQL has a keyword called <code>LATERAL</code>. This keyword
+can be used in a join table to enable the use of an outside table in a
+<code>WHERE</code> condition. By doing so, we can directly tell the
+query optimizer how to use the index. Since data in a combined index is
+stored in an ordered tree, finding the maximum value or any arbitrarily
+value has a time complexity of <span
+class="math inline">\(O(log(n))\)</span>.</p>
+<p>Finally, we obtain a time complexity of <span
+class="math inline">\(O(N \cdot log(M))\)</span>.</p>
+<h3 id="performance">Performance</h3>
+<p>Result: Fetching an arbitrary version will be done in tens of
+milliseconds.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">explain analyse</span><br><span class="line"><span class="keyword">select</span> f.record_id, f.filename, latest.revision_id</span><br><span class="line"><span class="keyword">from</span> files f</span><br><span class="line"><span class="keyword">inner</span> <span class="keyword">join</span> <span class="keyword">lateral</span> (</span><br><span class="line">        <span class="keyword">select</span> <span class="operator">*</span></span><br><span class="line">        <span class="keyword">from</span> file_logs fl</span><br><span class="line">        <span class="keyword">where</span> f.filename <span class="operator">=</span> fl.filename</span><br><span class="line">          <span class="keyword">and</span> f.record_id <span class="operator">=</span> fl.record_id</span><br><span class="line">          <span class="comment">-- and revision_id &lt; 20000</span></span><br><span class="line">        <span class="keyword">order</span> <span class="keyword">by</span> revision_id <span class="keyword">desc</span></span><br><span class="line">        limit <span class="number">1</span></span><br><span class="line">    ) <span class="keyword">as</span> latest</span><br><span class="line"><span class="keyword">on</span> f.record_id <span class="operator">=</span> <span class="string">&#x27;f5c2049f-5a32-44f5-b0cc-b7e0531bf706&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Nested Loop  (cost<span class="operator">=</span><span class="number">0.86</span>.<span class="number">.979</span><span class="number">.71</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1445</span> width<span class="operator">=</span><span class="number">50</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.040</span>.<span class="number">.18</span><span class="number">.297</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1445</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">  <span class="operator">-</span><span class="operator">&gt;</span>  Index <span class="keyword">Only</span> Scan <span class="keyword">using</span> files_pkey <span class="keyword">on</span> files f  (cost<span class="operator">=</span><span class="number">0.29</span>.<span class="number">.89</span><span class="number">.58</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1445</span> width<span class="operator">=</span><span class="number">46</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.019</span>.<span class="number">.0</span><span class="number">.174</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1445</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">        Index Cond: (record_id <span class="operator">=</span> <span class="string">&#x27;f5c2049f-5a32-44f5-b0cc-b7e0531bf706&#x27;</span>::uuid)</span><br><span class="line">        Heap Fetches: <span class="number">0</span></span><br><span class="line">  <span class="operator">-</span><span class="operator">&gt;</span>  Memoize  (cost<span class="operator">=</span><span class="number">0.57</span>.<span class="number">.0</span><span class="number">.65</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">4</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.012</span>.<span class="number">.0</span><span class="number">.012</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> loops<span class="operator">=</span><span class="number">1445</span>)</span><br><span class="line">&quot;        Cache Key: f.filename, f.record_id&quot;</span><br><span class="line">        Cache Mode: <span class="type">binary</span></span><br><span class="line">        Hits: <span class="number">0</span>  Misses: <span class="number">1445</span>  Evictions: <span class="number">0</span>  Overflows: <span class="number">0</span>  Memory Usage: <span class="number">221</span>kB</span><br><span class="line">        <span class="operator">-</span><span class="operator">&gt;</span>  Subquery Scan <span class="keyword">on</span> latest  (cost<span class="operator">=</span><span class="number">0.56</span>.<span class="number">.0</span><span class="number">.64</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">4</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.012</span>.<span class="number">.0</span><span class="number">.012</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> loops<span class="operator">=</span><span class="number">1445</span>)</span><br><span class="line">              <span class="operator">-</span><span class="operator">&gt;</span>  Limit  (cost<span class="operator">=</span><span class="number">0.56</span>.<span class="number">.0</span><span class="number">.63</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">852</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.012</span>.<span class="number">.0</span><span class="number">.012</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> loops<span class="operator">=</span><span class="number">1445</span>)</span><br><span class="line">                    <span class="operator">-</span><span class="operator">&gt;</span>  Index <span class="keyword">Only</span> Scan Backward <span class="keyword">using</span> file_logs_pk <span class="keyword">on</span> file_logs fl  (cost<span class="operator">=</span><span class="number">0.56</span>.<span class="number">.11</span><span class="number">.72</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">158</span> width<span class="operator">=</span><span class="number">852</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.011</span>.<span class="number">.0</span><span class="number">.011</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> loops<span class="operator">=</span><span class="number">1445</span>)</span><br><span class="line">                          Index Cond: ((record_id <span class="operator">=</span> f.record_id) <span class="keyword">AND</span> (filename <span class="operator">=</span> (f.filename)::text))</span><br><span class="line">                          Heap Fetches: <span class="number">0</span></span><br><span class="line">Planning <span class="type">Time</span>: <span class="number">0.117</span> ms</span><br><span class="line">Execution <span class="type">Time</span>: <span class="number">18.384</span> ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="test-datasets">Test Datasets</h3>
+<p>This dataset simulates the worst-case scenario of a table with 14.6
+million rows. Specifically, it contains 14.45 million rows representing
+a situation in which 1,400 files are changed 10,000 times.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- cnt: 14605858</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">0</span>) <span class="keyword">from</span> file_logs;</span><br><span class="line"><span class="comment">-- cnt: 14451538</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">0</span>) <span class="keyword">from</span> file_logs <span class="keyword">where</span> record_id <span class="operator">=</span> <span class="string">&#x27;f5c2049f-5a32-44f5-b0cc-b7e0531bf706&#x27;</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="schema">Schema</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create table</span> public.file_logs</span><br><span class="line">(</span><br><span class="line">    file_key    ltree         <span class="keyword">not null</span>,</span><br><span class="line">    revision_id <span class="type">integer</span>       <span class="keyword">not null</span>,</span><br><span class="line">    record_id   uuid          <span class="keyword">not null</span>,</span><br><span class="line">    filename    <span class="type">varchar</span>(<span class="number">2048</span>) <span class="keyword">not null</span>,</span><br><span class="line">    create_time <span class="type">timestamp</span>,</span><br><span class="line">    update_time <span class="type">timestamp</span>,</span><br><span class="line">    delete_time <span class="type">timestamp</span>,</span><br><span class="line">    blob_sha256 <span class="type">char</span>(<span class="number">64</span>),</span><br><span class="line">    <span class="keyword">constraint</span> file_logs_pk</span><br><span class="line">        <span class="keyword">primary key</span> (record_id, filename, revision_id)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">alter table</span> public.file_logs</span><br><span class="line">    owner <span class="keyword">to</span> postgres;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create table</span> public.files</span><br><span class="line">(</span><br><span class="line">    record_id uuid          <span class="keyword">not null</span>,</span><br><span class="line">    filename  <span class="type">varchar</span>(<span class="number">2048</span>) <span class="keyword">not null</span>,</span><br><span class="line">    create_at <span class="type">timestamp</span>     <span class="keyword">not null</span>,</span><br><span class="line">    <span class="keyword">primary key</span> (record_id, filename)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">alter table</span> public.files</span><br><span class="line">    owner <span class="keyword">to</span> postgres;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="further-improvements"><strong>Further Improvements</strong></h1>
+<p>We can implement this using an intuitive approach in a graph
+database.</p>
+<figure>
+<img
+src="/images/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/file-tree-version-graph-database.png"
+alt="File tree version in graph database" />
+<figcaption aria-hidden="true">File tree version in graph
+database</figcaption>
+</figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/System-design/" rel="tag"># System design</a>
+              <a href="/tags/PostgreSQL/" rel="tag"># PostgreSQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/03/19/Implement-the-file%E2%80%93tree-in-PostgreSQL-using-ltree/" rel="prev" title="Implement the file tree in PostgreSQL using ltree">
+                  <i class="fa fa-chevron-left"></i> Implement the file tree in PostgreSQL using ltree
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/" rel="next" title="Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture">
+                  Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

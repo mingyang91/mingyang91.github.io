@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Background A file tree is a hierarchical structure used to organize files and directories on a computer. It allows users to easily navigate and access their files and folders, and is commonly used in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Implement the file tree in PostgreSQL using ltree">
+<meta property="og:url" content="https://famer.me/2023/03/19/Implement-the-file%E2%80%93tree-in-PostgreSQL-using-ltree/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="Background A file tree is a hierarchical structure used to organize files and directories on a computer. It allows users to easily navigate and access their files and folders, and is commonly used in">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-03-19T10:18:18.000Z">
+<meta property="article:modified_time" content="2025-06-30T03:30:49.733Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="System design">
+<meta property="article:tag" content="PostgreSQL">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2023/03/19/Implement-the-file%E2%80%93tree-in-PostgreSQL-using-ltree/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2023/03/19/Implement-the-file%E2%80%93tree-in-PostgreSQL-using-ltree/","path":"2023/03/19/Implement-the-file–tree-in-PostgreSQL-using-ltree/","title":"Implement the file tree in PostgreSQL using ltree"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Implement the file tree in PostgreSQL using ltree | My Space</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tldr"><span class="nav-number">2.</span> <span class="nav-text">TL;DR</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pros"><span class="nav-number">2.1.</span> <span class="nav-text">Pros</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cons"><span class="nav-number">2.2.</span> <span class="nav-text">Cons</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#limitation"><span class="nav-number">2.3.</span> <span class="nav-text">Limitation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#how-to-use"><span class="nav-number">3.</span> <span class="nav-text">How to use</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#explaination"><span class="nav-number">4.</span> <span class="nav-text">Explaination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#further"><span class="nav-number">5.</span> <span class="nav-text">Further</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#summary"><span class="nav-number">6.</span> <span class="nav-text">Summary</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#appendix-postgresql-functions"><span class="nav-number">7.</span> <span class="nav-text">Appendix: PostgreSQL
+Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#entry-function-immutable-is-required"><span class="nav-number">7.1.</span> <span class="nav-text">Entry function (immutable
+is required)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#util-escape-every-part-folder-or-file"><span class="nav-number">7.2.</span> <span class="nav-text">Util: Escape every part
+(folder or file)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#util-split-a-string-into-groups"><span class="nav-number">7.3.</span> <span class="nav-text">Util: Split a string into
+groups</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#util-base62-encode-function"><span class="nav-number">7.4.</span> <span class="nav-text">Util: base62 encode function</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2023/03/19/Implement-the-file%E2%80%93tree-in-PostgreSQL-using-ltree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Implement the file tree in PostgreSQL using ltree | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Implement the file tree in PostgreSQL using ltree
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-03-19 18:18:18" itemprop="dateCreated datePublished" datetime="2023-03-19T18:18:18+08:00">2023-03-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-06-30 11:30:49" itemprop="dateModified" datetime="2025-06-30T11:30:49+08:00">2025-06-30</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="background">Background</h1>
+<p>A file tree is a hierarchical structure used to organize files and
+directories on a computer. It allows users to easily navigate and access
+their files and folders, and is commonly used in operating systems and
+file management software.</p>
+<p>But implementing file trees in traditional RDBMS like MySQL can be a
+challenge due to the lack of support for hierarchical data structures.
+However, there are workarounds such as using nested sets or materialized
+path approaches. Alternatively, you could consider using NoSQL databases
+like MongoDB or document-oriented databases like Couchbase, which have
+built-in support for hierarchical data structures.</p>
+<p>It is possible to implement a file tree in PostgreSQL using the
+<code>ltree</code> datatype provided by PostgreSQL. This datatype can
+help us build the hierarchy within the database.</p>
+<h1 id="tldr">TL;DR</h1>
+<h2 id="pros">Pros</h2>
+<ul>
+<li>Excellent performance!</li>
+<li>No migration is needed for this, as no new columns will be added.
+Only a new expression index needs to be created.</li>
+</ul>
+<h2 id="cons">Cons</h2>
+<ul>
+<li>Need additional mechanism to create virtual folder entities.(only if
+you need to show the folder level)</li>
+<li>There are limitations on the file/folder name length.(especially in
+non-ASCII characters)</li>
+</ul>
+<h2 id="limitation">Limitation</h2>
+<p>The maximum length for a file or directory name is limited, and in
+the worst case scenario where non-ASCII characters(Chinese) and
+alphabets are interlaced, it can not be longer than <strong>33</strong>
+characters. Even if all the characters are Chinese, the name can not
+exceed <strong>62</strong> characters in length.</p>
+<p>Based on PostgreSQL <a
+target="_blank" rel="noopener" href="https://www.postgresql.org/docs/current/ltree.html#id-1.11.7.32.5">documentation</a>,
+the label path can not exceed 65535 labels. However, in most cases, this
+limit should be sufficient and it is unlikely that you would need to
+nest directories to such a deep level.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> escape_filename_for_ltree(</span><br><span class="line">    <span class="string">&#x27;一0二0三0四0五0六0七0八0九0十0&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一0二0三0四0五0六0七0八0九0十0&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一0二0三0四0五0六0七0八0九0十0&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一0二0&#x27;</span></span><br><span class="line">); <span class="comment">-- worst case len 34</span></span><br><span class="line"><span class="keyword">select</span> escape_filename_for_ltree(</span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三&#x27;</span></span><br><span class="line">); <span class="comment">-- Chinese case len 63</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[42622] ERROR: label string is too long Detail: Label length is 259, must be at most 255, at character 260. Where: PL/pgSQL function escape_filename_for_ltree(text) line 5 at SQL statement</span><br></pre></td></tr></table></figure>
+<h1 id="how-to-use">How to use</h1>
+<p>Build expression index</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX idx_file_tree_filename <span class="keyword">ON</span> files <span class="keyword">using</span> gist (escape_filename_for_ltree(filename));</span><br></pre></td></tr></table></figure>
+<p>Example Query</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">explain analyse</span><br><span class="line"><span class="keyword">select</span> filename</span><br><span class="line"><span class="keyword">from</span> files</span><br><span class="line"><span class="keyword">where</span> escape_filename_for_ltree(filename) <span class="operator">~</span> <span class="string">&#x27;ow.*&#123;1&#125;&#x27;</span></span><br><span class="line">  <span class="keyword">and</span> record_id <span class="operator">=</span> <span class="string">&#x27;1666bad1-202c-496e-bb0e-9664ce3febcb&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>Query Result</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ow/ros_00000000_2022-03-02-12-55-19_330.bag</span><br><span class="line">ow/ros_00011426_2022-08-15-19-24-11_0.bag</span><br><span class="line">ow/ros_00019378_2022-08-12-18-40-06_0.bag</span><br><span class="line">ow/ros_00011426_2022-08-15-19-24-11_0.bag</span><br><span class="line">ow/ros_00011426_2022-08-15-19-24-11_0.bag.coscene-reserved-index</span><br></pre></td></tr></table></figure>
+<p>Query Explain</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Bitmap Heap Scan <span class="keyword">on</span> files  (cost<span class="operator">=</span><span class="number">32.12</span>.<span class="number">.36</span><span class="number">.38</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">28</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.341</span>.<span class="number">.0</span><span class="number">.355</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">8</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">  Recheck Cond: ((record_id <span class="operator">=</span> <span class="string">&#x27;1666bad1-202c-496e-bb0e-9664ce3febcb&#x27;</span>::uuid) <span class="keyword">AND</span> (escape_filename_for_ltree((filename)::text) <span class="operator">&lt;</span>@ <span class="string">&#x27;ow&#x27;</span>::ltree))</span><br><span class="line">  Heap Blocks: exact<span class="operator">=</span><span class="number">3</span></span><br><span class="line">  <span class="operator">-</span><span class="operator">&gt;</span>  BitmapAnd  (cost<span class="operator">=</span><span class="number">32.12</span>.<span class="number">.32</span><span class="number">.12</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">0</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.323</span>.<span class="number">.0</span><span class="number">.324</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">0</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">        <span class="operator">-</span><span class="operator">&gt;</span>  Bitmap Index Scan <span class="keyword">on</span> idx_file_tree_record_id  (cost<span class="operator">=</span><span class="number">0.00</span>.<span class="number">.4</span><span class="number">.99</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">93</span> width<span class="operator">=</span><span class="number">0</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.051</span>.<span class="number">.0</span><span class="number">.051</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">100</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">              Index Cond: (record_id <span class="operator">=</span> <span class="string">&#x27;1666bad1-202c-496e-bb0e-9664ce3febcb&#x27;</span>::uuid)</span><br><span class="line">        <span class="operator">-</span><span class="operator">&gt;</span>  Bitmap Index Scan <span class="keyword">on</span> idx_file_tree_filename  (cost<span class="operator">=</span><span class="number">0.00</span>.<span class="number">.26</span><span class="number">.88</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">347</span> width<span class="operator">=</span><span class="number">0</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.253</span>.<span class="number">.0</span><span class="number">.253</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">52</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">              Index Cond: (escape_filename_for_ltree((filename)::text) <span class="operator">&lt;</span>@ <span class="string">&#x27;ow&#x27;</span>::ltree)</span><br><span class="line">Planning <span class="type">Time</span>: <span class="number">0.910</span> ms</span><br><span class="line">Execution <span class="type">Time</span>: <span class="number">0.599</span> ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="explaination">Explaination</h1>
+<p>PostgreSQL's LTREE data type allows you to use a sequence of
+alphanumeric characters and <strong>underscores</strong> on the label,
+with a maximum length of 256 characters. So, we get a special character
+<strong>underscore</strong> that can be used as a notation to
+<strong>build our escape rules</strong> within the label.</p>
+<p><strong>Slashes(<code>/</code>)</strong> will be
+<strong>replaced</strong> with <strong>dots(<code>.</code>)</strong>. I
+think it does not require further explanation.</p>
+<p>Initially, I attempted to encode all non-alphabetic characters into
+their Unicode hex format. However, after receiving advice from other
+guys, I discovered that using <strong>base64</strong> encoding can be
+more efficient in terms of information entropy. Ultimately, I decided to
+use <strong>base62</strong> encoding instead to ensure that no illegal
+characters are produced and to achieve the maximum possible information
+entropy.</p>
+<p>This is the final representation of the physical data that will be
+stored in the index of PostgreSQL.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> escape_filename_for_ltree(<span class="string">&#x27;root/folder1/机器人仿真gazebo11-noetic集成ROS1/state.log&#x27;</span>);</span><br><span class="line"><span class="comment">-- result:</span></span><br><span class="line"><span class="comment">-- root.folder1._1hOBTVt5n7EhFWzIbUcjT_gazebo11_j_noetic_1Aw3qhY48_ROS1.state_k_log</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="further">Further</h1>
+<p>If you want to store an isolated file tree in the same table, one
+thing you need to do is prepend the isolation key as the first label of
+the ltree. For example:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> escape_filename_for_ltree(<span class="string">&#x27;&lt;put_user_id_in_there&gt;&#x27;</span> <span class="operator">||</span> <span class="string">&#x27;/&#x27;</span> <span class="operator">||</span> <span class="string">&#x27;&lt;path_to_file&gt;&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>By doing this, you will get the best query performance.</p>
+<h1 id="summary">Summary</h1>
+<p>This document explains how to implement a file tree in PostgreSQL
+using the <code>ltree</code> datatype. The <code>ltree</code> datatype
+can help build the hierarchy within the database, and an expression
+index needs to be created. There are some limitations on the file/folder
+name length, but the performance is excellent. The document also
+provides PostgreSQL functions for escaping and encoding file/folder
+names.</p>
+<h1 id="appendix-postgresql-functions">Appendix: PostgreSQL
+Functions</h1>
+<h2 id="entry-function-immutable-is-required">Entry function (immutable
+is required)</h2>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">FUNCTION</span> escape_filename_for_ltree(filename TEXT)</span><br><span class="line">    <span class="keyword">RETURNS</span> ltree <span class="keyword">AS</span></span><br><span class="line">$$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    escaped_path ltree;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">select</span> string_agg(escape_part(part), <span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">    <span class="keyword">into</span> escaped_path</span><br><span class="line">    <span class="keyword">from</span> (<span class="keyword">select</span> regexp_split_to_table <span class="keyword">as</span> part</span><br><span class="line">          <span class="keyword">from</span> regexp_split_to_table(filename, <span class="string">&#x27;/&#x27;</span>)) <span class="keyword">as</span> parts;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> escaped_path;</span><br><span class="line"></span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$ <span class="keyword">LANGUAGE</span> plpgsql IMMUTABLE;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="util-escape-every-part-folder-or-file">Util: Escape every part
+(folder or file)</h2>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> replace <span class="keyword">function</span> escape_part(part text) <span class="keyword">returns</span> text <span class="keyword">as</span></span><br><span class="line">$$</span><br><span class="line"><span class="keyword">declare</span></span><br><span class="line">    escaped_part text;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">select</span> string_agg(escaped, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">into</span> escaped_part</span><br><span class="line">    <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">case</span> <span class="built_in">substring</span>(sep, <span class="number">1</span>, <span class="number">1</span>) <span class="operator">~</span> <span class="string">&#x27;[0-9a-zA-Z]&#x27;</span></span><br><span class="line">                     <span class="keyword">when</span> <span class="literal">true</span> <span class="keyword">then</span> sep</span><br><span class="line">                     <span class="keyword">else</span> <span class="string">&#x27;_&#x27;</span> <span class="operator">||</span> base62_encode(sep) <span class="operator">||</span> <span class="string">&#x27;_&#x27;</span></span><br><span class="line">                     <span class="keyword">end</span> <span class="keyword">as</span> escaped</span><br><span class="line">          <span class="keyword">from</span> (<span class="keyword">select</span> split_string_by_alpha <span class="keyword">as</span> sep</span><br><span class="line">                <span class="keyword">from</span> split_string_by_alpha(part)) <span class="keyword">as</span> split) <span class="keyword">as</span> <span class="keyword">escape</span>;</span><br><span class="line">    <span class="keyword">RETURN</span> escaped_part;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line">$$ <span class="keyword">language</span> plpgsql immutable</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="util-split-a-string-into-groups">Util: Split a string into
+groups</h2>
+<p>Each group contains only alphabetic characters or non-alphabetic
+characters.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">FUNCTION</span> split_string_by_alpha(input_str TEXT) <span class="keyword">RETURNS</span> SETOF TEXT <span class="keyword">AS</span></span><br><span class="line">$$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    split_str TEXT;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    IF input_str <span class="keyword">IS</span> <span class="keyword">NULL</span> <span class="keyword">OR</span> input_str <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">THEN</span></span><br><span class="line">        <span class="keyword">RETURN</span>;</span><br><span class="line">    <span class="keyword">END</span> IF;</span><br><span class="line"></span><br><span class="line">    WHILE input_str <span class="operator">!=</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">        LOOP</span><br><span class="line">            split_str :<span class="operator">=</span> <span class="built_in">substring</span>(input_str <span class="keyword">from</span> <span class="string">&#x27;[^0-9a-zA-Z]+|[0-9a-zA-Z]+&#x27;</span>);</span><br><span class="line">            IF split_str <span class="operator">!=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">THEN</span></span><br><span class="line">                <span class="keyword">RETURN</span> NEXT split_str;</span><br><span class="line">            <span class="keyword">END</span> IF;</span><br><span class="line">            input_str :<span class="operator">=</span> <span class="built_in">substring</span>(input_str <span class="keyword">from</span> length(split_str) <span class="operator">+</span> <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">END</span> LOOP;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">RETURN</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$ <span class="keyword">LANGUAGE</span> plpgsql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="util-base62-encode-function">Util: base62 encode function</h2>
+<p>By using the base62_encode function, we can create a string that
+meets the requirements of LTREE and achieves maximum information
+entropy.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">FUNCTION</span> base62_encode(data TEXT) <span class="keyword">RETURNS</span> TEXT <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    ALPHABET <span class="type">CHAR</span>(<span class="number">62</span>)[] :<span class="operator">=</span> <span class="keyword">ARRAY</span>[</span><br><span class="line">        <span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;2&#x27;</span>,<span class="string">&#x27;3&#x27;</span>,<span class="string">&#x27;4&#x27;</span>,<span class="string">&#x27;5&#x27;</span>,<span class="string">&#x27;6&#x27;</span>,<span class="string">&#x27;7&#x27;</span>,<span class="string">&#x27;8&#x27;</span>,<span class="string">&#x27;9&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;A&#x27;</span>,<span class="string">&#x27;B&#x27;</span>,<span class="string">&#x27;C&#x27;</span>,<span class="string">&#x27;D&#x27;</span>,<span class="string">&#x27;E&#x27;</span>,<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;G&#x27;</span>,<span class="string">&#x27;H&#x27;</span>,<span class="string">&#x27;I&#x27;</span>,<span class="string">&#x27;J&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;K&#x27;</span>,<span class="string">&#x27;L&#x27;</span>,<span class="string">&#x27;M&#x27;</span>,<span class="string">&#x27;N&#x27;</span>,<span class="string">&#x27;O&#x27;</span>,<span class="string">&#x27;P&#x27;</span>,<span class="string">&#x27;Q&#x27;</span>,<span class="string">&#x27;R&#x27;</span>,<span class="string">&#x27;S&#x27;</span>,<span class="string">&#x27;T&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;U&#x27;</span>,<span class="string">&#x27;V&#x27;</span>,<span class="string">&#x27;W&#x27;</span>,<span class="string">&#x27;X&#x27;</span>,<span class="string">&#x27;Y&#x27;</span>,<span class="string">&#x27;Z&#x27;</span>,<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;e&#x27;</span>,<span class="string">&#x27;f&#x27;</span>,<span class="string">&#x27;g&#x27;</span>,<span class="string">&#x27;h&#x27;</span>,<span class="string">&#x27;i&#x27;</span>,<span class="string">&#x27;j&#x27;</span>,<span class="string">&#x27;k&#x27;</span>,<span class="string">&#x27;l&#x27;</span>,<span class="string">&#x27;m&#x27;</span>,<span class="string">&#x27;n&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;o&#x27;</span>,<span class="string">&#x27;p&#x27;</span>,<span class="string">&#x27;q&#x27;</span>,<span class="string">&#x27;r&#x27;</span>,<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;t&#x27;</span>,<span class="string">&#x27;u&#x27;</span>,<span class="string">&#x27;v&#x27;</span>,<span class="string">&#x27;w&#x27;</span>,<span class="string">&#x27;x&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;y&#x27;</span>,<span class="string">&#x27;z&#x27;</span></span><br><span class="line">    ];</span><br><span class="line">    BASE <span class="type">BIGINT</span> :<span class="operator">=</span> <span class="number">62</span>;</span><br><span class="line">    <span class="keyword">result</span> TEXT :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    val <span class="type">numeric</span> :<span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    bytes bytea :<span class="operator">=</span> data::bytea;</span><br><span class="line">    len <span class="type">INT</span> :<span class="operator">=</span> length(data::bytea);</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">FOR</span> i <span class="keyword">IN</span> <span class="number">0.</span>.(len <span class="operator">-</span> <span class="number">1</span>) LOOP</span><br><span class="line">        val :<span class="operator">=</span> (val <span class="operator">*</span> <span class="number">256</span>) <span class="operator">+</span> get_byte(bytes, i);</span><br><span class="line">    <span class="keyword">END</span> LOOP;</span><br><span class="line"></span><br><span class="line">    WHILE val <span class="operator">&gt;</span> <span class="number">0</span> LOOP</span><br><span class="line">        <span class="keyword">result</span> :<span class="operator">=</span> ALPHABET[val <span class="operator">%</span> BASE <span class="operator">+</span> <span class="number">1</span>] <span class="operator">||</span> <span class="keyword">result</span>;</span><br><span class="line">        val :<span class="operator">=</span> <span class="built_in">floor</span>(val <span class="operator">/</span> BASE);</span><br><span class="line">    <span class="keyword">END</span> LOOP;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">RETURN</span> <span class="keyword">result</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$ <span class="keyword">LANGUAGE</span> plpgsql;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/System-design/" rel="tag"># System design</a>
+              <a href="/tags/PostgreSQL/" rel="tag"># PostgreSQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/21/talking-about-resource-security/" rel="prev" title="浅谈资源安全">
+                  <i class="fa fa-chevron-left"></i> 浅谈资源安全
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/" rel="next" title="Implementing Version Management of File Trees in PostgreSQL">
+                  Implementing Version Management of File Trees in PostgreSQL <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

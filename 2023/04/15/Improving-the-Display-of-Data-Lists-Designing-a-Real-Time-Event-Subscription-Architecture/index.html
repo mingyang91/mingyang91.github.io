@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time int">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture">
+<meta property="og:url" content="https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time int">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-14T16:31:35.000Z">
+<meta property="article:modified_time" content="2025-06-30T03:30:49.733Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="System design">
+<meta property="article:tag" content="Reactive stream">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/","path":"2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/","title":"Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture | My Space</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#terminologies-and-context"><span class="nav-number">1.</span> <span class="nav-text">Terminologies and Context</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#functional-requirements"><span class="nav-number">1.1.</span> <span class="nav-text">Functional Requirements</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#architecture"><span class="nav-number">2.</span> <span class="nav-text">Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#high-level-overview"><span class="nav-number">2.1.</span> <span class="nav-text">High-Level Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#application-component-level-design-lld"><span class="nav-number">2.2.</span> <span class="nav-text">Application &#x2F;
+Component Level Design (LLD)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#failure-modes"><span class="nav-number">2.3.</span> <span class="nav-text">Failure Modes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fast-producer-slow-consumer"><span class="nav-number">2.3.1.</span> <span class="nav-text">Fast Producer-Slow Consumer</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#alternative-design"><span class="nav-number">3.</span> <span class="nav-text">Alternative Design</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-04-15 00:31:35" itemprop="dateCreated datePublished" datetime="2023-04-15T00:31:35+08:00">2023-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-06-30 11:30:49" itemprop="dateModified" datetime="2025-06-30T11:30:49+08:00">2025-06-30</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Many data systems use polling refresh to display lists, which can
+cause a delay in updating content status and cannot immediately provide
+feedback to users on the page. Shortening the refresh time interval on
+the client side can lead to an excessive load on the server, which
+should be avoided.</p>
+<p>To solve this problem, this article proposes an event subscription
+mechanism. This mechanism provides real-time updates to the client,
+eliminating the need for polling refresh and improving the user
+experience.</p>
+<h1 id="terminologies-and-context">Terminologies and Context</h1>
+<p>This article introduces the following concepts:</p>
+<ul>
+<li><strong>Hub</strong>: An event aggregation center that receives
+events from producers and sends them to subscribers.</li>
+<li><strong>Buffer</strong>: An event buffer that caches events from
+producers and waits for the Hub to dispatch them to subscribers.</li>
+<li><strong>Filter</strong>: An event filter that only sends events
+meeting specified conditions to subscribers.</li>
+<li><strong>Broadcast</strong>: An event broadcaster that broadcasts the
+producer's events to all subscribers.</li>
+<li><strong>Observer</strong>: An event observer that allows subscribers
+to receive events through observers.</li>
+</ul>
+<p>The document discusses some common concepts such as:</p>
+<ul>
+<li>Pub-Sub pattern: It is a messaging pattern where the sender
+(publisher) does not send messages directly to specific recipients
+(subscribers). Instead, published messages are divided into different
+categories without needing to know which subscribers (if any) exist.
+Similarly, subscribers can express interest in one or more categories
+and receive all messages related to that category, without the publisher
+needing to know which subscribers (if any) exist.</li>
+<li>Filter:
+<ul>
+<li>Topic-based content filtering mode is based on topic filtering
+events. Producers publish events to one or more topics, and subscribers
+can subscribe to one or more topics. Only events that match the
+subscribed topics will be sent to subscribers. However, when a terminal
+client subscribes directly, this method has too broad a subscription
+range and is not suitable for a common hierarchical structure.</li>
+<li>Content-based content filtering mode is based on message content
+filtering events. Producers publish events to one or more topics, and
+subscribers can use filters to subscribe to one or more topics. Only
+events that match the subscribed topics will be sent to subscribers.
+This method is suitable for a common hierarchical structure.</li>
+</ul></li>
+</ul>
+<h2 id="functional-requirements">Functional Requirements</h2>
+<ul>
+<li>Client users can subscribe to events through gRPC Stream, WebSocket,
+or ServerSentEvent.</li>
+<li>Whenever a record's status changes (e.g. when the record is updated
+by an automation task) or when other collaborators operate on the same
+record simultaneously, an event will be triggered and pushed to the
+message center.</li>
+<li>Events will be filtered using content filtering mode, ensuring that
+only events that meet the specified conditions are sent to
+subscribers.</li>
+</ul>
+<h1 id="architecture">Architecture</h1>
+<pre><code class="highlight mermaid">flowchart TD
+  Hub([Hub])
+  Buffer0[\&quot;Buffer drop oldest&quot;/]
+  Buffer1[\&quot;Buffer1 drop oldest&quot;/]
+  Buffer2[\&quot;Buffer2 drop oldest&quot;/]
+  Buffer3[\&quot;Buffer3 drop oldest&quot;/]
+  Filter1[\&quot;File(Record = 111)&quot;/]
+  Filter2[\&quot;Workflow(Project = 222)&quot;/]
+  Filter3[\&quot;File(Project = 333)&quot;/]
+  Broadcast((Broadcast))
+  Client1(Client1)
+  Client2(Client2)
+  Client3(Client3)
+  Hub --&gt; Buffer0
+  subgraph Server
+    Buffer0 --&gt; Broadcast
+    Broadcast --&gt; Filter1 --&gt; Buffer1 --&gt; Observer1
+    Broadcast --&gt; Filter2 --&gt; Buffer2 --&gt; Observer2
+    Broadcast --&gt; Filter3 --&gt; Buffer3 --&gt; Observer3
+  end
+  subgraph Clients
+    Observer1 -.-&gt; Client1
+    Observer2 -.-&gt; Client2
+    Observer3 -.-&gt; Client3
+  end</code></pre>
+<h2 id="high-level-overview">High-Level Overview</h2>
+<pre><code class="highlight mermaid">flowchart TD
+  Pipe#a[[...Pipe...]]
+  Pipe#b[[...Pipe...]]
+  subgraph Hub
+  direction LR
+  Event1((Event1))
+	Event2((Event2))
+  Event3((Event3))
+  Event4((Event4))
+  Event5((Event5))
+  Event6((Event6))
+  Event7((Event7))
+  Event8((Event8))
+  Event1 -.-&gt; Event2 -.-&gt; Event3 -.-&gt; Event4 -.-&gt; Event5 -.-&gt; Event6 -.-&gt; Event7 -.-&gt; Event8
+  end
+	Pipe#a -.-&gt; Event1
+  Event8 -.-&gt; Pipe#b
+  subgraph Client1
+  direction LR
+  C1Subscribe((Start))
+  C1Cancel((End))
+  Event2 -.-&gt; C1Listen2
+  Event3 -.-&gt; C1Listen3
+  Event4 -.-&gt; C1Listen4
+  Event5 -.-&gt; C1Listen5
+  C1Subscribe -.-&gt; C1Listen2 -.-&gt; C1Listen3 -.-&gt; C1Listen4 -.-&gt; C1Listen5 -.-&gt; C1Cancel
+  end
+  subgraph Client2
+  direction LR
+  C2Subscribe((Start))
+  C2Cancel((End))
+  Lag((&quot;❌&quot;))
+  C2Subscribe -.-&gt; C2Listen1 -- &quot;Poor Network&quot; ---&gt; Lag --&quot;Packet loss&quot;---&gt; C2Listen5 -.-&gt; C2Listen6 -.-&gt; C2Listen7 -.-&gt; C2Listen8 -.-&gt; C2Cancel
+  Event1 -.-&gt; C2Listen1
+  Event5 -.-&gt; C2Listen5
+  Event6 -.-&gt; C2Listen6
+  Event7 -.-&gt; C2Listen7
+  Event8 -.-&gt; C2Listen8
+  end</code></pre>
+<p>Clients should follow these steps:</p>
+<ul>
+<li>Upon entering the page, subscribe as necessary.</li>
+<li>After listening to the change event, debounce and re-request the
+list interface, and then render it.</li>
+<li>When leaving the page, cancel the subscription.</li>
+</ul>
+<p>Servers should follow these steps:</p>
+<ul>
+<li>Subscribe to push events based on the client's filter.</li>
+<li>When the client's backlog message becomes too heavy, delete the
+oldest message from the buffer.</li>
+<li>When the client cancels the subscription, the server should also
+cancel the broadcast to the client.</li>
+</ul>
+<h2 id="application-component-level-design-lld"><strong>Application /
+Component Level Design (LLD)</strong></h2>
+<pre><code class="highlight mermaid">flowchart LR
+  Server([Server])
+  Client([Client: Web...])
+  MQ[Kafka or other]
+  Broadcast((Broadcast))
+  subgraph ExternalHub
+    direction LR
+    Receiver --&gt; MQ --&gt; Sender
+  end
+  subgraph InMemoryHub
+    direction LR
+    Emit -.-&gt; OnEach
+  end
+  Server -.-&gt; Emit
+  Sender --&gt; Broadcast
+  OnEach -.-&gt; Broadcast
+  Broadcast -.-&gt; gRPC
+  Broadcast -.-&gt; gRPC
+  Broadcast -.-&gt; gRPC
+  Server --  &quot;if horizon scale is needed&quot; --&gt; Receiver
+  gRPC --Stream--&gt; Client</code></pre>
+<p>For a single-node server, a simple Hub can be implemented using an
+in-memory queue.</p>
+<p>For multi-node servers, an external Hub implementation such as Kafka,
+MQ, or Knative eventing should be considered. The broadcasting logic is
+no different from that of a single machine.</p>
+<h2 id="failure-modes"><strong>Failure Modes</strong></h2>
+<h3 id="fast-producer-slow-consumer">Fast Producer-Slow Consumer</h3>
+<p>This is a common scenario that requires special attention. The
+publish-subscribe mechanism for terminal clients cannot always expect
+clients to consume messages in real time. However, message continuity
+must be maximally guaranteed. Clients may access our products in an
+uncontrollable network environment, such as over 4G or poor Wi-Fi. Thus,
+the server message queue cannot become too backlogged. When a client's
+consumption rate cannot keep up with the server's production speed, this
+article recommends using a bounded <code>Buffer</code> with the
+<code>OverflowStrategy.DropOldest</code> strategy. This ensures that
+subscriptions between consumers are isolated, avoiding too many unpushed
+messages on the server (which could lead to potential memory leak
+risks).</p>
+<h1 id="alternative-design">Alternative Design</h1>
+<p><a
+target="_blank" rel="noopener" href="https://tanzu.vmware.com/content/blog/a-channel-based-ring-buffer-in-go">VMware
+has publish a very similar design in 2013, but use Go
+RingChannel</a></p>
+<h1 id="summary">Summary</h1>
+<p>This document proposes an event subscription mechanism to address the
+delay in updating content status caused by polling refresh. Clients can
+subscribe to events through any long connection protocol, and events
+will be filtered based on specified conditions. To avoid having too many
+unpushed messages on the server, a bounded buffer with the
+<code>OverflowStrategy.DropOldest</code> strategy is used.</p>
+<p>Implementing this in Reactive Streams is straightforward, but you can
+choose your preferred technology to do so.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/System-design/" rel="tag"># System design</a>
+              <a href="/tags/Reactive-stream/" rel="tag"># Reactive stream</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/" rel="prev" title="Implementing Version Management of File Trees in PostgreSQL">
+                  <i class="fa fa-chevron-left"></i> Implementing Version Management of File Trees in PostgreSQL
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
