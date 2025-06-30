@@ -119,7 +119,7 @@ deploy:
   branch: gh-pages
 
 google_analytics:
-  tracking_id: UA-72173137-1
+  tracking_id: G-1RGPQ0EFYL
   localhost_ignored: true
 
 # Demo: https://utteranc.es/  http://trumandu.github.io/about/
