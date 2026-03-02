@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="前言 最近一年我在 Google&#x2F;Anthropic&#x2F;OpenAI 三家烧了超过 1 万美金的 token 账单。所以本文内容基于 opus4.6、codex-5.3-xhigh、gemini3-pro 等最强模型不限量使用所表现出来的编码能力进行评价。 现象：Agent 的信任危机 就好像保健品销售拿着他的《大数据量子 AI 生物磁场治疗仪》，忽悠我说这台原价 20 万、现在活动价 8 万 8">
+    <meta name="description" content="前言 最近一年我在 Google&#x2F;Anthropic&#x2F;OpenAI 三家烧了超过 1 万美金的 token 账单。所以本文内容基于 opus4.6、codex-5.3-xhigh、gemini3-pro 等最强模型不限量使用所表现出来的编码能力进行评价。 这些 token 分布在嵌入式内核驱动、后端架构、DevOps、以及前端 UI 四类项目中。不同领域的 agent 表现差异大到离谱——20 美">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vibe Coding 一年实践后的冷思考">
 <meta property="og:url" content="https://famer.me/2026/02/06/vibe-coding-one-year-reflection/index.html">
 <meta property="og:site_name" content="My Space">
-<meta property="og:description" content="前言 最近一年我在 Google&#x2F;Anthropic&#x2F;OpenAI 三家烧了超过 1 万美金的 token 账单。所以本文内容基于 opus4.6、codex-5.3-xhigh、gemini3-pro 等最强模型不限量使用所表现出来的编码能力进行评价。 现象：Agent 的信任危机 就好像保健品销售拿着他的《大数据量子 AI 生物磁场治疗仪》，忽悠我说这台原价 20 万、现在活动价 8 万 8">
+<meta property="og:description" content="前言 最近一年我在 Google&#x2F;Anthropic&#x2F;OpenAI 三家烧了超过 1 万美金的 token 账单。所以本文内容基于 opus4.6、codex-5.3-xhigh、gemini3-pro 等最强模型不限量使用所表现出来的编码能力进行评价。 这些 token 分布在嵌入式内核驱动、后端架构、DevOps、以及前端 UI 四类项目中。不同领域的 agent 表现差异大到离谱——20 美">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-02-06T05:44:21.000Z">
-<meta property="article:modified_time" content="2026-02-26T01:28:34.088Z">
+<meta property="article:modified_time" content="2026-03-02T05:21:49.122Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -111,7 +111,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8E%B0%E8%B1%A1agent-%E7%9A%84%E4%BF%A1%E4%BB%BB%E5%8D%B1%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">现象：Agent 的信任危机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%9C%9F%E5%AE%9E%E6%A1%88%E4%BE%8B"><span class="nav-number">2.1.</span> <span class="nav-text">一个真实案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0%E9%AA%8C%E8%AF%81%E6%89%8B%E6%AE%B5%E7%9A%84%E5%85%A8%E9%9D%A2%E5%A4%B1%E6%95%88"><span class="nav-number">3.</span> <span class="nav-text">原因：验证手段的全面失效</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#code-review-%E5%A4%B1%E6%95%88"><span class="nav-number">3.1.</span> <span class="nav-text">Code Review 失效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%A4%B1%E6%95%88"><span class="nav-number">3.2.</span> <span class="nav-text">测试失效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E4%BC%A0%E7%BB%9F%E8%A1%8C%E4%B8%9A%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">3.3.</span> <span class="nav-text">与传统行业的对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E8%AE%A9%E7%BC%96%E8%AF%91%E5%99%A8%E6%9B%BF%E4%BD%A0%E6%8A%8A%E5%85%B3"><span class="nav-number">4.</span> <span class="nav-text">方案：让编译器替你把关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E6%95%88%E6%9E%9C"><span class="nav-number">4.1.</span> <span class="nav-text">实践效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">局限性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E6%B7%B1%E7%9A%84%E5%9B%B0%E5%A2%83plan-%E4%B8%8E-execute"><span class="nav-number">5.</span> <span class="nav-text">更深的困境：Plan 与 Execute</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E8%A7%81%E5%8D%B3%E5%B7%85%E5%B3%B0"><span class="nav-number">6.</span> <span class="nav-text">初见即巅峰</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#agent-%E6%97%B6%E4%BB%A3cs-%E5%9F%BA%E7%A1%80%E8%BF%98%E8%A6%81%E5%AD%A6%E5%90%97"><span class="nav-number">7.</span> <span class="nav-text">Agent 时代，CS 基础还要学吗？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">8.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8E%B0%E8%B1%A1agent-%E7%9A%84%E4%BF%A1%E4%BB%BB%E5%8D%B1%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">现象：Agent 的信任危机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%9F%E5%AE%9E%E6%A1%88%E4%BE%8B"><span class="nav-number">2.1.</span> <span class="nav-text">真实案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0%E9%AA%8C%E8%AF%81%E6%89%8B%E6%AE%B5%E7%9A%84%E5%85%A8%E9%9D%A2%E5%A4%B1%E6%95%88"><span class="nav-number">3.</span> <span class="nav-text">原因：验证手段的全面失效</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#code-review-%E5%A4%B1%E6%95%88"><span class="nav-number">3.1.</span> <span class="nav-text">Code Review 失效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%A4%B1%E6%95%88"><span class="nav-number">3.2.</span> <span class="nav-text">测试失效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E4%BC%A0%E7%BB%9F%E8%A1%8C%E4%B8%9A%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">3.3.</span> <span class="nav-text">与传统行业的对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E8%AE%A9%E7%BC%96%E8%AF%91%E5%99%A8%E6%9B%BF%E4%BD%A0%E6%8A%8A%E5%85%B3"><span class="nav-number">4.</span> <span class="nav-text">方案：让编译器替你把关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E5%B1%82%E9%98%B2%E7%BA%BF%E8%AE%A9-z3-%E6%9B%BF%E4%BD%A0%E8%AF%81%E6%98%8E"><span class="nav-number">4.1.</span> <span class="nav-text">第二层防线：让 z3 替你证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E6%95%88%E6%9E%9C"><span class="nav-number">4.2.</span> <span class="nav-text">实践效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">4.3.</span> <span class="nav-text">局限性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E6%B7%B1%E7%9A%84%E5%9B%B0%E5%A2%83plan-%E4%B8%8E-execute"><span class="nav-number">5.</span> <span class="nav-text">更深的困境：Plan 与 Execute</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E8%A7%81%E5%8D%B3%E5%B7%85%E5%B3%B0"><span class="nav-number">6.</span> <span class="nav-text">初见即巅峰</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#agent-%E6%97%B6%E4%BB%A3cs-%E5%9F%BA%E7%A1%80%E8%BF%98%E8%A6%81%E5%AD%A6%E5%90%97"><span class="nav-number">7.</span> <span class="nav-text">Agent 时代，CS 基础还要学吗？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">8.</span> <span class="nav-text">结语</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -200,7 +200,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-02-26 09:28:34" itemprop="dateModified" datetime="2026-02-26T09:28:34+08:00">2026-02-26</time>
+      <time title="Modified: 2026-03-02 13:21:49" itemprop="dateModified" datetime="2026-03-02T13:21:49+08:00">2026-03-02</time>
     </span>
 
   
@@ -217,6 +217,11 @@
 <p>最近一年我在 Google/Anthropic/OpenAI 三家烧了超过 1 万美金的 token
 账单。所以本文内容基于 opus4.6、codex-5.3-xhigh、gemini3-pro
 等最强模型不限量使用所表现出来的编码能力进行评价。</p>
+<p>这些 token 分布在嵌入式内核驱动、后端架构、DevOps、以及前端 UI
+四类项目中。不同领域的 agent 表现差异大到离谱——20 美金的 token 就能让
+agent 低人类指导条件下 vibe 出一个还不错的 React dashboard，但 2k 甚至
+20k 美金的 token 也无法让 agent
+在真机上编写出可用的内核驱动程序。下文的结论，基于这种跨领域的对比。</p>
 <h1 id="现象agent-的信任危机">现象：Agent 的信任危机</h1>
 <p>就好像保健品销售拿着他的《大数据量子 AI
 生物磁场治疗仪》，忽悠我说这台原价 20 万、现在活动价 8 万 8
@@ -230,7 +235,7 @@ agent 给你保证现在质量和完成度可以上线生产了，你信吗？</
 <p>此时此刻，无数知识星球、自媒体、AI
 导师教父们正在到处收割韭菜的学费。大意基本上都是教你如何
 prompt（tool/skill 换汤不换药），然后让你多开 agent 并行干活。</p>
-<h2 id="一个真实案例">一个真实案例</h2>
+<h2 id="真实案例">真实案例</h2>
 <p>Agent 的盲目自信不仅会误导使用者，也会误导 agent 自己。</p>
 <p>我曾给 agent 这个任务：为当前 Kotlin 项目集成 GCP Transcoding
 服务。我给了 agent 该产品的页面和文档作为参考，让它开始 plan。Agent
@@ -253,6 +258,9 @@ RESTful 远没有想象中那么简单。哪怕仅实现 Transcoding
 <p>若是让 agent 按照 RESTful 文档手动实现，agent 可能会陷入 debug
 泥潭——因为当 AI
 幻觉导致写错了可选字段的字段名（大小写、驼峰、下划线），程序不会立即报错。你需要多久才能发现它实现错了？等上线生产后客户投诉吗？</p>
+<p>还有更蠢的。我让 agent 训练一个 ML 模型并评估效果，它兴高采烈地汇报
+accuracy 接近完美——仔细检查才发现它在训练集上跑的测试。agent
+不觉得这有问题，数据进去了，指标出来了，流程完整，可以上线。</p>
 <p><strong>为什么我们无法信任 agent？</strong>
 经过一年的实践，我认为问题的根源在于：我们缺乏有效的验证手段。</p>
 <h1 id="原因验证手段的全面失效">原因：验证手段的全面失效</h1>
@@ -277,12 +285,25 @@ review
 阶段发现，经常是上线后出了问题，回头细查的时候才发现是「巧克力味的屎」。</p>
 <p>你信我，opus、codex-xhigh 这些你们舍不得用的模型，我开 thinking+max
 模式站起来蹬，一样有这个问题。</p>
+<p>我也试过让 AI 反过来审我的设计。AI
+对你谄媚的语气，你感受一下——把一个我自己都知道有问题的方案丢给 gpt4o
+评审，enterprise level、future
+proof、scaleable，彩虹屁一套接一套。后来我换了提示词，让它扮演"讨厌的同事"来批评我的代码，好了一点点。但最终效果依然不理想——AI
+看到思路连贯的专业文字就会降低警惕，给出较高评价，即便内容错的离谱。</p>
 <h2 id="测试失效">测试失效</h2>
 <p>更不用说测试了。现在的 test cases 也是 AI vibe 出来的，agent
 又当裁判又当运动员，它说什么就是什么。蒙我坑我也不是一次两次了。写了几千行
 getter/setter 的 test case，最后测试全绿告诉我可以上生产环境发布了。</p>
 <p>就像前面 GCP Transcoding 的例子，agent
 写错了可选字段的字段名，测试照样能过，因为测试也是它自己写的，错的一致就是「对」的。</p>
+<p>有人会说：那让不同的 agent
+分工——一个写代码一个写测试，不就行了？我试过。比同一个 agent
+自写自测好一些，显而易见的 bug 确实能被揪出来。但这些 agent
+共享相同的训练数据和系统性偏差，盲区高度重合。不像两个人类程序员——张三是做嵌入式出身的，李四是搞
+web 的，他俩的知识结构和思维盲点能互补。两个 agent
+再怎么分角色，本质上都是同一个培训班出来的——解决的是「同一个人出卷又答题」的问题，但解决不了「所有出题者都来自同一个培训班」的问题。</p>
+<p>而且 AI 自己审核自己，边界递减效应非常明显。如果一审 agent
+没看出来的问题，二审三审大概率也一样，除非你能喂给它更多错误信息。</p>
 <h2 id="与传统行业的对比">与传统行业的对比</h2>
 <p>说到这里，有人可能会问：其他行业被机械、智能赋能后，难道就没有这个问题吗？</p>
 <p>让我用 CNC 机床打个比方：</p>
@@ -298,16 +319,16 @@ agent 自己维护，不考虑对人类的可读性），性能更高，资源�
 <p>而目前我们还无法评价 agent
 是否达到了这个状态。单就「功能实现」这一基础要求，agent
 还不能脱离人的引导和测试验证——更别提安全性、可维护性、性能这些更高阶的指标了。</p>
-<p>而且程序不是物理工件，不能用物理手段去测量。你没法拿卡尺量一下这段代码的「质量公差」是多少。</p>
-<p>所以没法用衡量物理工件的标准去衡量程序，反而应该像衡量 CNC
-机床本身一样——而一次生产（all tests
-passed）远不能衡量机床质量，更不能衡量程序质量。</p>
+<p>问题是：目前主流的验证手段——人工 review、自动测试——都能被
+agent「污染」。它可以写出风格完美但逻辑有毒的代码，也可以写出与错误代码完美匹配的错误测试。我们需要的是一把
+agent
+自己没法干扰的「卡尺」——不依赖它自己的判断、具有客观确定性的验证手段。</p>
 <p>CNC
 机床加工塑料、铝合金小件精度高，不代表加工钛合金、不锈钢精度也能达标。后者更考验整体刚性，以及工件质量大了以后热胀冷缩对程序进刀补偿的要求。</p>
 <p>同理，vibe coding
 出来的代码，本地点两下鼠标测试通过了，上线也是极大概率会直接炸掉。</p>
 <p><strong>传统行业：机器精度高、质量稳定，人能评价。软件行业：Agent
-产出快、覆盖广，但人还没法可靠地评价。这就是问题所在。</strong></p>
+产出快、覆盖广，但人还没法可靠地评价。这就是问题所在——那把「卡尺」在哪？</strong></p>
 <h1 id="方案让编译器替你把关">方案：让编译器替你把关</h1>
 <p>既然人工评价（Code
 Review）和自动测试都靠不住，我们需要另一种评价手段——一种不依赖 agent
@@ -315,7 +336,7 @@ Review）和自动测试都靠不住，我们需要另一种评价手段——�
 <p>我的观点和主流 AI 编码观点相反：</p>
 <p><strong>Agent
 编程时代，更需要强类型，更需要严格可验证的语言，而不是放任 agent 去写
-python/js/go，还有 anyscript。</strong></p>
+python/js/java/go，还有 anyscript。</strong></p>
 <p>为什么？</p>
 <p>AI 堆屎山这么快，别说生成个几万行了，就是生成超过 100
 行我都已经懒得逐行去细读了。但是读类型签名、pre/post-condition
@@ -329,12 +350,38 @@ agent 编码流行起来了，我发现让 agent
 用的是强类型语言，字段名写错了至少还能在编译期被类型系统拦住一部分。但
 RESTful +
 弱类型的组合，错了就是悄无声息地错，等你发现的时候已经晚了。</p>
+<p>但这只是第一层防线。强类型能拦住类型不匹配、空指针、Rust
+的生命周期错误这些「语法级」的问题。能告诉你「这段代码编译不过」，但没法告诉你「这段代码逻辑上是错的」。</p>
+<h2 id="第二层防线让-z3-替你证明">第二层防线：让 z3 替你证明</h2>
+<p>更进一步的方案是 Formal Method 级别的验证——通过 refinement type 或
+OpenJML 这类工具，在类型系统上直接编码业务约束。</p>
+<p>举个具体例子。让 agent
+写一个排序函数，传统强类型能保证输入输出类型正确——接收数组，返回数组。但没法保证返回的数组真的是有序的。而如果用
+refinement type，你可以在函数签名上直接写：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ensures(forall i, j : i &lt; j → arr[i] ≤ arr[j])</span><br></pre></td></tr></table></figure>
+<p>这行 pre/post-condition 就是你的「质量公差标准」。z3 求解器会数学证明
+agent
+写的那几百行排序实现，是否真的在所有可能的输入下都满足这个约束。证明通过就是通过，证明失败就是失败，不存在
+agent 嘴硬说「没问题」就能蒙混过关的空间。</p>
+<p><strong>关键在于：人类只需要审读这一行 spec
+是否表达了自己想要的语义，而不必逐行阅读几百行实现代码。</strong>
+这才是前面说的那把 agent 自己干扰不了的「卡尺」。</p>
 <h2 id="实践效果">实践效果</h2>
-<p>y1s1，该夸的还是要夸。现在的最新最强模型，过编译问题不大了，除非你比我还执着于类型体操。</p>
-<p>放手让 agent 做工程还是拉垮的一批，但过编译已经问题不大了。Pure-FP
-Scala、tagless final，opus 4.5 和 codex-xhigh
-遵循得挺不错了，过编译也是自动的。函数式类型体操的编译错误基本上都是几十上百行的类型天书，agent
-读懂并修复这些编译错误，在我写这篇文章时已经不再是困难。</p>
+<p>先说第一层，y1s1，该夸的还是要夸。现在的最新最强模型，过编译问题不大了，除非你比我还执着于类型体操。</p>
+<p>过去 agent 碰到 Rust
+生命周期错误、函数式类型体操，能反复尝试几十轮甚至陷入死循环直到上下文爆掉。FM
+学习曲线本就陡峭，人脑都得一直进行抽象符号推理，我曾经认为 AI
+永远不可能学会解决类型体操。</p>
+<p>但现在不一样了。Pure-FP Scala、tagless final，opus 4.5 和 codex-xhigh
+遵循得挺不错，过编译基本上是自动的。函数式类型体操的编译错误基本上都是几十上百行的类型天书，agent
+读懂并修复这些编译错误已经不再是困难。</p>
+<p>关键是：agent 解决类型体操并不是靠作弊（比如到处 asInstanceOf 或者
+any），而是通过反复尝试，真正填补了这些形式化过程的
+gap。这不是绕过，反而给了我足够的信心——说不定 AI 真的能写出通过 FM
+检查的代码。如此一来，代码的正确性就有了形式化保证，这远比单元测试覆盖更全面、更可靠。</p>
+<p>但第二层目前还是另一个世界。FM 级别的验证错误——z3
+求解失败、refinement type 约束不满足——agent
+处理起来仍然非常吃力。不过第一层的突破让我相信，这条路是有希望的。</p>
 <h2 id="局限性">局限性</h2>
 <p>当然，这个方案也有局限。</p>
 <p>实际上现在的 formal method
@@ -342,19 +389,21 @@ Scala、tagless final，opus 4.5 和 codex-xhigh
 FM 那边都是
 unsound，或者尚未证明。更不用说动不动就陷入死循环/无解证明了——稍不注意，z3
 求解器要在比宇宙空间还大的可能性里搜索，到宇宙毁灭那一天都证明不出来。</p>
-<p>强类型能解决一部分问题，但不是全部。</p>
+<p>强类型和 FM 能解决一部分问题，但不是全部。</p>
 <h1 id="更深的困境plan-与-execute">更深的困境：Plan 与 Execute</h1>
-<p>即使有了强类型作为评价手段，还有一个更深层的问题：agent
+<p>即使有了强类型 + FM 作为评价手段，还有一个更深层的问题：agent
 对计划的理解和执行。</p>
 <p>GCP Transcoding 的例子其实已经暴露了这个问题：agent 选择手动实现
 RESTful 而不是包装 Java
-SDK，这不是代码写错了，而是<strong>路线选错了</strong>。编译器能告诉你代码有没有语法错误，但没法告诉你该不该走这条路。</p>
+SDK，这不是代码写错了，而是<strong>路线选错了</strong>。编译器能告诉你代码有没有语法错误，z3
+能证明你的实现满不满足 spec，但没法告诉你该不该走这条路。</p>
 <p>再举个更极端的例子：给 agent 一个复杂任务，研制一款火箭发动机。Plan
 决定了做全流量分级燃烧循环，路线选择了共轴方案。</p>
 <p><strong>Agent 不遵循的话：</strong>
 可能就偏离到抽气循环也说不定。编译器能告诉你代码有没有语法错误，但没法告诉你这是不是你要的火箭发动机。</p>
 <p><strong>Agent 遵循太好：</strong>
-真的做出来共轴方案，那可能上线后会碰到更大的问题——共轴以后动密封系统做不好，氧化剂和燃料随着涡轮轴互相泄漏，俩预燃室要炸一个。编译器能保证类型正确，但没法保证设计合理。</p>
+真的做出来共轴方案，那可能上线后会碰到更大的问题——共轴以后动密封系统做不好，氧化剂和燃料随着涡轮轴互相泄漏，俩预燃室要炸一个。编译器能保证类型正确，z3
+能保证实现满足 spec，但没法保证 spec 本身是合理的设计。</p>
 <p>现在的 plan/edit mode
 切换也只是现阶段的权宜之计、无奈之举。这个问题比「评价手段缺失」更难解决，因为它涉及到对需求和设计的理解，而不仅仅是代码质量。</p>
 <h1 id="初见即巅峰">初见即巅峰</h1>
@@ -366,6 +415,10 @@ API 有个历史遗留的
 quirk、哪个模块之间有个微妙的依赖关系——这些东西，老员工心里都有数，但从来没人写下来。</p>
 <p>而 agent
 无法处理无限长的上下文，只能通过压缩、总结来选择性遗忘细节。可能被丢弃的是几次失败尝试的经验，也可能被丢弃的是关键数据结构的偏移量、寄存器地址、枚举定义。</p>
+<p>这不是感觉。实际用下来，上下文窗口占用接近 30% 时 agent
+就已经明显降智，接近 50%
+时退化到不如基础模型。即便关键细节仍然在上下文内，agent
+也会视而不见。</p>
 <p>每次新开一个 session
 的时候，开发者不得不面对一个几乎全新的「员工」——它似乎继承了压缩后的上下文（claude.md
 /
@@ -393,16 +446,25 @@ Submit &amp; Run，前 1%。就这？</p>
 <p>比如你要实现 Red-Black Tree、B-Tree、AVL
 Tree，那就上点强度：给算法加上形式化验证，再把泛型支持也加上。放心，当下最强模型也写不出来。</p>
 <p>其实幻觉反而会帮助你学习——因为幻觉里包含了常见的误解，你去验证和纠正幻觉的过程，本身就加深了学习效果。</p>
+<p>当然，不是每个人都要一步到位搞形式化验证。更实际的第一步是：学会写
+spec 而不是写 implementation。让 agent
+动手之前，先自己用人话写出这个功能的
+pre/post-condition——输入满足什么条件，输出应满足什么约束，哪些边界情况必须覆盖。然后把这份
+spec 作为 agent 的验收标准，而不是一句话需求丢进去许愿。</p>
+<p>从人话 spec 到 property-based test，再到 refinement
+type——这条路可以慢慢走。但核心能力是一样的：<strong>准确描述你想要什么</strong>。这本身就是
+CS 基础功底的体现，也是 agent 时代人类最不可被替代的能力。</p>
 <h1 id="结语">结语</h1>
 <p>AI
 框架、模型、工具、方法论层出不穷，日新月异。但说到底，这些都是在给模型做加法、打补丁。</p>
 <p>人类完成一个完整工作流的时候，不需要把自己拆解成多个「子
 agent」去协作——因为人类是真的有记忆能力，且会学习的。做的时间越长，成长越多，越熟练。项目里那些隐藏的上下文、踩过的坑、约定俗成的规矩，都会沉淀成经验。</p>
 <p>而 agent
-则相反。当前上下文越长，智力下降越明显。即便细节仍然在上下文内，agent
+则相反。上下文越长，智力下降越明显。即便细节仍然在上下文内，agent
 也开始频繁地忽略这些细节，自顾自地幻觉出一些「看起来合理」的东西来。</p>
 <p>核心问题始终没变：我们依然缺乏可靠的手段来评价 agent
-的产出。强类型是目前我找到的最实用的部分解，但也只是部分解。</p>
+的产出。强类型是第一层部分解，FM
+验证是第二层部分解，但也只是部分解。</p>
 <p>一天不学，错过很多。一年不学，好像也没错过什么。</p>
 <p>框架工具更新迭代，爆款层出不穷，但其炒作因素远大于实际能力和价值。而
 CS
