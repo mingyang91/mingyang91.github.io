@@ -27,7 +27,7 @@
 <meta property="og:description" content="利益声明：本文不构成投资建议，不推荐任何 AI 工具购买或中转平台推广。所有内容均来自本人约 2 万美金 token 的实践经验。不同项目类别、不同编码品味可能会得出不一样的结论。  引子 AI 是一种特殊的工具——一个需要理解其认知特性的协作伙伴。 Opus 4.6 给了我一种奇点临近的感觉——它已经可以对我的项目开发实现整体加速了。不是某个环节快一点，而是从架构设计到编码实现到调试部署，全链">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-09T06:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-09T04:38:15.145Z">
+<meta property="article:modified_time" content="2026-03-09T04:44:18.332Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -194,7 +194,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-03-09 14:00:00 / Modified: 12:38:15" itemprop="dateCreated datePublished" datetime="2026-03-09T14:00:00+08:00">2026-03-09</time>
+      <time title="Created: 2026-03-09 14:00:00 / Modified: 12:44:18" itemprop="dateCreated datePublished" datetime="2026-03-09T14:00:00+08:00">2026-03-09</time>
     </span>
 
   
@@ -342,7 +342,8 @@ agent 埋雷。好的命名让 AI
 <li><strong>功能设计</strong>：保持通用简单，不要特立独行。有独特需求就用几个简单模块叠加——<strong>做加法而不是做乘法</strong>。功能叠加是线性增长，功能交叉是组合爆炸。一个函数干三件事，agent
 理解错任何一件都会全盘出错</li>
 <li><strong>有限状态，不做无限状态</strong>：状态空间越小，AI
-越不容易走偏</li>
+越不容易走偏。这和围棋的道理一样——棋越下到后面，棋盘上的空间越小、状态越少，局势越收敛，评估越精确。好的软件设计应该让
+agent 面对的也是一个不断收敛的状态空间</li>
 <li><strong>要收敛不要发散</strong>：引导 AI
 向确定性收敛，而不是无限展开可能性</li>
 </ul>
@@ -388,7 +389,9 @@ rule</strong>。尤其是在长调试/反馈周期里——多种修复方案来
 发现设计文档与实际代码行为不符时，应该更新文档而不是按文档改代码</li>
 <li><strong>文档越堆越长，反噬上下文</strong>。最长的设计文档接近千行，一个新功能横跨
 2-3 个模块，agent 需要先读完项目背景和框架的千行
-markdown，上下文已经逼近普通模型的降智边缘。文档本应降低认知负担，结果却在消耗最宝贵的资源——上下文窗口</li>
+markdown，上下文已经逼近普通模型的降智边缘。文档本应降低认知负担，结果却在消耗最宝贵的资源——上下文窗口。回忆前文讨论的创造力衰减：上下文越长，AI
+越倾向于沿惯性走、越缺乏跳出当前路径的能力。千行 markdown 文档直接把
+agent 推入了降智区间，等于人为放大了这个缺陷</li>
 </ol>
 <p>所以让 agent 编写和维护 markdown
 文档，在过去一年里起到了完全相反的效果——甚至在今天的 Opus 4.6
