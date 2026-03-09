@@ -27,7 +27,7 @@
 <meta property="og:description" content="利益声明：本文不构成投资建议，不推荐任何 AI 工具购买或中转平台推广。所有内容均来自本人约 2 万美金 token 的实践经验。不同项目类别、不同编码品味可能会得出不一样的结论。  引子 AI 是一种特殊的工具——一个需要理解其认知特性的协作伙伴。 Opus 4.6 给了我一种奇点临近的感觉——它已经可以对我的项目开发实现整体加速了。不是某个环节快一点，而是从架构设计到编码实现到调试部署，全链">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-09T06:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-09T04:44:18.332Z">
+<meta property="article:modified_time" content="2026-03-09T04:49:35.699Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -111,7 +111,7 @@
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text">引子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E9%99%8D%E6%99%BA"><span class="nav-number">2.</span> <span class="nav-text">两种降智</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D%E9%81%97%E5%BF%98"><span class="nav-number">2.1.</span> <span class="nav-text">第一种：遗忘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D%E5%88%9B%E9%80%A0%E5%8A%9B%E8%A1%B0%E5%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">第二种：创造力衰减</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E8%BF%99%E6%A0%B7"><span class="nav-number">3.</span> <span class="nav-text">为什么会这样</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E5%B1%82%E9%9D%A2%E6%B3%A8%E6%84%8F%E5%8A%9B%E7%A8%80%E9%87%8A"><span class="nav-number">3.1.</span> <span class="nav-text">架构层面：注意力稀释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E5%B1%82%E9%9D%A2%E5%AF%B9%E9%BD%90%E5%8E%8B%E5%8A%9B"><span class="nav-number">3.2.</span> <span class="nav-text">训练层面：对齐压力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E4%BA%BA%E7%B1%BB%E5%B7%A5%E7%A8%8B%E5%B8%88"><span class="nav-number">3.3.</span> <span class="nav-text">对比人类工程师</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E4%BA%86%E7%89%B9%E6%80%A7%E5%90%8E%E6%80%8E%E4%B9%88%E5%8D%8F%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">理解了特性后，怎么协作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%83%8F%E4%B8%93%E5%AE%B6%E4%B8%80%E6%A0%B7%E5%AF%B9%E8%AF%9D%E8%80%8C%E4%B8%8D%E6%98%AF%E5%83%8F%E5%86%99%E9%82%AE%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">像专家一样对话，而不是像写邮件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E5%8A%A8%E5%AF%B9%E6%8A%97%E5%88%9B%E9%80%A0%E5%8A%9B%E8%A1%B0%E5%87%8F"><span class="nav-number">4.2.</span> <span class="nav-text">主动对抗创造力衰减</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E5%8E%9F%E5%88%99%E5%90%8C%E6%A0%B7%E9%80%82%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text">工程原则同样适用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E6%9E%84ai-%E6%97%B6%E4%BB%A3%E7%9A%84%E5%8F%AF%E6%8C%81%E7%BB%AD%E5%BC%80%E5%8F%91"><span class="nav-number">4.4.</span> <span class="nav-text">重构：AI 时代的可持续开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E9%9D%A2%E6%95%99%E6%9D%90%E8%AE%A9-agent-%E5%86%99%E6%96%87%E6%A1%A3%E7%AE%A1%E6%96%87%E6%A1%A3"><span class="nav-number">4.4.1.</span> <span class="nav-text">反面教材：让 agent
-写文档管文档</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0ccc-alphago-%E7%9A%84%E6%A3%8B%E7%9B%98"><span class="nav-number">5.</span> <span class="nav-text">后记：CCC &#x3D; AlphaGo 的棋盘？</span></a></li></ol></div>
+写文档管文档</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0ccc-alphago-%E7%9A%84%E6%A3%8B%E7%9B%98"><span class="nav-number">5.</span> <span class="nav-text">后记：CCC &#x3D; AlphaGo 的棋盘？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8B%98%E8%AF%AF"><span class="nav-number">6.</span> <span class="nav-text">勘误</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -194,7 +194,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-03-09 14:00:00 / Modified: 12:44:18" itemprop="dateCreated datePublished" datetime="2026-03-09T14:00:00+08:00">2026-03-09</time>
+      <time title="Created: 2026-03-09 14:00:00 / Modified: 12:49:35" itemprop="dateCreated datePublished" datetime="2026-03-09T14:00:00+08:00">2026-03-09</time>
     </span>
 
   
@@ -254,14 +254,13 @@ NIAH（大海捞针）近乎满分的模型，在多针/多跳任务上显著退
 <p>两股力量在长上下文中同向叠加，共同把 AI
 推向"听话但缺乏主见的执行者"。</p>
 <h2 id="架构层面注意力稀释">架构层面：注意力稀释</h2>
-<p>Transformer 的 softmax 注意力机制把概率质量分散到所有 token
-上。上下文 N 越大，每个 token
-得到的注意力越少。要形成远距离的"灵光一闪"式连接——比如在讨论镜像编译的时候突然想到可以用临时
+<p>简单粗暴地说：上下文越长，token
+之间的注意力越"糊"<sup>[勘误1]</sup>。要形成远距离的"灵光一闪"式连接——比如在讨论镜像编译的时候突然想到可以用临时
 pod——需要在特定 token
 之间建立尖锐的注意力分布，而这正是长上下文削弱的。</p>
 <p>2025 年有三篇论文（Scalable-Softmax, ASEntmax, Critical Attention
 Scaling）从机制上验证了这一点。GSM-Infinite (2025, ICML)
-也发现推理能力随上下文长度呈 sigmoid 衰减。</p>
+也发现推理能力随上下文长度单调衰减<sup>[勘误2]</sup>。</p>
 <p>更值得注意的是 "Context Length Alone Hurts" (Du &amp; Tian, 2025)
 的发现：<strong>即使模型完美检索到了所有信息，推理性能仍下降
 13.9%-85%</strong>。这说明不是找不到，而是用不好。</p>
@@ -406,8 +405,8 @@ AI 都能给搞砸。</p>
 <p>说实话，我也跟风嘲笑过 Claude's C
 Compiler（CCC）——认为它只不过是拙劣地模仿"人类开发编译器"这一行为，而不是在开发编译器本身。</p>
 <p>但我现在有一个很疯狂的想法。</p>
-<p>AlphaGo
-后期的进化已经不再依赖人类棋手的对弈了，而是自己与自己对弈。围棋棋盘是它的训练场。</p>
+<p>AlphaGo Zero
+的进化完全不依赖人类棋谱，纯粹自己与自己对弈<sup>[勘误3]</sup>。围棋棋盘是它的训练场。</p>
 <p>那么 CCC 是不是 Claude 的棋盘？</p>
 <p>这个类比值得展开，因为围棋和代码作为"训练场"各有优劣。</p>
 <p>围棋的反馈是<strong>终极二元的</strong>——输或赢，无可辩驳，无法逆转。代码世界没有这样干净的
@@ -438,6 +437,29 @@ coding agent。</strong> CCC 今天看起来是个笑话——但 AlphaGo Zero
 <p>如果 AI
 能通过这类封闭、复杂、反馈密集的任务进行自我进化——不断写代码、编译、调试、修复、优化——那"协作伙伴"这个关系，可能只是一个过渡阶段。</p>
 <p>但至少在现在，理解它的认知特性、找到有效的协作方式，仍然是我们能做的最重要的事。</p>
+<hr />
+<h1 id="勘误">勘误</h1>
+<p>正文为了可读性做了简化甚至偏见性表述，以下是更严谨的说明。</p>
+<p><strong>[勘误1] "上下文越长，注意力越糊"</strong></p>
+<p>正文的说法是一个方便的直觉，但机制上不完全准确。Softmax 对 query-key
+点积做归一化——如果新增的 token 与当前 query
+无关，理论上它们的注意力权重会趋近于零，不会显著稀释相关
+token。真正的问题更微妙：(a)
+当上下文中存在大量<strong>语义相近但不完全相同</strong>的 token
+时，注意力在它们之间的区分度下降；(b) 多头注意力中每个 head
+的有效覆盖范围有限，长上下文中部分 head 可能"失焦"。Scalable-Softmax
+(2025) 等工作正是从 softmax
+的温度缩放和熵控制角度解决这个问题，而非简单的"概率质量被均摊"。</p>
+<p><strong>[勘误2] "sigmoid 衰减"</strong></p>
+<p>原文使用"sigmoid 衰减"描述 GSM-Infinite
+的发现，这是作者对论文中衰减曲线形态的主观概括，论文本身未必使用此术语。更准确的表述是"推理能力随上下文长度单调衰减"，具体曲线形态请参阅原论文。</p>
+<p><strong>[勘误3] AlphaGo 演进路线</strong></p>
+<p>AlphaGo 系列的演进为：AlphaGo Fan（2015，击败樊麾）→ AlphaGo
+Lee（2016，击败李世石）→ AlphaGo Master（2017，60 连胜）→ AlphaGo
+Zero（2017，纯自我对弈）。其中只有 <strong>AlphaGo Zero</strong>
+完全不依赖人类棋谱数据，从随机初始化开始纯靠自我对弈训练。此前版本均使用了人类对弈数据进行监督学习预训练。原文"AlphaGo
+后期"的说法模糊了这条演进线，容易让读者误以为是同一个系统的渐进改进，实际上
+Zero 是架构和训练方法的根本性重新设计。</p>
 
     </div>
 
