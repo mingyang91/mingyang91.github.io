@@ -127,7 +127,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -155,6 +155,100 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2021/05/14/Webhook-system-design-base-ZIO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/14/Webhook-system-design-base-ZIO/" class="post-title-link" itemprop="url">Webhook system design - base ZIO</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-14 09:42:33" itemprop="dateCreated datePublished" datetime="2021-05-14T09:42:33+08:00">2021-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-09 12:01:11" itemprop="dateModified" datetime="2026-03-09T12:01:11+08:00">2026-03-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="goals">Goals</h1>
+<ul>
+<li>Sending event message by http post</li>
+<li>Recording success/error response from third-party reply.</li>
+<li>It should re-send message after third-party reply error or
+down.</li>
+</ul>
+<h1 id="features">Features</h1>
+<ul>
+<li>Delivery (HTTP POST)</li>
+<li>Success / Error Record</li>
+<li>Re-send in the case of third-party failure.</li>
+<li>Run in multi-process environment (e.g. Kubernetes)</li>
+<li>Metrics of backlog message</li>
+<li>Policy of record automatic archive</li>
+<li>Prevent sent too fequencly after massive event
+generated.(throttle)</li>
+</ul>
+<h1 id="results">Results</h1>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -200,7 +294,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-05 15:27:18" itemprop="dateModified" datetime="2026-03-05T15:27:18+08:00">2026-03-05</time>
+      <time title="Modified: 2026-03-09 12:01:11" itemprop="dateModified" datetime="2026-03-09T12:01:11+08:00">2026-03-09</time>
     </span>
 
   

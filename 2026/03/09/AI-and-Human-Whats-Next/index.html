@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="利益声明：本文不构成投资建议，不推荐任何 AI 工具购买或中转平台推广。所有内容均来自本人约 2 万美金 token 的实践经验。不同项目类别、不同编码品味可能会得出不一样的结论。  引子 AI 是一种特殊的工具——一个需要理解其认知特性的协作伙伴。 Opus 4.6 给了我一种奇点临近的感觉——它已经可以对我的项目开发实现整体加速了。不是某个环节快一点，而是从架构设计到编码实现到调试部署，全链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI &amp; Human: What&#39;s Next">
+<meta property="og:url" content="https://famer.me/2026/03/09/AI-and-Human-Whats-Next/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="利益声明：本文不构成投资建议，不推荐任何 AI 工具购买或中转平台推广。所有内容均来自本人约 2 万美金 token 的实践经验。不同项目类别、不同编码品味可能会得出不一样的结论。  引子 AI 是一种特殊的工具——一个需要理解其认知特性的协作伙伴。 Opus 4.6 给了我一种奇点临近的感觉——它已经可以对我的项目开发实现整体加速了。不是某个环节快一点，而是从架构设计到编码实现到调试部署，全链">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-09T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-09T04:01:11.368Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Programming">
+<meta property="article:tag" content="Agent">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2026/03/09/AI-and-Human-Whats-Next/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2026/03/09/AI-and-Human-Whats-Next/","path":"2026/03/09/AI-and-Human-Whats-Next/","title":"AI & Human: What's Next"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>AI & Human: What's Next | My Space</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RGPQ0EFYL"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1RGPQ0EFYL","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text">引子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E9%99%8D%E6%99%BA"><span class="nav-number">2.</span> <span class="nav-text">两种降智</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D%E9%81%97%E5%BF%98"><span class="nav-number">2.1.</span> <span class="nav-text">第一种：遗忘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D%E5%88%9B%E9%80%A0%E5%8A%9B%E8%A1%B0%E5%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">第二种：创造力衰减</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E8%BF%99%E6%A0%B7"><span class="nav-number">3.</span> <span class="nav-text">为什么会这样</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E5%B1%82%E9%9D%A2%E6%B3%A8%E6%84%8F%E5%8A%9B%E7%A8%80%E9%87%8A"><span class="nav-number">3.1.</span> <span class="nav-text">架构层面：注意力稀释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E5%B1%82%E9%9D%A2%E5%AF%B9%E9%BD%90%E5%8E%8B%E5%8A%9B"><span class="nav-number">3.2.</span> <span class="nav-text">训练层面：对齐压力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E4%BA%BA%E7%B1%BB%E5%B7%A5%E7%A8%8B%E5%B8%88"><span class="nav-number">3.3.</span> <span class="nav-text">对比人类工程师</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E4%BA%86%E7%89%B9%E6%80%A7%E5%90%8E%E6%80%8E%E4%B9%88%E5%8D%8F%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">理解了特性后，怎么协作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%83%8F%E4%B8%93%E5%AE%B6%E4%B8%80%E6%A0%B7%E5%AF%B9%E8%AF%9D%E8%80%8C%E4%B8%8D%E6%98%AF%E5%83%8F%E5%86%99%E9%82%AE%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">像专家一样对话，而不是像写邮件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E5%8A%A8%E5%AF%B9%E6%8A%97%E5%88%9B%E9%80%A0%E5%8A%9B%E8%A1%B0%E5%87%8F"><span class="nav-number">4.2.</span> <span class="nav-text">主动对抗创造力衰减</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E5%8E%9F%E5%88%99%E5%90%8C%E6%A0%B7%E9%80%82%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text">工程原则同样适用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0ccc-alphago-%E7%9A%84%E6%A3%8B%E7%9B%98"><span class="nav-number">5.</span> <span class="nav-text">后记：CCC &#x3D; AlphaGo 的棋盘？</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/09/AI-and-Human-Whats-Next/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="AI & Human: What's Next | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI & Human: What's Next
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-09 14:00:00 / Modified: 12:01:11" itemprop="dateCreated datePublished" datetime="2026-03-09T14:00:00+08:00">2026-03-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p><strong>利益声明</strong>：本文不构成投资建议，不推荐任何 AI
+工具购买或中转平台推广。所有内容均来自本人约 2 万美金 token
+的实践经验。不同项目类别、不同编码品味可能会得出不一样的结论。</p>
+</blockquote>
+<h1 id="引子">引子</h1>
+<p>AI 是一种特殊的工具——一个需要理解其认知特性的协作伙伴。</p>
+<p>Opus 4.6
+给了我一种奇点临近的感觉——它已经可以对我的项目开发实现整体加速了。不是某个环节快一点，而是从架构设计到编码实现到调试部署，全链路都能帮上忙。</p>
+<p>但用久了你会发现一个问题：上下文长了以后，AI "变笨了"。</p>
+<p>这个"笨"不是简单的能力退化，仔细观察会发现它有两种截然不同的表现。而理解这两种"降智"的区别，是有效与
+AI 协作的关键。</p>
+<h1 id="两种降智">两种降智</h1>
+<h2 id="第一种遗忘">第一种：遗忘</h2>
+<p>上下文越长，AI
+会忽略掉过去已经达成的共识和结论。你问它的时候它会意识到，但你不主动提，它就会回到错误的路线上走很远。</p>
+<p>这个问题在学术界已经有充分研究：</p>
+<ul>
+<li><strong>"Lost in the Middle"</strong> (Liu et al., 2023) —
+模型对上下文中间位置的信息检索率下降 30%+，呈 U 形曲线</li>
+<li><strong>NoLiMa</strong> (Adobe, 2025) — 去掉字面关键词匹配后，13
+个模型中 11 个在 32K 时准确率低于 50%</li>
+<li><strong>RULER</strong> (NVIDIA, 2024) —
+NIAH（大海捞针）近乎满分的模型，在多针/多跳任务上显著退化</li>
+</ul>
+<p>好消息是，Opus 4.6 在 1M 长上下文上改善很大。官方数据显示 8 针 MRCR
+测试中达到 76%（对比 Sonnet 4.5 的 18.5%）。在 500K
+左右的上下文中，遗忘问题已经不太影响实际工作了。</p>
+<h2 id="第二种创造力衰减">第二种：创造力衰减</h2>
+<p>这种"降智"更加隐蔽——模型不是给出错误答案，而是给出"正确但笨"的答案。用户很难察觉到它本可以做得更好。</p>
+<p>举两个我实际遇到的例子：</p>
+<ul>
+<li>带着 PyTorch + CUDA + .pth
+的镜像编译一次要接近半小时。上下文短的时候，AI 会建议<strong>先在 K8s
+里开一个临时 pod
+把整条链路跑通了再提交代码编译镜像</strong>。但上下文长了以后，它就老老实实地改代码、编译、等半小时、报错、再改、再编译……</li>
+<li>调试视频流的时候，上下文短时 AI 会说"<strong>先给你几行 JS
+代码，贴到浏览器 console 里验证一下有哪些 tracks，codec profile
+是什么</strong>"。上下文长了以后，它更倾向于直接在后端代码里改来改去反复试。</li>
+</ul>
+<p>这些"鬼点子"的共同特征是：<strong>跳出当前执行路径，用低成本方式先验证假设</strong>。本质上是一种元认知——"我现在做的这件事成本高、反馈慢，有没有更快的方式先确认方向对不对？"</p>
+<p>核心洞察：<strong>能力没丢，是注意力分配的问题。</strong>
+你主动提醒一下它就能想到——说明权重还在，只是没被激活。</p>
+<h1 id="为什么会这样">为什么会这样</h1>
+<p>两股力量在长上下文中同向叠加，共同把 AI
+推向"听话但缺乏主见的执行者"。</p>
+<h2 id="架构层面注意力稀释">架构层面：注意力稀释</h2>
+<p>Transformer 的 softmax 注意力机制把概率质量分散到所有 token
+上。上下文 N 越大，每个 token
+得到的注意力越少。要形成远距离的"灵光一闪"式连接——比如在讨论镜像编译的时候突然想到可以用临时
+pod——需要在特定 token
+之间建立尖锐的注意力分布，而这正是长上下文削弱的。</p>
+<p>2025 年有三篇论文（Scalable-Softmax, ASEntmax, Critical Attention
+Scaling）从机制上验证了这一点。GSM-Infinite (2025, ICML)
+也发现推理能力随上下文长度呈 sigmoid 衰减。</p>
+<p>更值得注意的是 "Context Length Alone Hurts" (Du &amp; Tian, 2025)
+的发现：<strong>即使模型完美检索到了所有信息，推理性能仍下降
+13.9%-85%</strong>。这说明不是找不到，而是用不好。</p>
+<h2 id="训练层面对齐压力">训练层面：对齐压力</h2>
+<p>RLHF/对齐训练在短上下文中表现为"靠谱"，在长上下文中表现为"死板"：</p>
+<ul>
+<li>模型被奖励的是完成当前步骤，而不是质疑"这个步骤本身是否最优"</li>
+<li>人类标注员更容易给"逻辑连贯、稳步推进"的回答高分，而"突然跳到一个完全不同的方向"容易被标为不相关</li>
+<li>长对话中 sycophancy（讨好倾向）累积，模型越来越顺着当前路径走</li>
+</ul>
+<p>上下文本身就是隐性
+SOP——对话中积累的执行历史形成了一条隐含的路径，模型的注意力越来越多地分配给"延续这条路径"而非"评估是否应该换路径"。</p>
+<h2 id="对比人类工程师">对比人类工程师</h2>
+<p>人类工程师的"创造力"本质上是<strong>并行探索 +
+跨路径迁移</strong>——你在调 K8s
+的时候突然想到"等等，我先在浏览器里验证一下
+codec"，这不是线性推理，是两条思路之间的意外碰撞。</p>
+<p>优秀的工程师会同时维护多条尝试路径，这些路径不完全隔离，甚至会互相促进影响。只要能达成最终结果，过程不会固定遵循一个模式——除非被
+SOP 或安全生产要求约束。</p>
+<p>而 autoregressive 架构一次只生成一个 token，一次只走一条路。即使是
+Chain-of-Thought
+也是串行的，不是真正的并行探索。这恰好是当前架构最弱的地方。</p>
+<h1 id="理解了特性后怎么协作">理解了特性后，怎么协作</h1>
+<h2
+id="像专家一样对话而不是像写邮件">像专家一样对话，而不是像写邮件</h2>
+<p>我看到有人教写 prompt
+的方法论：要像写邮件一样长篇大段、有逻辑地输出，要尽可能详细。</p>
+<p>我的经验正好相反。</p>
+<p>高手之间交流不需要长篇大论的铺垫。特别是同领域专家之间，三句话就点到位了，甚至都不需要提背景，只讲关键路线选择，剩下的对方自己就脑补出来了。就算没点到位，对面一问一答，也就心领神会了。</p>
+<p>对大模型也一样。废话说多了浪费 token，也浪费人的脑力。不如 2-3
+句话：</p>
+<ul>
+<li>第 1 句讲背景：为当前项目集成视频水印功能</li>
+<li>第 2-3 句讲关键路线：考虑选择 FFT 或者 DFT
+类似方案，为了防止高频降噪，考虑在低频域插入特征</li>
+</ul>
+<p>够了。剩下的让 AI 自己展开。</p>
+<p>但这里有一个前提：<strong>你自己的认知水平决定了 AI
+产出的上限。</strong></p>
+<p>低水平的认知写出来的低水平 prompt，只能换来 AI
+低水平的产出。你说不出"考虑 FFT/DFT 方案，低频域插入特征"这种话，AI
+就只会给你一个最朴素的明文水印方案。AI
+拥有的知识远超任何个人，但它需要你用正确的钥匙去开门——而这把钥匙就是你自己的专业认知。</p>
+<p>所以"像专家一样对话"的真正含义不只是简洁，而是<strong>你得先成为专家</strong>。AI
+放大的是你已有的能力，而不是凭空创造能力。</p>
+<h2 id="主动对抗创造力衰减">主动对抗创造力衰减</h2>
+<p>既然知道长上下文会让 AI
+失去创造力，就应该主动对抗。核心策略是：<strong>适时停下来，由人类主导对当前路线做审计。</strong></p>
+<p>具体操作：</p>
+<ol type="1">
+<li>当你感觉 AI 开始"沿着惯性走"的时候，停下来</li>
+<li>Fork 当前会话，或者开一个新会话</li>
+<li>用 <code>/compact</code> 压缩上下文，让 AI
+带着精简过的记忆重新审视当前方案</li>
+<li>让 AI
+先自行审计一遍：当前路线有没有更好的替代方案？有没有可以低成本验证的假设？</li>
+</ol>
+<p>本质上，这是用人类的元认知能力弥补 AI
+在长上下文中的注意力分配缺陷。人类负责"该不该这么做"，AI
+负责"怎么做"。</p>
+<h2 id="工程原则同样适用">工程原则同样适用</h2>
+<p>一些在人类工程实践中被验证过的原则，在人机协作中同样重要——甚至更重要，因为它们帮助管理双方的认知负担：</p>
+<ul>
+<li><strong>命名</strong>：非常重要，定期审计，不要创造名字。好的命名让
+AI 和人类都能快速建立正确的心智模型</li>
+<li><strong>功能设计</strong>：保持通用简单，不要特立独行</li>
+<li><strong>有限状态，不做无限状态</strong>：状态空间越小，AI
+越不容易走偏</li>
+<li><strong>要收敛不要发散</strong>：引导 AI
+向确定性收敛，而不是无限展开可能性</li>
+<li><strong>做加法而不是做乘法</strong>：功能叠加而非功能交叉，降低组合爆炸的复杂度</li>
+</ul>
+<h1 id="后记ccc-alphago-的棋盘">后记：CCC = AlphaGo 的棋盘？</h1>
+<p>说实话，我也跟风嘲笑过 Claude's C
+Compiler（CCC）——认为它只不过是拙劣地模仿"人类开发编译器"这一行为，而不是在开发编译器本身。</p>
+<p>但我现在有一个很疯狂的想法。</p>
+<p>AlphaGo
+后期的进化已经不再依赖人类棋手的对弈了，而是自己与自己对弈。围棋棋盘是它的训练场。</p>
+<p>那么 CCC 是不是 Claude 的棋盘？</p>
+<p>这个类比值得展开，因为围棋和代码作为"训练场"各有优劣。</p>
+<p>围棋的反馈是<strong>终极二元的</strong>——输或赢，无可辩驳，无法逆转。代码世界没有这样干净的
+binary
+标准：代码质量是一个连续谱，"能跑"和"优雅高效"之间隔着巨大的灰度空间。从这个意义上说，围棋的反馈信号更强、更纯粹。</p>
+<p>但围棋有一个致命的弱点：<strong>反馈路径太长</strong>。开局时落下的一手棋，要等到终局才知道输赢，而中间极难确定这手棋对全局胜负的贡献有多大——这正是
+AlphaGo 需要价值评估网络（value
+network）的原因，它本质上是在用一个额外的神经网络来"猜测"中间状态的价值，因为围棋本身不提供这种中间反馈。</p>
+<p>代码世界恰恰相反：<strong>短路径反馈无处不在</strong>。类型签名在你写下代码的瞬间就告诉你接口对不对；单元测试在几秒内告诉你逻辑对不对；集成测试告诉你组件之间配合得对不对。你不需要等到"终局"才知道一步走得好不好——每一步都有即时的、局部的反馈信号。这意味着
+credit assignment（功劳归因）问题天然比围棋简单得多。</p>
+<p>而编译器开发，恰恰是人类世界中最复杂、最精妙的软件工程用例之一。它对<strong>正确性</strong>的要求极其严苛——一个
+codegen bug
+可能导致下游所有程序产生难以追踪的错误；它对<strong>性能</strong>有极致追求——寄存器分配、指令调度、循环优化，每一步都在逼近理论最优；它对<strong>生成代码的体积</strong>也有硬约束——嵌入式场景下每一个多余的字节都是成本。更关键的是，人类已经为编译器积累了极其完善的测试基础设施——从语言一致性测试套件到性能基准，从模糊测试到形式化验证，这些都能提供精确、可量化的反馈信号。编译器开发远比
+LeetCode
+算法题复杂——它不是解一个孤立的问题，而是在一个庞大的约束空间中做全局优化。然而即便是人类顶尖的编译器工程师，面对不断演进的硬件架构和语言特性，也无法声称完美解决了这个问题。</p>
+<p>同时，编译器开发还有一个常被忽略的优势：<strong>它是一个相对封闭的任务</strong>——而封闭性，恰恰也是围棋棋盘之于
+AlphaGo 的核心优势。围棋的规则是有限的、完备的，19×19
+的棋盘就是整个宇宙，不存在"对手突然掀桌"或"棋子自己消失"的情况。正因为封闭，问题空间才是有限的，才可以被穷举、被学习、被征服。</p>
+<p>现实世界中的软件工程恰恰缺少这种封闭性——需要驱动的外设、需要兼容的
+legacy API、各种历史遗留的屎山代码、外部第三方和云平台的 SDK
+变更、数据库约束、磁盘空间不足、网线被剪断或丢包延迟、对方服务器被拔电源甚至数据中心被炸。这些因素让反馈信号变得嘈杂、不可控、难以复现。而编译器的输入是源代码，输出是目标代码，中间的变换规则由语言规范严格定义——整个问题域是自包含的，几乎不依赖外部世界的不确定性。</p>
+<p>这正是它作为 AI
+自我进化"棋盘"的理想之处：足够复杂、反馈足够清晰、标准足够客观、边界足够封闭。</p>
+<p>所以我的爆论是：<strong>编译器开发，比任何其他软件工程任务都更适合用来自我训练
+coding agent。</strong> CCC 今天看起来是个笑话——但 AlphaGo Zero
+从随机落子开始，3
+天就超越了击败李世石的版本。重要的不是起点多低，而是它有没有一个能让自己不断变强的训练场。</p>
+<p>如果 AI
+能通过这类封闭、复杂、反馈密集的任务进行自我进化——不断写代码、编译、调试、修复、优化——那"协作伙伴"这个关系，可能只是一个过渡阶段。</p>
+<p>但至少在现在，理解它的认知特性、找到有效的协作方式，仍然是我们能做的最重要的事。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Programming/" rel="tag"># Programming</a>
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/24/AI-vs-Human/" rel="prev" title="恐怖直立猿们，你们低估了自己的智慧。">
+                  <i class="fa fa-chevron-left"></i> 恐怖直立猿们，你们低估了自己的智慧。
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
