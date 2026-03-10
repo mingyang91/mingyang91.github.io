@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="观前提醒  该文件为我个人自用的CLAUDE.md规则文件，维护生产项目已有一年时间，从 Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。 因为编码风格，个人品味原因，请勿整段复制甚至替换掉你的规则文件。你可以让Claude阅读我的规则文件，分析后你再决定有哪些可以采纳，有哪些不适合你当前项目。我个人的编码和架构风格非常激进，因为许多代码&#x2F;系统烂是烂">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的Claude规则文件分享">
+<meta property="og:url" content="https://famer.me/2026/03/10/My-Claude/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="观前提醒  该文件为我个人自用的CLAUDE.md规则文件，维护生产项目已有一年时间，从 Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。 因为编码风格，个人品味原因，请勿整段复制甚至替换掉你的规则文件。你可以让Claude阅读我的规则文件，分析后你再决定有哪些可以采纳，有哪些不适合你当前项目。我个人的编码和架构风格非常激进，因为许多代码&#x2F;系统烂是烂">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-10T15:37:43.000Z">
+<meta property="article:modified_time" content="2026-03-10T15:47:11.119Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Programming">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2026/03/10/My-Claude/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2026/03/10/My-Claude/","path":"2026/03/10/My-Claude/","title":"我的Claude规则文件分享"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>我的Claude规则文件分享 | My Space</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RGPQ0EFYL"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1RGPQ0EFYL","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%82%E5%89%8D%E6%8F%90%E9%86%92"><span class="nav-number">1.</span> <span class="nav-text">观前提醒</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#claude.md"><span class="nav-number">2.</span> <span class="nav-text">CLAUDE.md</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#overview"><span class="nav-number">2.1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refactoring-philosophy"><span class="nav-number">2.2.</span> <span class="nav-text">Refactoring Philosophy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#technology-stack"><span class="nav-number">2.3.</span> <span class="nav-text">Technology Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-run-commands"><span class="nav-number">2.4.</span> <span class="nav-text">Build &amp; Run Commands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#project-structure"><span class="nav-number">2.5.</span> <span class="nav-text">Project Structure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configuration"><span class="nav-number">2.6.</span> <span class="nav-text">Configuration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#key-architectural-patterns"><span class="nav-number">2.7.</span> <span class="nav-text">Key Architectural Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tagless-final-pattern"><span class="nav-number">2.7.1.</span> <span class="nav-text">Tagless Final Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-style-flat-for-comprehensions"><span class="nav-number">2.7.2.</span> <span class="nav-text">Code Style: Flat
+for-comprehensions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdklibrary-priority-order"><span class="nav-number">2.7.3.</span> <span class="nav-text">SDK&#x2F;Library Priority Order</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-tenancy-with-schema-isolation"><span class="nav-number">2.7.4.</span> <span class="nav-text">Multi-Tenancy with Schema
+Isolation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fail-fast---no-silent-error-swallowing"><span class="nav-number">2.7.5.</span> <span class="nav-text">Fail Fast - No Silent
+Error Swallowing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#typed-error-model-adt-errors"><span class="nav-number">2.7.6.</span> <span class="nav-text">Typed Error Model (ADT
+Errors)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#feature-module-organization"><span class="nav-number">2.7.7.</span> <span class="nav-text">Feature Module Organization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#testing-strategy"><span class="nav-number">2.7.8.</span> <span class="nav-text">Testing Strategy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#api-routes"><span class="nav-number">2.8.</span> <span class="nav-text">API Routes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#development-workflow"><span class="nav-number">2.9.</span> <span class="nav-text">Development Workflow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#adding-new-routes"><span class="nav-number">2.9.1.</span> <span class="nav-text">Adding New Routes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-formatting"><span class="nav-number">2.9.2.</span> <span class="nav-text">Code Formatting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logging"><span class="nav-number">2.9.3.</span> <span class="nav-text">Logging</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runtime-assertion-checks-rac"><span class="nav-number">2.9.4.</span> <span class="nav-text">Runtime Assertion Checks
+(RAC)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cicd-pipeline"><span class="nav-number">2.10.</span> <span class="nav-text">CI&#x2F;CD Pipeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#key-dependencies-services"><span class="nav-number">2.11.</span> <span class="nav-text">Key Dependencies &amp; Services</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#external-services-integration"><span class="nav-number">2.11.1.</span> <span class="nav-text">External Services
+Integration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#optional-features"><span class="nav-number">2.11.2.</span> <span class="nav-text">Optional Features</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#important-files"><span class="nav-number">2.12.</span> <span class="nav-text">Important Files</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/10/My-Claude/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="我的Claude规则文件分享 | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我的Claude规则文件分享
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-10 23:37:43 / Modified: 23:47:11" itemprop="dateCreated datePublished" datetime="2026-03-10T23:37:43+08:00">2026-03-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="观前提醒">观前提醒</h1>
+<blockquote>
+<p>该文件为我个人自用的CLAUDE.md规则文件，维护生产项目已有一年时间，从
+Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。
+因为编码风格，个人品味原因，<strong>请勿整段复制甚至替换掉你的规则文件</strong>。你可以让Claude阅读我的规则文件，分析后你再决定有哪些可以采纳，有哪些不适合你当前项目。我个人的编码和架构风格非常激进，因为许多代码/系统烂是烂在骨子里的，在这些屎山系统上打“优雅”的补丁实际上还是在推高屎山的海拔，而并没有真的降低技术债务。所以我的架构设计风格从来是大胆激进，没什么不能改也没什么不敢改的，活着的系统一定要经常重新审视，只要能降低技术债务，要敢于进行局部甚至底朝天的重写；只有死了的系统才是永恒不变的。
+这是我的项目在 vibe 一年后的提交统计图，受到 opus 4.6 1M-context
+的帮助，最近一个月我用 5k usd token 烧出了7-8 个超大型 feature 和从
+Kotlin 到 Scala
+的彻底重写，代码量也大幅降低到了3万行出头，系统健康程度远超半年前。 <img
+src="backend-contributors.png" alt="backend repository contributors" />
+---</p>
+</blockquote>
+<h1 id="claude.md">CLAUDE.md</h1>
+<p>This file provides guidance to Claude Code (claude.ai/code) when
+working with code in this repository.</p>
+<h2 id="overview">Overview</h2>
+<p>A multi-tenant backend service built with <strong>http4s</strong>
+(Scala 3 / cats-effect). It provides document management, AI-powered
+features (embeddings, RAG), video SOP generation, and real-time
+communication capabilities.</p>
+<h2 id="refactoring-philosophy">Refactoring Philosophy</h2>
+<p><strong>Prefer radical type-level refactors over conservative
+patches.</strong> This is a statically-typed Scala 3 codebase with
+tagless final — the compiler catches all downstream breakage. When
+fixing an issue, always choose the solution that encodes the constraint
+in the type system, even if it touches many files. A 15-file signature
+change that the compiler verifies is <strong>safer</strong> than a
+1-file patch with a runtime check.</p>
+<ul>
+<li><strong>Don't minimize blast radius — maximize type safety.</strong>
+Changing a method from <code>List[T]</code> to
+<code>NonEmptyList[T]</code> across 6 files is not "risky" — the
+compiler finds every call site. A runtime <code>.toNel.get</code> hidden
+in one file is the real risk.</li>
+<li><strong>The compiler is the last line of defense.</strong> If a
+refactor compiles, it's correct. Treat compilation as the acceptance
+test for type-level changes.</li>
+<li><strong>Write-cost is near zero.</strong> AI writes 90%+ of code, so
+the cost of touching more files is negligible. Optimize for correctness
+and compile-time safety, not for minimal diff.</li>
+<li><strong>Type precision is not over-engineering.</strong>
+Over-engineering means unnecessary abstractions, config flags, strategy
+patterns for one implementation. Using <code>NonEmptyList</code> over
+<code>List</code>, <code>ProjectId</code> over <code>UUID</code>, or
+propagating constraints through signatures is the opposite — it removes
+complexity (runtime checks) by shifting it to the compiler. "Avoid
+over-engineering" applies to architecture, not to type-level
+precision.</li>
+</ul>
+<h2 id="technology-stack">Technology Stack</h2>
+<ul>
+<li><strong>Framework:</strong> http4s 0.23.33 (Ember server)</li>
+<li><strong>Language:</strong> Scala 3.8.1</li>
+<li><strong>Runtime:</strong> Java 25 (Amazon Corretto)</li>
+<li><strong>Build:</strong> Mill 1.1.2</li>
+<li><strong>Database:</strong> PostgreSQL 42.7.3 + pgvector extension +
+ltree extension</li>
+<li><strong>ORM:</strong> Doobie 1.0.0-RC11</li>
+<li><strong>Auth:</strong> Firebase Admin SDK 9.4.3</li>
+<li><strong>AI:</strong> Google Cloud Vertex AI (embeddings, GenAI,
+RAG), Google GenAI SDK</li>
+<li><strong>Migrations:</strong> Flyway 11.7.2</li>
+<li><strong>Scheduler:</strong> Quartz 2.5.0</li>
+<li><strong>Observability:</strong> otel4s 0.15.0 (OpenTelemetry),
+Sentry error tracking</li>
+<li><strong>Container Orchestration:</strong> Optional Kubernetes
+integration for video processing jobs</li>
+</ul>
+<h2 id="build-run-commands">Build &amp; Run Commands</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Compile</span></span><br><span class="line">./mill compile</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run (dev)</span></span><br><span class="line">./mill run</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run all tests</span></span><br><span class="line">./mill <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Build classpath distribution (lib/ with all JARs)</span></span><br><span class="line">./mill dist</span><br><span class="line"></span><br><span class="line"><span class="comment"># Format code</span></span><br><span class="line">./mill reformat</span><br><span class="line"></span><br><span class="line"><span class="comment"># Check formatting</span></span><br><span class="line">./mill checkFormat</span><br><span class="line"></span><br><span class="line"><span class="comment"># Clean build artifacts</span></span><br><span class="line">./mill clean</span><br></pre></td></tr></table></figure>
+<p><strong>Database setup:</strong> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Start PostgreSQL with pgvector extension</span></span><br><span class="line">docker-compose up -d</span><br><span class="line"></span><br><span class="line"><span class="comment"># Stop database</span></span><br><span class="line">docker-compose down</span><br></pre></td></tr></table></figure></p>
+<h2 id="project-structure">Project Structure</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">src/main/scala/com/example/</span><br><span class="line">├── App.scala                   # Main entry point (IOApp.Simple)</span><br><span class="line">├── core/                       # Shared infrastructure</span><br><span class="line">│   ├── auth/                   # Firebase auth, claims parsing</span><br><span class="line">│   ├── config/                 # AppConfig (pureconfig HOCON)</span><br><span class="line">│   └── database/               # Doobie transactor, multi-tenant, Flyway</span><br><span class="line">├── features/                   # Feature modules</span><br><span class="line">│   ├── bookmark/               # Bookmark management</span><br><span class="line">│   ├── chat/                   # Chat sessions</span><br><span class="line">│   ├── copy/                   # Content copy</span><br><span class="line">│   ├── document/               # Document CRUD, embeddings, GCS</span><br><span class="line">│   ├── folder/                 # Folder management</span><br><span class="line">│   ├── librechat/              # LibreChat integration</span><br><span class="line">│   ├── mfareset/               # MFA reset</span><br><span class="line">│   ├── permission/             # Resource-scoped permissions</span><br><span class="line">│   ├── project/                # Projects, membership, RBAC</span><br><span class="line">│   ├── quota/                  # Usage quota tracking</span><br><span class="line">│   ├── rag/                    # RAG indexing &amp; retrieval (pgvector)</span><br><span class="line">│   ├── reindex/                # Reindex jobs</span><br><span class="line">│   ├── settings/               # System/tenant settings</span><br><span class="line">│   ├── sop/                    # SOP generation (video → steps)</span><br><span class="line">│   ├── system/                 # Tenant admin endpoints</span><br><span class="line">│   ├── transcode/              # Video transcoding</span><br><span class="line">│   ├── user/                   # User profiles &amp; preferences</span><br><span class="line">│   ├── video/                  # Video clips, descriptions, fingerprints</span><br><span class="line">│   └── webauthn/               # WebAuthn/passkeys</span><br><span class="line">├── http/                       # HTTP layer</span><br><span class="line">│   ├── routes/                 # Route handlers</span><br><span class="line">│   ├── AuthMiddleware.scala</span><br><span class="line">│   └── ErrorHandlingMiddleware.scala</span><br><span class="line">├── infrastructure/             # External integrations</span><br><span class="line">│   ├── firebase/               # Firebase auth &amp; email</span><br><span class="line">│   ├── ffmpeg/                 # FFmpeg wrapper</span><br><span class="line">│   ├── gcs/                    # Google Cloud Storage</span><br><span class="line">│   ├── genai/                  # Gemini video analysis</span><br><span class="line">│   ├── kubernetes/             # K8s job delegation</span><br><span class="line">│   ├── sentry/                 # Error tracking</span><br><span class="line">│   ├── telemetry/              # otel4s tracing</span><br><span class="line">│   ├── videointelligence/      # Video Intelligence API</span><br><span class="line">│   ├── videoseal/              # Neural watermarking</span><br><span class="line">│   └── vertexai/               # Vertex AI, MCP server (30 tools)</span><br><span class="line">└── jobs/                       # Quartz job schedulers</span><br></pre></td></tr></table></figure>
+<h2 id="configuration">Configuration</h2>
+<p>Main config: <code>src/main/resources/application.conf</code> (HOCON
+format, parsed by pureconfig)</p>
+<p><strong>Environment Variables:</strong> - <code>DATABASE_URL</code> -
+PostgreSQL JDBC URL (or <code>secrets/database/url</code> file) -
+<code>JWT_SECRET</code> - JWT signing secret - <code>GCS_BUCKET</code> -
+GCS bucket for documents - <code>GCS_HOSTNAME</code> - Optional GCS
+hostname - <code>TRANSCODE_GCS_BUCKET</code> - GCS bucket for transcoded
+videos - <code>TRANSCODE_GCS_HOSTNAME</code> - Optional transcode GCS
+hostname - <code>ENABLE_OTEL</code> - Enable OpenTelemetry (fallback:
+false) - <code>SENTRY_DSN</code> - Sentry error tracking DSN (optional)
+- <code>SENTRY_ENV</code> - Sentry environment (fallback: "development")
+- <code>KUBERNETES_JOBS_ENABLED</code> - Enable K8s job delegation for
+video processing (fallback: false) - <code>KUBERNETES_NAMESPACE</code> -
+K8s namespace for jobs (fallback: "default") -
+<code>FIREBASE_API_KEY</code> - Firebase API key (for MCP browser login)
+- <code>FIREBASE_AUTH_DOMAIN</code> - Firebase auth domain (for MCP
+browser login)</p>
+<p><strong>Required secrets (excluded from VCS):</strong> -
+<code>secrets/firebase/service-account.json</code> - Firebase Admin SDK
+credentials - <code>secrets/gcp/service-account.json</code> - GCP
+service account for Vertex AI - <code>secrets/database/url</code> -
+PostgreSQL JDBC URL (optional, defaults to localhost)</p>
+<h2 id="key-architectural-patterns">Key Architectural Patterns</h2>
+<h3 id="tagless-final-pattern">Tagless Final Pattern</h3>
+<p>The codebase uses <strong>tagless final</strong> with context bounds
+for dependency injection:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Service trait with F[_] type parameter</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">SOPService</span>[<span class="type">F</span>[_]]</span>:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getSOP</span></span>(tenant: <span class="type">TenantContext</span>, id: <span class="type">UUID</span>): <span class="type">F</span>[<span class="type">Option</span>[<span class="type">SOP</span>]]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createSOP</span></span>(...): <span class="type">F</span>[<span class="type">Either</span>[<span class="type">String</span>, <span class="type">SOP</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Companion object with summoner and factories</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">SOPService</span></span>:</span><br><span class="line">  <span class="keyword">inline</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>[<span class="type">F</span>[_]](<span class="keyword">using</span> ev: <span class="type">SOPService</span>[<span class="type">F</span>]): <span class="type">SOPService</span>[<span class="type">F</span>] = ev  <span class="comment">// Summoner</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">make</span></span>[<span class="type">F</span>[_]: <span class="type">Sync</span>](xa: <span class="type">Transactor</span>[<span class="type">F</span>]): <span class="type">SOPService</span>[<span class="type">F</span>] = ...         <span class="comment">// Live implementation</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">noop</span></span>[<span class="type">F</span>[_]: <span class="type">Applicative</span>]: <span class="type">SOPService</span>[<span class="type">F</span>] = ...                     <span class="comment">// NoOp implementation</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Routes use context bounds</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">routes</span></span>[<span class="type">F</span>[_]: &#123;<span class="type">Async</span>, <span class="type">SOPService</span>, <span class="type">PermissionService</span>&#125;]: <span class="type">AuthedRoutes</span>[<span class="type">AuthenticatedUser</span>, <span class="type">F</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Access via summoner</span></span><br><span class="line"><span class="type">SOPService</span>[<span class="type">F</span>].getSOP(tenant, id)</span><br></pre></td></tr></table></figure>
+<p><strong>NoOp Result Patterns - Caller Decides:</strong></p>
+<p>NoOp implementations return results (not throw exceptions). The
+caller decides if it's an error:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NoOp returns result indicating &quot;not processed&quot;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SOPServiceNoop</span>[<span class="type">F</span>[_]</span>: <span class="type">Applicative</span>] <span class="keyword">extends</span> <span class="type">SOPService</span>[<span class="type">F</span>]:</span><br><span class="line">  <span class="comment">// Either methods → Left with error message</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createSOP</span></span>(...) = <span class="type">Left</span>(<span class="string">&quot;Service not available&quot;</span>).pure[<span class="type">F</span>]</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Option methods → None</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getSOP</span></span>(...) = <span class="type">None</span>.pure[<span class="type">F</span>]</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Idempotent operations → Right(()) (success - nothing to do)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">deleteSOP</span></span>(...) = <span class="type">Right</span>(()).pure[<span class="type">F</span>]</span><br></pre></td></tr></table></figure>
+<p><strong>Method-level context bounds for partial
+dependencies:</strong></p>
+<p>When only some methods on a service need an extra capability, use a
+method-level <code>using</code> parameter instead of requiring it on the
+whole class:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">UserService</span>[<span class="type">F</span>[_]]</span>:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getUser</span></span>(tenant: <span class="type">TenantContext</span>, id: <span class="type">UUID</span>): <span class="type">F</span>[<span class="type">Option</span>[<span class="type">User</span>]]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">avatar</span></span>(tenant: <span class="type">TenantContext</span>, id: <span class="type">UUID</span>)(<span class="keyword">using</span> <span class="type">S3Service</span>[<span class="type">F</span>]): <span class="type">F</span>[<span class="type">Option</span>[<span class="type">Array</span>[<span class="type">Byte</span>]]]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Routes that call avatar need S3Service in scope:</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">routes</span></span>[<span class="type">F</span>[_]: &#123;<span class="type">Async</span>, <span class="type">UserService</span>, <span class="type">S3Service</span>&#125;]: <span class="type">AuthedRoutes</span>[...] = ...</span><br><span class="line"></span><br><span class="line"><span class="comment">// Routes that don&#x27;t call avatar don&#x27;t need S3Service:</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">routes</span></span>[<span class="type">F</span>[_]: &#123;<span class="type">Async</span>, <span class="type">UserService</span>&#125;]: <span class="type">AuthedRoutes</span>[...] = ...</span><br></pre></td></tr></table></figure>
+<p><strong>Wiring with givens in App:</strong> <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">given</span> <span class="type">SOPService</span>[<span class="type">IO</span>] = <span class="type">SOPService</span>.make[<span class="type">IO</span>](xa)</span><br><span class="line"><span class="keyword">given</span> <span class="type">RAGService</span>[<span class="type">IO</span>] =</span><br><span class="line">  <span class="keyword">if</span> <span class="type">Config</span>.enableRAG <span class="keyword">then</span> <span class="type">RAGService</span>.make[<span class="type">IO</span>](httpClient)</span><br><span class="line">  <span class="keyword">else</span> <span class="type">RAGService</span>.noop[<span class="type">IO</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> routes = <span class="type">SOPRoutes</span>.routes[<span class="type">IO</span>]  <span class="comment">// Givens in scope</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="code-style-flat-for-comprehensions">Code Style: Flat
+<code>for</code>-comprehensions</h3>
+<p>Prefer flat <code>for</code>/<code>yield</code> over nested
+<code>match</code>/<code>case</code> inside effectful blocks. Lift
+<code>Either</code>/<code>Option</code> into <code>F</code> so the
+<code>for</code> stays linear:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BAD — nested match breaks the for-comprehension flow</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  result &lt;- service.doSomething(...)</span><br><span class="line">  response &lt;- result <span class="keyword">match</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Right</span>(value) =&gt; <span class="type">Ok</span>(value.asJson)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Left</span>(err)    =&gt; <span class="type">BadRequest</span>(err.asJson)</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOD — lift Either/Option into F</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  value &lt;- <span class="type">Sync</span>[<span class="type">F</span>].fromEither(parseJson(raw).leftMap(e =&gt; <span class="type">RuntimeException</span>(e.message)))</span><br><span class="line">  response &lt;- <span class="type">Ok</span>(value)</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOD — use EitherT.foldF when both paths have logic</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body &lt;- req.req.as[<span class="type">Body</span>]</span><br><span class="line">  response &lt;- <span class="type">EitherT</span>(service.doSomething(body)).foldF(</span><br><span class="line">    err  =&gt; <span class="type">Logger</span>[<span class="type">F</span>].warn(<span class="string">s&quot;Failed: <span class="subst">$err</span>&quot;</span>) *&gt; <span class="type">BadRequest</span>(err.asJson),</span><br><span class="line">    value =&gt; <span class="type">Created</span>(value.asJson)</span><br><span class="line">  )</span><br><span class="line"><span class="keyword">yield</span> response</span><br></pre></td></tr></table></figure>
+<p><strong>Key lifters:</strong> <code>Sync[F].fromEither</code>,
+<code>Sync[F].fromOption</code>, <code>EitherT(...).foldF</code>.</p>
+<p><strong>No premature helpers:</strong> Don't extract single-use
+private methods that just wrap a <code>match</code>. Inline the logic at
+the call site.</p>
+<p><strong>Case classes over manual cursor decoding:</strong> For
+external API payloads, define case classes with
+<code>derives Decoder</code> and decode once with <code>.as[T]</code>,
+then pattern-match on decoded fields. Avoid manual
+<code>hcursor.downField(...).get[T](...)</code> chains.</p>
+<h3 id="sdklibrary-priority-order">SDK/Library Priority Order</h3>
+<p>When integrating external services (e.g., Google Cloud, AWS,
+Firebase), prefer libraries in this order:</p>
+<ol type="1">
+<li><strong>Typelevel-wrapped Scala SDK</strong> (e.g., from
+typelevel.org ecosystem)
+<ul>
+<li>Native cats-effect integration, functional patterns</li>
+</ul></li>
+<li><strong>Official Scala SDK</strong> (e.g., from Google/Azure/AWS)
+<ul>
+<li>First-party support with Scala idioms</li>
+</ul></li>
+<li><strong>Third-party wrapped Scala SDK</strong> (actively maintained)
+<ul>
+<li>Community wrappers with Scala-friendly APIs</li>
+</ul></li>
+<li><strong>Official Java/Kotlin SDK</strong> (wrap with
+<code>Async.blocking</code>)
+<ul>
+<li>Use when no Scala alternative exists</li>
+</ul></li>
+<li><strong>Implement yourself</strong> (HTTP client)
+<ul>
+<li>Last resort, only when SDK unavailable or unsuitable</li>
+</ul></li>
+</ol>
+<p><strong>Example:</strong> For Google Gemini integration, use the
+official Java SDK wrapped with <code>Async[F].blocking</code> rather
+than implementing raw HTTP calls.</p>
+<h3 id="multi-tenancy-with-schema-isolation">Multi-Tenancy with Schema
+Isolation</h3>
+<p>The database uses PostgreSQL schema isolation for multi-tenancy:</p>
+<ul>
+<li><strong>System schema</strong> (<code>public</code>): Stores shared
+data (tenants, users, system settings, quotas)</li>
+<li><strong>Tenant schemas</strong> (<code>tenant_&lt;id&gt;</code>):
+Each tenant gets an isolated schema for their data (projects, documents,
+SOPs, etc.)</li>
+</ul>
+<p><strong>Migration System:</strong> - System migrations:
+<code>db/migration/system/</code> - run once at startup - Tenant
+migrations: <code>db/migration/tenant/</code> - run for each tenant
+schema - Migrations run automatically at startup for all existing
+tenants - New tenant schemas are migrated on creation - Never modify
+existing migration files; always create new versioned files</p>
+<p><strong>Tenant Schema Access:</strong> All tenant routes follow the
+pattern: <code>/api/org/&#123;tenant&#125;/...</code></p>
+<h3 id="fail-fast---no-silent-error-swallowing">Fail Fast - No Silent
+Error Swallowing</h3>
+<p><strong>CRITICAL RULE:</strong> Never silently swallow errors.
+Arbitrary tolerance pollutes the database and hides bugs.</p>
+<p><strong>Forbidden patterns (ALWAYS):</strong> <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BAD - silently converts errors to None/null</span></span><br><span class="line">json.as[<span class="type">T</span>].toOption</span><br><span class="line">json.as[<span class="type">T</span>].getOrElse(defaultValue)</span><br><span class="line">either.toOption</span><br><span class="line"><span class="type">Try</span>(x).toOption</span><br><span class="line">result.getOrElse(<span class="literal">null</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>Error Handling Strategy - Trusted vs Untrusted
+Paths:</strong></p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Path Type</th>
+<th>Examples</th>
+<th>Strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Trusted (internal)</strong></td>
+<td>Config files, system settings, DB schema data, internal
+serialization</td>
+<td><strong>Throw exception</strong> - low probability of error, if it
+fails it's a bug</td>
+</tr>
+<tr class="even">
+<td><strong>Untrusted (external)</strong></td>
+<td>User input, AI-generated content, external API responses</td>
+<td><strong>Catch and report</strong> - high probability of error,
+report back to user/AI to fix</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TRUSTED PATH - throw on failure (system internal data)</span></span><br><span class="line"><span class="keyword">val</span> config = configJson.as[<span class="type">AppConfig</span>].getOrElse(</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">RuntimeException</span>(<span class="string">s&quot;Config decode failed: <span class="subst">$&#123;configJson&#125;</span>&quot;</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// UNTRUSTED PATH - catch and report to caller (user/AI content)</span></span><br><span class="line"><span class="keyword">val</span> result = userJson.as[<span class="type">UserContent</span>] <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="type">Right</span>(v) =&gt; v</span><br><span class="line">  <span class="keyword">case</span> <span class="type">Left</span>(err) =&gt; <span class="keyword">return</span> <span class="type">BadRequest</span>(<span class="string">s&quot;Invalid content format: <span class="subst">$&#123;err.message&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="typed-error-model-adt-errors">Typed Error Model (ADT
+Errors)</h3>
+<p><strong>Use <code>enum</code> error types, not
+<code>Either[String, T]</code>.</strong> Services define sealed error
+enums for known failure modes. Routes pattern-match on the enum to
+decide HTTP status — no string parsing.</p>
+<p><strong>Scope: one error enum per logical failure domain, not per
+service.</strong> - If two methods share most failure modes → one shared
+enum - If two methods have different failure modes → separate enums -
+Shared subset across domains → compose via wrapping:
+<code>ParseError.Embedding(EmbeddingError)</code></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Separate enums — methodA and methodB have different failure modes</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">DocumentService</span>[<span class="type">F</span>[_]]</span>:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">importUrl</span></span>(url: <span class="type">String</span>): <span class="type">F</span>[<span class="type">Either</span>[<span class="type">ImportError</span>, <span class="type">Document</span>]]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">parseContent</span></span>(docId: <span class="type">DocumentId</span>): <span class="type">F</span>[<span class="type">Either</span>[<span class="type">ParseError</span>, <span class="type">Content</span>]]</span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> <span class="type">ImportError</span>:</span><br><span class="line">  <span class="keyword">case</span> <span class="type">InvalidUrl</span>(url: <span class="type">String</span>)</span><br><span class="line">  <span class="keyword">case</span> <span class="type">Unreachable</span>(url: <span class="type">String</span>, status: <span class="type">Int</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> <span class="type">ParseError</span>:</span><br><span class="line">  <span class="keyword">case</span> <span class="type">FormatNotSupported</span>(mimeType: <span class="type">MimeType</span>)</span><br><span class="line">  <span class="keyword">case</span> <span class="type">DocumentNotUploaded</span>(documentId: <span class="type">DocumentId</span>)</span><br><span class="line">  <span class="keyword">case</span> <span class="type">Embedding</span>(cause: <span class="type">EmbeddingError</span>)  <span class="comment">// wraps inner domain error</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Shared enum — indexDocument and indexSop share the same failure modes</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">RagIndexService</span>[<span class="type">F</span>[_]]</span>:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">indexDocument</span></span>(docId: <span class="type">DocumentId</span>): <span class="type">F</span>[<span class="type">Either</span>[<span class="type">IndexError</span>, <span class="type">Unit</span>]]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">indexSop</span></span>(sopId: <span class="type">SopId</span>): <span class="type">F</span>[<span class="type">Either</span>[<span class="type">IndexError</span>, <span class="type">Unit</span>]]</span><br></pre></td></tr></table></figure>
+<p><strong>Rules:</strong> - <strong>Named variants for known
+failures.</strong> Each variant carries structured context (IDs, limits,
+types), not string messages. - <strong><code>Sdk</code> /
+<code>Other(message: String)</code> variant</strong> for unexpected
+errors that don't warrant their own case yet. - <strong>Compose, don't
+flatten.</strong> When service A calls service B, wrap B's error:
+<code>case Embedding(cause: EmbeddingError)</code>, not
+<code>case EmbeddingFailed(message: String)</code>. - <strong>Route
+mapping:</strong> Each error variant maps to exactly one HTTP status.
+The match is exhaustive — compiler enforces handling every variant. -
+<strong>Define in feature's <code>models.scala</code>.</strong> -
+<strong>Migrate incrementally.</strong> New services use typed errors.
+Existing <code>Either[String, T]</code> services migrate when next
+modified.</p>
+<h3 id="feature-module-organization">Feature Module Organization</h3>
+<p>Each feature module follows a consistent structure:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">features/&lt;feature&gt;/</span><br><span class="line">├── &lt;Feature&gt;Service.scala      # Business logic (tagless final trait + impl)</span><br><span class="line">├── &lt;Feature&gt;Repository.scala   # Data access layer (Doobie queries)</span><br><span class="line">├── models.scala                # Domain objects and DTOs</span><br><span class="line">└── README.md                   # Feature documentation</span><br></pre></td></tr></table></figure></p>
+<p><strong>Layered Architecture:</strong> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Routes → Services → Repositories → Database (Doobie)</span><br><span class="line">   ↓         ↓            ↓</span><br><span class="line">  DTOs   Business    SQL Queries (ConnectionIO)</span><br><span class="line">        Logic</span><br></pre></td></tr></table></figure></p>
+<h3 id="testing-strategy">Testing Strategy</h3>
+<p>Tests use: - <strong>munit</strong> with cats-effect support for test
+framework - <strong>TestContainers</strong> for PostgreSQL integration
+tests (automatic database provisioning) - <strong>Doobie munit</strong>
+for query checker tests</p>
+<p><strong>What NOT to test (waste of time):</strong> - Case classes -
+no value without complex methods - JSON serialization - Circe is already
+well-tested - Config class definitions - if config is wrong, app fails
+to start anyway - Framework behavior (http4s, Doobie) - already
+well-tested by the community</p>
+<p><strong>What TO test (valuable):</strong> - Security validation
+(e.g., tenant name injection prevention) - Error handling / fallback
+logic - Real database integration with TestContainers - Business logic
+that has actual branching/computation - Assembly/wiring that connects
+our components together</p>
+<h2 id="api-routes">API Routes</h2>
+<p>All routes require Firebase JWT auth: -
+<code>/api/org/&#123;tenant&#125;/projects/</code> - Project management -
+<code>/api/org/&#123;tenant&#125;/projects/&#123;id&#125;/documents/</code> - Document CRUD
+- <code>/api/org/&#123;tenant&#125;/projects/&#123;id&#125;/sops/</code> - SOP management -
+<code>/api/org/&#123;tenant&#125;/projects/&#123;id&#125;/bookmarks/</code> - Bookmarks -
+<code>/api/system/tenants/</code> - Tenant admin -
+<code>/api/system/users/</code> - User management</p>
+<h2 id="development-workflow">Development Workflow</h2>
+<h3 id="adding-new-routes">Adding New Routes</h3>
+<p>When adding or modifying routes:</p>
+<ol type="1">
+<li><strong>Update the OpenAPI spec:</strong> After route/DTO changes,
+update <code>src/main/resources/openapi/documentation.yaml</code></li>
+<li><strong>Validate the spec:</strong> Run
+<code>swagger-cli validate</code> to ensure correctness</li>
+<li><strong>Follow authentication patterns:</strong> All API routes
+require Firebase JWT authentication (except system/health
+endpoints)</li>
+</ol>
+<h3 id="code-formatting">Code Formatting</h3>
+<p>Use scalafmt (configured in <code>.scalafmt.conf</code>):
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./mill reformat      <span class="comment"># Format all Scala sources</span></span><br><span class="line">./mill checkFormat   <span class="comment"># Check formatting without modifying</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Code style rules:</strong> - <strong>No fully-qualified names
+in code.</strong> Always use imports. - <strong>Context bounds: use
+<code>&#123;A, B, C&#125;</code> syntax</strong> (Scala 3.6 aggregate bounds), not
+colon-separated. - <strong>Opaque types for domain values.</strong> AI
+writes 90%+ of code, so write-cost is near zero while compile-time
+safety is free. Use opaque types with smart constructors for all entity
+IDs, constrained strings, and bounded numbers. Defined in
+<code>core/domain/Ids.scala</code> and
+<code>core/domain/Types.scala</code>. - <strong>Type-level constraints
+flow E2E.</strong> Encode invariants in types (opaque types,
+<code>NonEmptyList</code>, refined types) and propagate them through
+<strong>all</strong> layer signatures: route → service → repository.
+Never downgrade a constraint to a weaker type and re-validate internally
+— that hides the requirement from callers and defeats compile-time
+safety. Unwrap/weaken only at the true system boundary: SQL
+interpolation, Java SDK calls, job parameter serialization. -
+<strong><code>.toString</code> over
+<code>.value.toString</code>.</strong> Opaque types erase at runtime, so
+<code>s"...$opaqueId"</code> and <code>opaqueId.toString</code> just
+work — no need to unwrap first. - <strong><code>NonEmptyList</code> over
+<code>List</code> + <code>.get</code>/<code>.head</code>.</strong> When
+a method logically requires non-empty input (batch embeddings,
+<code>IN</code> clauses, etc.), use <code>NonEmptyList[T]</code> in the
+<strong>signature</strong> — including repository methods — instead of
+<code>List[T]</code> with a runtime <code>.toNel.get</code> or
+<code>.head</code>. Callers use <code>NonEmptyList.fromList</code> to
+handle the empty case at the call site. - <strong>No premature
+helpers.</strong> Don't extract single-use private methods. Inline at
+call site. - <strong>Generic over specific.</strong> One
+<code>queryParam[T]</code> not three type-specific parsers. -
+<strong>Proactive naming review.</strong> When reading or modifying
+code, flag misleading, stale, or inconsistent names to the user. For
+<strong>internal names</strong> (classes, properties, methods) —
+recommend renaming directly. For <strong>external names</strong>
+(request/response DTOs, DB-serialized JSONB fields) — suggest the better
+name but note migration implications. Common smells: Kotlin-era suffixes
+(<code>Kt</code>), field names that don't match their type
+(<code>name</code> holding an ID), stale comments referencing deleted
+code, generic names that obscure domain meaning.</p>
+<h3 id="logging">Logging</h3>
+<ul>
+<li><strong>Use <code>val logger</code> (not context-bound
+injection).</strong> Create a local
+<code>val logger = Slf4jLogger.getLogger[F]</code> or pass as
+constructor param. Logger is too common to justify tagless-final
+injection overhead.</li>
+<li><strong>Milestone logging for long operations.</strong> Every
+long-running call (external API, DB migration, video processing,
+embedding) should log at each major step so operators can see progress
+and diagnose hangs.</li>
+<li><strong>Log level in loops:</strong> If each iteration is fast
+(e.g., processing a list of items), use
+<code>debug</code>/<code>trace</code>. If each iteration is slow (e.g.,
+transcoding, embedding backfill), <code>info</code> is appropriate.</li>
+<li><strong>Log levels:</strong> <code>error</code> = unexpected
+failures that need attention. <code>warn</code> = degraded but
+recoverable. <code>info</code> = lifecycle events, milestones, external
+calls. <code>debug</code> = per-item processing in loops, internal
+state.</li>
+</ul>
+<h3 id="runtime-assertion-checks-rac">Runtime Assertion Checks
+(RAC)</h3>
+<p><strong>Insert runtime assertions on critical paths.</strong> RACs
+catch inconsistent state early, before it propagates downstream and
+corrupts data. Always enabled in dev/testing; switchable off in
+production via config flag.</p>
+<p><strong>Implementation:</strong> Use a shared
+<code>RAC.assert(condition, message)</code> helper that checks a config
+flag. When disabled, assertions are no-ops. When enabled, they throw
+immediately.</p>
+<p><strong>What should have RAC:</strong> - <strong>Money/balance
+operations</strong> — assert balance &gt;= 0 after debit, assert credit
++ debit = expected total - <strong>Inconsistent state
+transitions</strong> — assert valid transitions in state machines (e.g.,
+SOP stage: draft→processing→published, never published→draft; RAG index:
+PENDING→INDEXING→INDEXED, never backward). Throw immediately on invalid
+transition to prevent downstream pollution. - <strong>Tenant
+isolation</strong> — assert search_path matches expected tenant schema
+before writes. Wrong schema = cross-tenant data leak. -
+<strong>Embedding dimensions</strong> — assert vector length matches
+expected dimension (768 for text, 1408 for video) before pgvector
+insert. Wrong dimension corrupts similarity search silently. -
+<strong>Idempotency</strong> — assert no duplicate job submission for
+same entity (K8s jobs, Quartz jobs). Duplicates waste resources. -
+<strong>Invariant preservation</strong> — any operation where a
+post-condition violation would silently corrupt data rather than fail
+visibly.</p>
+<p><strong>What should NOT have RAC:</strong> - Input validation (use
+typed errors instead — that's user-facing, not assertion) -
+Performance-sensitive hot loops (use debug logging instead) - Conditions
+already enforced by the type system (that's the compiler's job)</p>
+<h2 id="cicd-pipeline">CI/CD Pipeline</h2>
+<p><strong>IMPORTANT: Do NOT build and push Docker images from local
+machine.</strong> Always commit and push to git to trigger CI for
+building images. Only build locally if explicitly requested by the
+user.</p>
+<p><strong>Branches and Docker Tags:</strong> - <code>develop</code>
+branch → <code>gcr.io/$&#123;PROJECT_ID&#125;/api:develop</code> -
+<code>testing</code> branch →
+<code>gcr.io/$&#123;PROJECT_ID&#125;/api:testing</code> - <code>master</code>
+branch → <code>gcr.io/$&#123;PROJECT_ID&#125;/api:latest</code> and
+<code>:master</code> - Git tag <code>vX.Y.Z</code> →
+<code>gcr.io/$&#123;PROJECT_ID&#125;/api:vX.Y.Z</code></p>
+<p><strong>Git Push:</strong> - If SSH push fails (e.g. VPN/proxy blocks
+port 22), switch to HTTPS temporarily.</p>
+<p><strong>Deployment:</strong> - GitHub Actions workflow:
+<code>.github/workflows/build-and-push-gcr.yml</code> - Builds with
+Mill, then Docker image, pushes to Google Container Registry - Requires
+<code>GCR_SERVICE_ACCOUNT</code> secret (GCP service account JSON) -
+Deployed via <strong>ArgoCD on Kubernetes</strong> (not docker-compose
+or manual shell) - Deploy manifests live in a separate repo:
+<code>deploy/overlays/&#123;dev,testing,prod&#125;</code></p>
+<p><strong>Deploy impact reporting:</strong> When a code change involves
+deploy-affecting changes, output a summary of what needs to be updated
+in the deploy repo. Examples: - <strong>New environment
+variable</strong> → add to ConfigMap or Secret in the overlay, reference
+in Deployment env - <strong>New configuration field</strong> → add to
+<code>application.conf</code> ConfigMap - <strong>New sidecar
+container</strong> → add container spec to Deployment manifest -
+<strong>New volume/secret mount</strong> → add Volume + VolumeMount to
+Deployment - <strong>New external service dependency</strong> → may need
+NetworkPolicy, ServiceAccount, or IAM binding</p>
+<p>Format the output as a checklist the user can apply to the deploy
+repo. Do NOT suggest docker-compose changes or manual
+<code>docker run</code> / <code>kubectl apply</code> commands.</p>
+<h2 id="key-dependencies-services">Key Dependencies &amp; Services</h2>
+<h3 id="external-services-integration">External Services
+Integration</h3>
+<ul>
+<li><strong>Firebase Admin SDK</strong>: User authentication and JWT
+verification</li>
+<li><strong>Vertex AI</strong>: Text embeddings, Gemini models, Document
+AI for OCR</li>
+<li><strong>Google Cloud Storage (GCS)</strong>: Document and video file
+storage</li>
+<li><strong>LibreChat</strong>: Optional integration for chat
+interface</li>
+</ul>
+<h3 id="optional-features">Optional Features</h3>
+<p><strong>Kubernetes Job Delegation:</strong> - Video processing
+(FFmpeg, VideoSeal) can run as K8s jobs instead of in-process - Enable
+via <code>KUBERNETES_JOBS_ENABLED=true</code> - Requires service account
+with GCS access and K8s job permissions</p>
+<p><strong>Observability:</strong> - <strong>otel4s</strong>: Native
+Scala OpenTelemetry integration (set <code>ENABLE_OTEL=true</code>) -
+<strong>Sentry</strong>: Error tracking and monitoring (provide
+<code>SENTRY_DSN</code>)</p>
+<h2 id="important-files">Important Files</h2>
+<ul>
+<li><code>App.scala</code> - Main entry point, service initialization,
+givens wiring</li>
+<li><code>build.mill</code> - Mill build definition, dependencies</li>
+<li><code>application.conf</code> - HOCON configuration with environment
+variable overrides</li>
+<li><code>Dockerfile</code> - Multi-stage build with Mill, FFmpeg for
+video processing</li>
+<li><code>docker-compose.yaml</code> - Local PostgreSQL with pgvector
+for development</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Programming/" rel="tag"># Programming</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/09/AI-and-Human-Whats-Next/" rel="prev" title="AI & Human: What's Next">
+                  <i class="fa fa-chevron-left"></i> AI & Human: What's Next
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
