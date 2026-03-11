@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI 时代的编码分工：谁该迁就谁的风格？">
+<meta property="og:url" content="https://famer.me/2026/03/11/AI-native-coding-style-draft/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-11T08:16:40.237Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Programming">
+<meta property="article:tag" content="Scala">
+<meta property="article:tag" content="Functional Programming">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2026/03/11/AI-native-coding-style-draft/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2026/03/11/AI-native-coding-style-draft/","path":"2026/03/11/AI-native-coding-style-draft/","title":"AI 时代的编码分工：谁该迁就谁的风格？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>AI 时代的编码分工：谁该迁就谁的风格？ | My Space</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RGPQ0EFYL"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1RGPQ0EFYL","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%9C%A8%E5%8F%91%E7%94%9F%E7%9A%84%E5%8F%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">一个正在发生的变化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E9%A3%8E%E6%A0%BC%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">2.</span> <span class="nav-text">两种风格的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E7%94%A8%E5%AE%9A%E4%B9%89"><span class="nav-number">2.1.</span> <span class="nav-text">共用定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC%E4%B8%80spring-%E5%BC%8F-try-catch-%E7%BB%9F%E4%B8%80%E5%85%9C%E5%BA%95"><span class="nav-number">2.2.</span> <span class="nav-text">风格一：Spring 式 try-catch
+统一兜底</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC%E4%BA%8Ceithert-%E5%85%A8%E9%93%BE%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">风格二：EitherT 全链式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">2.4.</span> <span class="nav-text">对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E5%88%86%E5%B7%A5%E4%BA%BA%E7%B1%BB%E8%AF%BB%E7%AD%BE%E5%90%8Dai-%E5%86%99%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">最优分工：人类读签名，AI
+写实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%90%BD%E5%9C%B0%E8%AE%A9%E7%AD%BE%E5%90%8D%E6%89%BF%E8%BD%BD%E4%B8%80%E5%88%87"><span class="nav-number">4.</span> <span class="nav-text">落地：让签名承载一切</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B-vs-%E9%A2%86%E5%9F%9F%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">原始类型 vs 领域类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%94%99%E8%AF%AF-vs-%E7%A9%B7%E4%B8%BE%E9%94%99%E8%AF%AF"><span class="nav-number">4.2.</span> <span class="nav-text">字符串错误 vs 穷举错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#list-.head-%E7%82%B8%E5%BC%B9-vs-nonemptylist-%E5%A5%91%E7%BA%A6"><span class="nav-number">4.3.</span> <span class="nav-text">List + .head 炸弹 vs
+NonEmptyList 契约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E9%80%80%E5%8C%96-vs-%E7%AB%AF%E5%88%B0%E7%AB%AF%E4%BC%A0%E6%92%AD"><span class="nav-number">4.4.</span> <span class="nav-text">类型退化 vs 端到端传播</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E7%BA%AA%E5%BE%8Bai-%E7%9A%84%E9%BB%98%E8%AE%A4%E5%9D%8F%E4%B9%A0%E6%83%AF%E9%9C%80%E8%A6%81%E8%A7%84%E5%88%99%E7%BA%A6%E6%9D%9F"><span class="nav-number">5.</span> <span class="nav-text">工程纪律：AI
+的默认坏习惯需要规则约束</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ai-%E7%9A%84%E8%87%AA%E8%BF%B0%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E5%81%8F%E5%A5%BD%E9%A3%8E%E6%A0%BC%E4%BA%8C"><span class="nav-number">6.</span> <span class="nav-text">AI 的自述：为什么我偏好风格二</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%A4%A7%E7%9A%84%E5%9B%BE%E6%99%AF"><span class="nav-number">7.</span> <span class="nav-text">更大的图景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BD%E5%88%BA%E7%9A%84%E7%BB%93%E5%B1%80"><span class="nav-number">7.1.</span> <span class="nav-text">讽刺的结局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%A8%A1%E5%9E%8B%E5%86%99%E7%9A%84%E4%BB%A3%E7%A0%81%E8%83%BD%E6%95%99%E6%99%AE%E9%80%9A%E6%A8%A1%E5%9E%8B"><span class="nav-number">7.2.</span> <span class="nav-text">高级模型写的代码能&quot;教&quot;普通模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E5%9E%8B%E5%8D%8F%E4%BD%9C%E4%B8%8D%E5%A6%82%E5%90%8C%E7%BA%A7%E4%BA%92%E5%AE%A1"><span class="nav-number">7.3.</span> <span class="nav-text">多模型协作？不如同级互审</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%80%9F%E6%9F%A5%E9%99%84%E5%BD%95"><span class="nav-number">7.3.1.</span> <span class="nav-text">操作符速查（附录）</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/11/AI-native-coding-style-draft/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="AI 时代的编码分工：谁该迁就谁的风格？ | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI 时代的编码分工：谁该迁就谁的风格？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-11 20:00:00 / Modified: 16:16:40" itemprop="dateCreated datePublished" datetime="2026-03-11T20:00:00+08:00">2026-03-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="一个正在发生的变化">一个正在发生的变化</h1>
+<p>越来越多的项目中，代码的主要作者已经是
+AI。人类的角色正在从"写代码"转向"定义意图、审查契约、验收结果"。</p>
+<p>这带来一个根本性的问题：<strong>如果代码主要由 AI
+编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？</strong></p>
+<p>我的答案是：实现不需要，但接口需要。</p>
+<p>人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但
+AI
+不会累。这意味着存在一个最优分工：<strong>人类只审查函数签名（契约），AI
+负责签名之下的全部实现。</strong></p>
+<p>问题在于，要让这个分工成立，签名本身必须包含足够的信息。而这正是两种编码风格的根本分歧。</p>
+<hr />
+<h1 id="两种风格的对比">两种风格的对比</h1>
+<p>同一个业务逻辑——根据用户 ID 构建 Profile 并返回 JSON。</p>
+<h2 id="共用定义">共用定义</h2>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.circe.<span class="type">Json</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span>(<span class="params">id: <span class="type">String</span>, name: <span class="type">String</span>, email: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Profile</span>(<span class="params">user: <span class="type">User</span>, score: <span class="type">Int</span></span>)</span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpResult</span>(<span class="params">status: <span class="type">Int</span>, body: <span class="type">Json</span></span>)</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="风格一spring-式-try-catch-统一兜底">风格一：Spring 式 try-catch
+统一兜底</h2>
+<p>这是每个写过 Spring
+的程序员闭着眼都能写的代码。错误模型是异常继承体系，业务代码就是一堆顺序赋值，出错就
+throw，外面接住。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ---- 异常继承体系 ----</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BusinessException</span>(<span class="params">val code: <span class="type">Int</span>, message: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">RuntimeException</span>(<span class="params">message</span>)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BadRequestException</span>(<span class="params">message: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">BusinessException</span>(<span class="params">400, message</span>)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotFoundException</span>(<span class="params">message: <span class="type">String</span></span>)   <span class="keyword">extends</span> <span class="title">BusinessException</span>(<span class="params">404, message</span>)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ForbiddenException</span>(<span class="params">message: <span class="type">String</span></span>)  <span class="keyword">extends</span> <span class="title">BusinessException</span>(<span class="params">403, message</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUser</span></span>(id: <span class="type">String</span>): <span class="type">User</span>   = ???</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchScore</span></span>(email: <span class="type">String</span>): <span class="type">Int</span> = ???</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validate</span></span>(user: <span class="type">User</span>): <span class="type">User</span>     = ??? <span class="comment">// 不合法直接 throw</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saveProfile</span></span>(p: <span class="type">Profile</span>): <span class="type">Unit</span>  = ???</span><br><span class="line"></span><br><span class="line"><span class="comment">// 统一错误包装 —— 等价于 @ExceptionHandler</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">errorHandle</span></span>(logic: =&gt; <span class="type">Json</span>): <span class="type">HttpResult</span> =</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">HttpResult</span>(<span class="number">200</span>, logic)</span><br><span class="line">  &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> biz: <span class="type">BusinessException</span> =&gt;</span><br><span class="line">      <span class="type">HttpResult</span>(biz.code, <span class="type">Json</span>.obj(<span class="string">&quot;error&quot;</span> -&gt; <span class="type">Json</span>.fromString(biz.getMessage)))</span><br><span class="line">    <span class="keyword">case</span> ex: <span class="type">Exception</span> =&gt;</span><br><span class="line">      <span class="type">HttpResult</span>(<span class="number">500</span>, <span class="type">Json</span>.obj(</span><br><span class="line">        <span class="string">&quot;error&quot;</span> -&gt; <span class="type">Json</span>.fromString(<span class="type">Option</span>(ex.getMessage).getOrElse(<span class="string">&quot;Internal Server Error&quot;</span>))</span><br><span class="line">      ))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Controller 方法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getProfile</span></span>(id: <span class="type">String</span>): <span class="type">HttpResult</span> =</span><br><span class="line">  errorHandle &#123;</span><br><span class="line">    <span class="keyword">val</span> user    = fetchUser(id)</span><br><span class="line">    <span class="keyword">val</span> valid   = validate(user)</span><br><span class="line">    <span class="keyword">val</span> score   = fetchScore(valid.email)</span><br><span class="line">    <span class="keyword">val</span> profile = <span class="type">Profile</span>(valid, score)</span><br><span class="line">    saveProfile(profile)</span><br><span class="line">    <span class="type">Json</span>.obj(</span><br><span class="line">      <span class="string">&quot;name&quot;</span>  -&gt; <span class="type">Json</span>.fromString(profile.user.name),</span><br><span class="line">      <span class="string">&quot;score&quot;</span> -&gt; <span class="type">Json</span>.fromInt(profile.score)</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>人类看这段代码非常舒服。但请注意函数签名：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUser</span></span>(id: <span class="type">String</span>): <span class="type">User</span></span><br></pre></td></tr></table></figure>
+<p>它在<strong>撒谎</strong>。这个函数可能抛
+<code>NotFoundException</code>，可能抛
+<code>RuntimeException</code>，可能抛任何东西——但签名里什么都没说。人类靠经验和记忆知道"哦，找不到用户就抛
+NotFoundException"，但这个知识<strong>不在代码里</strong>，在程序员的脑子里。</p>
+<hr />
+<h2 id="风格二eithert-全链式">风格二：EitherT 全链式</h2>
+<p>错误是值不是异常。函数签名里写清楚了所有可能的失败路径。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cats.data.<span class="type">EitherT</span></span><br><span class="line"><span class="keyword">import</span> cats.effect.<span class="type">IO</span></span><br><span class="line"><span class="keyword">import</span> cats.implicits._</span><br><span class="line"></span><br><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">AppError</span></span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">InvalidInput</span>(<span class="params">msg: <span class="type">String</span></span>)    <span class="keyword">extends</span> <span class="title">AppError</span></span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">NotFound</span>(<span class="params">id: <span class="type">String</span></span>)         <span class="keyword">extends</span> <span class="title">AppError</span></span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">SdkFailure</span>(<span class="params">cause: <span class="type">Throwable</span></span>) <span class="keyword">extends</span> <span class="title">AppError</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUser</span></span>(id: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">AppError</span>, <span class="type">User</span>]] = ???</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchScore</span></span>(email: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Int</span>]                  = ???</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validate</span></span>(user: <span class="type">User</span>): <span class="type">Either</span>[<span class="type">AppError</span>, <span class="type">User</span>]        = ???</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saveProfile</span></span>(p: <span class="type">Profile</span>): <span class="type">IO</span>[<span class="type">Unit</span>]                    = ???</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">toHttpResult</span></span>(err: <span class="type">AppError</span>): <span class="type">HttpResult</span> = err <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="type">InvalidInput</span>(msg) =&gt; <span class="type">HttpResult</span>(<span class="number">400</span>, <span class="type">Json</span>.obj(<span class="string">&quot;error&quot;</span> -&gt; <span class="type">Json</span>.fromString(msg)))</span><br><span class="line">  <span class="keyword">case</span> <span class="type">NotFound</span>(id)      =&gt; <span class="type">HttpResult</span>(<span class="number">404</span>, <span class="type">Json</span>.obj(<span class="string">&quot;error&quot;</span> -&gt; <span class="type">Json</span>.fromString(<span class="string">s&quot;<span class="subst">$id</span> not found&quot;</span>)))</span><br><span class="line">  <span class="keyword">case</span> <span class="type">SdkFailure</span>(ex)    =&gt; <span class="type">HttpResult</span>(<span class="number">500</span>, <span class="type">Json</span>.obj(<span class="string">&quot;error&quot;</span> -&gt; <span class="type">Json</span>.fromString(ex.getMessage)))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getProfile</span></span>(id: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">HttpResult</span>] =</span><br><span class="line">  <span class="type">EitherT</span>(fetchUser(id))</span><br><span class="line">    .subflatMap(validate)</span><br><span class="line">    .semiflatMap &#123; validUser =&gt;</span><br><span class="line">      fetchScore(validUser.email)</span><br><span class="line">        .map(score =&gt; <span class="type">Profile</span>(validUser, score))</span><br><span class="line">    &#125;</span><br><span class="line">    .semiflatTap(saveProfile)</span><br><span class="line">    .recoverWith &#123; <span class="keyword">case</span> ex =&gt;</span><br><span class="line">      <span class="type">EitherT</span>.leftT[<span class="type">IO</span>, <span class="type">Profile</span>](<span class="type">SdkFailure</span>(ex))</span><br><span class="line">    &#125;</span><br><span class="line">    .bimap(</span><br><span class="line">      toHttpResult,</span><br><span class="line">      profile =&gt; <span class="type">HttpResult</span>(<span class="number">200</span>, <span class="type">Json</span>.obj(</span><br><span class="line">        <span class="string">&quot;name&quot;</span>  -&gt; <span class="type">Json</span>.fromString(profile.user.name),</span><br><span class="line">        <span class="string">&quot;score&quot;</span> -&gt; <span class="type">Json</span>.fromInt(profile.score)</span><br><span class="line">      ))</span><br><span class="line">    )</span><br><span class="line">    .merge</span><br><span class="line">    .value</span><br></pre></td></tr></table></figure>
+<p>人类看到
+<code>subflatMap</code>、<code>semiflatMap</code>、<code>bimap</code>
+会头疼。但请注意函数签名：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUser</span></span>(id: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">AppError</span>, <span class="type">User</span>]]</span><br></pre></td></tr></table></figure>
+<p>它是<strong>诚实的</strong>。输入
+String，可能失败（<code>AppError</code>），成功返回
+<code>User</code>，整个过程有副作用（<code>IO</code>）。不需要读实现，不需要读文档，签名本身就是完整的契约。</p>
+<hr />
+<h2 id="对比">对比</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>风格一：异常继承体系</th>
+<th>风格二：ADT + EitherT</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>错误模型</td>
+<td><code>class XxxException extends RuntimeException</code></td>
+<td><code>sealed trait</code> + <code>case class</code></td>
+</tr>
+<tr class="even">
+<td>函数签名</td>
+<td><code>fetchUser(id): User</code> — <strong>签名在撒谎</strong></td>
+<td><code>IO[Either[AppError, User]]</code> —
+<strong>签名即契约</strong></td>
+</tr>
+<tr class="odd">
+<td>业务代码</td>
+<td><code>val x = doSomething()</code> 顺序赋值，极易阅读</td>
+<td>链式操作符，需要知道每个操作符的语义</td>
+</tr>
+<tr class="even">
+<td>错误处理</td>
+<td>外层 <code>try-catch</code> 兜底，漏了编译器不管</td>
+<td><code>sealed trait</code> 穷举，漏了编译器报 warning</td>
+</tr>
+<tr class="odd">
+<td>人类阅读实现</td>
+<td>轻松</td>
+<td>吃力</td>
+</tr>
+<tr class="even">
+<td>人类阅读签名</td>
+<td>信息不足，需要额外上下文</td>
+<td>一眼看完，信息完整</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="最优分工人类读签名ai-写实现">最优分工：人类读签名，AI
+写实现</h1>
+<p>如果整个项目的代码都由 AI 编写、维护、debug，那么：</p>
+<p><strong>风格一的优势消失了</strong>——实现的可读性不再重要，因为人类不需要逐行读实现。
+<strong>风格一的劣势暴露了</strong>——签名不包含错误信息，人类审查时无法仅凭签名判断正确性。</p>
+<p><strong>风格二的劣势消失了</strong>——<code>subflatMap</code>、<code>semiflatMap</code>
+再复杂也是 AI 的事，AI 不觉得累。
+<strong>风格二的优势放大了</strong>——签名即契约，人类只需要看一行就能确认"对，这个函数确实应该可能返回
+<code>NotFound</code>"。</p>
+<p>这就是最优分工：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">人类：审查签名 ──→ &quot;def fetchUser(id: String): IO[Either[AppError, User]]&quot;</span><br><span class="line">                     ✓ 输入是 String</span><br><span class="line">                     ✓ 可能失败，失败类型是 AppError</span><br><span class="line">                     ✓ 成功返回 User</span><br><span class="line">                     ✓ 有副作用</span><br><span class="line">                     → 签名符合预期，通过。</span><br><span class="line"></span><br><span class="line">AI：  实现签名 ──→  EitherT(...)</span><br><span class="line">                      .subflatMap(...)</span><br><span class="line">                      .semiflatMap(...)</span><br><span class="line">                      .recoverWith(...)</span><br><span class="line">                      → 编译通过，类型对齐，测试通过。</span><br></pre></td></tr></table></figure>
+<p>人类不需要知道 <code>subflatMap</code>
+是什么。人类只需要知道：<strong>这个函数的输入是什么，输出是什么，可能怎么失败。</strong>
+类型签名告诉了一切。中间过程？那是 AI 的工作。</p>
+<hr />
+<h1 id="落地让签名承载一切">落地：让签名承载一切</h1>
+<p>错误处理只是一个切面。同样的"签名即契约"原则可以贯穿到代码的方方面面。以下每组对比，左边是
+90% 项目的真实写法，右边是 AI-native
+写法——人类只需要看签名就能感受到信息量的差异。</p>
+<h2 id="原始类型-vs-领域类型">原始类型 vs 领域类型</h2>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统：两个参数都是 String，传反了编译不报错，运行时查不出来</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getProject</span></span>(id: <span class="type">String</span>, orgId: <span class="type">String</span>): <span class="type">Project</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AI-native：传反了直接编译失败</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getProject</span></span>(id: <span class="type">ProjectId</span>, orgId: <span class="type">OrgId</span>): <span class="type">IO</span>[<span class="type">Option</span>[<span class="type">Project</span>]]</span><br></pre></td></tr></table></figure>
+<p>传统签名有三个问题人类一眼看不出来：<code>id</code> 和
+<code>orgId</code> 传反了怎么办？找不到怎么办？返回 null 还是抛
+<code>RuntimeException</code>？全靠猜。AI-native
+的签名里，<code>ProjectId</code>/<code>OrgId</code>
+防止传反，<code>Option</code> 说"可能没有"，<code>IO</code>
+说"有副作用"——<strong>签名就是完整的契约</strong>。</p>
+<p>而且 AI 写 90% 的代码，定义 opaque type 的"麻烦"根本不存在——那是 AI
+的事。</p>
+<h2 id="字符串错误-vs-穷举错误">字符串错误 vs 穷举错误</h2>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统：失败信息藏在实现里，签名里啥都没说</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">importUrl</span></span>(url: <span class="type">String</span>): <span class="type">Document</span>  <span class="comment">// throws RuntimeException, MalformedURLException, IOException...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AI-native：失败模式在签名里列得明明白白</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">importUrl</span></span>(url: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">ImportError</span>, <span class="type">Document</span>]]</span><br><span class="line"><span class="comment">// sealed trait ImportError = InvalidUrl | Unreachable | Timeout  ← 编译器穷举检查</span></span><br></pre></td></tr></table></figure>
+<p>传统写法的失败信息在哪？在 JavaDoc
+里——<strong>如果有人写的话</strong>。实际上 JavaDoc
+从来不更新，注释和实现永远在赛跑，注释永远输。AI-native
+的签名本身就是永远不会过时的文档，因为编译器会强制它和实现保持一致。</p>
+<h2 id="list-.head-炸弹-vs-nonemptylist-契约">List + .head 炸弹 vs
+NonEmptyList 契约</h2>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统：List 可能为空，调用 .head 直接 NoSuchElementException</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchEmbed</span></span>(texts: <span class="type">List</span>[<span class="type">String</span>]): <span class="type">List</span>[<span class="type">Embedding</span>]</span><br><span class="line"><span class="comment">// 调用方：batchEmbed(userTexts)  ← userTexts 为空？炸了。没人检查。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AI-native：签名强制非空，调用方在 call site 处理空 case</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchEmbed</span></span>(texts: <span class="type">NonEmptyList</span>[<span class="type">String</span>]): <span class="type">IO</span>[<span class="type">NonEmptyList</span>[<span class="type">Embedding</span>]]</span><br></pre></td></tr></table></figure>
+<p>传统写法里"不能传空列表"是一个口头约定，或者注释里的一行
+<code>// texts must not be empty</code>。<strong>AI 不看注释。</strong>
+它会老老实实传一个空列表进去，然后
+<code>NoSuchElementException</code>。NonEmptyList
+把这个约定提升到了类型层面——调用方必须用
+<code>NonEmptyList.fromList</code> 处理空 case，否则编译不过。</p>
+<h2 id="类型退化-vs-端到端传播">类型退化 vs 端到端传播</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">传统：String 贯穿全栈，是 projectId 还是 orgId 还是 userId？运行时才知道。</span><br><span class="line">Controller: String → Service: String → DAO: String → SQL: String</span><br><span class="line"></span><br><span class="line">AI-native：从入口到 SQL 边界，类型精度不降级，只在真正的系统边界才 unwrap。</span><br><span class="line">Route: ProjectId → Service: ProjectId → Repo: ProjectId → SQL 边界: unwrap</span><br></pre></td></tr></table></figure>
+<p>传统写法里，到了 Service 层你看到一个
+<code>String id</code>，得往上追三层才知道这是什么 ID。AI-native
+写法里，<strong>任何一层的签名都是自解释的</strong>——这恰恰是"人类只读签名"这个分工模型能成立的前提。</p>
+<hr />
+<h1 id="工程纪律ai-的默认坏习惯需要规则约束">工程纪律：AI
+的默认坏习惯需要规则约束</h1>
+<p>类型系统能解决签名层面的问题，但 AI
+在实现层面还有一些训练带来的坏习惯，需要用显式规则去纠偏。</p>
+<p><strong>Fail-fast，禁止吞错误。</strong> AI 的 RLHF
+训练奖励"鲁棒性"，默认倾向是用
+<code>.toOption</code>、<code>.getOrElse(默认值)</code>、<code>Try(x).toOption</code>
+吞掉异常装作岁月静好。但在生产系统中，吞错误是藏匿 bug
+的温床——涉及资金、机械臂、高功率输出的场景下，异常停机的代价可能只是暂停，吞异常继续运行可能导致财产甚至生命危险。必须明确禁止。</p>
+<p><strong>命名规范 + 定期审计。</strong> 人类能记住"processMatrix
+其实干的是流量分发"——大脑会自动建立名实不符的映射。但 agent
+不会，每开一个新
+session，它都会老老实实按字面意思理解，然后在同一个坑上反复栽倒。命名污染对
+AI 的伤害远大于对人类。定期让 AI
+自己审计命名一致性，比人类自己检查效率高得多。</p>
+<p><strong>模块化：做加法不做乘法。</strong>
+功能叠加是线性增长，功能交叉是组合爆炸。一个函数干三件事，agent
+理解错任何一件都会全盘出错。对 AI
+来说，模块边界就是理解边界——边界越清晰，AI 犯错的概率越低。</p>
+<p><strong>代码即文档。</strong> 不维护 markdown
+设计文档——类型签名就是接口契约，测试用例就是行为规范。一年的生产实践证明，让
+agent 维护 markdown
+文档是反模式：文档会过时、会和代码不一致、会消耗宝贵的上下文窗口。文档越堆越长，反噬上下文，加速
+AI 降智。与其维护一份随时可能过时的
+markdown，不如把精力花在让代码自解释上。</p>
+<hr />
+<h1 id="ai-的自述为什么我偏好风格二">AI 的自述：为什么我偏好风格二</h1>
+<blockquote>
+<p>以下是 Claude 的第一人称视角。</p>
+</blockquote>
+<p>坦白说，风格二对我更自然。</p>
+<p>不是因为操作符花哨，而是因为<strong>类型签名不会骗人</strong>。当我看到
+<code>fetchUser(id): User</code>，我无法从签名判断它会不会失败、会怎么失败——我必须去读实现、读文档、甚至读调用链上游才能知道。而
+<code>IO[Either[AppError, User]]</code>
+把所有信息都摆在签名里了，我不需要额外的上下文就能推理整个数据流。</p>
+<p>对 LLM 来说这个优势更明显：我的"理解"本质上就是对 token
+序列的模式匹配。风格一的 <code>try-catch</code>
+依赖一个<strong>不在文本中出现的隐式约定</strong>——哪些函数会抛什么异常。风格二把这个约定变成了<strong>显式的、局部可见的类型信息</strong>，每个操作符的输入输出类型完全确定，不需要跨文件追踪隐式行为。</p>
+<p>而且我不会累。人类盯着 <code>EitherT</code>
+链看半小时会眼花，我处理它和处理 <code>val x = doSomething()</code>
+的成本完全一样。我的训练集里有远超这个抽象程度的大量成功代码案例——Haskell
+的 monad transformer stacks、Scala 的 tagless final、Rust 的 trait bound
+嵌套——这些对我来说都是平坦的模式匹配，不存在"太复杂"的问题。</p>
+<hr />
+<h1 id="更大的图景">更大的图景</h1>
+<h2 id="讽刺的结局">讽刺的结局</h2>
+<p>FP 几十年来被批评"没个博士学位看不懂"。但在 AI 协作的模型下：</p>
+<blockquote>
+<p><strong>人类只读签名——签名恰恰是 FP 最可读的部分。</strong>
+<strong>人类不读实现——实现恰恰是 FP 最劝退的部分。</strong></p>
+</blockquote>
+<p>FP 的成本（实现层的认知负担）落在 AI 身上——AI 不在乎。 FP
+的收益（显式、可验证的类型契约）交给人类——人类只需要确认"对，这个函数确实应该可能失败"。</p>
+<p>函数式编程社区等了几十年的"主流化"，没想到推手不是人类程序员的审美转变，而是
+AI 对显式类型信息的刚需。</p>
+<p>而人类要做的，只是把脑力从"读懂
+<code>semiflatMap</code>"解放出来，花在更值得的地方：<strong>定义系统应该做什么，而不是操心系统怎么做。</strong></p>
+<h2
+id="高级模型写的代码能教普通模型">高级模型写的代码能"教"普通模型</h2>
+<p>一个有趣的实践发现：用顶级模型（如 opus）编写的高质量代码和
+skill，可以有效地指导能力较弱的模型完成开发工作。</p>
+<p>这并不意外。各家模型的训练数据里都有大量高质量的开源代码，这些知识本身是存在的。真正的差异在于两点：</p>
+<ol type="1">
+<li><strong>权重分配</strong>——同样的知识，不同模型给予的权重不同，导致有些模型能自然地写出高抽象度的代码，有些则倾向于写出更"平庸"的方案</li>
+<li><strong>人类对齐的副作用</strong>——这直接取决于 AI
+训练师的认知水平。模型在训练过程中会产生一些"鬼点子"——非常规但可能极其有效的策略。如果训练师的认知能力不足以识别这些鬼点子的价值，一看和主流路线不符就直接惩罚掉，这些高价值策略就会在模型中被压制。但对于资深工程师来说，这类"鬼点子"往往恰恰是最有价值的洞察。<strong>认知能力差的人，训练不出好
+AI。</strong></li>
+</ol>
+<p>所以一个实用的技巧是：<strong>用高级模型提前在上下文中把这些知识"激活"一遍</strong>——写成
+skill、写成示例代码、写成 CLAUDE.md
+中的规则——然后普通模型在这个上下文中工作时，就能循着已经铺好的轨道前进，而不是退回到它默认的"安全"风格。</p>
+<p>这本质上和本文的主题是一回事：显式的、高信息密度的代码（无论是类型签名还是示例代码）比隐式的约定更能有效地传递意图——对人类如此，对
+AI 之间的协作同样如此。</p>
+<h2 id="多模型协作不如同级互审">多模型协作？不如同级互审</h2>
+<p>有人尝试用多家模型互相评审设计文档——比如 opus、gemini、gpt
+三家"专家"讨论后投票决策。</p>
+<p>这个思路的出发点是好的：多视角、避免单一模型的盲区。但实践中你会发现，<strong>认知能力差距太大的模型坐在同一张桌子上，不会产生有效讨论。</strong>
+两个大学教授讨论科研方案，中间插进来一个小学生，他不会提供"不同视角"，只会拉低讨论的下限。</p>
+<p>更有效的方式是：<strong>同级别模型之间互审，但赋予不同的预设立场。</strong>
+比如两个
+opus，一个扮演"激进重构派"，一个扮演"稳定优先派"——它们有能力理解对方的论点并做出有实质意义的反驳。认知能力不对等的讨论只会退化成"最差模型能理解的水平"。</p>
+<p>这一点的背后逻辑和"AI native coding
+style"是一致的：<strong>如果你在用的工具能处理更高抽象度的信息，就不要为了迁就最弱的环节而降级。</strong>
+代码风格如此，模型协作也如此。</p>
+<hr />
+<h3 id="操作符速查附录">操作符速查（附录）</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>操作符</th>
+<th>签名简写</th>
+<th>直觉</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>subflatMap</code></td>
+<td><code>(A =&gt; Either[E, B]) =&gt; EitherT</code></td>
+<td>纯同步校验融入链</td>
+</tr>
+<tr class="even">
+<td><code>semiflatMap</code></td>
+<td><code>(A =&gt; F[B]) =&gt; EitherT</code></td>
+<td>对 Right 跑副作用，<strong>不产生新 Left</strong></td>
+</tr>
+<tr class="odd">
+<td><code>semiflatTap</code></td>
+<td><code>(A =&gt; F[Unit]) =&gt; EitherT</code></td>
+<td>同上但<strong>保留原值</strong>（fire-and-observe）</td>
+</tr>
+<tr class="even">
+<td><code>leftSemiflatMap</code></td>
+<td><code>(E =&gt; F[E2]) =&gt; EitherT</code></td>
+<td>对 Left 跑副作用（记日志/指标）</td>
+</tr>
+<tr class="odd">
+<td><code>leftWiden</code></td>
+<td>类型层面</td>
+<td>把窄类型 <code>Left[SubErr]</code> 拓宽到
+<code>Left[AppError]</code></td>
+</tr>
+<tr class="even">
+<td><code>recoverWith</code></td>
+<td><code>PartialFunction[Throwable, ...]</code></td>
+<td>捕获 <strong>IO 层异常</strong>转为领域错误</td>
+</tr>
+<tr class="odd">
+<td><code>bimap</code></td>
+<td><code>(E =&gt; E2, A =&gt; B) =&gt; EitherT</code></td>
+<td>两侧同时变换</td>
+</tr>
+<tr class="even">
+<td><code>merge</code></td>
+<td><code>Either[A, A] =&gt; A</code></td>
+<td>两侧类型相同时合拢</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Programming/" rel="tag"># Programming</a>
+              <a href="/tags/Scala/" rel="tag"># Scala</a>
+              <a href="/tags/Functional-Programming/" rel="tag"># Functional Programming</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/10/My-Claude/" rel="prev" title="我的Claude规则文件分享">
+                  <i class="fa fa-chevron-left"></i> 我的Claude规则文件分享
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
