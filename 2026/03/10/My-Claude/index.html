@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="观前提醒  该文件为我个人自用的CLAUDE.md规则文件，维护生产项目已有一年时间，从 Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。 因为编码风格，个人品味原因，请勿整段复制甚至替换掉你的规则文件。你可以让Claude阅读我的规则文件，分析后你再决定有哪些可以采纳，有哪些不适合你当前项目。我个人的编码和架构风格非常激进，因为许多代码&#x2F;系统烂是烂">
+    <meta name="description" content="观前提醒 该文件为我个人自用的CLAUDE.md规则文件，维护生产项目已有一年时间，从 Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。 请注意：该文件也仅可用于 Claude code opus 4.6，我不是对 codex 和 gemini 有偏见，OpenAI 的 25k USD credits 今年6月份就要过期了，它（gpt-5.4-xhi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="我的Claude规则文件分享">
 <meta property="og:url" content="https://famer.me/2026/03/10/My-Claude/index.html">
 <meta property="og:site_name" content="My Space">
-<meta property="og:description" content="观前提醒  该文件为我个人自用的CLAUDE.md规则文件，维护生产项目已有一年时间，从 Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。 因为编码风格，个人品味原因，请勿整段复制甚至替换掉你的规则文件。你可以让Claude阅读我的规则文件，分析后你再决定有哪些可以采纳，有哪些不适合你当前项目。我个人的编码和架构风格非常激进，因为许多代码&#x2F;系统烂是烂">
+<meta property="og:description" content="观前提醒 该文件为我个人自用的CLAUDE.md规则文件，维护生产项目已有一年时间，从 Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。 请注意：该文件也仅可用于 Claude code opus 4.6，我不是对 codex 和 gemini 有偏见，OpenAI 的 25k USD credits 今年6月份就要过期了，它（gpt-5.4-xhi">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-10T15:37:43.000Z">
-<meta property="article:modified_time" content="2026-03-10T15:47:11.119Z">
+<meta property="article:modified_time" content="2026-03-11T01:32:55.743Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -196,9 +196,15 @@ Integration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2026-03-10 23:37:43 / Modified: 23:47:11" itemprop="dateCreated datePublished" datetime="2026-03-10T23:37:43+08:00">2026-03-10</time>
+      <time title="Created: 2026-03-10 23:37:43" itemprop="dateCreated datePublished" datetime="2026-03-10T23:37:43+08:00">2026-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-11 09:32:55" itemprop="dateModified" datetime="2026-03-11T09:32:55+08:00">2026-03-11</time>
     </span>
 
   
@@ -212,17 +218,22 @@ Integration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
     
     <div class="post-body" itemprop="articleBody">
         <h1 id="观前提醒">观前提醒</h1>
-<blockquote>
 <p>该文件为我个人自用的CLAUDE.md规则文件，维护生产项目已有一年时间，从
-Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。
-因为编码风格，个人品味原因，<strong>请勿整段复制甚至替换掉你的规则文件</strong>。你可以让Claude阅读我的规则文件，分析后你再决定有哪些可以采纳，有哪些不适合你当前项目。我个人的编码和架构风格非常激进，因为许多代码/系统烂是烂在骨子里的，在这些屎山系统上打“优雅”的补丁实际上还是在推高屎山的海拔，而并没有真的降低技术债务。所以我的架构设计风格从来是大胆激进，没什么不能改也没什么不敢改的，活着的系统一定要经常重新审视，只要能降低技术债务，要敢于进行局部甚至底朝天的重写；只有死了的系统才是永恒不变的。
-这是我的项目在 vibe 一年后的提交统计图，受到 opus 4.6 1M-context
+Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。</p>
+<p>请注意：该文件也<strong>仅可用于 Claude code opus
+4.6</strong>，我不是对 codex 和 gemini 有偏见，OpenAI 的 25k USD credits
+今年6月份就要过期了，它（gpt-5.4-xhigh/codex-5.3-xhigh）要是真有自媒体和AI教父们宣传的那么牛逼plus，我能把这些credits放过保质期？</p>
+<p>实测效果就是 codex 对函数式编程风格遵循不理想，对 opus 4.6
+有效的简短提示词，你不掰开揉碎了讲给 AGENTS.md 它必定会跑偏。</p>
+<p>因为编码风格，个人品味原因，<strong>请勿整段复制甚至替换掉你的规则文件</strong>。你可以让
+Claude
+阅读我的规则文件，分析后你再决定有哪些可以采纳，有哪些不适合你当前项目。我个人的编码和架构风格非常激进，因为许多代码/系统烂是烂在骨子里的，在这些屎山系统上打“优雅”的补丁实际上还是在推高屎山的海拔，而并没有真的降低技术债务。所以我的架构设计风格从来是大胆激进，没什么不能改也没什么不敢改的，活着的系统一定要经常重新审视，只要能降低技术债务，要敢于进行局部甚至底朝天的重写；只有死了的系统才是永恒不变的。</p>
+<p>这是我的项目在 vibe 一年后的提交统计图，受到 opus 4.6 1M-context
 的帮助，最近一个月我用 5k usd token 烧出了7-8 个超大型 feature 和从
 Kotlin 到 Scala
 的彻底重写，代码量也大幅降低到了3万行出头，系统健康程度远超半年前。 <img
 src="backend-contributors.png" alt="backend repository contributors" />
 ---</p>
-</blockquote>
 <h1 id="claude.md">CLAUDE.md</h1>
 <p>This file provides guidance to Claude Code (claude.ai/code) when
 working with code in this repository.</p>
