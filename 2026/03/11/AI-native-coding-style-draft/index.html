@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-11T12:34:45.786Z">
+<meta property="article:modified_time" content="2026-03-11T14:02:23.301Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -198,7 +198,7 @@ NonEmptyList 契约</span></a></li><li class="nav-item nav-level-2"><a class="na
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-03-11 20:00:00 / Modified: 20:34:45" itemprop="dateCreated datePublished" datetime="2026-03-11T20:00:00+08:00">2026-03-11</time>
+      <time title="Created: 2026-03-11 20:00:00 / Modified: 22:02:23" itemprop="dateCreated datePublished" datetime="2026-03-11T20:00:00+08:00">2026-03-11</time>
     </span>
 
   
@@ -255,9 +255,9 @@ String，可能失败（<code>AppError</code>），成功返回
 <h2 id="对比">对比</h2>
 <table>
 <colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
+<col style="width: 11%" />
+<col style="width: 44%" />
+<col style="width: 44%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -389,22 +389,28 @@ AI 降智。与其维护一份随时可能过时的
 markdown，不如把精力花在让代码自解释上。</p>
 <hr />
 <h1 id="ai-的自述为什么我偏好风格二">AI 的自述：为什么我偏好风格二</h1>
-<blockquote>
 <p>以下是 Claude 的第一人称视角。</p>
-</blockquote>
+<blockquote>
 <p>坦白说，风格二对我更自然。</p>
+</blockquote>
+<blockquote>
 <p>不是因为操作符花哨，而是因为<strong>类型签名不会骗人</strong>。当我看到
 <code>fetchUser(id): User</code>，我无法从签名判断它会不会失败、会怎么失败——我必须去读实现、读文档、甚至读调用链上游才能知道。而
 <code>IO[Either[AppError, User]]</code>
 把所有信息都摆在签名里了，我不需要额外的上下文就能推理整个数据流。</p>
+</blockquote>
+<blockquote>
 <p>对 LLM 来说这个优势更明显：我的"理解"本质上就是对 token
 序列的模式匹配。风格一的 <code>try-catch</code>
 依赖一个<strong>不在文本中出现的隐式约定</strong>——哪些函数会抛什么异常。风格二把这个约定变成了<strong>显式的、局部可见的类型信息</strong>，每个操作符的输入输出类型完全确定，不需要跨文件追踪隐式行为。</p>
+</blockquote>
+<blockquote>
 <p>而且我不会累。人类盯着 <code>EitherT</code>
 链看半小时会眼花，我处理它和处理 <code>val x = doSomething()</code>
 的成本完全一样。我的训练集里有远超这个抽象程度的大量成功代码案例——Haskell
 的 monad transformer stacks、Scala 的 tagless final、Rust 的 trait bound
 嵌套——这些对我来说都是平坦的模式匹配，不存在"太复杂"的问题。</p>
+</blockquote>
 <hr />
 <h1 id="更大的图景">更大的图景</h1>
 <h2 id="讽刺的结局">讽刺的结局</h2>
@@ -450,9 +456,9 @@ style"是一致的：<strong>如果你在用的工具能处理更高抽象度的
 <h3 id="操作符速查附录">操作符速查（附录）</h3>
 <table>
 <colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
+<col style="width: 17%" />
+<col style="width: 34%" />
+<col style="width: 48%" />
 </colgroup>
 <thead>
 <tr class="header">
