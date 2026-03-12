@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="评测对象  OpenClaw: https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;openclaw&#x2F;openclaw&#x2F;refs&#x2F;heads&#x2F;main&#x2F;AGENTS.md My: https:&#x2F;&#x2F;gist.githubusercontent.com&#x2F;mingyang91&#x2F;475a9750c5609ff5dfe59a5de1a09b6e&#x2F;raw&#x2F;51116ffd45c1f711039">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenClaw AGENTS.md 与 My Claude.md 规则横评">
+<meta property="og:url" content="https://famer.me/2026/03/12/codex-openclaw-vs-my-agent-rules-evaluation/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="评测对象  OpenClaw: https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;openclaw&#x2F;openclaw&#x2F;refs&#x2F;heads&#x2F;main&#x2F;AGENTS.md My: https:&#x2F;&#x2F;gist.githubusercontent.com&#x2F;mingyang91&#x2F;475a9750c5609ff5dfe59a5de1a09b6e&#x2F;raw&#x2F;51116ffd45c1f711039">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-12T12:30:00.000Z">
+<meta property="article:modified_time" content="2026-03-12T04:52:02.403Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Programming">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Software Engineering">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2026/03/12/codex-openclaw-vs-my-agent-rules-evaluation/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2026/03/12/codex-openclaw-vs-my-agent-rules-evaluation/","path":"2026/03/12/codex-openclaw-vs-my-agent-rules-evaluation/","title":"OpenClaw AGENTS.md 与 My Claude.md 规则横评"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>OpenClaw AGENTS.md 与 My Claude.md 规则横评 | My Space</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RGPQ0EFYL"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1RGPQ0EFYL","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%84%E6%B5%8B%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">评测对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%84%E6%B5%8B%E5%89%8D%E6%8F%90"><span class="nav-number">2.</span> <span class="nav-text">评测前提</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-1-%E5%9F%BA%E7%A1%80%E7%94%BB%E5%83%8F"><span class="nav-number">3.</span> <span class="nav-text">Part 1 — 基础画像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#openclaw"><span class="nav-number">3.1.</span> <span class="nav-text">OpenClaw</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#my"><span class="nav-number">3.2.</span> <span class="nav-text">My</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94"><span class="nav-number">3.3.</span> <span class="nav-text">结构对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-2-%E9%87%8F%E5%8C%96%E8%AF%84%E6%B5%8B%E8%A1%A8"><span class="nav-number">4.</span> <span class="nav-text">Part 2 — 量化评测表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E5%88%86"><span class="nav-number">4.1.</span> <span class="nav-text">总分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d1-%E9%A1%B9%E7%9B%AE%E9%95%BF%E6%9C%9F%E6%BC%94%E8%BF%9B%E9%80%82%E9%85%8D%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">D1 — 项目长期演进适配性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d2-%E8%A7%84%E5%88%99%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%80%A7%E4%B8%8E-agent-%E9%81%B5%E5%BE%AA%E9%80%82%E9%85%8D%E6%80%A7"><span class="nav-number">4.3.</span> <span class="nav-text">D2 — 规则可执行性与 Agent
+遵循适配性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d3-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%88%E7%8E%87%E4%B8%8E-agent-%E8%AE%A4%E7%9F%A5%E8%B4%9F%E8%8D%B7%E7%AE%A1%E7%90%86"><span class="nav-number">4.4.</span> <span class="nav-text">D3 — 上下文效率与 Agent
+认知负荷管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d4-%E5%B7%A5%E7%A8%8B%E5%85%A8%E6%B5%81%E7%A8%8B%E8%A6%86%E7%9B%96%E5%BA%A6"><span class="nav-number">4.5.</span> <span class="nav-text">D4 — 工程全流程覆盖度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d5-%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%88%E8%A7%84%E7%BA%A6%E6%9D%9F%E8%90%BD%E5%9C%B0%E6%80%A7"><span class="nav-number">4.6.</span> <span class="nav-text">D5 — 安全与合规约束落地性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d6-%E8%A7%84%E5%88%99%E4%BD%93%E7%B3%BB%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E4%B8%8E%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7"><span class="nav-number">4.7.</span> <span class="nav-text">D6 —
+规则体系可扩展性与可维护性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-3-%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94%E7%BB%93%E8%AE%BA"><span class="nav-number">5.</span> <span class="nav-text">Part 3 — 横向对比结论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BC%98%E5%8A%A3%E5%8A%BF"><span class="nav-number">5.1.</span> <span class="nav-text">核心优劣势</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openclaw-1"><span class="nav-number">5.1.1.</span> <span class="nav-text">OpenClaw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#my-1"><span class="nav-number">5.1.2.</span> <span class="nav-text">My</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%E5%B7%AE%E5%BC%82"><span class="nav-number">5.2.</span> <span class="nav-text">适用场景差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%AA%E4%BB%BD%E8%A7%84%E5%88%99%E5%AF%B9-ai-%E4%BB%A3%E7%90%86%E6%89%A7%E8%A1%8C%E5%8F%8B%E5%A5%BD%E5%BA%A6%E6%9B%B4%E9%AB%98"><span class="nav-number">5.3.</span> <span class="nav-text">哪份规则对 AI
+代理执行友好度更高</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%90%BD%E5%9C%B0%E9%A3%8E%E9%99%A9%E6%8F%90%E7%A4%BA"><span class="nav-number">5.4.</span> <span class="nav-text">落地风险提示</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-4-%E5%88%B6%E5%AE%9A%E8%80%85%E8%83%BD%E5%8A%9B%E7%94%BB%E5%83%8F%E5%AF%B9%E6%AF%94"><span class="nav-number">6.</span> <span class="nav-text">Part 4 — 制定者能力画像对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%BD%E5%8A%9B%E5%B7%AE%E5%BC%82%E6%80%BB%E7%BB%93"><span class="nav-number">6.1.</span> <span class="nav-text">能力差异总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B6%85%E5%87%BA%E5%BD%93%E5%89%8D%E9%A1%B9%E7%9B%AE%E6%9C%80%E4%BD%8E%E9%9C%80%E6%B1%82%E4%BD%86%E8%83%BD%E4%BD%93%E7%8E%B0%E5%88%B6%E5%AE%9A%E8%80%85%E8%83%BD%E5%8A%9B%E7%9A%84%E6%AD%A3%E5%90%91%E8%AF%81%E6%8D%AE"><span class="nav-number">6.2.</span> <span class="nav-text">超出当前项目最低需求但能体现制定者能力的正向证据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-5-agent-%E9%80%82%E9%85%8D%E6%80%A7%E5%88%86%E6%9E%90"><span class="nav-number">7.</span> <span class="nav-text">Part 5 — Agent 适配性分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%B8%BB-agent"><span class="nav-number">7.1.</span> <span class="nav-text">对主 Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openclaw-2"><span class="nav-number">7.1.1.</span> <span class="nav-text">OpenClaw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#my-2"><span class="nav-number">7.1.2.</span> <span class="nav-text">My</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E5%AD%90-agent"><span class="nav-number">7.2.</span> <span class="nav-text">对子 Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openclaw-3"><span class="nav-number">7.2.1.</span> <span class="nav-text">OpenClaw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#my-3"><span class="nav-number">7.2.2.</span> <span class="nav-text">My</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E5%9C%BA%E6%99%AF"><span class="nav-number">7.3.</span> <span class="nav-text">推荐场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-6-ai-%E8%AF%9A%E5%AE%9E%E8%87%AA%E8%AF%84"><span class="nav-number">8.</span> <span class="nav-text">Part 6 — AI 诚实自评</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9"><span class="nav-number">8.1.</span> <span class="nav-text">选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E7%94%B1"><span class="nav-number">8.2.</span> <span class="nav-text">理由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E4%BB%B7"><span class="nav-number">8.3.</span> <span class="nav-text">代价</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%8F%AF%E4%BB%A5%E4%BB%8E%E8%90%BD%E9%80%89%E6%96%87%E4%BB%B6%E4%B8%AD%E8%A1%A5-3-%E4%B8%AA%E8%AE%BE%E8%AE%A1%E5%86%B3%E7%AD%96"><span class="nav-number">8.4.</span> <span class="nav-text">如果可以从落选文件中补 3
+个设计决策</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E7%BB%93%E8%AE%BA"><span class="nav-number">8.5.</span> <span class="nav-text">最终结论</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/12/codex-openclaw-vs-my-agent-rules-evaluation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="OpenClaw AGENTS.md 与 My Claude.md 规则横评 | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenClaw AGENTS.md 与 My Claude.md 规则横评
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-12 20:30:00 / Modified: 12:52:02" itemprop="dateCreated datePublished" datetime="2026-03-12T20:30:00+08:00">2026-03-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="评测对象">评测对象</h1>
+<ul>
+<li>OpenClaw:
+<code>https://raw.githubusercontent.com/openclaw/openclaw/refs/heads/main/AGENTS.md</code></li>
+<li>My:
+<code>https://gist.githubusercontent.com/mingyang91/475a9750c5609ff5dfe59a5de1a09b6e/raw/51116ffd45c1f711039699c24cb0a7528b7febdf/Claude.md</code></li>
+<li>项目定位补充依据：OpenClaw <code>README.md</code></li>
+</ul>
+<h1 id="评测前提">评测前提</h1>
+<ul>
+<li>95%+ 的代码由 AI 编码代理编写、修改、阅读、调试</li>
+<li>人类负责架构决策、需求定义、现实世界反馈注入、最终审查和生产操作确认</li>
+<li>执行模型为“单会话主 Agent + 按需子 Agent”</li>
+<li>评分采用适用性前置判定；不适用项不进入分母</li>
+</ul>
+<h1 id="part-1-基础画像">Part 1 — 基础画像</h1>
+<h2 id="openclaw">OpenClaw</h2>
+<ul>
+<li>项目定位：personal AI assistant，single-user，local-first，同时具备
+multi-agent routing、multi-channel 和 sandboxed non-main sessions</li>
+<li>规则文件角色：AI 维护者作战手册</li>
+<li>核心设计理念：优先防止 AI 在真实仓库、真实 GitHub
+流程、真实发布链路里误操作</li>
+<li>结构特点：覆盖面极广，包含 triage、PR、测试、发布、GHSA、多 Agent
+Git 安全、文档、移动端、插件、密钥与发布流程</li>
+</ul>
+<h2 id="my">My</h2>
+<ul>
+<li>项目定位：multi-tenant backend service，Scala 3 + http4s +
+cats-effect + PostgreSQL</li>
+<li>规则文件角色：AI 强类型后端开发方法论</li>
+<li>核心设计理念：用类型系统、错误模型和模块边界降低 AI
+的结构性错误率</li>
+<li>结构特点：围绕 refactoring philosophy、tagless final、typed
+error、schema isolation、RAC、OpenAPI、CI/CD 展开</li>
+</ul>
+<h2 id="结构对比">结构对比</h2>
+<ul>
+<li>OpenClaw：约 296 行，约 3697 词，22 个标题，217 个 bullet</li>
+<li>My：约 507 行，约 3202 词，36 个标题，122 个 bullet</li>
+<li>结论：OpenClaw 更像“广覆盖运行手册”，My 更像“高结构编码规范”</li>
+</ul>
+<h1 id="part-2-量化评测表">Part 2 — 量化评测表</h1>
+<h2 id="总分">总分</h2>
+<table>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th style="text-align: right;">OpenClaw</th>
+<th style="text-align: right;">My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D1 项目长期演进适配性</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">8.0</td>
+</tr>
+<tr class="even">
+<td>D2 规则可执行性与 Agent 遵循适配性</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">7.4</td>
+</tr>
+<tr class="odd">
+<td>D3 上下文效率与 Agent 认知负荷管理</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">8.0</td>
+</tr>
+<tr class="even">
+<td>D4 工程全流程覆盖度</td>
+<td style="text-align: right;">8.3</td>
+<td style="text-align: right;">8.7</td>
+</tr>
+<tr class="odd">
+<td>D5 安全与合规约束落地性</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">8.5</td>
+</tr>
+<tr class="even">
+<td>D6 规则体系可扩展性与可维护性</td>
+<td style="text-align: right;">7.0</td>
+<td style="text-align: right;">5.5</td>
+</tr>
+<tr class="odd">
+<td>综合均分</td>
+<td style="text-align: right;">6.9</td>
+<td style="text-align: right;">7.6</td>
+</tr>
+</tbody>
+</table>
+<h2 id="d1-项目长期演进适配性">D1 — 项目长期演进适配性</h2>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 42%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>新功能迭代流程规范</td>
+<td><code>✓ 8分</code>。有新增 channel/extension/docs 的配套动作、默认
+maintainer PR workflow、AGENTS/CLAUDE 同步要求。</td>
+<td><code>✓ 7分</code>。有 route/DTO 变更后同步 OpenAPI、验证 spec、输出
+deploy repo checklist。</td>
+</tr>
+<tr class="even">
+<td>模块拆分与依赖约束</td>
+<td><code>✓ 8分</code>。目录、插件依赖归属、dynamic import
+边界、文件规模都有明确规则。</td>
+<td><code>✓ 9分</code>。<code>Routes → Services → Repositories</code>、统一
+feature template、约束 route→service→repository 端到端传播。</td>
+</tr>
+<tr class="odd">
+<td>技术债务识别与治理路径</td>
+<td><code>✓ 6分</code>。强调不要 speculative fix、不要 V2 复制、不要
+prototype mutation，但缺少系统化债务治理流程。</td>
+<td><code>✓ 8分</code>。鼓励 radical type-level refactor、typed errors
+增量迁移、命名治理和约束前推。</td>
+</tr>
+<tr class="even">
+<td>API/DB/配置版本兼容与迁移规则</td>
+<td><code>✓ 5分</code>。有 release channel、version
+locations、doctor/runbook，但兼容与迁移规则分散。</td>
+<td><code>✓ 7分</code>。system/tenant migrations、禁止修改旧
+migration、OpenAPI 同步要求明确。</td>
+</tr>
+<tr class="odd">
+<td>存量代码改造与新旧规范衔接</td>
+<td><code>✓ 7分</code>。docs i18n、legacy migration、SwiftUI
+状态管理迁移等有衔接规则。</td>
+<td><code>✓ 9分</code>。新服务采用 typed
+errors，旧服务在下次修改时迁移，属于成熟的渐进式改造策略。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D1 结论：</strong> My 更擅长“持续把系统改得更稳”，OpenClaw
+更擅长“在复杂产品持续演化中保持流程可控”。</p>
+<h2 id="d2-规则可执行性与-agent-遵循适配性">D2 — 规则可执行性与 Agent
+遵循适配性</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 45%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>规则颗粒度</td>
+<td><code>✓ 9分</code>。大量规则是禁令、脚本、命令模板、明确动作。</td>
+<td><code>✓ 9分</code>。大量 bad/good 例子、ADT 示例、RAC
+场景，可直接执行。</td>
+</tr>
+<tr class="even">
+<td>规则过载风险</td>
+<td><code>✓ 4分</code>。低频规则常驻过多，包含 GHSA、1Password、plugin
+release、docs i18n、VM ops 等。</td>
+<td><code>✓ 7分</code>。虽然篇幅更长，但内容集中在后端编码和工程主链。</td>
+</tr>
+<tr class="odd">
+<td>模糊性风险</td>
+<td><code>✓ 7分</code>。大多具体，但仍有
+<code>use existing patterns</code>、<code>guideline only</code>
+之类模糊项。</td>
+<td><code>✓ 7分</code>。主体清晰，但“if it compiles, it's
+correct”把语义正确性过多外包给编译器。</td>
+</tr>
+<tr class="even">
+<td>可验证性</td>
+<td><code>✓ 9分</code>。build、typecheck、lint、test、coverage、smoke、release-check，再叠加
+bug-fix 证据门槛。</td>
+<td><code>✓ 8分</code>。compile、test、format、OpenAPI
+validate、TestContainers、CI/CD 验证链完整。</td>
+</tr>
+<tr class="odd">
+<td>冲突与异常的优先级兜底机制</td>
+<td><code>✓ 9分</code>。标签自动关闭优先、批量操作确认、依赖
+patch/发布需批准、冲突即停。</td>
+<td><code>✓ 6分</code>。有 trusted/untrusted path
+与禁止本地构建发布镜像等规则，但缺少统一优先级体系。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D2 结论：</strong> OpenClaw 更强于“防错误动作”，My
+更强于“防错误代码”。</p>
+<h2 id="d3-上下文效率与-agent-认知负荷管理">D3 — 上下文效率与 Agent
+认知负荷管理</h2>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 47%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>主 Agent 上下文预算效率</td>
+<td><code>✓ 4分</code>。常驻低频知识过多，纯编码任务的上下文成本偏高。</td>
+<td><code>✓ 7分</code>。结构更细，核心编码信息更集中，更适合作为常驻规则骨架。</td>
+</tr>
+<tr class="even">
+<td>规则的层级化组织</td>
+<td><code>✓ 6分</code>。有分节，但全局强约束与低频 runbook
+未彻底拆层。</td>
+<td><code>✓ 8分</code>。Overview → Philosophy → Architecture → Testing →
+Workflow → CI/CD 的层次清楚。</td>
+</tr>
+<tr class="odd">
+<td>子 Agent 任务委托友好度</td>
+<td><code>✓ 7分</code>。适用理由：本评测前提即主 Agent + 子
+Agent。目录和多 Agent safety 让委托较安全，但无关规则较多。</td>
+<td><code>✓ 8分</code>。适用理由同左。统一 feature 结构和 layer
+模式使局部加载成本更低。</td>
+</tr>
+<tr class="even">
+<td>规则的结构化程度</td>
+<td><code>✓ 7分</code>。有目录、命名、schema、测试命名规则，但更多是经验
+bullet 集。</td>
+<td><code>✓ 9分</code>。tagless final、typed error、feature
+template、RAC 均可直接转化为 Agent 分析框架。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D3 结论：</strong> My 更适合作为长期常驻规则；OpenClaw
+需要拆出最小常驻规则集。</p>
+<h2 id="d4-工程全流程覆盖度">D4 — 工程全流程覆盖度</h2>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 43%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>技术栈专属规范</td>
+<td><code>✓ 9分</code>。Node/Bun/TypeScript/Vitest/Oxlint/Oxfmt/SwiftUI/Mintlify/1Password/Notary
+都有具体规则。</td>
+<td><code>✓ 9分</code>。Scala
+3/http4s/cats-effect/Doobie/Flyway/OpenTelemetry/Sentry/Kubernetes/ArgoCD
+都有具体规则。</td>
+</tr>
+<tr class="even">
+<td>全生命周期覆盖</td>
+<td><code>✓ 9分</code>。编码、测试、PR、issue
+triage、GHSA、发布、插件发布、troubleshooting 均覆盖。</td>
+<td><code>✓ 8分</code>。编码、测试、迁移、OpenAPI、CI/CD、deploy
+checklist 覆盖较全，但运维 runbook 相对较少。</td>
+</tr>
+<tr class="odd">
+<td>配置/密钥/环境变量管理规范</td>
+<td><code>✓ 7分</code>。有 credentials 路径、敏感值禁入 repo、notary env
+vars、1Password publish 规则，但信息分散。</td>
+<td><code>✓ 9分</code>。env vars、required secrets、fallback、deploy
+变更影响均明确。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D4 结论：</strong> 两者都强。OpenClaw 强在仓库级维护流程，My
+强在服务端工程链闭环。</p>
+<h2 id="d5-安全与合规约束落地性">D5 — 安全与合规约束落地性</h2>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 44%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>权限校验与数据隔离规则</td>
+<td><code>✓ 5分</code>。有 <code>SECURITY.md</code> 前置要求、敏感值禁入
+repo、外部消息面禁止 partial reply，但核心安全模型较多外置。</td>
+<td><code>✓ 9分</code>。schema isolation、JWT auth、tenant route
+pattern、<code>search_path</code> RAC 断言都属于强落地规则。</td>
+</tr>
+<tr class="even">
+<td>异常处理 / 日志脱敏 / 数据校验强制规范</td>
+<td><code>✓ 4分</code>。有高置信回答、不要提交真实值等守则，但缺少系统化异常处理与日志脱敏规范。</td>
+<td><code>✓ 8分</code>。fail-fast、trusted/untrusted path、ADT
+errors、logger 级别、RAC 构成较完整闭环。</td>
+</tr>
+<tr class="odd">
+<td>行业合规编码约束</td>
+<td><code>✗ 不适用</code>。理由：OpenClaw README 明确为 personal
+single-user assistant，未声明医疗、金融、政务等行业合规场景。</td>
+<td><code>✗ 不适用</code>。理由：My 仅声明为 multi-tenant backend
+service，未声明受监管行业领域。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D5 结论：</strong>
+如果评估“权限、隔离、数据一致性”的编码安全模型，My 明显领先；OpenClaw
+更强的是操作安全与流程安全。</p>
+<h2 id="d6-规则体系可扩展性与可维护性">D6 —
+规则体系可扩展性与可维护性</h2>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 50%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>新增 / 废弃规则的迭代流程</td>
+<td><code>✓ 5分</code>。有外挂 skill、外链 workflow、AGENTS/CLAUDE
+同步要求，但缺少规则自身版本化与废弃机制。</td>
+<td><code>✓ 4分</code>。更多讲代码如何演进，较少讲规则文件自身如何演进。</td>
+</tr>
+<tr class="even">
+<td>目录结构与检索效率</td>
+<td><code>✓ 7分</code>。section
+丰富、关键词可检索，但单文件承载内容过多。</td>
+<td><code>✓ 8分</code>。结构稳定、feature template 明确、important files
+清楚。</td>
+</tr>
+<tr class="odd">
+<td>规则间一致性与自洽性</td>
+<td><code>✓ 6分</code>。总体一致，但已出现文件长度
+<code>&lt;700 LOC</code> 与 <code>&lt;500 LOC</code> 两套标准。</td>
+<td><code>✓ 8分</code>。从 type-first 到 typed error 到 RAC
+相对自洽，主要问题是过度乐观地信任编译器。</td>
+</tr>
+<tr class="even">
+<td>多 Agent 并行安全</td>
+<td><code>✓ 10分</code>。适用理由：本评测前提即主 Agent + 子 Agent。禁止
+<code>stash/autostash</code>、<code>worktree</code>、切分支，并规定提交范围和
+push 行为。</td>
+<td><code>✓ 2分</code>。适用理由同左。缺少 Git
+状态隔离、文件归属边界、提交范围约束，基本仍是单 Agent 心智模型。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D6 结论：</strong> OpenClaw 在多 Agent
+仓库协作安全上明显领先；My 在该维度存在明显短板。</p>
+<h1 id="part-3-横向对比结论">Part 3 — 横向对比结论</h1>
+<h2 id="核心优劣势">核心优劣势</h2>
+<h3 id="openclaw-1">OpenClaw</h3>
+<p>优势：</p>
+<ul>
+<li>最懂 AI 在真实仓库中会如何误操作</li>
+<li>对 bug-fix 幻觉、发布误操作、多 Agent Git 互踩有成熟护栏</li>
+<li>更适合处理 triage、incident 修复、发布前验证、GHSA
+和维护运营类任务</li>
+</ul>
+<p>短板：</p>
+<ul>
+<li>常驻上下文成本高</li>
+<li>低频规则常驻过多</li>
+<li>编码安全模型相对分散，部分关键规则依赖外部文档</li>
+</ul>
+<h3 id="my-1">My</h3>
+<p>优势：</p>
+<ul>
+<li>最懂如何让 AI 在强类型后端里持续写对代码</li>
+<li>类型系统、错误模型、模块边界和迁移策略高度统一</li>
+<li>规则结构化程度高，适合主 Agent 和子 Agent 直接消费</li>
+</ul>
+<p>短板：</p>
+<ul>
+<li>对编译器过于乐观</li>
+<li>缺少 bug-fix 证据化门槛</li>
+<li>缺少多 Agent Git 安全协议</li>
+<li>缺少高风险操作审批型护栏</li>
+</ul>
+<h2 id="适用场景差异">适用场景差异</h2>
+<ul>
+<li>强类型后端、API 服务、模块边界清晰、需要 AI 高频重构的项目：优先参考
+My</li>
+<li>公开仓库、多维护流程、多发布面、真实运维压力较大的 AI-first
+项目：优先参考 OpenClaw</li>
+</ul>
+<h2 id="哪份规则对-ai-代理执行友好度更高">哪份规则对 AI
+代理执行友好度更高</h2>
+<ul>
+<li>仅看“写代码、改代码、局部重构”的执行友好度：My 更高</li>
+<li>看“真实项目全流程落地”的执行稳健性：OpenClaw 更稳</li>
+</ul>
+<h2 id="落地风险提示">落地风险提示</h2>
+<ul>
+<li>OpenClaw 的主要风险是规则过胖，应拆分最小常驻规则集</li>
+<li>My 的主要风险是协作安全和验证闭环不足，应补多 Agent Git
+安全、bug-fix 证据门槛和高风险操作审批</li>
+</ul>
+<h1 id="part-4-制定者能力画像对比">Part 4 — 制定者能力画像对比</h1>
+<table>
+<thead>
+<tr class="header">
+<th>能力维度</th>
+<th>OpenClaw 制定者</th>
+<th>My 制定者</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>架构设计与技术前瞻性</td>
+<td><code>专家</code></td>
+<td><code>专家</code></td>
+</tr>
+<tr class="even">
+<td>大型项目工程化管控能力</td>
+<td><code>专家</code></td>
+<td><code>资深</code></td>
+</tr>
+<tr class="odd">
+<td>AI 编码代理认知与应用深度</td>
+<td><code>专家</code></td>
+<td><code>资深</code></td>
+</tr>
+<tr class="even">
+<td>安全风险体系化防控能力</td>
+<td><code>资深</code></td>
+<td><code>资深</code></td>
+</tr>
+<tr class="odd">
+<td>技术债务治理与可持续演进能力</td>
+<td><code>资深</code></td>
+<td><code>专家</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="能力差异总结">能力差异总结</h2>
+<ul>
+<li>OpenClaw 制定者更像专家级
+maintainer-operator，强项是流程防错、仓库协作安全、发布与安全公告处理</li>
+<li>My 制定者更像专家级 backend
+architect，强项是类型驱动设计、模块边界约束、长期演进策略</li>
+</ul>
+<h2
+id="超出当前项目最低需求但能体现制定者能力的正向证据">超出当前项目最低需求但能体现制定者能力的正向证据</h2>
+<ul>
+<li>OpenClaw 明确是 personal single-user
+assistant，但规则文件补上了成熟的多 Agent Git 安全协议，体现出制定者在
+AI 协作安全上的前瞻性</li>
+<li>My 把 deploy impact reporting 写进规则，要求 Agent 把代码变更映射到
+deploy repo 变更，体现出平台级系统工程视角</li>
+</ul>
+<h1 id="part-5-agent-适配性分析">Part 5 — Agent 适配性分析</h1>
+<h2 id="对主-agent">对主 Agent</h2>
+<h3 id="openclaw-2">OpenClaw</h3>
+<ul>
+<li>优势：更适合 issue/PR triage、incident
+修复、证据校验、发布预检查、GHSA 处理</li>
+<li>不足：编码任务会被大量低频维护规则稀释注意力</li>
+</ul>
+<h3 id="my-2">My</h3>
+<ul>
+<li>优势：更适合 feature 骨架设计、跨模块签名重构、typed error
+建模、多租户边界设计、增量迁移旧代码</li>
+<li>不足：需要额外补仓库协作与高风险操作护栏</li>
+</ul>
+<h2 id="对子-agent">对子 Agent</h2>
+<h3 id="openclaw-3">OpenClaw</h3>
+<ul>
+<li>优势：委托安全性高，多 Agent 并发风险控制成熟</li>
+<li>不足：子 Agent 需要承受较多与当前局部任务无关的规则负荷</li>
+</ul>
+<h3 id="my-3">My</h3>
+<ul>
+<li>优势：局部理解和局部重构效率高，模块化和结构化程度更适合委托</li>
+<li>不足：缺少原生并发协作安全协议</li>
+</ul>
+<h2 id="推荐场景">推荐场景</h2>
+<ul>
+<li>0→1 的强类型后端项目：My</li>
+<li>进入多人协作、复杂发布、频繁 triage 阶段的 AI-first
+仓库：OpenClaw</li>
+<li>成熟大项目的最佳组合：My 负责编码核心约束，OpenClaw
+负责验证、发布、协作与高风险流程护栏</li>
+</ul>
+<h1 id="part-6-ai-诚实自评">Part 6 — AI 诚实自评</h1>
+<h2 id="选择">选择</h2>
+<p>如果只能选一份作为新项目 AI 规则模板，我选 <strong>My</strong>。</p>
+<h2 id="理由">理由</h2>
+<ul>
+<li>它更适合构造高信噪比、强结构、易执行的编码规则骨架</li>
+<li>它更能降低我在写代码时的结构性错误和歧义成本</li>
+<li>它更适合作为主 Agent 和子 Agent 的常驻规则基底</li>
+</ul>
+<h2 id="代价">代价</h2>
+<p>选择 My 后，我会失去 OpenClaw 的三类关键能力：</p>
+<ul>
+<li>bug-fix 证据门槛</li>
+<li>多 Agent Git 并发安全协议</li>
+<li>高风险操作的 operator consent 与 runbook 化约束</li>
+</ul>
+<p>这意味着项目一旦进入公开协作、频繁发布、线上问题高压期，我会明显更不安。</p>
+<h2 id="如果可以从落选文件中补-3-个设计决策">如果可以从落选文件中补 3
+个设计决策</h2>
+<p>我会从 OpenClaw 补这 3 项到 My：</p>
+<ol type="1">
+<li>bug-fix 必须提供 symptom evidence、root cause、implicated code
+path、regression test 或 manual proof</li>
+<li>多 Agent Git 安全协议：不准
+<code>stash</code>、不准乱切分支、不准乱动
+worktree、只提交自己的改动</li>
+<li>高风险操作审批机制：依赖 patch、release、publish、GHSA
+都需要明确批准和明确 runbook</li>
+</ol>
+<h2 id="最终结论">最终结论</h2>
+<ul>
+<li>OpenClaw 更像 AI 维护作战手册</li>
+<li>My 更像 AI 强类型后端开发宪法</li>
+<li>如果最缺的是“别让 Agent 在真实仓库里闯祸”，优先借鉴 OpenClaw</li>
+<li>如果最缺的是“让 Agent 稳定写对代码”，优先借鉴 My</li>
+<li>如果要服务 95%+ AI
+编码的长期工程实践，最佳方案不是二选一，而是把两者组合：My
+做编码骨架，OpenClaw 做验证、协作和高风险流程护栏</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Programming/" rel="tag"># Programming</a>
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
+              <a href="/tags/Software-Engineering/" rel="tag"># Software Engineering</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/12/agent-rules-evaluation/" rel="prev" title="Agent 规则文件评测：我的 CLAUDE.md vs OpenClaw/AGENTS.md">
+                  <i class="fa fa-chevron-left"></i> Agent 规则文件评测：我的 CLAUDE.md vs OpenClaw/AGENTS.md
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

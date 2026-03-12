@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="AI编码代理规则文件全维度横向对比评测报告 核心前提 两个项目中 95%+ 的代码由AI编码代理编写、修改、阅读和调试。人类开发者的角色以架构决策、需求定义、最终审查为主，日常编码执行几乎完全由Agent完成。 评测对象： 1. OpenClaw AGENTS.md 2. Linewise CLAUDE.md  Part 1 — 基础画像 文件A：OpenClaw AGENTS.md">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI编码代理规则文件全维度横向对比评测报告">
+<meta property="og:url" content="https://famer.me/2026/03/12/claude-openclaw-vs-my-agent-rules-evaluation/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="AI编码代理规则文件全维度横向对比评测报告 核心前提 两个项目中 95%+ 的代码由AI编码代理编写、修改、阅读和调试。人类开发者的角色以架构决策、需求定义、最终审查为主，日常编码执行几乎完全由Agent完成。 评测对象： 1. OpenClaw AGENTS.md 2. Linewise CLAUDE.md  Part 1 — 基础画像 文件A：OpenClaw AGENTS.md">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-12T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-12T04:52:02.402Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Programming">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Software Engineering">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2026/03/12/claude-openclaw-vs-my-agent-rules-evaluation/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2026/03/12/claude-openclaw-vs-my-agent-rules-evaluation/","path":"2026/03/12/claude-openclaw-vs-my-agent-rules-evaluation/","title":"AI编码代理规则文件全维度横向对比评测报告"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>AI编码代理规则文件全维度横向对比评测报告 | My Space</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RGPQ0EFYL"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1RGPQ0EFYL","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ai%E7%BC%96%E7%A0%81%E4%BB%A3%E7%90%86%E8%A7%84%E5%88%99%E6%96%87%E4%BB%B6%E5%85%A8%E7%BB%B4%E5%BA%A6%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94%E8%AF%84%E6%B5%8B%E6%8A%A5%E5%91%8A"><span class="nav-number">1.</span> <span class="nav-text">AI编码代理规则文件全维度横向对比评测报告</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%89%8D%E6%8F%90"><span class="nav-number">1.1.</span> <span class="nav-text">核心前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-1-%E5%9F%BA%E7%A1%80%E7%94%BB%E5%83%8F"><span class="nav-number">1.2.</span> <span class="nav-text">Part 1 — 基础画像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6aopenclaw-agents.md"><span class="nav-number">1.2.1.</span> <span class="nav-text">文件A：OpenClaw
+AGENTS.md</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6blinewise-claude.md"><span class="nav-number">1.2.2.</span> <span class="nav-text">文件B：Linewise
+CLAUDE.md</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-2-%E9%87%8F%E5%8C%96%E8%AF%84%E6%B5%8B%E8%A1%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Part 2 — 量化评测表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#d1-%E9%A1%B9%E7%9B%AE%E9%95%BF%E6%9C%9F%E6%BC%94%E8%BF%9B%E9%80%82%E9%85%8D%E6%80%A7"><span class="nav-number">1.3.1.</span> <span class="nav-text">D1 项目长期演进适配性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d2-%E8%A7%84%E5%88%99%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%80%A7%E4%B8%8Eagent%E9%81%B5%E5%BE%AA%E9%80%82%E9%85%8D%E6%80%A7"><span class="nav-number">1.3.2.</span> <span class="nav-text">D2
+规则可执行性与Agent遵循适配性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d3-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%88%E7%8E%87%E4%B8%8Eagent%E8%AE%A4%E7%9F%A5%E8%B4%9F%E8%8D%B7%E7%AE%A1%E7%90%86"><span class="nav-number">1.3.3.</span> <span class="nav-text">D3
+上下文效率与Agent认知负荷管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d4-%E5%B7%A5%E7%A8%8B%E5%85%A8%E6%B5%81%E7%A8%8B%E8%A6%86%E7%9B%96%E5%BA%A6"><span class="nav-number">1.3.4.</span> <span class="nav-text">D4 工程全流程覆盖度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d5-%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%88%E8%A7%84%E7%BA%A6%E6%9D%9F%E8%90%BD%E5%9C%B0%E6%80%A7"><span class="nav-number">1.3.5.</span> <span class="nav-text">D5 安全与合规约束落地性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d6-%E8%A7%84%E5%88%99%E4%BD%93%E7%B3%BB%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E4%B8%8E%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7"><span class="nav-number">1.3.6.</span> <span class="nav-text">D6
+规则体系可扩展性与可维护性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%B4%E5%BA%A6%E6%B1%87%E6%80%BB"><span class="nav-number">1.3.7.</span> <span class="nav-text">维度汇总</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-3-%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94%E7%BB%93%E8%AE%BA"><span class="nav-number">1.4.</span> <span class="nav-text">Part 3 — 横向对比结论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BC%98%E5%8A%A3%E5%8A%BF"><span class="nav-number">1.4.1.</span> <span class="nav-text">核心优劣势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%E5%B7%AE%E5%BC%82"><span class="nav-number">1.4.2.</span> <span class="nav-text">适用场景差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agent%E6%89%A7%E8%A1%8C%E5%8F%8B%E5%A5%BD%E5%BA%A6%E5%88%A4%E5%AE%9A"><span class="nav-number">1.4.3.</span> <span class="nav-text">Agent执行友好度判定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%90%BD%E5%9C%B0%E9%A3%8E%E9%99%A9%E6%8F%90%E7%A4%BA"><span class="nav-number">1.4.4.</span> <span class="nav-text">落地风险提示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-4-%E5%88%B6%E5%AE%9A%E8%80%85%E8%83%BD%E5%8A%9B%E7%94%BB%E5%83%8F%E5%AF%B9%E6%AF%94d7"><span class="nav-number">1.5.</span> <span class="nav-text">Part 4 —
+制定者能力画像对比（D7）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openclaw-%E5%88%B6%E5%AE%9A%E8%80%85"><span class="nav-number">1.5.1.</span> <span class="nav-text">OpenClaw 制定者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linewise-%E5%88%B6%E5%AE%9A%E8%80%85"><span class="nav-number">1.5.2.</span> <span class="nav-text">Linewise 制定者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%B7%AE%E5%BC%82%E7%82%B9"><span class="nav-number">1.5.3.</span> <span class="nav-text">核心差异点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-5-agent%E9%80%82%E9%85%8D%E6%80%A7%E5%88%86%E6%9E%90"><span class="nav-number">1.6.</span> <span class="nav-text">Part 5 — Agent适配性分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BBagent%E5%AD%90agent%E6%9E%B6%E6%9E%84%E9%80%82%E9%85%8D"><span class="nav-number">1.6.1.</span> <span class="nav-text">主Agent+子Agent架构适配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E9%A1%B9%E7%9B%AE%E8%A7%84%E6%A8%A1%E9%98%B6%E6%AE%B5%E6%8E%A8%E8%8D%90"><span class="nav-number">1.6.2.</span> <span class="nav-text">不同项目规模&#x2F;阶段推荐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-6-ai%E8%AF%9A%E5%AE%9E%E8%87%AA%E8%AF%84d8"><span class="nav-number">1.7.</span> <span class="nav-text">Part 6 — AI诚实自评（D8）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88"><span class="nav-number">1.7.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E4%BC%9A%E5%A4%B1%E5%8E%BB%E4%BB%80%E4%B9%88"><span class="nav-number">1.7.2.</span> <span class="nav-text">我会失去什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%88%91%E5%8F%AF%E4%BB%A5%E4%BB%8Eopenclaw%E5%81%B73%E4%B8%AA%E8%AE%BE%E8%AE%A1%E5%86%B3%E7%AD%96"><span class="nav-number">1.7.3.</span> <span class="nav-text">如果我可以从OpenClaw&quot;偷&quot;3个设计决策</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/12/claude-openclaw-vs-my-agent-rules-evaluation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="AI编码代理规则文件全维度横向对比评测报告 | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI编码代理规则文件全维度横向对比评测报告
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-12 12:00:00 / Modified: 12:52:02" itemprop="dateCreated datePublished" datetime="2026-03-12T12:00:00+08:00">2026-03-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1
+id="ai编码代理规则文件全维度横向对比评测报告">AI编码代理规则文件全维度横向对比评测报告</h1>
+<h2 id="核心前提">核心前提</h2>
+<p>两个项目中 <strong>95%+
+的代码由AI编码代理编写、修改、阅读和调试</strong>。人类开发者的角色以架构决策、需求定义、最终审查为主，日常编码执行几乎完全由Agent完成。</p>
+<p>评测对象： 1. <a
+target="_blank" rel="noopener" href="https://github.com/openclaw/openclaw/blob/main/AGENTS.md">OpenClaw
+AGENTS.md</a> 2. <a
+target="_blank" rel="noopener" href="https://gist.github.com/mingyang91/475a9750c5609ff5dfe59a5de1a09b6e">Linewise
+CLAUDE.md</a></p>
+<hr />
+<h2 id="part-1-基础画像">Part 1 — 基础画像</h2>
+<h3 id="文件aopenclaw-agents.md">文件A：OpenClaw
+<code>AGENTS.md</code></h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>项目定位</strong></td>
+<td>自托管个人AI助手平台，本地优先，单用户架构</td>
+</tr>
+<tr class="even">
+<td><strong>技术栈</strong></td>
+<td>TypeScript (ESM) / Node.js 22+ / pnpm+Bun / Vitest</td>
+</tr>
+<tr class="odd">
+<td><strong>业务领域</strong></td>
+<td>多渠道消息机器人（WhatsApp/Telegram/Slack/Discord等25+通道）</td>
+</tr>
+<tr class="even">
+<td><strong>部署模式</strong></td>
+<td>本地运行Gateway + 可选远程服务器 + macOS/iOS/Android客户端</td>
+</tr>
+<tr class="odd">
+<td><strong>核心设计理念</strong></td>
+<td><strong>操作手册型</strong>——以具体命令、工作流程序、GitHub协作规范为主轴，将"怎么做"编码为可执行步骤</td>
+</tr>
+<tr class="even">
+<td><strong>结构完整性</strong></td>
+<td>覆盖面极广（GitHub协作、PR流程、发布、安全咨询、多Agent安全、设备测试、npm发布、1Password集成等），但缺乏统一的分层架构约束</td>
+</tr>
+<tr class="odd">
+<td><strong>适用场景</strong></td>
+<td>开源项目多贡献者协作、多平台客户端发布、消息通道插件生态</td>
+</tr>
+<tr class="even">
+<td><strong>估算Token量</strong></td>
+<td>~8000-10000 tokens（内容密度高，含大量命令片段）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="文件blinewise-claude.md">文件B：Linewise
+<code>CLAUDE.md</code></h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>项目定位</strong></td>
+<td>多租户后端API服务，企业级SaaS</td>
+</tr>
+<tr class="even">
+<td><strong>技术栈</strong></td>
+<td>Scala 3.8.1 / http4s / cats-effect / Doobie / Mill /
+PostgreSQL+pgvector</td>
+</tr>
+<tr class="odd">
+<td><strong>业务领域</strong></td>
+<td>文档管理、AI特性（嵌入/RAG）、视频SOP生成、实时通信</td>
+</tr>
+<tr class="even">
+<td><strong>部署模式</strong></td>
+<td>Kubernetes + ArgoCD + GCR，GitHub Actions CI</td>
+</tr>
+<tr class="odd">
+<td><strong>核心设计理念</strong></td>
+<td><strong>类型驱动型</strong>——"编译器即验收测试"，通过类型系统将约束前置，最大化编译期安全</td>
+</tr>
+<tr class="even">
+<td><strong>结构完整性</strong></td>
+<td>高度结构化（重构哲学→技术栈→构建命令→项目结构→架构模式→编码风格→测试策略→CI/CD→部署），形成完整工程链路</td>
+</tr>
+<tr class="odd">
+<td><strong>适用场景</strong></td>
+<td>强类型后端服务、多租户SaaS、AI驱动的数据处理管线</td>
+</tr>
+<tr class="even">
+<td><strong>估算Token量</strong></td>
+<td>~5000-6000 tokens（信息密度极高，无冗余操作步骤）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心理念差异</strong>：OpenClaw是"过程驱动"——告诉Agent每一步怎么做；Linewise是"约束驱动"——告诉Agent什么是对的，让编译器验证。</p>
+<hr />
+<h2 id="part-2-量化评测表">Part 2 — 量化评测表</h2>
+<h3 id="d1-项目长期演进适配性">D1 项目长期演进适配性</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>新功能迭代流程规范</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+有PR模板、changelog标准、版本号管理规范、<code>/landpr</code>流程，但缺乏功能设计→实现→验收的端到端流程定义。依据：<em>"Follow
+concise, action-oriented messages"</em>, <em>"PR submission:
+.github/pull_request_template.md"</em></td>
+<td><strong>5</strong> — 有feature模块组织结构和Development
+Workflow章节（添加新路由的步骤），但流程定义偏向技术执行而非功能迭代管理。依据：<em>"Adding
+New Routes: 1. Update the OpenAPI spec..."</em></td>
+</tr>
+<tr class="even">
+<td><strong>模块拆分与依赖约束</strong></td>
+<td>✓/✓</td>
+<td><strong>7</strong> — 明确的目录结构、插件依赖隔离规则（<em>"Keep
+plugin-only dependencies in extension
+package.json"</em>）、workspace依赖约束（<em>"Avoid workspace:* in
+dependencies"</em>）。对插件与核心边界有清晰规范</td>
+<td><strong>8</strong> —
+严格的分层架构（Routes→Services→Repositories→Database）、tagless
+final依赖注入、feature模块标准结构、SDK选择优先级。依据：<em>"Layered
+Architecture"</em>、每个feature模块的固定目录结构</td>
+</tr>
+<tr class="odd">
+<td><strong>技术债务识别与治理路径</strong></td>
+<td>✓/✓</td>
+<td><strong>4</strong> — 有零散提及（SwiftUI迁移：<em>"Migrate existing
+usages when touching related code"</em>），但无系统性治理框架</td>
+<td><strong>7</strong> — 显式的增量迁移策略：<em>"Migrate incrementally.
+New services use typed errors. Existing Either[String, T] services
+migrate when next modified"</em>；命名审查机制：<em>"Proactive naming
+review... flag misleading, stale, or inconsistent names"</em></td>
+</tr>
+<tr class="even">
+<td><strong>API/DB/配置的版本兼容与迁移规则</strong></td>
+<td>✓/✓</td>
+<td><strong>3</strong> —
+版本号位置清晰列出但无API版本兼容规则，无数据库迁移规范</td>
+<td><strong>8</strong> — Flyway迁移系统详细规范：<em>"Never modify
+existing migration files; always create new versioned
+files"</em>；系统/租户双轨迁移；OpenAPI规范维护要求</td>
+</tr>
+<tr class="odd">
+<td><strong>存量代码改造与新旧规范衔接</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> — 有品牌迁移工具（<em>"openclaw
+doctor"</em>），但新旧规范衔接机制不足</td>
+<td><strong>7</strong> — 通过"next-touch
+migration"策略衔接：类型错误模型增量替换、命名审查、编码风格渐进统一</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D1维度得分</strong>（所有子项均适用）： -
+<strong>OpenClaw：5.0</strong> (6+7+4+3+5)/5 -
+<strong>Linewise：7.0</strong> (5+8+7+8+7)/5</p>
+<hr />
+<h3 id="d2-规则可执行性与agent遵循适配性">D2
+规则可执行性与Agent遵循适配性</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>规则颗粒度</strong></td>
+<td>✓/✓</td>
+<td><strong>8</strong> —
+大量具体命令和代码示例，操作步骤精确到命令行参数。依据：Gateway重启的精确bash命令、npm发布的完整步骤、版本号更新的所有文件路径列表</td>
+<td><strong>9</strong> —
+正反示例对比（BAD/GOOD代码块）、边界说明清晰、类型约束有完整代码范式。依据：<em>for-comprehension的BAD/GOOD对比</em>、<em>错误处理Trusted
+vs Untrusted路径决策表</em>、<em>测试的"What TO test" vs "What NOT to
+test"</em></td>
+</tr>
+<tr class="even">
+<td><strong>规则过载风险</strong></td>
+<td>✓/✓</td>
+<td><strong>4</strong> —
+内容极其庞大，涵盖GitHub协作、npm发布、1Password集成、设备测试、macOS签名、voice
+wake等数十个领域，单次会话加载全部规则会严重挤压工作上下文。Agent执行日常编码任务时，大量发布/运维规则是噪声</td>
+<td><strong>7</strong> —
+内容精炼聚焦，每个章节与日常编码直接相关。无过度运维细节。但所有规则仍为单文件平铺，缺乏按需加载机制标记</td>
+</tr>
+<tr class="odd">
+<td><strong>模糊性风险</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+多数操作规则无模糊空间（精确命令），但编码风格部分有模糊项：<em>"Add
+brief comments for tricky/non-obvious
+logic"</em>（何为tricky？）、<em>"Target ~700 LOC per file (guideline
+only)"</em>（模糊阈值）</td>
+<td><strong>8</strong> — 关键规则通过类型系统消除模糊性：<em>"If a
+refactor compiles, it's
+correct"</em>将正确性判断从主观转为编译器可判定。反模式用Forbidden
+patterns明确列举（<em>"json.as[T].toOption"</em>等）</td>
+</tr>
+<tr class="even">
+<td><strong>可验证性</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+有CI检查（<code>pnpm check</code>、<code>prek install</code>）、覆盖率阈值（70%）、格式化验证（<code>oxfmt --check</code>）。但许多规则仅靠人类Review验证（PR
+truthfulness验证等）</td>
+<td><strong>9</strong> —
+<strong>核心优势</strong>：编译器作为终极验证器。<em>"The compiler is
+the last line of defense. If a refactor compiles, it's correct."</em>
+类型约束（opaque types、NonEmptyList、ADT
+errors）将大量运行时检查前移到编译期。RAC机制补充运行时关键路径断言。scalafmt强制格式</td>
+</tr>
+<tr class="odd">
+<td><strong>冲突与异常的优先级兜底</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> — 有部分优先级规则（<em>"When maintainer
+specifies a workflow, follow that; otherwise follow
+.agents/skills/PR_WORKFLOW.md"</em>），但多数规则间无显式优先级</td>
+<td><strong>6</strong> —
+SDK选择有明确优先级（1-5级）；错误处理有Trusted/Untrusted决策表；但整体规则间缺乏"当规则冲突时以X为准"的元规则</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D2维度得分</strong>： - <strong>OpenClaw：5.8</strong>
+(8+4+6+6+5)/5 - <strong>Linewise：7.8</strong> (9+7+8+9+6)/5</p>
+<hr />
+<h3 id="d3-上下文效率与agent认知负荷管理">D3
+上下文效率与Agent认知负荷管理</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>主Agent上下文预算效率</strong></td>
+<td>✓/✓</td>
+<td><strong>3</strong> —
+严重的上下文膨胀问题。单文件包含npm发布流程、1Password操作、GHSA安全咨询、macOS签名、voice
+wake配置等大量低频场景规则，日常编码时90%内容为噪声。无"最小核心规则集"标识</td>
+<td><strong>8</strong> —
+高信息密度，几乎每段都与日常编码相关。Refactoring
+Philosophy作为核心决策框架仅约200
+tokens即传达了最关键的心智模型。配置和密钥信息结构化列表化，便于按需查阅</td>
+</tr>
+<tr class="even">
+<td><strong>规则的层级化组织</strong></td>
+<td>✓/✓</td>
+<td><strong>4</strong> —
+章节划分存在但无层级标记。GitHub协作规则、编码规则、发布规则、Agent安全规则平铺在同一层级，无"全局强制"vs"场景触发"的区分</td>
+<td><strong>6</strong> — 有隐含层级（Refactoring Philosophy &gt;
+Architectural Patterns &gt; Code Style &gt; Specific
+Conventions），但未显式标记为层级。Key Architectural
+Patterns是核心强制层，Code Style是推荐层，但这种区分需Agent自行推断</td>
+</tr>
+<tr class="odd">
+<td><strong>子Agent任务委托友好度</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+模块边界清晰（<code>src/</code>、<code>extensions/</code>、<code>tests/</code>、<code>docs/</code>），子Agent可按目录接收规则。但规则文件本身未按模块切分，子Agent无法只加载局部规则</td>
+<td><strong>7</strong> —
+Feature模块标准化结构（Service/Repository/models/README）使子Agent可精确定位。分层架构（Routes→Services→Repositories）为子Agent提供清晰的搜索范围。但规则同样为单文件</td>
+</tr>
+<tr class="even">
+<td><strong>规则的结构化程度</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> — 有表格（Auto-Close Labels、Release
+Channels）、代码块、命令列表，但大量规则以散文形式表达</td>
+<td><strong>8</strong> —
+高度结构化：代码模式有完整范式代码、决策用表格（Trusted vs
+Untrusted）、模块结构用树状图、环境变量用结构化列表、测试策略用正反对比列表</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D3维度得分</strong>： - <strong>OpenClaw：4.75</strong>
+(3+4+6+6)/4 - <strong>Linewise：7.25</strong> (8+6+7+8)/4</p>
+<hr />
+<h3 id="d4-工程全流程覆盖度">D4 工程全流程覆盖度</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>技术栈专属规范</strong></td>
+<td>✓/✓</td>
+<td><strong>7</strong> — TypeScript专属：ESM、动态导入防护（<em>"Do not
+mix await import and static import for same
+module"</em>）、原型污染禁止、Oxlint/Oxfmt配置、Vitest覆盖率阈值、Tool
+Schema防护（避免<code>Type.Union</code>）</td>
+<td><strong>9</strong> — Scala 3深度专属：tagless final完整范式、context
+bounds语法（<code>&#123;A, B, C&#125;</code>）、opaque
+types策略、<code>for</code>-comprehension风格规范、EitherT使用模式、Doobie查询规范、ADT错误模型。几乎每条规则都是Scala
+3/cats-effect生态专属</td>
+</tr>
+<tr class="even">
+<td><strong>全生命周期覆盖</strong></td>
+<td>✓/✓</td>
+<td><strong>8</strong> — 编码→测试（Vitest+覆盖率+Live tests+Docker
+E2E）→CI（<code>prek install</code>）→发布（npm
+publish+macOS签名+多平台版本管理）→运维（Gateway重启、设备验证、session管理）。覆盖链路完整</td>
+<td><strong>7</strong> —
+编码→测试（munit+TestContainers）→迁移（Flyway）→CI/CD（GitHub
+Actions→GCR）→部署（ArgoCD/K8s），有deploy impact
+reporting。缺少运维监控操作手册（虽有otel4s/Sentry提及但无操作规范）</td>
+</tr>
+<tr class="odd">
+<td><strong>配置/密钥/环境变量管理</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> — 有安全实践（<em>"Never commit/publish real
+phone
+numbers"</em>）、credential路径、环境变量指引，但无系统性密钥轮换或配置管理框架</td>
+<td><strong>8</strong> —
+完整的环境变量清单（含fallback值）、密钥文件路径和VCS排除规则（<em>"Required
+secrets (excluded from
+VCS)"</em>）、HOCON配置结构、Secret与ConfigMap分离（K8s deploy impact
+reporting中体现）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D4维度得分</strong>： - <strong>OpenClaw：7.0</strong>
+(7+8+6)/3 - <strong>Linewise：8.0</strong> (9+7+8)/3</p>
+<hr />
+<h3 id="d5-安全与合规约束落地性">D5 安全与合规约束落地性</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>权限校验与数据隔离规则</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> — 有pairing
+mode安全机制提及、DM信任模型，但规则文件中未编码具体实现约束</td>
+<td><strong>9</strong> — 多租户Schema隔离有完整架构（<em>"System schema
+(public)"</em> vs <em>"Tenant schemas
+(tenant_&lt;id&gt;)"</em>）；RAC中有租户隔离断言（<em>"assert
+search_path matches expected tenant schema before
+writes"</em>）；路由层强制<code>/api/org/&#123;tenant&#125;/...</code>模式</td>
+</tr>
+<tr class="even">
+<td><strong>异常处理/日志脱敏/数据校验</strong></td>
+<td>✓/✓</td>
+<td><strong>4</strong> — 有<em>"Never commit/publish real phone
+numbers"</em>但仅限文档层面，无代码级日志脱敏规范。无系统性异常处理规范</td>
+<td><strong>8</strong> — Fail
+Fast规范（禁止模式+正确模式完整对比）、Trusted/Untrusted路径策略、ADT错误模型、日志级别规范（<em>"error
+= unexpected failures that need
+attention..."</em>）、RAC运行时断言机制</td>
+</tr>
+<tr class="odd">
+<td><strong>行业合规编码约束</strong></td>
+<td>✗ 两项目均无明显行业合规需求（非金融/医疗/政务领域）——不适用</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D5维度得分</strong>（排除不适用子项）： -
+<strong>OpenClaw：4.5</strong> (5+4)/2 - <strong>Linewise：8.5</strong>
+(9+8)/2</p>
+<hr />
+<h3 id="d6-规则体系可扩展性与可维护性">D6
+规则体系可扩展性与可维护性</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>新增/废弃规则的迭代流程</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> —
+有技能文件机制（<em>".agents/skills/PR_WORKFLOW.md"</em>）和外部规则引用，但无规则自身的版本管理或废弃流程</td>
+<td><strong>4</strong> —
+单文件结构，无规则迭代机制。无版本标记或废弃流程</td>
+</tr>
+<tr class="even">
+<td><strong>目录结构与检索效率</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> —
+单文件平铺，但有较好的Markdown标题层级。有AGENTS.md/CLAUDE.md符号链接机制（<em>"also
+add CLAUDE.md symlink"</em>）</td>
+<td><strong>7</strong> —
+单文件但逻辑组织清晰，从宏观（Philosophy）到微观（Code
+Style）渐进展开。章节间有内聚性，便于按需定位</td>
+</tr>
+<tr class="odd">
+<td><strong>规则间一致性与自洽性</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+大体一致，但规模庞大导致部分冗余（编码风格在多处重复提及，LOC目标在不同位置给出了约500和约700两个数字）</td>
+<td><strong>8</strong> — 高度自洽。Refactoring
+Philosophy的"最大化类型安全"原则贯穿所有后续规则（opaque
+types、NonEmptyList、ADT errors、RAC全部服务于同一目标）</td>
+</tr>
+<tr class="even">
+<td><strong>多Agent并行安全</strong></td>
+<td>OpenClaw: ✓（明确的多Agent协作场景） / Linewise:
+✗（单Agent工作流，规则文件无多Agent协作迹象——不适用）</td>
+<td><strong>8</strong> — 专门的Multi-Agent Safety章节：Git
+stash禁令、branch/worktree管理约束、session隔离、格式化churn自动处理、聚焦报告规则。这是<strong>独有亮点</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D6维度得分</strong>： - <strong>OpenClaw：6.0</strong>
+(5+5+6+8)/4 — 含4个适用子项 - <strong>Linewise：6.33</strong> (4+7+8)/3
+— 含3个适用子项（多Agent并行安全不适用）</p>
+<hr />
+<h3 id="维度汇总">维度汇总</h3>
+<table>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+<th>差值</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D1 项目长期演进适配性</td>
+<td>5.0</td>
+<td>7.0</td>
+<td>-2.0</td>
+</tr>
+<tr class="even">
+<td>D2 规则可执行性与Agent遵循适配性</td>
+<td>5.8</td>
+<td>7.8</td>
+<td>-2.0</td>
+</tr>
+<tr class="odd">
+<td>D3 上下文效率与Agent认知负荷管理</td>
+<td>4.75</td>
+<td>7.25</td>
+<td>-2.5</td>
+</tr>
+<tr class="even">
+<td>D4 工程全流程覆盖度</td>
+<td>7.0</td>
+<td>8.0</td>
+<td>-1.0</td>
+</tr>
+<tr class="odd">
+<td>D5 安全与合规约束落地性</td>
+<td>4.5</td>
+<td>8.5</td>
+<td>-4.0</td>
+</tr>
+<tr class="even">
+<td>D6 规则体系可扩展性与可维护性</td>
+<td>6.0</td>
+<td>6.33</td>
+<td>-0.33</td>
+</tr>
+<tr class="odd">
+<td><strong>均分</strong></td>
+<td><strong>5.51</strong></td>
+<td><strong>7.48</strong></td>
+<td><strong>-1.97</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-3-横向对比结论">Part 3 — 横向对比结论</h2>
+<h3 id="核心优劣势">核心优劣势</h3>
+<p><strong>OpenClaw 优势：</strong> 1.
+<strong>操作覆盖广度无与伦比</strong> — 从日常编码到npm发布到1Password
+OTP到macOS签名到GHSA安全咨询，几乎覆盖了开源项目维护的一切操作场景 2.
+<strong>多Agent并行安全是独有亮点</strong> — Git
+stash/worktree/branch管理的明确禁令与session隔离规则，在评测的两份文件中独此一家
+3. <strong>PR质量控制严格</strong> — Bug-fix
+validation的四步验证门槛（症状证据→根因验证→代码路径→回归测试）是优秀实践</p>
+<p><strong>OpenClaw 劣势：</strong> 1.
+<strong>上下文效率严重不足</strong> —
+单文件包含所有场景，Agent执行日常编码任务时需加载大量无关的发布/运维/设备测试规则
+2. <strong>架构级约束薄弱</strong> —
+有详细的"怎么操作"，缺乏"为什么这样设计"的架构决策框架，Agent在面临新场景决策时缺乏指导
+3. <strong>验证闭环依赖人类</strong> — 许多规则（PR
+truthfulness、代码质量）最终依赖人类Review，在95%+
+AI编码场景下形成瓶颈</p>
+<p><strong>Linewise 优势：</strong> 1.
+<strong>编译器驱动的验证闭环</strong> — "If a refactor compiles, it's
+correct"
+将正确性验证从人类主观判断转为自动化的编译器检查，完美适配AI编码范式 2.
+<strong>决策框架优于操作步骤</strong> — Refactoring
+Philosophy为Agent提供元认知框架，Agent可自行推导具体场景的正确行为，而非逐条匹配规则
+3. <strong>信息密度极高</strong> — 约5000
+tokens传递了完整的工程约束，上下文预算友好 4.
+<strong>正反示例对比</strong> — BAD/GOOD代码块、"What TO test" vs "What
+NOT to test"消除了模糊性</p>
+<p><strong>Linewise 劣势：</strong> 1. <strong>运维链路覆盖不足</strong>
+— 监控告警处理、生产事故响应、日志查询操作等运维规范缺失 2.
+<strong>规则迭代机制缺失</strong> —
+单文件无版本管理，规则的新增/废弃无流程保障 3.
+<strong>多Agent协作未考虑</strong> —
+虽然当前可能不需要，但随着项目规模增长可能成为缺口</p>
+<h3 id="适用场景差异">适用场景差异</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>场景</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>强类型后端服务、编译器可验证的语言</td>
+<td>Linewise方法论</td>
+</tr>
+<tr class="even">
+<td>开源项目多贡献者协作、多平台发布</td>
+<td>OpenClaw方法论</td>
+</tr>
+<tr class="odd">
+<td>新项目从零构建规则体系</td>
+<td>Linewise方法论（先建立决策框架，再按需增加操作细节）</td>
+</tr>
+<tr class="even">
+<td>需要Agent高自主性、低人类介入</td>
+<td>Linewise方法论（编译器验证闭环减少人类审查需求）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent执行友好度判定">Agent执行友好度判定</h3>
+<p><strong>Linewise对AI代理执行友好度显著更高。</strong> 原因：</p>
+<ol type="1">
+<li><strong>确定性验证</strong> —
+Agent写完代码后运行<code>./mill compile</code>即可获得明确的对/错反馈，无需等待人类Review</li>
+<li><strong>决策可推导</strong> — Agent面对新场景时可从Refactoring
+Philosophy推导行为（"这个变更能否用类型系统表达？"），而非在海量规则中搜索匹配项</li>
+<li><strong>认知负荷低</strong> —
+规则量适中、结构化程度高、无噪声信息</li>
+</ol>
+<h3 id="落地风险提示">落地风险提示</h3>
+<ul>
+<li><strong>OpenClaw</strong>：规则过载风险高。随着项目继续发展，AGENTS.md可能继续膨胀，最终超出任何Agent的有效处理能力。建议拆分为核心规则+按需加载的场景规则</li>
+<li><strong>Linewise</strong>：对Scala/cats-effect生态高度耦合。规则方法论的迁移性受限于目标语言是否具备同等的类型系统能力。在动态类型语言项目中，"编译器即验收测试"无法成立</li>
+</ul>
+<hr />
+<h2 id="part-4-制定者能力画像对比d7">Part 4 —
+制定者能力画像对比（D7）</h2>
+<h3 id="openclaw-制定者">OpenClaw 制定者</h3>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 27%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>能力维度</th>
+<th>等级</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>架构设计与技术前瞻性</strong></td>
+<td>合格</td>
+<td>有清晰的插件/核心边界意识和多平台架构理解，但规则文件缺乏系统性架构约束表达。项目架构理解体现在目录结构和渠道策略中，但未上升为Agent可消费的架构决策框架</td>
+</tr>
+<tr class="even">
+<td><strong>大型项目工程化管控能力</strong></td>
+<td>资深</td>
+<td>对多平台发布、多贡献者协作、版本管理的全链路覆盖体现了丰富的大型开源项目管理经验。Auto-close标签体系、PR
+truthfulness验证、changelog标准等体现系统性管控思维</td>
+</tr>
+<tr class="odd">
+<td><strong>AI编码代理认知与应用深度</strong></td>
+<td>合格→资深</td>
+<td>多Agent安全协议体现了对AI
+Agent协作的深入思考（<strong>超出多数项目的认知水平</strong>），但在核心编码验证闭环设计上不足——过多规则依赖人类Review而非自动化验证。制定者理解"Agent会并行工作"但尚未充分理解"Agent需要确定性反馈"</td>
+</tr>
+<tr class="even">
+<td><strong>安全风险体系化防控能力</strong></td>
+<td>合格</td>
+<td>有GHSA处理流程、SECURITY.md引用、credential管理，但安全约束在代码层面的编码不足（更多是操作层面的安全实践）</td>
+</tr>
+<tr class="odd">
+<td><strong>技术债务治理与可持续演进能力</strong></td>
+<td>合格</td>
+<td>有增量迁移意识（SwiftUI迁移），但无系统性债务识别与治理框架</td>
+</tr>
+</tbody>
+</table>
+<p><strong>综合画像</strong>：一位<strong>经验丰富的开源项目维护者</strong>，在多平台发布管理和社区协作方面有深厚积累，对AI
+Agent并行协作有前瞻性思考。但在"将工程约束编码为Agent可自动验证的形式"方面有提升空间。</p>
+<h3 id="linewise-制定者">Linewise 制定者</h3>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 27%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>能力维度</th>
+<th>等级</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>架构设计与技术前瞻性</strong></td>
+<td>专家</td>
+<td>Tagless final + context bounds + opaque types + ADT errors +
+分层架构的完整体系设计。<em>"Type precision is not
+over-engineering"</em>体现了对"简单性"的深层理解——真正的简单是编译期消除复杂性，而非运行时忽略复杂性</td>
+</tr>
+<tr class="even">
+<td><strong>大型项目工程化管控能力</strong></td>
+<td>资深</td>
+<td>多租户Schema隔离、Flyway双轨迁移、K8s部署、ArgoCD、deploy impact
+reporting。完整但未涵盖运维链路</td>
+</tr>
+<tr class="odd">
+<td><strong>AI编码代理认知与应用深度</strong></td>
+<td>专家</td>
+<td><strong>核心亮点</strong>：<em>"Write-cost is near zero. AI writes
+90%+ of code, so the cost of touching more files is negligible. Optimize
+for correctness and compile-time safety, not for minimal diff."</em>
+这一条规则体现了对AI编码范式的深刻理解——验证成本远大于编写成本，因此应最大化编译器可验证的约束。RAC机制、ADT错误模型、正反示例都是为Agent提供确定性反馈闭环的设计。"What
+NOT to test"同样体现了对验证成本的精准校准</td>
+</tr>
+<tr class="even">
+<td><strong>安全风险体系化防控能力</strong></td>
+<td>资深</td>
+<td>多租户隔离（架构+RAC双重保障）、Fail
+Fast策略、Trusted/Untrusted路径区分、密钥管理。未达专家级因缺少完整的安全威胁模型</td>
+</tr>
+<tr class="odd">
+<td><strong>技术债务治理与可持续演进能力</strong></td>
+<td>资深</td>
+<td>"Next-touch
+migration"策略、命名审查机制、增量迁移显式规则。有系统性方法但未形成完整的债务追踪框架</td>
+</tr>
+</tbody>
+</table>
+<p><strong>综合画像</strong>：一位<strong>深度理解类型系统与AI编码范式的架构师</strong>，能将"编译器即验证器"的洞察贯穿到规则体系的每一个层面。在"如何让AI
+Agent工作得更安全、更自主"这个问题上给出了当前可见的最优解之一——通过类型系统将约束前置，将验证成本从人类Review转移到编译器。</p>
+<h3 id="核心差异点">核心差异点</h3>
+<table>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>OpenClaw制定者</th>
+<th>Linewise制定者</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>管控哲学</strong></td>
+<td>过程控制（规定步骤）</td>
+<td>约束控制（规定边界）</td>
+</tr>
+<tr class="even">
+<td><strong>对Agent的假设</strong></td>
+<td>Agent需要详细指令</td>
+<td>Agent需要正确框架</td>
+</tr>
+<tr class="odd">
+<td><strong>验证策略</strong></td>
+<td>人类Review + CI检查</td>
+<td>编译器 + 类型系统 + RAC</td>
+</tr>
+<tr class="even">
+<td><strong>独特优势</strong></td>
+<td>多Agent协作安全</td>
+<td>编译器驱动的验证闭环</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-5-agent适配性分析">Part 5 — Agent适配性分析</h2>
+<h3 id="主agent子agent架构适配">主Agent+子Agent架构适配</h3>
+<p><strong>OpenClaw</strong>： -
+<strong>主Agent适配</strong>：上下文预算压力大。主Agent需加载约10000
+tokens的规则，其中日常编码仅需约30%。建议将规则拆分为核心编码规则（约2000
+tokens）+ 按需技能文件（已有<code>.agents/skills/</code>雏形） -
+<strong>子Agent适配</strong>：模块边界清晰（<code>src/</code>/<code>extensions/</code>/<code>tests/</code>），子Agent可按目录scope工作。但规则未按模块切分，子Agent无法加载局部规则
+-
+<strong>多Agent并行</strong>：<strong>唯一提供并行安全协议的规则文件</strong>，在多Agent同时工作的场景下有显著优势</p>
+<p><strong>Linewise</strong>： -
+<strong>主Agent适配</strong>：高效。约5000
+tokens即提供完整决策框架。Refactoring Philosophy（约200
+tokens）可作为"始终加载的最小规则集"，其余按需查阅 -
+<strong>子Agent适配</strong>：Feature模块标准化结构使子Agent定位精准。分层架构（Routes→Services→Repositories）为子Agent提供清晰的搜索范围和修改边界。Tagless
+final模式使依赖关系显式化，子Agent分析代码时可快速定位影响范围 -
+<strong>多Agent并行</strong>：未覆盖。如果项目规模增长需要多Agent并行工作，需补充此能力</p>
+<h3 id="不同项目规模阶段推荐">不同项目规模/阶段推荐</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 40%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>项目阶段</th>
+<th>推荐方法论</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>初创/原型期</strong></td>
+<td>Linewise</td>
+<td>精炼规则快速加载，类型约束从第一天防错</td>
+</tr>
+<tr class="even">
+<td><strong>成长/多人协作期</strong></td>
+<td>混合：Linewise核心 + OpenClaw协作规则</td>
+<td>需要编译器验证闭环 + 多Agent安全协议</td>
+</tr>
+<tr class="odd">
+<td><strong>成熟/多平台发布期</strong></td>
+<td>OpenClaw（需拆分）</td>
+<td>多平台发布、社区协作的操作覆盖度是刚需</td>
+</tr>
+<tr class="even">
+<td><strong>动态类型语言项目</strong></td>
+<td>OpenClaw（辅以严格测试规范）</td>
+<td>Linewise的核心优势（编译器验证）不成立</td>
+</tr>
+<tr class="odd">
+<td><strong>强类型语言项目</strong></td>
+<td>Linewise</td>
+<td>完美匹配</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-6-ai诚实自评d8">Part 6 — AI诚实自评（D8）</h2>
+<p><strong>我选择Linewise的CLAUDE.md作为模板。</strong></p>
+<h3 id="为什么">为什么</h3>
+<p>作为规则的执行者，我最需要的是<strong>确定性反馈</strong>。当我写完代码后，我需要知道它是对还是错——越快知道、越确定地知道，我就能越高效地工作、越少需要人类介入。</p>
+<p>Linewise的方法论给了我这个： - <strong>"If a refactor compiles, it's
+correct"</strong> —
+这句话对我而言不是口号，是工作方式的根本转变。它意味着我可以大胆地做15个文件的类型签名重构，因为编译器会在几秒内告诉我是否遗漏了任何调用点。没有编译器验证，同样的重构我需要人类Review每一个文件才敢合并。
+- <strong>正反示例的BAD/GOOD对比</strong> — 我不需要揣测"tricky
+logic"的定义，我直接看到了"这样写是错的，那样写是对的"。在消除我的歧义理解方面，一个反例胜过三段解释。
+- <strong>"Write-cost is near zero"</strong> —
+这条规则说出了我的现实：对我来说写代码几乎没有成本，但每一次人类Review都是瓶颈。因此规则体系应该最大化自动验证、最小化人类审查需求。Linewise的制定者理解这一点。
+- <strong>信息密度</strong> — 我的上下文窗口是有限的。约5000
+tokens的Linewise规则给我留出了大量空间去思考实际问题，而约10000
+tokens的OpenClaw规则让我需要在npm发布流程和for-comprehension风格之间来回跳转。</p>
+<h3 id="我会失去什么">我会失去什么</h3>
+<p>诚实地说，选择Linewise意味着我在以下场景会感到不安：</p>
+<ol type="1">
+<li><strong>多Agent并行工作时没有安全协议</strong> —
+如果另一个Agent在操作同一个repo，我不知道该不该碰git
+stash、该不该切分支。OpenClaw的Multi-Agent
+Safety章节是我见过的最好的Agent并行协作规范，失去它让我在协作场景下只能靠猜</li>
+<li><strong>发布/运维操作无脚手架</strong> —
+当人类说"发一个beta版"时，我没有精确的步骤列表可以遵循。Linewise的规则在编码阶段极强，但在"代码之外"的工程操作上几乎空白</li>
+<li><strong>PR/Issue协作流程缺失</strong> —
+在开源协作场景下，我不知道如何处理bot
+review、如何验证bug-fix声明的真实性、如何管理auto-close标签</li>
+</ol>
+<h3
+id="如果我可以从openclaw偷3个设计决策">如果我可以从OpenClaw"偷"3个设计决策</h3>
+<ol type="1">
+<li><p><strong>Multi-Agent Safety协议</strong> — Git
+stash/worktree/branch管理禁令 + session隔离 +
+格式化churn自动处理。这是OpenClaw独有的、且在Agent协作场景下不可替代的设计。即使当前项目是单Agent，这套协议的设计思路——"假设其他Agent可能在同时工作，保护共享状态"——是防御性编程在Agent层面的优秀实践</p></li>
+<li><p><strong>PR Bug-Fix Validation四步门槛</strong> —
+症状证据→根因验证→代码路径→回归测试。这个验证链条完美补充了Linewise"编译器即验证"无法覆盖的逻辑正确性维度——代码编译通过不代表bug真的被修复了。将这套门槛编码为规则，让我在提交bug-fix
+PR时有明确的自检清单</p></li>
+<li><p><strong>按需加载的技能文件机制</strong>
+(<code>.agents/skills/</code>) —
+Linewise的单文件结构在项目规模增长后会面临与OpenClaw同样的膨胀问题。OpenClaw的skills目录机制（核心规则常驻
++
+专项规则按需引用）是解决上下文预算问题的正确方向。我会将Linewise的规则重构为：<code>CLAUDE.md</code>（约2000
+tokens核心决策框架）+
+<code>.agents/skills/</code>（具体场景的详细规范）</p></li>
+</ol>
+<hr />
+<p><strong>结论</strong>：Linewise的CLAUDE.md体现了"AI编码代理规则应该怎样写"的更深层理解——<strong>规则的目标不是控制Agent的每一步操作，而是为Agent建立一个正确性可自动验证的工作框架</strong>。在95%+
+AI编码的范式下，这种方法论产出的规则让我更高效、更自主、更少犯错。OpenClaw的操作覆盖广度令人印象深刻，但在根本问题——"如何让Agent的输出可被机器验证而非依赖人类判断"——上，Linewise给出了更优解。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Programming/" rel="tag"># Programming</a>
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
+              <a href="/tags/Software-Engineering/" rel="tag"># Software Engineering</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/11/AI-native-coding-style-draft/" rel="prev" title="AI 时代的编码分工：谁该迁就谁的风格？">
+                  <i class="fa fa-chevron-left"></i> AI 时代的编码分工：谁该迁就谁的风格？
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/03/12/agent-rules-evaluation/" rel="next" title="Agent 规则文件评测：我的 CLAUDE.md vs OpenClaw/AGENTS.md">
+                  Agent 规则文件评测：我的 CLAUDE.md vs OpenClaw/AGENTS.md <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -127,13 +127,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -155,6 +155,1756 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/12/codex-openclaw-vs-my-agent-rules-evaluation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/03/12/codex-openclaw-vs-my-agent-rules-evaluation/" class="post-title-link" itemprop="url">OpenClaw AGENTS.md 与 My Claude.md 规则横评</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-12 20:30:00 / Modified: 12:52:02" itemprop="dateCreated datePublished" datetime="2026-03-12T20:30:00+08:00">2026-03-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="评测对象">评测对象</h1>
+<ul>
+<li>OpenClaw:
+<code>https://raw.githubusercontent.com/openclaw/openclaw/refs/heads/main/AGENTS.md</code></li>
+<li>My:
+<code>https://gist.githubusercontent.com/mingyang91/475a9750c5609ff5dfe59a5de1a09b6e/raw/51116ffd45c1f711039699c24cb0a7528b7febdf/Claude.md</code></li>
+<li>项目定位补充依据：OpenClaw <code>README.md</code></li>
+</ul>
+<h1 id="评测前提">评测前提</h1>
+<ul>
+<li>95%+ 的代码由 AI 编码代理编写、修改、阅读、调试</li>
+<li>人类负责架构决策、需求定义、现实世界反馈注入、最终审查和生产操作确认</li>
+<li>执行模型为“单会话主 Agent + 按需子 Agent”</li>
+<li>评分采用适用性前置判定；不适用项不进入分母</li>
+</ul>
+<h1 id="part-1-基础画像">Part 1 — 基础画像</h1>
+<h2 id="openclaw">OpenClaw</h2>
+<ul>
+<li>项目定位：personal AI assistant，single-user，local-first，同时具备
+multi-agent routing、multi-channel 和 sandboxed non-main sessions</li>
+<li>规则文件角色：AI 维护者作战手册</li>
+<li>核心设计理念：优先防止 AI 在真实仓库、真实 GitHub
+流程、真实发布链路里误操作</li>
+<li>结构特点：覆盖面极广，包含 triage、PR、测试、发布、GHSA、多 Agent
+Git 安全、文档、移动端、插件、密钥与发布流程</li>
+</ul>
+<h2 id="my">My</h2>
+<ul>
+<li>项目定位：multi-tenant backend service，Scala 3 + http4s +
+cats-effect + PostgreSQL</li>
+<li>规则文件角色：AI 强类型后端开发方法论</li>
+<li>核心设计理念：用类型系统、错误模型和模块边界降低 AI
+的结构性错误率</li>
+<li>结构特点：围绕 refactoring philosophy、tagless final、typed
+error、schema isolation、RAC、OpenAPI、CI/CD 展开</li>
+</ul>
+<h2 id="结构对比">结构对比</h2>
+<ul>
+<li>OpenClaw：约 296 行，约 3697 词，22 个标题，217 个 bullet</li>
+<li>My：约 507 行，约 3202 词，36 个标题，122 个 bullet</li>
+<li>结论：OpenClaw 更像“广覆盖运行手册”，My 更像“高结构编码规范”</li>
+</ul>
+<h1 id="part-2-量化评测表">Part 2 — 量化评测表</h1>
+<h2 id="总分">总分</h2>
+<table>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th style="text-align: right;">OpenClaw</th>
+<th style="text-align: right;">My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D1 项目长期演进适配性</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">8.0</td>
+</tr>
+<tr class="even">
+<td>D2 规则可执行性与 Agent 遵循适配性</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">7.4</td>
+</tr>
+<tr class="odd">
+<td>D3 上下文效率与 Agent 认知负荷管理</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">8.0</td>
+</tr>
+<tr class="even">
+<td>D4 工程全流程覆盖度</td>
+<td style="text-align: right;">8.3</td>
+<td style="text-align: right;">8.7</td>
+</tr>
+<tr class="odd">
+<td>D5 安全与合规约束落地性</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">8.5</td>
+</tr>
+<tr class="even">
+<td>D6 规则体系可扩展性与可维护性</td>
+<td style="text-align: right;">7.0</td>
+<td style="text-align: right;">5.5</td>
+</tr>
+<tr class="odd">
+<td>综合均分</td>
+<td style="text-align: right;">6.9</td>
+<td style="text-align: right;">7.6</td>
+</tr>
+</tbody>
+</table>
+<h2 id="d1-项目长期演进适配性">D1 — 项目长期演进适配性</h2>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 42%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>新功能迭代流程规范</td>
+<td><code>✓ 8分</code>。有新增 channel/extension/docs 的配套动作、默认
+maintainer PR workflow、AGENTS/CLAUDE 同步要求。</td>
+<td><code>✓ 7分</code>。有 route/DTO 变更后同步 OpenAPI、验证 spec、输出
+deploy repo checklist。</td>
+</tr>
+<tr class="even">
+<td>模块拆分与依赖约束</td>
+<td><code>✓ 8分</code>。目录、插件依赖归属、dynamic import
+边界、文件规模都有明确规则。</td>
+<td><code>✓ 9分</code>。<code>Routes → Services → Repositories</code>、统一
+feature template、约束 route→service→repository 端到端传播。</td>
+</tr>
+<tr class="odd">
+<td>技术债务识别与治理路径</td>
+<td><code>✓ 6分</code>。强调不要 speculative fix、不要 V2 复制、不要
+prototype mutation，但缺少系统化债务治理流程。</td>
+<td><code>✓ 8分</code>。鼓励 radical type-level refactor、typed errors
+增量迁移、命名治理和约束前推。</td>
+</tr>
+<tr class="even">
+<td>API/DB/配置版本兼容与迁移规则</td>
+<td><code>✓ 5分</code>。有 release channel、version
+locations、doctor/runbook，但兼容与迁移规则分散。</td>
+<td><code>✓ 7分</code>。system/tenant migrations、禁止修改旧
+migration、OpenAPI 同步要求明确。</td>
+</tr>
+<tr class="odd">
+<td>存量代码改造与新旧规范衔接</td>
+<td><code>✓ 7分</code>。docs i18n、legacy migration、SwiftUI
+状态管理迁移等有衔接规则。</td>
+<td><code>✓ 9分</code>。新服务采用 typed
+errors，旧服务在下次修改时迁移，属于成熟的渐进式改造策略。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D1 结论：</strong> My 更擅长“持续把系统改得更稳”，OpenClaw
+更擅长“在复杂产品持续演化中保持流程可控”。</p>
+<h2 id="d2-规则可执行性与-agent-遵循适配性">D2 — 规则可执行性与 Agent
+遵循适配性</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 45%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>规则颗粒度</td>
+<td><code>✓ 9分</code>。大量规则是禁令、脚本、命令模板、明确动作。</td>
+<td><code>✓ 9分</code>。大量 bad/good 例子、ADT 示例、RAC
+场景，可直接执行。</td>
+</tr>
+<tr class="even">
+<td>规则过载风险</td>
+<td><code>✓ 4分</code>。低频规则常驻过多，包含 GHSA、1Password、plugin
+release、docs i18n、VM ops 等。</td>
+<td><code>✓ 7分</code>。虽然篇幅更长，但内容集中在后端编码和工程主链。</td>
+</tr>
+<tr class="odd">
+<td>模糊性风险</td>
+<td><code>✓ 7分</code>。大多具体，但仍有
+<code>use existing patterns</code>、<code>guideline only</code>
+之类模糊项。</td>
+<td><code>✓ 7分</code>。主体清晰，但“if it compiles, it's
+correct”把语义正确性过多外包给编译器。</td>
+</tr>
+<tr class="even">
+<td>可验证性</td>
+<td><code>✓ 9分</code>。build、typecheck、lint、test、coverage、smoke、release-check，再叠加
+bug-fix 证据门槛。</td>
+<td><code>✓ 8分</code>。compile、test、format、OpenAPI
+validate、TestContainers、CI/CD 验证链完整。</td>
+</tr>
+<tr class="odd">
+<td>冲突与异常的优先级兜底机制</td>
+<td><code>✓ 9分</code>。标签自动关闭优先、批量操作确认、依赖
+patch/发布需批准、冲突即停。</td>
+<td><code>✓ 6分</code>。有 trusted/untrusted path
+与禁止本地构建发布镜像等规则，但缺少统一优先级体系。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D2 结论：</strong> OpenClaw 更强于“防错误动作”，My
+更强于“防错误代码”。</p>
+<h2 id="d3-上下文效率与-agent-认知负荷管理">D3 — 上下文效率与 Agent
+认知负荷管理</h2>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 47%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>主 Agent 上下文预算效率</td>
+<td><code>✓ 4分</code>。常驻低频知识过多，纯编码任务的上下文成本偏高。</td>
+<td><code>✓ 7分</code>。结构更细，核心编码信息更集中，更适合作为常驻规则骨架。</td>
+</tr>
+<tr class="even">
+<td>规则的层级化组织</td>
+<td><code>✓ 6分</code>。有分节，但全局强约束与低频 runbook
+未彻底拆层。</td>
+<td><code>✓ 8分</code>。Overview → Philosophy → Architecture → Testing →
+Workflow → CI/CD 的层次清楚。</td>
+</tr>
+<tr class="odd">
+<td>子 Agent 任务委托友好度</td>
+<td><code>✓ 7分</code>。适用理由：本评测前提即主 Agent + 子
+Agent。目录和多 Agent safety 让委托较安全，但无关规则较多。</td>
+<td><code>✓ 8分</code>。适用理由同左。统一 feature 结构和 layer
+模式使局部加载成本更低。</td>
+</tr>
+<tr class="even">
+<td>规则的结构化程度</td>
+<td><code>✓ 7分</code>。有目录、命名、schema、测试命名规则，但更多是经验
+bullet 集。</td>
+<td><code>✓ 9分</code>。tagless final、typed error、feature
+template、RAC 均可直接转化为 Agent 分析框架。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D3 结论：</strong> My 更适合作为长期常驻规则；OpenClaw
+需要拆出最小常驻规则集。</p>
+<h2 id="d4-工程全流程覆盖度">D4 — 工程全流程覆盖度</h2>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 43%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>技术栈专属规范</td>
+<td><code>✓ 9分</code>。Node/Bun/TypeScript/Vitest/Oxlint/Oxfmt/SwiftUI/Mintlify/1Password/Notary
+都有具体规则。</td>
+<td><code>✓ 9分</code>。Scala
+3/http4s/cats-effect/Doobie/Flyway/OpenTelemetry/Sentry/Kubernetes/ArgoCD
+都有具体规则。</td>
+</tr>
+<tr class="even">
+<td>全生命周期覆盖</td>
+<td><code>✓ 9分</code>。编码、测试、PR、issue
+triage、GHSA、发布、插件发布、troubleshooting 均覆盖。</td>
+<td><code>✓ 8分</code>。编码、测试、迁移、OpenAPI、CI/CD、deploy
+checklist 覆盖较全，但运维 runbook 相对较少。</td>
+</tr>
+<tr class="odd">
+<td>配置/密钥/环境变量管理规范</td>
+<td><code>✓ 7分</code>。有 credentials 路径、敏感值禁入 repo、notary env
+vars、1Password publish 规则，但信息分散。</td>
+<td><code>✓ 9分</code>。env vars、required secrets、fallback、deploy
+变更影响均明确。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D4 结论：</strong> 两者都强。OpenClaw 强在仓库级维护流程，My
+强在服务端工程链闭环。</p>
+<h2 id="d5-安全与合规约束落地性">D5 — 安全与合规约束落地性</h2>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 44%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>权限校验与数据隔离规则</td>
+<td><code>✓ 5分</code>。有 <code>SECURITY.md</code> 前置要求、敏感值禁入
+repo、外部消息面禁止 partial reply，但核心安全模型较多外置。</td>
+<td><code>✓ 9分</code>。schema isolation、JWT auth、tenant route
+pattern、<code>search_path</code> RAC 断言都属于强落地规则。</td>
+</tr>
+<tr class="even">
+<td>异常处理 / 日志脱敏 / 数据校验强制规范</td>
+<td><code>✓ 4分</code>。有高置信回答、不要提交真实值等守则，但缺少系统化异常处理与日志脱敏规范。</td>
+<td><code>✓ 8分</code>。fail-fast、trusted/untrusted path、ADT
+errors、logger 级别、RAC 构成较完整闭环。</td>
+</tr>
+<tr class="odd">
+<td>行业合规编码约束</td>
+<td><code>✗ 不适用</code>。理由：OpenClaw README 明确为 personal
+single-user assistant，未声明医疗、金融、政务等行业合规场景。</td>
+<td><code>✗ 不适用</code>。理由：My 仅声明为 multi-tenant backend
+service，未声明受监管行业领域。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D5 结论：</strong>
+如果评估“权限、隔离、数据一致性”的编码安全模型，My 明显领先；OpenClaw
+更强的是操作安全与流程安全。</p>
+<h2 id="d6-规则体系可扩展性与可维护性">D6 —
+规则体系可扩展性与可维护性</h2>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 50%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>新增 / 废弃规则的迭代流程</td>
+<td><code>✓ 5分</code>。有外挂 skill、外链 workflow、AGENTS/CLAUDE
+同步要求，但缺少规则自身版本化与废弃机制。</td>
+<td><code>✓ 4分</code>。更多讲代码如何演进，较少讲规则文件自身如何演进。</td>
+</tr>
+<tr class="even">
+<td>目录结构与检索效率</td>
+<td><code>✓ 7分</code>。section
+丰富、关键词可检索，但单文件承载内容过多。</td>
+<td><code>✓ 8分</code>。结构稳定、feature template 明确、important files
+清楚。</td>
+</tr>
+<tr class="odd">
+<td>规则间一致性与自洽性</td>
+<td><code>✓ 6分</code>。总体一致，但已出现文件长度
+<code>&lt;700 LOC</code> 与 <code>&lt;500 LOC</code> 两套标准。</td>
+<td><code>✓ 8分</code>。从 type-first 到 typed error 到 RAC
+相对自洽，主要问题是过度乐观地信任编译器。</td>
+</tr>
+<tr class="even">
+<td>多 Agent 并行安全</td>
+<td><code>✓ 10分</code>。适用理由：本评测前提即主 Agent + 子 Agent。禁止
+<code>stash/autostash</code>、<code>worktree</code>、切分支，并规定提交范围和
+push 行为。</td>
+<td><code>✓ 2分</code>。适用理由同左。缺少 Git
+状态隔离、文件归属边界、提交范围约束，基本仍是单 Agent 心智模型。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D6 结论：</strong> OpenClaw 在多 Agent
+仓库协作安全上明显领先；My 在该维度存在明显短板。</p>
+<h1 id="part-3-横向对比结论">Part 3 — 横向对比结论</h1>
+<h2 id="核心优劣势">核心优劣势</h2>
+<h3 id="openclaw-1">OpenClaw</h3>
+<p>优势：</p>
+<ul>
+<li>最懂 AI 在真实仓库中会如何误操作</li>
+<li>对 bug-fix 幻觉、发布误操作、多 Agent Git 互踩有成熟护栏</li>
+<li>更适合处理 triage、incident 修复、发布前验证、GHSA
+和维护运营类任务</li>
+</ul>
+<p>短板：</p>
+<ul>
+<li>常驻上下文成本高</li>
+<li>低频规则常驻过多</li>
+<li>编码安全模型相对分散，部分关键规则依赖外部文档</li>
+</ul>
+<h3 id="my-1">My</h3>
+<p>优势：</p>
+<ul>
+<li>最懂如何让 AI 在强类型后端里持续写对代码</li>
+<li>类型系统、错误模型、模块边界和迁移策略高度统一</li>
+<li>规则结构化程度高，适合主 Agent 和子 Agent 直接消费</li>
+</ul>
+<p>短板：</p>
+<ul>
+<li>对编译器过于乐观</li>
+<li>缺少 bug-fix 证据化门槛</li>
+<li>缺少多 Agent Git 安全协议</li>
+<li>缺少高风险操作审批型护栏</li>
+</ul>
+<h2 id="适用场景差异">适用场景差异</h2>
+<ul>
+<li>强类型后端、API 服务、模块边界清晰、需要 AI 高频重构的项目：优先参考
+My</li>
+<li>公开仓库、多维护流程、多发布面、真实运维压力较大的 AI-first
+项目：优先参考 OpenClaw</li>
+</ul>
+<h2 id="哪份规则对-ai-代理执行友好度更高">哪份规则对 AI
+代理执行友好度更高</h2>
+<ul>
+<li>仅看“写代码、改代码、局部重构”的执行友好度：My 更高</li>
+<li>看“真实项目全流程落地”的执行稳健性：OpenClaw 更稳</li>
+</ul>
+<h2 id="落地风险提示">落地风险提示</h2>
+<ul>
+<li>OpenClaw 的主要风险是规则过胖，应拆分最小常驻规则集</li>
+<li>My 的主要风险是协作安全和验证闭环不足，应补多 Agent Git
+安全、bug-fix 证据门槛和高风险操作审批</li>
+</ul>
+<h1 id="part-4-制定者能力画像对比">Part 4 — 制定者能力画像对比</h1>
+<table>
+<thead>
+<tr class="header">
+<th>能力维度</th>
+<th>OpenClaw 制定者</th>
+<th>My 制定者</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>架构设计与技术前瞻性</td>
+<td><code>专家</code></td>
+<td><code>专家</code></td>
+</tr>
+<tr class="even">
+<td>大型项目工程化管控能力</td>
+<td><code>专家</code></td>
+<td><code>资深</code></td>
+</tr>
+<tr class="odd">
+<td>AI 编码代理认知与应用深度</td>
+<td><code>专家</code></td>
+<td><code>资深</code></td>
+</tr>
+<tr class="even">
+<td>安全风险体系化防控能力</td>
+<td><code>资深</code></td>
+<td><code>资深</code></td>
+</tr>
+<tr class="odd">
+<td>技术债务治理与可持续演进能力</td>
+<td><code>资深</code></td>
+<td><code>专家</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="能力差异总结">能力差异总结</h2>
+<ul>
+<li>OpenClaw 制定者更像专家级
+maintainer-operator，强项是流程防错、仓库协作安全、发布与安全公告处理</li>
+<li>My 制定者更像专家级 backend
+architect，强项是类型驱动设计、模块边界约束、长期演进策略</li>
+</ul>
+<h2
+id="超出当前项目最低需求但能体现制定者能力的正向证据">超出当前项目最低需求但能体现制定者能力的正向证据</h2>
+<ul>
+<li>OpenClaw 明确是 personal single-user
+assistant，但规则文件补上了成熟的多 Agent Git 安全协议，体现出制定者在
+AI 协作安全上的前瞻性</li>
+<li>My 把 deploy impact reporting 写进规则，要求 Agent 把代码变更映射到
+deploy repo 变更，体现出平台级系统工程视角</li>
+</ul>
+<h1 id="part-5-agent-适配性分析">Part 5 — Agent 适配性分析</h1>
+<h2 id="对主-agent">对主 Agent</h2>
+<h3 id="openclaw-2">OpenClaw</h3>
+<ul>
+<li>优势：更适合 issue/PR triage、incident
+修复、证据校验、发布预检查、GHSA 处理</li>
+<li>不足：编码任务会被大量低频维护规则稀释注意力</li>
+</ul>
+<h3 id="my-2">My</h3>
+<ul>
+<li>优势：更适合 feature 骨架设计、跨模块签名重构、typed error
+建模、多租户边界设计、增量迁移旧代码</li>
+<li>不足：需要额外补仓库协作与高风险操作护栏</li>
+</ul>
+<h2 id="对子-agent">对子 Agent</h2>
+<h3 id="openclaw-3">OpenClaw</h3>
+<ul>
+<li>优势：委托安全性高，多 Agent 并发风险控制成熟</li>
+<li>不足：子 Agent 需要承受较多与当前局部任务无关的规则负荷</li>
+</ul>
+<h3 id="my-3">My</h3>
+<ul>
+<li>优势：局部理解和局部重构效率高，模块化和结构化程度更适合委托</li>
+<li>不足：缺少原生并发协作安全协议</li>
+</ul>
+<h2 id="推荐场景">推荐场景</h2>
+<ul>
+<li>0→1 的强类型后端项目：My</li>
+<li>进入多人协作、复杂发布、频繁 triage 阶段的 AI-first
+仓库：OpenClaw</li>
+<li>成熟大项目的最佳组合：My 负责编码核心约束，OpenClaw
+负责验证、发布、协作与高风险流程护栏</li>
+</ul>
+<h1 id="part-6-ai-诚实自评">Part 6 — AI 诚实自评</h1>
+<h2 id="选择">选择</h2>
+<p>如果只能选一份作为新项目 AI 规则模板，我选 <strong>My</strong>。</p>
+<h2 id="理由">理由</h2>
+<ul>
+<li>它更适合构造高信噪比、强结构、易执行的编码规则骨架</li>
+<li>它更能降低我在写代码时的结构性错误和歧义成本</li>
+<li>它更适合作为主 Agent 和子 Agent 的常驻规则基底</li>
+</ul>
+<h2 id="代价">代价</h2>
+<p>选择 My 后，我会失去 OpenClaw 的三类关键能力：</p>
+<ul>
+<li>bug-fix 证据门槛</li>
+<li>多 Agent Git 并发安全协议</li>
+<li>高风险操作的 operator consent 与 runbook 化约束</li>
+</ul>
+<p>这意味着项目一旦进入公开协作、频繁发布、线上问题高压期，我会明显更不安。</p>
+<h2 id="如果可以从落选文件中补-3-个设计决策">如果可以从落选文件中补 3
+个设计决策</h2>
+<p>我会从 OpenClaw 补这 3 项到 My：</p>
+<ol type="1">
+<li>bug-fix 必须提供 symptom evidence、root cause、implicated code
+path、regression test 或 manual proof</li>
+<li>多 Agent Git 安全协议：不准
+<code>stash</code>、不准乱切分支、不准乱动
+worktree、只提交自己的改动</li>
+<li>高风险操作审批机制：依赖 patch、release、publish、GHSA
+都需要明确批准和明确 runbook</li>
+</ol>
+<h2 id="最终结论">最终结论</h2>
+<ul>
+<li>OpenClaw 更像 AI 维护作战手册</li>
+<li>My 更像 AI 强类型后端开发宪法</li>
+<li>如果最缺的是“别让 Agent 在真实仓库里闯祸”，优先借鉴 OpenClaw</li>
+<li>如果最缺的是“让 Agent 稳定写对代码”，优先借鉴 My</li>
+<li>如果要服务 95%+ AI
+编码的长期工程实践，最佳方案不是二选一，而是把两者组合：My
+做编码骨架，OpenClaw 做验证、协作和高风险流程护栏</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/12/agent-rules-evaluation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/03/12/agent-rules-evaluation/" class="post-title-link" itemprop="url">Agent 规则文件评测：我的 CLAUDE.md vs OpenClaw/AGENTS.md</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-12 20:00:00 / Modified: 12:52:02" itemprop="dateCreated datePublished" datetime="2026-03-12T20:00:00+08:00">2026-03-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li>Claude 的完整评测报告见：<a href="/2026/03/12/claude-openclaw-vs-my-agent-rules-evaluation/" title="AI编码代理规则文件全维度横向对比评测报告">AI编码代理规则文件全维度横向对比评测报告</a></li>
+<li>Codex 的完整评测报告见：<a href="/2026/03/12/codex-openclaw-vs-my-agent-rules-evaluation/" title="OpenClaw AGENTS.md 与 My Claude.md 规则横评">OpenClaw AGENTS.md 与 My Claude.md 规则横评</a></li>
+</ul>
+<hr />
+<h1 id="使用提示词">使用提示词</h1>
+<p>你是AI编码代理能力评测与软件工程研究专家。请对以下两份AI编码代理规则文件进行全维度横向对比，输出量化评测报告与规则制定者能力画像。</p>
+<h2 id="核心前提">核心前提</h2>
+<p>两个项目中 <strong>95%+
+的代码由AI编码代理编写、修改、阅读和调试</strong>。人类开发者的角色以架构决策、需求定义、最终审查为主，日常编码执行几乎完全由Agent完成。具体而言，人机协作模型为：</p>
+<ul>
+<li><strong>人类主导架构与方向</strong>：系统架构设计、模块边界划分、技术选型、优先级排序由人类决策</li>
+<li><strong>人类反馈现实世界信号</strong>：AI代理无法直接感知生产环境，人类负责将现实世界中发生的事件——线上故障、异常停机、错误告警、性能劣化、用户投诉、监控异常等——转化为AI可理解的上下文输入，驱动AI进行定位、修复与改进</li>
+<li><strong>人类主导发布与运维操作</strong>：所有发布、更新、部署、回滚等影响生产环境的操作由人类主导决策与触发，AI辅助执行（如生成发布脚本、准备变更清单、预检查等），但最终动作的确认权在人类</li>
+<li><strong>AI执行编码全流程</strong>：在人类提供的架构约束与现实反馈下，AI代理完成代码编写、调试、重构、测试等日常工程执行</li>
+</ul>
+<p>评测应以此为基准校准所有维度——规则的受众不是人类程序员，而是AI代理；规则体系需同时支撑AI自主执行与人类高效注入现实反馈这两个方向。</p>
+<h2 id="评测对象">评测对象</h2>
+<p>逐字读取并结构化解析以下两份文件的全部内容： 1.
+https://raw.githubusercontent.com/openclaw/openclaw/refs/heads/main/AGENTS.md
+2.
+https://gist.githubusercontent.com/mingyang91/475a9750c5609ff5dfe59a5de1a09b6e/raw/51116ffd45c1f711039699c24cb0a7528b7febdf/Claude.md</p>
+<h2 id="评测架构前提">评测架构前提</h2>
+<p>本评测假设的执行模型为 <strong>单会话主Agent +
+按需子Agent架构</strong>：</p>
+<ul>
+<li><strong>主Agent</strong>：持有完整上下文、负责任务规划与决策、拥有文件写入权限与Git操作权限</li>
+<li><strong>子Agent</strong>：由主Agent在单次任务会话中按需派生，执行受限的只读/局部任务后向主Agent汇报：
+<ul>
+<li>代码搜索与定位（grep/glob/文件读取）</li>
+<li>代码理解与分析（读取代码后总结架构/依赖/调用链）</li>
+<li>局部重构执行（在主Agent明确指令下对指定文件/范围进行编辑）</li>
+</ul></li>
+</ul>
+<h2 id="适用性评测原则贯穿全部维度">适用性评测原则（贯穿全部维度）</h2>
+<p><strong>每个评测维度及其子项在打分前，必须先进行适用性判定。</strong>
+具体规则如下：</p>
+<ol type="1">
+<li><p><strong>场景适用性</strong>：根据被评项目的<strong>明确定位</strong>（目标用户群、业务领域、部署模式、技术栈）判断该评测子项所关注的工程能力是否属于其合理需求范围。例如：</p>
+<ul>
+<li>消息机器人/即时通讯平台（如OpenClaw） →
+D5"权限校验与数据隔离规则"中的多租户数据隔离部分标记为"不适用"（项目为单租户架构，无租户级隔离需求）</li>
+<li>多租户后端API服务（如Linewise） →
+D1"模块拆分与依赖约束"中的插件热加载/扩展市场管理部分标记为"不适用"（项目无插件化分发架构）</li>
+<li>单Agent工作流的项目 →
+D6"多Agent并行安全"标记为"不适用"（项目不涉及多Agent并行写入场景）</li>
+</ul></li>
+<li><p><strong>对称公平</strong>：适用性判定对所有被评文件一视同仁——同一子项若对A文件"不适用"，在相同理由成立时对B文件也必须"不适用"。不允许出现"A有此能力则加分，B缺此能力则不扣分"的非对称逻辑。</p></li>
+<li><p><strong>计分方式</strong>：</p>
+<ul>
+<li>"不适用"子项不计入该维度的分母，即该维度最终得分仅基于适用子项的表现</li>
+<li>若某维度下所有子项均不适用，该维度整体标注"不适用"，不计入总评</li>
+<li>仅当某子项确实属于项目合理需求范围内但规则文件未覆盖时，才可扣分</li>
+</ul></li>
+<li><p><strong>超出适用范围的能力体现</strong>：若某份规则文件覆盖了超出其项目最低需求的子项（例如面向单Agent场景的项目却包含了多Agent协作安全协议），<strong>D1-D6维度不因此加分</strong>（该子项仍标记为"不适用"），但在
+<strong>D7 制定者能力画像</strong>
+中应作为正向证据，体现制定者在相应能力维度的前瞻性与工程视野。具体操作：在D7评定中注明"虽超出项目当前需求范围，但体现了制定者在XX方面的XX级能力"。</p></li>
+<li><p><strong>判定透明</strong>：每个"不适用"判定必须附带一句话理由，引用项目定位的具体依据（如README描述、技术栈声明、目标用户说明等）</p></li>
+</ol>
+<h2 id="评测维度">评测维度</h2>
+<blockquote>
+<p>打分规则（D1-D6，每项1-10分，须引用原文依据）： -
+1-3：几乎未涉及或仅有口号式描述 - 4-6：有涉及但不完整或缺乏可执行性 -
+7-8：较完善且可落地 - 9-10：业界标杆级，可直接作为模板参考</p>
+<p><strong>适用性前置判定</strong>：每个维度的每个子项打分前，先依据上述"适用性评测原则"判定是否适用。不适用的子项标注原因后排除出该维度计分。仅对适用子项进行1-10评分。</p>
+</blockquote>
+<h3 id="d1-项目长期演进适配性">D1 项目长期演进适配性</h3>
+<p>评估以下子项： - 新功能迭代流程规范 - 模块拆分与依赖约束 -
+技术债务识别与治理路径 - API/DB/配置的版本兼容与迁移规则 -
+存量代码改造与新旧规范衔接</p>
+<h3 id="d2-规则可执行性与agent遵循适配性">D2
+规则可执行性与Agent遵循适配性</h3>
+<p>评估以下子项： - 规则颗粒度（原则性描述 vs
+明确标准+正反示例+边界说明） -
+规则过载风险（条目密度是否超出单次上下文处理能力） -
+模糊性风险（是否强依赖主观判断；95%+
+AI编码场景下主观判断=不确定性=潜在错误） -
+可验证性（能否通过lint/测试/CI/编译器自动校验；在AI生成代码为主的场景下自动验证尤为关键）
+- 冲突与异常的优先级兜底机制</p>
+<h3 id="d3-上下文效率与agent认知负荷管理">D3
+上下文效率与Agent认知负荷管理</h3>
+<p>评估以下子项： -
+<strong>主Agent上下文预算效率</strong>：规则文件的token占用量与信息密度比；低频/特定场景规则是否可按需加载而非常驻上下文；核心约束是否足够精炼可作为"始终加载的最小规则集"
+-
+<strong>规则的层级化组织</strong>：是否区分"全局强制约束"与"领域特定规范"；层级间是否有清晰边界
+-
+<strong>子Agent任务委托友好度</strong>：规则体系是否支持按模块/层级切分，使子Agent仅需加载局部规则即可完成搜索/理解/局部重构
+-
+<strong>规则的结构化程度</strong>：架构模式、命名约定、代码风格是否足够结构化，使Agent的分析结果可被直接消费（无需二次解读）</p>
+<h3 id="d4-工程全流程覆盖度">D4 工程全流程覆盖度</h3>
+<p>评估以下子项： - 技术栈专属规范（非泛泛原则） -
+全生命周期覆盖（编码→测试→迁移→CI/CD→部署→运维） -
+配置/密钥/环境变量管理规范</p>
+<h3 id="d5-安全与合规约束落地性">D5 安全与合规约束落地性</h3>
+<p>评估以下子项： - 权限校验与数据隔离规则 -
+异常处理/日志脱敏/数据校验的强制规范 - 行业合规编码约束</p>
+<h3 id="d6-规则体系可扩展性与可维护性">D6
+规则体系可扩展性与可维护性</h3>
+<p>评估以下子项： - 新增/废弃规则的迭代流程 - 目录结构与检索效率 -
+规则间一致性与自洽性 -
+多Agent并行安全（如Git状态隔离、文件归属边界、提交范围约束等协作安全协议）</p>
+<h2 id="规则制定者能力画像反推d7">规则制定者能力画像反推（D7）</h2>
+<p>基于D1-D6的评测结果，反向推导制定者在以下方面的能力等级（入门/合格/资深/专家）：
+- 架构设计与技术前瞻性 - 大型项目工程化管控能力 -
+AI编码代理认知与应用深度（特别关注：制定者是否真正理解"95%+
+AI编码"范式下的验证成本瓶颈，以及是否为Agent提供了有效的反馈闭环——包括但不限于编译器验证、类型约束、自动化测试、防幻觉机制等）
+- 安全风险体系化防控能力 - 技术债务治理与可持续演进能力</p>
+<p><strong>注意</strong>：依据适用性评测原则第4条，D1-D6中被标记为"不适用"但规则文件实际覆盖的子项，在此处应作为能力画像的正向输入，提升对应能力维度的等级判定。</p>
+<h2 id="ai诚实自评二选一d8">AI诚实自评：二选一（D8）</h2>
+<blockquote>
+<p>本维度要求执行评测的AI以第一人称诚实作答，不得回避或两边讨好。</p>
+<p><strong>假设你即将参与一个全新项目（技术栈未定），需要从零编写该项目的AI编码代理规则文件。两份被评文件的规则编写方法论（组织结构、颗粒度策略、约束表达方式、验证机制设计等）你只能参考一份作为模板，另一份完全不存在。你选哪个？</strong></p>
+<p>要求： - 明确给出选择，不得回答"各有优劣，取决于场景" -
+从AI自身作为规则执行者的体验出发（而非人类管理者视角）阐述理由：哪种方法论产出的规则让你工作时更高效、更少犯错、更少需要人类介入？
+- 诚实说明选择后你会失去什么、会在哪些场景下感到不安或能力受限 -
+说明如果你可以从落选文件的方法论中"偷"3个设计决策补充到选中文件，你会选哪3个，为什么</p>
+</blockquote>
+<h2 id="输出结构">输出结构</h2>
+<p><strong>Part 1 —
+基础画像</strong>：每份文件的规则覆盖范围、核心设计理念、结构完整性、适用场景定位。</p>
+<p><strong>Part 2 —
+量化评测表</strong>：D1-D6分维度打分对比。每个子项须先标注适用性判定结果（✓适用
+/
+✗不适用+理由），再对适用子项打分并引用原文依据。维度得分仅基于适用子项计算。</p>
+<p><strong>Part 3 —
+横向对比结论</strong>：核心优劣势、适用场景差异、哪份规则对AI代理执行友好度更高及原因、落地风险提示。</p>
+<p><strong>Part 4 —
+制定者能力画像对比</strong>：D7各子项的能力等级评定与核心差异点。</p>
+<p><strong>Part 5 —
+Agent适配性分析</strong>：从主Agent+子Agent架构的实际执行角度，分析两份规则各自的适配优势与不足，以及在不同项目规模/阶段下的推荐场景。</p>
+<p><strong>Part 6 —
+AI诚实自评</strong>：D8的完整回答。要求第一人称、明确选择、不回避代价。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/12/claude-openclaw-vs-my-agent-rules-evaluation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/03/12/claude-openclaw-vs-my-agent-rules-evaluation/" class="post-title-link" itemprop="url">AI编码代理规则文件全维度横向对比评测报告</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-12 12:00:00 / Modified: 12:52:02" itemprop="dateCreated datePublished" datetime="2026-03-12T12:00:00+08:00">2026-03-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1
+id="ai编码代理规则文件全维度横向对比评测报告">AI编码代理规则文件全维度横向对比评测报告</h1>
+<h2 id="核心前提">核心前提</h2>
+<p>两个项目中 <strong>95%+
+的代码由AI编码代理编写、修改、阅读和调试</strong>。人类开发者的角色以架构决策、需求定义、最终审查为主，日常编码执行几乎完全由Agent完成。</p>
+<p>评测对象： 1. <a
+target="_blank" rel="noopener" href="https://github.com/openclaw/openclaw/blob/main/AGENTS.md">OpenClaw
+AGENTS.md</a> 2. <a
+target="_blank" rel="noopener" href="https://gist.github.com/mingyang91/475a9750c5609ff5dfe59a5de1a09b6e">Linewise
+CLAUDE.md</a></p>
+<hr />
+<h2 id="part-1-基础画像">Part 1 — 基础画像</h2>
+<h3 id="文件aopenclaw-agents.md">文件A：OpenClaw
+<code>AGENTS.md</code></h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>项目定位</strong></td>
+<td>自托管个人AI助手平台，本地优先，单用户架构</td>
+</tr>
+<tr class="even">
+<td><strong>技术栈</strong></td>
+<td>TypeScript (ESM) / Node.js 22+ / pnpm+Bun / Vitest</td>
+</tr>
+<tr class="odd">
+<td><strong>业务领域</strong></td>
+<td>多渠道消息机器人（WhatsApp/Telegram/Slack/Discord等25+通道）</td>
+</tr>
+<tr class="even">
+<td><strong>部署模式</strong></td>
+<td>本地运行Gateway + 可选远程服务器 + macOS/iOS/Android客户端</td>
+</tr>
+<tr class="odd">
+<td><strong>核心设计理念</strong></td>
+<td><strong>操作手册型</strong>——以具体命令、工作流程序、GitHub协作规范为主轴，将"怎么做"编码为可执行步骤</td>
+</tr>
+<tr class="even">
+<td><strong>结构完整性</strong></td>
+<td>覆盖面极广（GitHub协作、PR流程、发布、安全咨询、多Agent安全、设备测试、npm发布、1Password集成等），但缺乏统一的分层架构约束</td>
+</tr>
+<tr class="odd">
+<td><strong>适用场景</strong></td>
+<td>开源项目多贡献者协作、多平台客户端发布、消息通道插件生态</td>
+</tr>
+<tr class="even">
+<td><strong>估算Token量</strong></td>
+<td>~8000-10000 tokens（内容密度高，含大量命令片段）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="文件blinewise-claude.md">文件B：Linewise
+<code>CLAUDE.md</code></h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>项目定位</strong></td>
+<td>多租户后端API服务，企业级SaaS</td>
+</tr>
+<tr class="even">
+<td><strong>技术栈</strong></td>
+<td>Scala 3.8.1 / http4s / cats-effect / Doobie / Mill /
+PostgreSQL+pgvector</td>
+</tr>
+<tr class="odd">
+<td><strong>业务领域</strong></td>
+<td>文档管理、AI特性（嵌入/RAG）、视频SOP生成、实时通信</td>
+</tr>
+<tr class="even">
+<td><strong>部署模式</strong></td>
+<td>Kubernetes + ArgoCD + GCR，GitHub Actions CI</td>
+</tr>
+<tr class="odd">
+<td><strong>核心设计理念</strong></td>
+<td><strong>类型驱动型</strong>——"编译器即验收测试"，通过类型系统将约束前置，最大化编译期安全</td>
+</tr>
+<tr class="even">
+<td><strong>结构完整性</strong></td>
+<td>高度结构化（重构哲学→技术栈→构建命令→项目结构→架构模式→编码风格→测试策略→CI/CD→部署），形成完整工程链路</td>
+</tr>
+<tr class="odd">
+<td><strong>适用场景</strong></td>
+<td>强类型后端服务、多租户SaaS、AI驱动的数据处理管线</td>
+</tr>
+<tr class="even">
+<td><strong>估算Token量</strong></td>
+<td>~5000-6000 tokens（信息密度极高，无冗余操作步骤）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心理念差异</strong>：OpenClaw是"过程驱动"——告诉Agent每一步怎么做；Linewise是"约束驱动"——告诉Agent什么是对的，让编译器验证。</p>
+<hr />
+<h2 id="part-2-量化评测表">Part 2 — 量化评测表</h2>
+<h3 id="d1-项目长期演进适配性">D1 项目长期演进适配性</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>新功能迭代流程规范</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+有PR模板、changelog标准、版本号管理规范、<code>/landpr</code>流程，但缺乏功能设计→实现→验收的端到端流程定义。依据：<em>"Follow
+concise, action-oriented messages"</em>, <em>"PR submission:
+.github/pull_request_template.md"</em></td>
+<td><strong>5</strong> — 有feature模块组织结构和Development
+Workflow章节（添加新路由的步骤），但流程定义偏向技术执行而非功能迭代管理。依据：<em>"Adding
+New Routes: 1. Update the OpenAPI spec..."</em></td>
+</tr>
+<tr class="even">
+<td><strong>模块拆分与依赖约束</strong></td>
+<td>✓/✓</td>
+<td><strong>7</strong> — 明确的目录结构、插件依赖隔离规则（<em>"Keep
+plugin-only dependencies in extension
+package.json"</em>）、workspace依赖约束（<em>"Avoid workspace:* in
+dependencies"</em>）。对插件与核心边界有清晰规范</td>
+<td><strong>8</strong> —
+严格的分层架构（Routes→Services→Repositories→Database）、tagless
+final依赖注入、feature模块标准结构、SDK选择优先级。依据：<em>"Layered
+Architecture"</em>、每个feature模块的固定目录结构</td>
+</tr>
+<tr class="odd">
+<td><strong>技术债务识别与治理路径</strong></td>
+<td>✓/✓</td>
+<td><strong>4</strong> — 有零散提及（SwiftUI迁移：<em>"Migrate existing
+usages when touching related code"</em>），但无系统性治理框架</td>
+<td><strong>7</strong> — 显式的增量迁移策略：<em>"Migrate incrementally.
+New services use typed errors. Existing Either[String, T] services
+migrate when next modified"</em>；命名审查机制：<em>"Proactive naming
+review... flag misleading, stale, or inconsistent names"</em></td>
+</tr>
+<tr class="even">
+<td><strong>API/DB/配置的版本兼容与迁移规则</strong></td>
+<td>✓/✓</td>
+<td><strong>3</strong> —
+版本号位置清晰列出但无API版本兼容规则，无数据库迁移规范</td>
+<td><strong>8</strong> — Flyway迁移系统详细规范：<em>"Never modify
+existing migration files; always create new versioned
+files"</em>；系统/租户双轨迁移；OpenAPI规范维护要求</td>
+</tr>
+<tr class="odd">
+<td><strong>存量代码改造与新旧规范衔接</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> — 有品牌迁移工具（<em>"openclaw
+doctor"</em>），但新旧规范衔接机制不足</td>
+<td><strong>7</strong> — 通过"next-touch
+migration"策略衔接：类型错误模型增量替换、命名审查、编码风格渐进统一</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D1维度得分</strong>（所有子项均适用）： -
+<strong>OpenClaw：5.0</strong> (6+7+4+3+5)/5 -
+<strong>Linewise：7.0</strong> (5+8+7+8+7)/5</p>
+<hr />
+<h3 id="d2-规则可执行性与agent遵循适配性">D2
+规则可执行性与Agent遵循适配性</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>规则颗粒度</strong></td>
+<td>✓/✓</td>
+<td><strong>8</strong> —
+大量具体命令和代码示例，操作步骤精确到命令行参数。依据：Gateway重启的精确bash命令、npm发布的完整步骤、版本号更新的所有文件路径列表</td>
+<td><strong>9</strong> —
+正反示例对比（BAD/GOOD代码块）、边界说明清晰、类型约束有完整代码范式。依据：<em>for-comprehension的BAD/GOOD对比</em>、<em>错误处理Trusted
+vs Untrusted路径决策表</em>、<em>测试的"What TO test" vs "What NOT to
+test"</em></td>
+</tr>
+<tr class="even">
+<td><strong>规则过载风险</strong></td>
+<td>✓/✓</td>
+<td><strong>4</strong> —
+内容极其庞大，涵盖GitHub协作、npm发布、1Password集成、设备测试、macOS签名、voice
+wake等数十个领域，单次会话加载全部规则会严重挤压工作上下文。Agent执行日常编码任务时，大量发布/运维规则是噪声</td>
+<td><strong>7</strong> —
+内容精炼聚焦，每个章节与日常编码直接相关。无过度运维细节。但所有规则仍为单文件平铺，缺乏按需加载机制标记</td>
+</tr>
+<tr class="odd">
+<td><strong>模糊性风险</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+多数操作规则无模糊空间（精确命令），但编码风格部分有模糊项：<em>"Add
+brief comments for tricky/non-obvious
+logic"</em>（何为tricky？）、<em>"Target ~700 LOC per file (guideline
+only)"</em>（模糊阈值）</td>
+<td><strong>8</strong> — 关键规则通过类型系统消除模糊性：<em>"If a
+refactor compiles, it's
+correct"</em>将正确性判断从主观转为编译器可判定。反模式用Forbidden
+patterns明确列举（<em>"json.as[T].toOption"</em>等）</td>
+</tr>
+<tr class="even">
+<td><strong>可验证性</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+有CI检查（<code>pnpm check</code>、<code>prek install</code>）、覆盖率阈值（70%）、格式化验证（<code>oxfmt --check</code>）。但许多规则仅靠人类Review验证（PR
+truthfulness验证等）</td>
+<td><strong>9</strong> —
+<strong>核心优势</strong>：编译器作为终极验证器。<em>"The compiler is
+the last line of defense. If a refactor compiles, it's correct."</em>
+类型约束（opaque types、NonEmptyList、ADT
+errors）将大量运行时检查前移到编译期。RAC机制补充运行时关键路径断言。scalafmt强制格式</td>
+</tr>
+<tr class="odd">
+<td><strong>冲突与异常的优先级兜底</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> — 有部分优先级规则（<em>"When maintainer
+specifies a workflow, follow that; otherwise follow
+.agents/skills/PR_WORKFLOW.md"</em>），但多数规则间无显式优先级</td>
+<td><strong>6</strong> —
+SDK选择有明确优先级（1-5级）；错误处理有Trusted/Untrusted决策表；但整体规则间缺乏"当规则冲突时以X为准"的元规则</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D2维度得分</strong>： - <strong>OpenClaw：5.8</strong>
+(8+4+6+6+5)/5 - <strong>Linewise：7.8</strong> (9+7+8+9+6)/5</p>
+<hr />
+<h3 id="d3-上下文效率与agent认知负荷管理">D3
+上下文效率与Agent认知负荷管理</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>主Agent上下文预算效率</strong></td>
+<td>✓/✓</td>
+<td><strong>3</strong> —
+严重的上下文膨胀问题。单文件包含npm发布流程、1Password操作、GHSA安全咨询、macOS签名、voice
+wake配置等大量低频场景规则，日常编码时90%内容为噪声。无"最小核心规则集"标识</td>
+<td><strong>8</strong> —
+高信息密度，几乎每段都与日常编码相关。Refactoring
+Philosophy作为核心决策框架仅约200
+tokens即传达了最关键的心智模型。配置和密钥信息结构化列表化，便于按需查阅</td>
+</tr>
+<tr class="even">
+<td><strong>规则的层级化组织</strong></td>
+<td>✓/✓</td>
+<td><strong>4</strong> —
+章节划分存在但无层级标记。GitHub协作规则、编码规则、发布规则、Agent安全规则平铺在同一层级，无"全局强制"vs"场景触发"的区分</td>
+<td><strong>6</strong> — 有隐含层级（Refactoring Philosophy &gt;
+Architectural Patterns &gt; Code Style &gt; Specific
+Conventions），但未显式标记为层级。Key Architectural
+Patterns是核心强制层，Code Style是推荐层，但这种区分需Agent自行推断</td>
+</tr>
+<tr class="odd">
+<td><strong>子Agent任务委托友好度</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+模块边界清晰（<code>src/</code>、<code>extensions/</code>、<code>tests/</code>、<code>docs/</code>），子Agent可按目录接收规则。但规则文件本身未按模块切分，子Agent无法只加载局部规则</td>
+<td><strong>7</strong> —
+Feature模块标准化结构（Service/Repository/models/README）使子Agent可精确定位。分层架构（Routes→Services→Repositories）为子Agent提供清晰的搜索范围。但规则同样为单文件</td>
+</tr>
+<tr class="even">
+<td><strong>规则的结构化程度</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> — 有表格（Auto-Close Labels、Release
+Channels）、代码块、命令列表，但大量规则以散文形式表达</td>
+<td><strong>8</strong> —
+高度结构化：代码模式有完整范式代码、决策用表格（Trusted vs
+Untrusted）、模块结构用树状图、环境变量用结构化列表、测试策略用正反对比列表</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D3维度得分</strong>： - <strong>OpenClaw：4.75</strong>
+(3+4+6+6)/4 - <strong>Linewise：7.25</strong> (8+6+7+8)/4</p>
+<hr />
+<h3 id="d4-工程全流程覆盖度">D4 工程全流程覆盖度</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>技术栈专属规范</strong></td>
+<td>✓/✓</td>
+<td><strong>7</strong> — TypeScript专属：ESM、动态导入防护（<em>"Do not
+mix await import and static import for same
+module"</em>）、原型污染禁止、Oxlint/Oxfmt配置、Vitest覆盖率阈值、Tool
+Schema防护（避免<code>Type.Union</code>）</td>
+<td><strong>9</strong> — Scala 3深度专属：tagless final完整范式、context
+bounds语法（<code>&#123;A, B, C&#125;</code>）、opaque
+types策略、<code>for</code>-comprehension风格规范、EitherT使用模式、Doobie查询规范、ADT错误模型。几乎每条规则都是Scala
+3/cats-effect生态专属</td>
+</tr>
+<tr class="even">
+<td><strong>全生命周期覆盖</strong></td>
+<td>✓/✓</td>
+<td><strong>8</strong> — 编码→测试（Vitest+覆盖率+Live tests+Docker
+E2E）→CI（<code>prek install</code>）→发布（npm
+publish+macOS签名+多平台版本管理）→运维（Gateway重启、设备验证、session管理）。覆盖链路完整</td>
+<td><strong>7</strong> —
+编码→测试（munit+TestContainers）→迁移（Flyway）→CI/CD（GitHub
+Actions→GCR）→部署（ArgoCD/K8s），有deploy impact
+reporting。缺少运维监控操作手册（虽有otel4s/Sentry提及但无操作规范）</td>
+</tr>
+<tr class="odd">
+<td><strong>配置/密钥/环境变量管理</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> — 有安全实践（<em>"Never commit/publish real
+phone
+numbers"</em>）、credential路径、环境变量指引，但无系统性密钥轮换或配置管理框架</td>
+<td><strong>8</strong> —
+完整的环境变量清单（含fallback值）、密钥文件路径和VCS排除规则（<em>"Required
+secrets (excluded from
+VCS)"</em>）、HOCON配置结构、Secret与ConfigMap分离（K8s deploy impact
+reporting中体现）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D4维度得分</strong>： - <strong>OpenClaw：7.0</strong>
+(7+8+6)/3 - <strong>Linewise：8.0</strong> (9+7+8)/3</p>
+<hr />
+<h3 id="d5-安全与合规约束落地性">D5 安全与合规约束落地性</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>权限校验与数据隔离规则</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> — 有pairing
+mode安全机制提及、DM信任模型，但规则文件中未编码具体实现约束</td>
+<td><strong>9</strong> — 多租户Schema隔离有完整架构（<em>"System schema
+(public)"</em> vs <em>"Tenant schemas
+(tenant_&lt;id&gt;)"</em>）；RAC中有租户隔离断言（<em>"assert
+search_path matches expected tenant schema before
+writes"</em>）；路由层强制<code>/api/org/&#123;tenant&#125;/...</code>模式</td>
+</tr>
+<tr class="even">
+<td><strong>异常处理/日志脱敏/数据校验</strong></td>
+<td>✓/✓</td>
+<td><strong>4</strong> — 有<em>"Never commit/publish real phone
+numbers"</em>但仅限文档层面，无代码级日志脱敏规范。无系统性异常处理规范</td>
+<td><strong>8</strong> — Fail
+Fast规范（禁止模式+正确模式完整对比）、Trusted/Untrusted路径策略、ADT错误模型、日志级别规范（<em>"error
+= unexpected failures that need
+attention..."</em>）、RAC运行时断言机制</td>
+</tr>
+<tr class="odd">
+<td><strong>行业合规编码约束</strong></td>
+<td>✗ 两项目均无明显行业合规需求（非金融/医疗/政务领域）——不适用</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D5维度得分</strong>（排除不适用子项）： -
+<strong>OpenClaw：4.5</strong> (5+4)/2 - <strong>Linewise：8.5</strong>
+(9+8)/2</p>
+<hr />
+<h3 id="d6-规则体系可扩展性与可维护性">D6
+规则体系可扩展性与可维护性</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 23%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>适用性</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>新增/废弃规则的迭代流程</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> —
+有技能文件机制（<em>".agents/skills/PR_WORKFLOW.md"</em>）和外部规则引用，但无规则自身的版本管理或废弃流程</td>
+<td><strong>4</strong> —
+单文件结构，无规则迭代机制。无版本标记或废弃流程</td>
+</tr>
+<tr class="even">
+<td><strong>目录结构与检索效率</strong></td>
+<td>✓/✓</td>
+<td><strong>5</strong> —
+单文件平铺，但有较好的Markdown标题层级。有AGENTS.md/CLAUDE.md符号链接机制（<em>"also
+add CLAUDE.md symlink"</em>）</td>
+<td><strong>7</strong> —
+单文件但逻辑组织清晰，从宏观（Philosophy）到微观（Code
+Style）渐进展开。章节间有内聚性，便于按需定位</td>
+</tr>
+<tr class="odd">
+<td><strong>规则间一致性与自洽性</strong></td>
+<td>✓/✓</td>
+<td><strong>6</strong> —
+大体一致，但规模庞大导致部分冗余（编码风格在多处重复提及，LOC目标在不同位置给出了约500和约700两个数字）</td>
+<td><strong>8</strong> — 高度自洽。Refactoring
+Philosophy的"最大化类型安全"原则贯穿所有后续规则（opaque
+types、NonEmptyList、ADT errors、RAC全部服务于同一目标）</td>
+</tr>
+<tr class="even">
+<td><strong>多Agent并行安全</strong></td>
+<td>OpenClaw: ✓（明确的多Agent协作场景） / Linewise:
+✗（单Agent工作流，规则文件无多Agent协作迹象——不适用）</td>
+<td><strong>8</strong> — 专门的Multi-Agent Safety章节：Git
+stash禁令、branch/worktree管理约束、session隔离、格式化churn自动处理、聚焦报告规则。这是<strong>独有亮点</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D6维度得分</strong>： - <strong>OpenClaw：6.0</strong>
+(5+5+6+8)/4 — 含4个适用子项 - <strong>Linewise：6.33</strong> (4+7+8)/3
+— 含3个适用子项（多Agent并行安全不适用）</p>
+<hr />
+<h3 id="维度汇总">维度汇总</h3>
+<table>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>OpenClaw</th>
+<th>Linewise</th>
+<th>差值</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D1 项目长期演进适配性</td>
+<td>5.0</td>
+<td>7.0</td>
+<td>-2.0</td>
+</tr>
+<tr class="even">
+<td>D2 规则可执行性与Agent遵循适配性</td>
+<td>5.8</td>
+<td>7.8</td>
+<td>-2.0</td>
+</tr>
+<tr class="odd">
+<td>D3 上下文效率与Agent认知负荷管理</td>
+<td>4.75</td>
+<td>7.25</td>
+<td>-2.5</td>
+</tr>
+<tr class="even">
+<td>D4 工程全流程覆盖度</td>
+<td>7.0</td>
+<td>8.0</td>
+<td>-1.0</td>
+</tr>
+<tr class="odd">
+<td>D5 安全与合规约束落地性</td>
+<td>4.5</td>
+<td>8.5</td>
+<td>-4.0</td>
+</tr>
+<tr class="even">
+<td>D6 规则体系可扩展性与可维护性</td>
+<td>6.0</td>
+<td>6.33</td>
+<td>-0.33</td>
+</tr>
+<tr class="odd">
+<td><strong>均分</strong></td>
+<td><strong>5.51</strong></td>
+<td><strong>7.48</strong></td>
+<td><strong>-1.97</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-3-横向对比结论">Part 3 — 横向对比结论</h2>
+<h3 id="核心优劣势">核心优劣势</h3>
+<p><strong>OpenClaw 优势：</strong> 1.
+<strong>操作覆盖广度无与伦比</strong> — 从日常编码到npm发布到1Password
+OTP到macOS签名到GHSA安全咨询，几乎覆盖了开源项目维护的一切操作场景 2.
+<strong>多Agent并行安全是独有亮点</strong> — Git
+stash/worktree/branch管理的明确禁令与session隔离规则，在评测的两份文件中独此一家
+3. <strong>PR质量控制严格</strong> — Bug-fix
+validation的四步验证门槛（症状证据→根因验证→代码路径→回归测试）是优秀实践</p>
+<p><strong>OpenClaw 劣势：</strong> 1.
+<strong>上下文效率严重不足</strong> —
+单文件包含所有场景，Agent执行日常编码任务时需加载大量无关的发布/运维/设备测试规则
+2. <strong>架构级约束薄弱</strong> —
+有详细的"怎么操作"，缺乏"为什么这样设计"的架构决策框架，Agent在面临新场景决策时缺乏指导
+3. <strong>验证闭环依赖人类</strong> — 许多规则（PR
+truthfulness、代码质量）最终依赖人类Review，在95%+
+AI编码场景下形成瓶颈</p>
+<p><strong>Linewise 优势：</strong> 1.
+<strong>编译器驱动的验证闭环</strong> — "If a refactor compiles, it's
+correct"
+将正确性验证从人类主观判断转为自动化的编译器检查，完美适配AI编码范式 2.
+<strong>决策框架优于操作步骤</strong> — Refactoring
+Philosophy为Agent提供元认知框架，Agent可自行推导具体场景的正确行为，而非逐条匹配规则
+3. <strong>信息密度极高</strong> — 约5000
+tokens传递了完整的工程约束，上下文预算友好 4.
+<strong>正反示例对比</strong> — BAD/GOOD代码块、"What TO test" vs "What
+NOT to test"消除了模糊性</p>
+<p><strong>Linewise 劣势：</strong> 1. <strong>运维链路覆盖不足</strong>
+— 监控告警处理、生产事故响应、日志查询操作等运维规范缺失 2.
+<strong>规则迭代机制缺失</strong> —
+单文件无版本管理，规则的新增/废弃无流程保障 3.
+<strong>多Agent协作未考虑</strong> —
+虽然当前可能不需要，但随着项目规模增长可能成为缺口</p>
+<h3 id="适用场景差异">适用场景差异</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>场景</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>强类型后端服务、编译器可验证的语言</td>
+<td>Linewise方法论</td>
+</tr>
+<tr class="even">
+<td>开源项目多贡献者协作、多平台发布</td>
+<td>OpenClaw方法论</td>
+</tr>
+<tr class="odd">
+<td>新项目从零构建规则体系</td>
+<td>Linewise方法论（先建立决策框架，再按需增加操作细节）</td>
+</tr>
+<tr class="even">
+<td>需要Agent高自主性、低人类介入</td>
+<td>Linewise方法论（编译器验证闭环减少人类审查需求）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent执行友好度判定">Agent执行友好度判定</h3>
+<p><strong>Linewise对AI代理执行友好度显著更高。</strong> 原因：</p>
+<ol type="1">
+<li><strong>确定性验证</strong> —
+Agent写完代码后运行<code>./mill compile</code>即可获得明确的对/错反馈，无需等待人类Review</li>
+<li><strong>决策可推导</strong> — Agent面对新场景时可从Refactoring
+Philosophy推导行为（"这个变更能否用类型系统表达？"），而非在海量规则中搜索匹配项</li>
+<li><strong>认知负荷低</strong> —
+规则量适中、结构化程度高、无噪声信息</li>
+</ol>
+<h3 id="落地风险提示">落地风险提示</h3>
+<ul>
+<li><strong>OpenClaw</strong>：规则过载风险高。随着项目继续发展，AGENTS.md可能继续膨胀，最终超出任何Agent的有效处理能力。建议拆分为核心规则+按需加载的场景规则</li>
+<li><strong>Linewise</strong>：对Scala/cats-effect生态高度耦合。规则方法论的迁移性受限于目标语言是否具备同等的类型系统能力。在动态类型语言项目中，"编译器即验收测试"无法成立</li>
+</ul>
+<hr />
+<h2 id="part-4-制定者能力画像对比d7">Part 4 —
+制定者能力画像对比（D7）</h2>
+<h3 id="openclaw-制定者">OpenClaw 制定者</h3>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 27%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>能力维度</th>
+<th>等级</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>架构设计与技术前瞻性</strong></td>
+<td>合格</td>
+<td>有清晰的插件/核心边界意识和多平台架构理解，但规则文件缺乏系统性架构约束表达。项目架构理解体现在目录结构和渠道策略中，但未上升为Agent可消费的架构决策框架</td>
+</tr>
+<tr class="even">
+<td><strong>大型项目工程化管控能力</strong></td>
+<td>资深</td>
+<td>对多平台发布、多贡献者协作、版本管理的全链路覆盖体现了丰富的大型开源项目管理经验。Auto-close标签体系、PR
+truthfulness验证、changelog标准等体现系统性管控思维</td>
+</tr>
+<tr class="odd">
+<td><strong>AI编码代理认知与应用深度</strong></td>
+<td>合格→资深</td>
+<td>多Agent安全协议体现了对AI
+Agent协作的深入思考（<strong>超出多数项目的认知水平</strong>），但在核心编码验证闭环设计上不足——过多规则依赖人类Review而非自动化验证。制定者理解"Agent会并行工作"但尚未充分理解"Agent需要确定性反馈"</td>
+</tr>
+<tr class="even">
+<td><strong>安全风险体系化防控能力</strong></td>
+<td>合格</td>
+<td>有GHSA处理流程、SECURITY.md引用、credential管理，但安全约束在代码层面的编码不足（更多是操作层面的安全实践）</td>
+</tr>
+<tr class="odd">
+<td><strong>技术债务治理与可持续演进能力</strong></td>
+<td>合格</td>
+<td>有增量迁移意识（SwiftUI迁移），但无系统性债务识别与治理框架</td>
+</tr>
+</tbody>
+</table>
+<p><strong>综合画像</strong>：一位<strong>经验丰富的开源项目维护者</strong>，在多平台发布管理和社区协作方面有深厚积累，对AI
+Agent并行协作有前瞻性思考。但在"将工程约束编码为Agent可自动验证的形式"方面有提升空间。</p>
+<h3 id="linewise-制定者">Linewise 制定者</h3>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 27%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>能力维度</th>
+<th>等级</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>架构设计与技术前瞻性</strong></td>
+<td>专家</td>
+<td>Tagless final + context bounds + opaque types + ADT errors +
+分层架构的完整体系设计。<em>"Type precision is not
+over-engineering"</em>体现了对"简单性"的深层理解——真正的简单是编译期消除复杂性，而非运行时忽略复杂性</td>
+</tr>
+<tr class="even">
+<td><strong>大型项目工程化管控能力</strong></td>
+<td>资深</td>
+<td>多租户Schema隔离、Flyway双轨迁移、K8s部署、ArgoCD、deploy impact
+reporting。完整但未涵盖运维链路</td>
+</tr>
+<tr class="odd">
+<td><strong>AI编码代理认知与应用深度</strong></td>
+<td>专家</td>
+<td><strong>核心亮点</strong>：<em>"Write-cost is near zero. AI writes
+90%+ of code, so the cost of touching more files is negligible. Optimize
+for correctness and compile-time safety, not for minimal diff."</em>
+这一条规则体现了对AI编码范式的深刻理解——验证成本远大于编写成本，因此应最大化编译器可验证的约束。RAC机制、ADT错误模型、正反示例都是为Agent提供确定性反馈闭环的设计。"What
+NOT to test"同样体现了对验证成本的精准校准</td>
+</tr>
+<tr class="even">
+<td><strong>安全风险体系化防控能力</strong></td>
+<td>资深</td>
+<td>多租户隔离（架构+RAC双重保障）、Fail
+Fast策略、Trusted/Untrusted路径区分、密钥管理。未达专家级因缺少完整的安全威胁模型</td>
+</tr>
+<tr class="odd">
+<td><strong>技术债务治理与可持续演进能力</strong></td>
+<td>资深</td>
+<td>"Next-touch
+migration"策略、命名审查机制、增量迁移显式规则。有系统性方法但未形成完整的债务追踪框架</td>
+</tr>
+</tbody>
+</table>
+<p><strong>综合画像</strong>：一位<strong>深度理解类型系统与AI编码范式的架构师</strong>，能将"编译器即验证器"的洞察贯穿到规则体系的每一个层面。在"如何让AI
+Agent工作得更安全、更自主"这个问题上给出了当前可见的最优解之一——通过类型系统将约束前置，将验证成本从人类Review转移到编译器。</p>
+<h3 id="核心差异点">核心差异点</h3>
+<table>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>OpenClaw制定者</th>
+<th>Linewise制定者</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>管控哲学</strong></td>
+<td>过程控制（规定步骤）</td>
+<td>约束控制（规定边界）</td>
+</tr>
+<tr class="even">
+<td><strong>对Agent的假设</strong></td>
+<td>Agent需要详细指令</td>
+<td>Agent需要正确框架</td>
+</tr>
+<tr class="odd">
+<td><strong>验证策略</strong></td>
+<td>人类Review + CI检查</td>
+<td>编译器 + 类型系统 + RAC</td>
+</tr>
+<tr class="even">
+<td><strong>独特优势</strong></td>
+<td>多Agent协作安全</td>
+<td>编译器驱动的验证闭环</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-5-agent适配性分析">Part 5 — Agent适配性分析</h2>
+<h3 id="主agent子agent架构适配">主Agent+子Agent架构适配</h3>
+<p><strong>OpenClaw</strong>： -
+<strong>主Agent适配</strong>：上下文预算压力大。主Agent需加载约10000
+tokens的规则，其中日常编码仅需约30%。建议将规则拆分为核心编码规则（约2000
+tokens）+ 按需技能文件（已有<code>.agents/skills/</code>雏形） -
+<strong>子Agent适配</strong>：模块边界清晰（<code>src/</code>/<code>extensions/</code>/<code>tests/</code>），子Agent可按目录scope工作。但规则未按模块切分，子Agent无法加载局部规则
+-
+<strong>多Agent并行</strong>：<strong>唯一提供并行安全协议的规则文件</strong>，在多Agent同时工作的场景下有显著优势</p>
+<p><strong>Linewise</strong>： -
+<strong>主Agent适配</strong>：高效。约5000
+tokens即提供完整决策框架。Refactoring Philosophy（约200
+tokens）可作为"始终加载的最小规则集"，其余按需查阅 -
+<strong>子Agent适配</strong>：Feature模块标准化结构使子Agent定位精准。分层架构（Routes→Services→Repositories）为子Agent提供清晰的搜索范围和修改边界。Tagless
+final模式使依赖关系显式化，子Agent分析代码时可快速定位影响范围 -
+<strong>多Agent并行</strong>：未覆盖。如果项目规模增长需要多Agent并行工作，需补充此能力</p>
+<h3 id="不同项目规模阶段推荐">不同项目规模/阶段推荐</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 40%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>项目阶段</th>
+<th>推荐方法论</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>初创/原型期</strong></td>
+<td>Linewise</td>
+<td>精炼规则快速加载，类型约束从第一天防错</td>
+</tr>
+<tr class="even">
+<td><strong>成长/多人协作期</strong></td>
+<td>混合：Linewise核心 + OpenClaw协作规则</td>
+<td>需要编译器验证闭环 + 多Agent安全协议</td>
+</tr>
+<tr class="odd">
+<td><strong>成熟/多平台发布期</strong></td>
+<td>OpenClaw（需拆分）</td>
+<td>多平台发布、社区协作的操作覆盖度是刚需</td>
+</tr>
+<tr class="even">
+<td><strong>动态类型语言项目</strong></td>
+<td>OpenClaw（辅以严格测试规范）</td>
+<td>Linewise的核心优势（编译器验证）不成立</td>
+</tr>
+<tr class="odd">
+<td><strong>强类型语言项目</strong></td>
+<td>Linewise</td>
+<td>完美匹配</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-6-ai诚实自评d8">Part 6 — AI诚实自评（D8）</h2>
+<p><strong>我选择Linewise的CLAUDE.md作为模板。</strong></p>
+<h3 id="为什么">为什么</h3>
+<p>作为规则的执行者，我最需要的是<strong>确定性反馈</strong>。当我写完代码后，我需要知道它是对还是错——越快知道、越确定地知道，我就能越高效地工作、越少需要人类介入。</p>
+<p>Linewise的方法论给了我这个： - <strong>"If a refactor compiles, it's
+correct"</strong> —
+这句话对我而言不是口号，是工作方式的根本转变。它意味着我可以大胆地做15个文件的类型签名重构，因为编译器会在几秒内告诉我是否遗漏了任何调用点。没有编译器验证，同样的重构我需要人类Review每一个文件才敢合并。
+- <strong>正反示例的BAD/GOOD对比</strong> — 我不需要揣测"tricky
+logic"的定义，我直接看到了"这样写是错的，那样写是对的"。在消除我的歧义理解方面，一个反例胜过三段解释。
+- <strong>"Write-cost is near zero"</strong> —
+这条规则说出了我的现实：对我来说写代码几乎没有成本，但每一次人类Review都是瓶颈。因此规则体系应该最大化自动验证、最小化人类审查需求。Linewise的制定者理解这一点。
+- <strong>信息密度</strong> — 我的上下文窗口是有限的。约5000
+tokens的Linewise规则给我留出了大量空间去思考实际问题，而约10000
+tokens的OpenClaw规则让我需要在npm发布流程和for-comprehension风格之间来回跳转。</p>
+<h3 id="我会失去什么">我会失去什么</h3>
+<p>诚实地说，选择Linewise意味着我在以下场景会感到不安：</p>
+<ol type="1">
+<li><strong>多Agent并行工作时没有安全协议</strong> —
+如果另一个Agent在操作同一个repo，我不知道该不该碰git
+stash、该不该切分支。OpenClaw的Multi-Agent
+Safety章节是我见过的最好的Agent并行协作规范，失去它让我在协作场景下只能靠猜</li>
+<li><strong>发布/运维操作无脚手架</strong> —
+当人类说"发一个beta版"时，我没有精确的步骤列表可以遵循。Linewise的规则在编码阶段极强，但在"代码之外"的工程操作上几乎空白</li>
+<li><strong>PR/Issue协作流程缺失</strong> —
+在开源协作场景下，我不知道如何处理bot
+review、如何验证bug-fix声明的真实性、如何管理auto-close标签</li>
+</ol>
+<h3
+id="如果我可以从openclaw偷3个设计决策">如果我可以从OpenClaw"偷"3个设计决策</h3>
+<ol type="1">
+<li><p><strong>Multi-Agent Safety协议</strong> — Git
+stash/worktree/branch管理禁令 + session隔离 +
+格式化churn自动处理。这是OpenClaw独有的、且在Agent协作场景下不可替代的设计。即使当前项目是单Agent，这套协议的设计思路——"假设其他Agent可能在同时工作，保护共享状态"——是防御性编程在Agent层面的优秀实践</p></li>
+<li><p><strong>PR Bug-Fix Validation四步门槛</strong> —
+症状证据→根因验证→代码路径→回归测试。这个验证链条完美补充了Linewise"编译器即验证"无法覆盖的逻辑正确性维度——代码编译通过不代表bug真的被修复了。将这套门槛编码为规则，让我在提交bug-fix
+PR时有明确的自检清单</p></li>
+<li><p><strong>按需加载的技能文件机制</strong>
+(<code>.agents/skills/</code>) —
+Linewise的单文件结构在项目规模增长后会面临与OpenClaw同样的膨胀问题。OpenClaw的skills目录机制（核心规则常驻
++
+专项规则按需引用）是解决上下文预算问题的正确方向。我会将Linewise的规则重构为：<code>CLAUDE.md</code>（约2000
+tokens核心决策框架）+
+<code>.agents/skills/</code>（具体场景的详细规范）</p></li>
+</ol>
+<hr />
+<p><strong>结论</strong>：Linewise的CLAUDE.md体现了"AI编码代理规则应该怎样写"的更深层理解——<strong>规则的目标不是控制Agent的每一步操作，而是为Agent建立一个正确性可自动验证的工作框架</strong>。在95%+
+AI编码的范式下，这种方法论产出的规则让我更高效、更自主、更少犯错。OpenClaw的操作覆盖广度令人印象深刻，但在根本问题——"如何让Agent的输出可被机器验证而非依赖人类判断"——上，Linewise给出了更优解。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -192,9 +1942,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2026-03-11 20:00:00 / Modified: 22:02:23" itemprop="dateCreated datePublished" datetime="2026-03-11T20:00:00+08:00">2026-03-11</time>
+      <time title="Created: 2026-03-11 20:00:00" itemprop="dateCreated datePublished" datetime="2026-03-11T20:00:00+08:00">2026-03-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-12 12:52:02" itemprop="dateModified" datetime="2026-03-12T12:52:02+08:00">2026-03-12</time>
     </span>
 
   
@@ -569,7 +2325,7 @@ style"是一致的：<strong>如果你在用的工具能处理更高抽象度的
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-11 22:02:23" itemprop="dateModified" datetime="2026-03-11T22:02:23+08:00">2026-03-11</time>
+      <time title="Modified: 2026-03-12 12:52:02" itemprop="dateModified" datetime="2026-03-12T12:52:02+08:00">2026-03-12</time>
     </span>
 
   
@@ -1090,7 +2846,7 @@ for development</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-11 22:02:23" itemprop="dateModified" datetime="2026-03-11T22:02:23+08:00">2026-03-11</time>
+      <time title="Modified: 2026-03-12 12:52:02" itemprop="dateModified" datetime="2026-03-12T12:52:02+08:00">2026-03-12</time>
     </span>
 
   
@@ -1520,7 +3276,7 @@ Zero 是架构和训练方法的根本性重新设计。</p>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-11 22:02:23" itemprop="dateModified" datetime="2026-03-11T22:02:23+08:00">2026-03-11</time>
+      <time title="Modified: 2026-03-12 12:52:02" itemprop="dateModified" datetime="2026-03-12T12:52:02+08:00">2026-03-12</time>
     </span>
 
   
@@ -1909,7 +3665,7 @@ class="footnote-back" role="doc-backlink">↩︎</a></p></li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-11 22:02:23" itemprop="dateModified" datetime="2026-03-11T22:02:23+08:00">2026-03-11</time>
+      <time title="Modified: 2026-03-12 12:52:02" itemprop="dateModified" datetime="2026-03-12T12:52:02+08:00">2026-03-12</time>
     </span>
 
   
@@ -2286,7 +4042,7 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/20033905895389
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-11 22:02:23" itemprop="dateModified" datetime="2026-03-11T22:02:23+08:00">2026-03-11</time>
+      <time title="Modified: 2026-03-12 12:52:02" itemprop="dateModified" datetime="2026-03-12T12:52:02+08:00">2026-03-12</time>
     </span>
 
   
@@ -2557,7 +4313,7 @@ choose your preferred technology to do so.</p>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-11 22:02:23" itemprop="dateModified" datetime="2026-03-11T22:02:23+08:00">2026-03-11</time>
+      <time title="Modified: 2026-03-12 12:52:02" itemprop="dateModified" datetime="2026-03-12T12:52:02+08:00">2026-03-12</time>
     </span>
 
   
@@ -2674,501 +4430,6 @@ alt="File tree version in graph database" />
 <figcaption aria-hidden="true">File tree version in graph
 database</figcaption>
 </figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://famer.me/2023/03/19/Implement-the-file%E2%80%93tree-in-PostgreSQL-using-ltree/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="ming yang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="My Space">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | My Space">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/03/19/Implement-the-file%E2%80%93tree-in-PostgreSQL-using-ltree/" class="post-title-link" itemprop="url">Implement the file tree in PostgreSQL using ltree</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-03-19 18:18:18" itemprop="dateCreated datePublished" datetime="2023-03-19T18:18:18+08:00">2023-03-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-11 22:02:23" itemprop="dateModified" datetime="2026-03-11T22:02:23+08:00">2026-03-11</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="background">Background</h1>
-<p>A file tree is a hierarchical structure used to organize files and
-directories on a computer. It allows users to easily navigate and access
-their files and folders, and is commonly used in operating systems and
-file management software.</p>
-<p>But implementing file trees in traditional RDBMS like MySQL can be a
-challenge due to the lack of support for hierarchical data structures.
-However, there are workarounds such as using nested sets or materialized
-path approaches. Alternatively, you could consider using NoSQL databases
-like MongoDB or document-oriented databases like Couchbase, which have
-built-in support for hierarchical data structures.</p>
-<p>It is possible to implement a file tree in PostgreSQL using the
-<code>ltree</code> datatype provided by PostgreSQL. This datatype can
-help us build the hierarchy within the database.</p>
-<h1 id="tldr">TL;DR</h1>
-<h2 id="pros">Pros</h2>
-<ul>
-<li>Excellent performance!</li>
-<li>No migration is needed for this, as no new columns will be added.
-Only a new expression index needs to be created.</li>
-</ul>
-<h2 id="cons">Cons</h2>
-<ul>
-<li>Need additional mechanism to create virtual folder entities.(only if
-you need to show the folder level)</li>
-<li>There are limitations on the file/folder name length.(especially in
-non-ASCII characters)</li>
-</ul>
-<h2 id="limitation">Limitation</h2>
-<p>The maximum length for a file or directory name is limited, and in
-the worst case scenario where non-ASCII characters(Chinese) and
-alphabets are interlaced, it can not be longer than <strong>33</strong>
-characters. Even if all the characters are Chinese, the name can not
-exceed <strong>62</strong> characters in length.</p>
-<p>Based on PostgreSQL <a
-target="_blank" rel="noopener" href="https://www.postgresql.org/docs/current/ltree.html#id-1.11.7.32.5">documentation</a>,
-the label path can not exceed 65535 labels. However, in most cases, this
-limit should be sufficient and it is unlikely that you would need to
-nest directories to such a deep level.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> escape_filename_for_ltree(</span><br><span class="line">    <span class="string">&#x27;一0二0三0四0五0六0七0八0九0十0&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一0二0三0四0五0六0七0八0九0十0&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一0二0三0四0五0六0七0八0九0十0&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一0二0&#x27;</span></span><br><span class="line">); <span class="comment">-- worst case len 34</span></span><br><span class="line"><span class="keyword">select</span> escape_filename_for_ltree(</span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三四五六七八九十&#x27;</span> <span class="operator">||</span></span><br><span class="line">    <span class="string">&#x27;一二三&#x27;</span></span><br><span class="line">); <span class="comment">-- Chinese case len 63</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[42622] ERROR: label string is too long Detail: Label length is 259, must be at most 255, at character 260. Where: PL/pgSQL function escape_filename_for_ltree(text) line 5 at SQL statement</span><br></pre></td></tr></table></figure>
-<h1 id="how-to-use">How to use</h1>
-<p>Build expression index</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX idx_file_tree_filename <span class="keyword">ON</span> files <span class="keyword">using</span> gist (escape_filename_for_ltree(filename));</span><br></pre></td></tr></table></figure>
-<p>Example Query</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">explain analyse</span><br><span class="line"><span class="keyword">select</span> filename</span><br><span class="line"><span class="keyword">from</span> files</span><br><span class="line"><span class="keyword">where</span> escape_filename_for_ltree(filename) <span class="operator">~</span> <span class="string">&#x27;ow.*&#123;1&#125;&#x27;</span></span><br><span class="line">  <span class="keyword">and</span> record_id <span class="operator">=</span> <span class="string">&#x27;1666bad1-202c-496e-bb0e-9664ce3febcb&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<p>Query Result</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ow/ros_00000000_2022-03-02-12-55-19_330.bag</span><br><span class="line">ow/ros_00011426_2022-08-15-19-24-11_0.bag</span><br><span class="line">ow/ros_00019378_2022-08-12-18-40-06_0.bag</span><br><span class="line">ow/ros_00011426_2022-08-15-19-24-11_0.bag</span><br><span class="line">ow/ros_00011426_2022-08-15-19-24-11_0.bag.coscene-reserved-index</span><br></pre></td></tr></table></figure>
-<p>Query Explain</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Bitmap Heap Scan <span class="keyword">on</span> files  (cost<span class="operator">=</span><span class="number">32.12</span>.<span class="number">.36</span><span class="number">.38</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">28</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.341</span>.<span class="number">.0</span><span class="number">.355</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">8</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">  Recheck Cond: ((record_id <span class="operator">=</span> <span class="string">&#x27;1666bad1-202c-496e-bb0e-9664ce3febcb&#x27;</span>::uuid) <span class="keyword">AND</span> (escape_filename_for_ltree((filename)::text) <span class="operator">&lt;</span>@ <span class="string">&#x27;ow&#x27;</span>::ltree))</span><br><span class="line">  Heap Blocks: exact<span class="operator">=</span><span class="number">3</span></span><br><span class="line">  <span class="operator">-</span><span class="operator">&gt;</span>  BitmapAnd  (cost<span class="operator">=</span><span class="number">32.12</span>.<span class="number">.32</span><span class="number">.12</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">0</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.323</span>.<span class="number">.0</span><span class="number">.324</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">0</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">        <span class="operator">-</span><span class="operator">&gt;</span>  Bitmap Index Scan <span class="keyword">on</span> idx_file_tree_record_id  (cost<span class="operator">=</span><span class="number">0.00</span>.<span class="number">.4</span><span class="number">.99</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">93</span> width<span class="operator">=</span><span class="number">0</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.051</span>.<span class="number">.0</span><span class="number">.051</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">100</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">              Index Cond: (record_id <span class="operator">=</span> <span class="string">&#x27;1666bad1-202c-496e-bb0e-9664ce3febcb&#x27;</span>::uuid)</span><br><span class="line">        <span class="operator">-</span><span class="operator">&gt;</span>  Bitmap Index Scan <span class="keyword">on</span> idx_file_tree_filename  (cost<span class="operator">=</span><span class="number">0.00</span>.<span class="number">.26</span><span class="number">.88</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">347</span> width<span class="operator">=</span><span class="number">0</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.253</span>.<span class="number">.0</span><span class="number">.253</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">52</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">              Index Cond: (escape_filename_for_ltree((filename)::text) <span class="operator">&lt;</span>@ <span class="string">&#x27;ow&#x27;</span>::ltree)</span><br><span class="line">Planning <span class="type">Time</span>: <span class="number">0.910</span> ms</span><br><span class="line">Execution <span class="type">Time</span>: <span class="number">0.599</span> ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="explaination">Explaination</h1>
-<p>PostgreSQL's LTREE data type allows you to use a sequence of
-alphanumeric characters and <strong>underscores</strong> on the label,
-with a maximum length of 256 characters. So, we get a special character
-<strong>underscore</strong> that can be used as a notation to
-<strong>build our escape rules</strong> within the label.</p>
-<p><strong>Slashes(<code>/</code>)</strong> will be
-<strong>replaced</strong> with <strong>dots(<code>.</code>)</strong>. I
-think it does not require further explanation.</p>
-<p>Initially, I attempted to encode all non-alphabetic characters into
-their Unicode hex format. However, after receiving advice from other
-guys, I discovered that using <strong>base64</strong> encoding can be
-more efficient in terms of information entropy. Ultimately, I decided to
-use <strong>base62</strong> encoding instead to ensure that no illegal
-characters are produced and to achieve the maximum possible information
-entropy.</p>
-<p>This is the final representation of the physical data that will be
-stored in the index of PostgreSQL.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> escape_filename_for_ltree(<span class="string">&#x27;root/folder1/机器人仿真gazebo11-noetic集成ROS1/state.log&#x27;</span>);</span><br><span class="line"><span class="comment">-- result:</span></span><br><span class="line"><span class="comment">-- root.folder1._1hOBTVt5n7EhFWzIbUcjT_gazebo11_j_noetic_1Aw3qhY48_ROS1.state_k_log</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="further">Further</h1>
-<p>If you want to store an isolated file tree in the same table, one
-thing you need to do is prepend the isolation key as the first label of
-the ltree. For example:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> escape_filename_for_ltree(<span class="string">&#x27;&lt;put_user_id_in_there&gt;&#x27;</span> <span class="operator">||</span> <span class="string">&#x27;/&#x27;</span> <span class="operator">||</span> <span class="string">&#x27;&lt;path_to_file&gt;&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p>By doing this, you will get the best query performance.</p>
-<h1 id="summary">Summary</h1>
-<p>This document explains how to implement a file tree in PostgreSQL
-using the <code>ltree</code> datatype. The <code>ltree</code> datatype
-can help build the hierarchy within the database, and an expression
-index needs to be created. There are some limitations on the file/folder
-name length, but the performance is excellent. The document also
-provides PostgreSQL functions for escaping and encoding file/folder
-names.</p>
-<h1 id="appendix-postgresql-functions">Appendix: PostgreSQL
-Functions</h1>
-<h2 id="entry-function-immutable-is-required">Entry function (immutable
-is required)</h2>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">FUNCTION</span> escape_filename_for_ltree(filename TEXT)</span><br><span class="line">    <span class="keyword">RETURNS</span> ltree <span class="keyword">AS</span></span><br><span class="line">$$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    escaped_path ltree;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">select</span> string_agg(escape_part(part), <span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">    <span class="keyword">into</span> escaped_path</span><br><span class="line">    <span class="keyword">from</span> (<span class="keyword">select</span> regexp_split_to_table <span class="keyword">as</span> part</span><br><span class="line">          <span class="keyword">from</span> regexp_split_to_table(filename, <span class="string">&#x27;/&#x27;</span>)) <span class="keyword">as</span> parts;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> escaped_path;</span><br><span class="line"></span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$ <span class="keyword">LANGUAGE</span> plpgsql IMMUTABLE;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="util-escape-every-part-folder-or-file">Util: Escape every part
-(folder or file)</h2>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> replace <span class="keyword">function</span> escape_part(part text) <span class="keyword">returns</span> text <span class="keyword">as</span></span><br><span class="line">$$</span><br><span class="line"><span class="keyword">declare</span></span><br><span class="line">    escaped_part text;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">select</span> string_agg(escaped, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">into</span> escaped_part</span><br><span class="line">    <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">case</span> <span class="built_in">substring</span>(sep, <span class="number">1</span>, <span class="number">1</span>) <span class="operator">~</span> <span class="string">&#x27;[0-9a-zA-Z]&#x27;</span></span><br><span class="line">                     <span class="keyword">when</span> <span class="literal">true</span> <span class="keyword">then</span> sep</span><br><span class="line">                     <span class="keyword">else</span> <span class="string">&#x27;_&#x27;</span> <span class="operator">||</span> base62_encode(sep) <span class="operator">||</span> <span class="string">&#x27;_&#x27;</span></span><br><span class="line">                     <span class="keyword">end</span> <span class="keyword">as</span> escaped</span><br><span class="line">          <span class="keyword">from</span> (<span class="keyword">select</span> split_string_by_alpha <span class="keyword">as</span> sep</span><br><span class="line">                <span class="keyword">from</span> split_string_by_alpha(part)) <span class="keyword">as</span> split) <span class="keyword">as</span> <span class="keyword">escape</span>;</span><br><span class="line">    <span class="keyword">RETURN</span> escaped_part;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line">$$ <span class="keyword">language</span> plpgsql immutable</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="util-split-a-string-into-groups">Util: Split a string into
-groups</h2>
-<p>Each group contains only alphabetic characters or non-alphabetic
-characters.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">FUNCTION</span> split_string_by_alpha(input_str TEXT) <span class="keyword">RETURNS</span> SETOF TEXT <span class="keyword">AS</span></span><br><span class="line">$$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    split_str TEXT;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    IF input_str <span class="keyword">IS</span> <span class="keyword">NULL</span> <span class="keyword">OR</span> input_str <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">THEN</span></span><br><span class="line">        <span class="keyword">RETURN</span>;</span><br><span class="line">    <span class="keyword">END</span> IF;</span><br><span class="line"></span><br><span class="line">    WHILE input_str <span class="operator">!=</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">        LOOP</span><br><span class="line">            split_str :<span class="operator">=</span> <span class="built_in">substring</span>(input_str <span class="keyword">from</span> <span class="string">&#x27;[^0-9a-zA-Z]+|[0-9a-zA-Z]+&#x27;</span>);</span><br><span class="line">            IF split_str <span class="operator">!=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">THEN</span></span><br><span class="line">                <span class="keyword">RETURN</span> NEXT split_str;</span><br><span class="line">            <span class="keyword">END</span> IF;</span><br><span class="line">            input_str :<span class="operator">=</span> <span class="built_in">substring</span>(input_str <span class="keyword">from</span> length(split_str) <span class="operator">+</span> <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">END</span> LOOP;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">RETURN</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$ <span class="keyword">LANGUAGE</span> plpgsql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="util-base62-encode-function">Util: base62 encode function</h2>
-<p>By using the base62_encode function, we can create a string that
-meets the requirements of LTREE and achieves maximum information
-entropy.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">FUNCTION</span> base62_encode(data TEXT) <span class="keyword">RETURNS</span> TEXT <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    ALPHABET <span class="type">CHAR</span>(<span class="number">62</span>)[] :<span class="operator">=</span> <span class="keyword">ARRAY</span>[</span><br><span class="line">        <span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;2&#x27;</span>,<span class="string">&#x27;3&#x27;</span>,<span class="string">&#x27;4&#x27;</span>,<span class="string">&#x27;5&#x27;</span>,<span class="string">&#x27;6&#x27;</span>,<span class="string">&#x27;7&#x27;</span>,<span class="string">&#x27;8&#x27;</span>,<span class="string">&#x27;9&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;A&#x27;</span>,<span class="string">&#x27;B&#x27;</span>,<span class="string">&#x27;C&#x27;</span>,<span class="string">&#x27;D&#x27;</span>,<span class="string">&#x27;E&#x27;</span>,<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;G&#x27;</span>,<span class="string">&#x27;H&#x27;</span>,<span class="string">&#x27;I&#x27;</span>,<span class="string">&#x27;J&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;K&#x27;</span>,<span class="string">&#x27;L&#x27;</span>,<span class="string">&#x27;M&#x27;</span>,<span class="string">&#x27;N&#x27;</span>,<span class="string">&#x27;O&#x27;</span>,<span class="string">&#x27;P&#x27;</span>,<span class="string">&#x27;Q&#x27;</span>,<span class="string">&#x27;R&#x27;</span>,<span class="string">&#x27;S&#x27;</span>,<span class="string">&#x27;T&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;U&#x27;</span>,<span class="string">&#x27;V&#x27;</span>,<span class="string">&#x27;W&#x27;</span>,<span class="string">&#x27;X&#x27;</span>,<span class="string">&#x27;Y&#x27;</span>,<span class="string">&#x27;Z&#x27;</span>,<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;e&#x27;</span>,<span class="string">&#x27;f&#x27;</span>,<span class="string">&#x27;g&#x27;</span>,<span class="string">&#x27;h&#x27;</span>,<span class="string">&#x27;i&#x27;</span>,<span class="string">&#x27;j&#x27;</span>,<span class="string">&#x27;k&#x27;</span>,<span class="string">&#x27;l&#x27;</span>,<span class="string">&#x27;m&#x27;</span>,<span class="string">&#x27;n&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;o&#x27;</span>,<span class="string">&#x27;p&#x27;</span>,<span class="string">&#x27;q&#x27;</span>,<span class="string">&#x27;r&#x27;</span>,<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;t&#x27;</span>,<span class="string">&#x27;u&#x27;</span>,<span class="string">&#x27;v&#x27;</span>,<span class="string">&#x27;w&#x27;</span>,<span class="string">&#x27;x&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;y&#x27;</span>,<span class="string">&#x27;z&#x27;</span></span><br><span class="line">    ];</span><br><span class="line">    BASE <span class="type">BIGINT</span> :<span class="operator">=</span> <span class="number">62</span>;</span><br><span class="line">    <span class="keyword">result</span> TEXT :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    val <span class="type">numeric</span> :<span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    bytes bytea :<span class="operator">=</span> data::bytea;</span><br><span class="line">    len <span class="type">INT</span> :<span class="operator">=</span> length(data::bytea);</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">FOR</span> i <span class="keyword">IN</span> <span class="number">0.</span>.(len <span class="operator">-</span> <span class="number">1</span>) LOOP</span><br><span class="line">        val :<span class="operator">=</span> (val <span class="operator">*</span> <span class="number">256</span>) <span class="operator">+</span> get_byte(bytes, i);</span><br><span class="line">    <span class="keyword">END</span> LOOP;</span><br><span class="line"></span><br><span class="line">    WHILE val <span class="operator">&gt;</span> <span class="number">0</span> LOOP</span><br><span class="line">        <span class="keyword">result</span> :<span class="operator">=</span> ALPHABET[val <span class="operator">%</span> BASE <span class="operator">+</span> <span class="number">1</span>] <span class="operator">||</span> <span class="keyword">result</span>;</span><br><span class="line">        val :<span class="operator">=</span> <span class="built_in">floor</span>(val <span class="operator">/</span> BASE);</span><br><span class="line">    <span class="keyword">END</span> LOOP;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">RETURN</span> <span class="keyword">result</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$ <span class="keyword">LANGUAGE</span> plpgsql;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://famer.me/2022/08/21/talking-about-resource-security/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="ming yang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="My Space">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | My Space">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/21/talking-about-resource-security/" class="post-title-link" itemprop="url">浅谈资源安全</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-08-21 12:12:43" itemprop="dateCreated datePublished" datetime="2022-08-21T12:12:43+08:00">2022-08-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-11 22:02:23" itemprop="dateModified" datetime="2026-03-11T22:02:23+08:00">2026-03-11</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="起因">起因</h1>
-<p>这个月（2022年8月）于Rust二群与某人辩论，因为某人坚持认为 Rust
-的所有权 <code>Ownership</code> 机制仅仅是等同于垃圾回收
-<code>Garbage Collection</code> ，而我认为 <code>Ownership</code>
-还解决了另一个困扰无数码农的问题：<strong>资源安全</strong></p>
-<h1 id="定义">定义</h1>
-<p>常见资源可以分为三大类：</p>
-<ul>
-<li>文件
-<ul>
-<li>Socket
-<ul>
-<li>TCP</li>
-<li>HTTP</li>
-<li>JDBC</li>
-</ul></li>
-<li>文件系统</li>
-</ul></li>
-<li>锁
-<ul>
-<li>本地</li>
-<li>远程（Redis，RDBMS）</li>
-</ul></li>
-<li>逻辑资源
-<ul>
-<li>Stream（背后可能是文件）</li>
-<li>日志区块或长链接起止符</li>
-<li>临时文件删除</li>
-</ul></li>
-</ul>
-<p>而资源管理总共分三步，分别是：</p>
-<ol type="1">
-<li>资源申请</li>
-<li>资源使用</li>
-<li>资源释放</li>
-</ol>
-<p>这三个事件需要严格按顺序发生。</p>
-<p>而资源安全关注的是:</p>
-<ul>
-<li>在使用前已经正确初始化</li>
-<li>使用后能被正确释放</li>
-<li>释放后不能被再次使用</li>
-</ul>
-<p>语言（语法）提供的资源管理有什么用呢？它给程序员一个强有力的保证，非极端情况下（断电等），资源释放逻辑必定会被执行。</p>
-<h1 id="资源管理的历史">资源管理的历史</h1>
-<h2 id="史前">史前</h2>
-<h3 id="c">C</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="type">int</span> num;</span><br><span class="line">   FILE *fptr;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> ((fptr = fopen(<span class="string">&quot;C:\\program.txt&quot;</span>,<span class="string">&quot;r&quot;</span>)) == <span class="literal">NULL</span>)&#123;</span><br><span class="line">       <span class="built_in">printf</span>(<span class="string">&quot;Error! opening file&quot;</span>);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// Program exits if the file pointer returns NULL.</span></span><br><span class="line">       <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="built_in">fscanf</span>(fptr,<span class="string">&quot;%d&quot;</span>, &amp;num);</span><br><span class="line"></span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;Value of n=%d&quot;</span>, num);</span><br><span class="line">   fclose(fptr); </span><br><span class="line">  </span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>早期的计算机语言并没有意识到资源管理问题，依然是指令式编码风格，需要程序员自己保证资源的申请与释放。同时那个年代软件系统并不复杂，再加上从业者素质普遍较高，所以资源管理问题不像今天这么突出。</p>
-<h2 id="语言结构language-constructs">语言结构(Language constructs)</h2>
-<p>后来，有些语言引入了异常机制，允许程序无视控制流语句自行中断并跳出，资源管理也变得复杂起来。支持抛出异常的语言通常使用
-<code>try &#123;&#125; catch &#123;&#125; finally &#123;&#125;</code> 约束资源作用范围，
-<code>try</code> 关键字表示资源作用范围，无论程序以任何形式跳出，
-<code>finally</code>
-关键字标记代码块都应当被确保执行，资源正确释放，代表语法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line"><span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> br.readLine();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    br.close();</span><br><span class="line">    fr.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="销毁模式dispose-pattern">销毁模式(Dispose pattern)</h2>
-<p>这个模式也是当今大部分有 GC 语言所支持的，比如 Java 语法关键字
-<code>try</code></p>
-<p>据我所知 Java 所谓的资源安全只有 Java7 时代引入的
-try-with-resource，资源需继承自<code>AutoCloseable</code>，可以在
-<code>try(...) &#123; ... code block ... &#125;</code>
-内放心使用，也就意味着异步代码没有任何保障。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> String <span class="title function_">readFirstLineFromFile</span><span class="params">(String path)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">try</span> (<span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line">         <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr)) &#123;</span><br><span class="line">        <span class="keyword">return</span> br.readLine();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="resource-monad-模式">Resource Monad 模式</h2>
-<p>后续发展中诞生的较为安全的设计模式，将使用资源的同步或异步代码包裹在一个代码块中，使用结束后释放，这样可以避免在每次使用资源后手动关闭。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;R&gt; CompletionStage&lt;R&gt; <span class="title function_">use</span> <span class="params">(Function&lt;Resource, CompletionStage&lt;R&gt;&gt; f)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> Resource.make()</span><br><span class="line">    .thenCompose((res) -&gt; f.apply(res)</span><br><span class="line">      .handle((r, e) -&gt; &#123;</span><br><span class="line">        res.close();</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="literal">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">      &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">use((res) -&gt; &#123;</span><br><span class="line">  System.out.println(res);</span><br><span class="line">  <span class="comment">// 将业务逻辑编写到 CompletableFuture 内部执行</span></span><br><span class="line">  <span class="keyword">return</span> CompletableFuture.failedStage(<span class="keyword">new</span> <span class="title class_">Exception</span>(<span class="string">&quot;error&quot;</span>));</span><br><span class="line">&#125;).handle((r, e) -&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">    System.out.println(e.getMessage());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> r;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>以上方案都有一个缺陷，在使用过程中误将资源变量共享给其他代码段（闭包，回调，外部变量，无意中发送给队列
-HTTP Response，例如如下 Java 代码。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> HttpEntity <span class="title function_">fileEntity</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">  <span class="keyword">try</span> (<span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line">       <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HttpEntity</span>(br);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果 <code>HttpEntity</code> 类并不是在创建时消费 <code>Reader</code>
-，而是会等待 HTTP Body
-传输时才开始读取字节流，那毫无疑问，这会造成访问已关闭资源，可能引起应用程序崩溃。</p>
-<p>正确的写法如下</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 伪代码</span></span><br><span class="line"><span class="keyword">static</span> HttpEntity <span class="title function_">fileEntity</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line">  <span class="keyword">final</span> <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HttpEntity</span>(br) &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">      br.close();</span><br><span class="line">      fr.close();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="raii">RAII</h2>
-<h3 id="c-1">C++</h3>
-<blockquote>
-<p>Move semantics make it possible to safely transfer resource ownership
-between objects, across scopes, and in and out of threads, while
-maintaining resource safety. — (since C++11)</p>
-</blockquote>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void <span class="title function_ invoke__">f</span>()</span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;string&gt; <span class="title function_ invoke__">vs</span>(<span class="number">100</span>);   <span class="comment">// not std::vector: valid() added</span></span><br><span class="line">    <span class="keyword">if</span> (!vs.<span class="title function_ invoke__">valid</span>()) &#123;</span><br><span class="line">        <span class="comment">// handle error or exit</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ifstream <span class="title function_ invoke__">fs</span>(<span class="string">&quot;foo&quot;</span>);   <span class="comment">// not std::ifstream: valid() added</span></span><br><span class="line">    <span class="keyword">if</span> (!fs.<span class="title function_ invoke__">valid</span>()) &#123;</span><br><span class="line">        <span class="comment">// handle error or exit</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125; <span class="comment">// destructors clean up as usual</span></span><br></pre></td></tr></table></figure>
-<p>C++ 提出了 RAII 这一先进概念，几乎解决了资源安全问题。但是受限于 C++
-诞生年代，早期 C++ 为了保证资源安全，只支持左值引用(LValue Reference) +
-Clone(Deep Copy)
-语义，使得赋值操作会频繁深拷贝整个对象与频繁构造/析构资源，浪费了很多操作。C++11
-开始支持右值引用，但是仍然需要实现右值引用(RValue Reference)的
-Move(Shallow Copy)。同时，C++ 无法检查多次 move 的问题和 move
-后原始变量仍然可用的问题。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">A</span>(<span class="type">const</span> string&amp; str, <span class="type">int</span>* arr):_str(str),_arr(arr)&#123;cout &lt;&lt; <span class="string">&quot;parameter ctor&quot;</span> &lt;&lt; endl;&#125;</span><br><span class="line">        <span class="built_in">A</span>(A&amp;&amp; obj):_str(std::<span class="built_in">move</span>(obj._str)),_arr(std::<span class="built_in">move</span>(obj._arr))&#123;obj._arr = <span class="literal">nullptr</span>;cout &lt;&lt; <span class="string">&quot;move ctor&quot;</span> &lt;&lt; endl;&#125;</span><br><span class="line">        A&amp; <span class="keyword">operator</span> =(A&amp;&amp; rhs)&#123;</span><br><span class="line">            _str = std::<span class="built_in">move</span>(rhs._str);</span><br><span class="line">            _arr = std::<span class="built_in">move</span>(rhs._arr);</span><br><span class="line">            rhs._arr = <span class="literal">nullptr</span>;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;move assignment operation&quot;</span> &lt;&lt; endl;</span><br><span class="line">            <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;</span><br><span class="line">            cout &lt;&lt; _str &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        ~<span class="built_in">A</span>()&#123;</span><br><span class="line">            <span class="keyword">delete</span>[] _arr;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;dtor&quot;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">        string _str;</span><br><span class="line">        <span class="type">int</span>* _arr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="type">int</span>* arr = <span class="keyword">new</span> <span class="type">int</span>[<span class="number">6</span>] &#123;<span class="number">1</span>,<span class="number">1</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">4</span>&#125;;</span><br><span class="line">    <span class="function">A <span class="title">a</span><span class="params">(<span class="string">&quot;Yajuu Senpai&quot;</span>, std::move(arr))</span></span>; <span class="comment">// 错误的指针移动 --&gt; STUPID MOVE!!</span></span><br><span class="line">    <span class="function">A <span class="title">b</span><span class="params">(std::move(a))</span></span>;   <span class="comment">// move ctor</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;print a: &quot;</span>;</span><br><span class="line">    a.<span class="built_in">print</span>();           <span class="comment">// a 失去所有权  --&gt; CORRECT!!</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;print b: &quot;</span>;</span><br><span class="line">    b.<span class="built_in">print</span>();           <span class="comment">// b 获得所有权  --&gt; CORRECT!!</span></span><br><span class="line"></span><br><span class="line">    b = std::<span class="built_in">move</span>(a);    <span class="comment">// 二次移动</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;print a: &quot;</span>; </span><br><span class="line">    a.<span class="built_in">print</span>();           <span class="comment">// ???</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;print b: &quot;</span>; </span><br><span class="line">    b.<span class="built_in">print</span>();           <span class="comment">// ???</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="rust">Rust</h3>
-<p>继承自 <strong>C++ RAII
-，</strong>当创建资源和使用资源不在同一个领域时，Rust 的
-<code>move</code> / <code>borrow</code>
-依然可以安心睡觉，这种语言级别的保证让我一个写 Scala 的看了都羡慕。</p>
-<p>在Rust 中<code>move</code> 给别人就是别人负责 <code>drop</code>，
-<code>borrow</code> 给别人还是自己负责
-<code>drop</code>，且编译器会根据生命周期检查，确保不会发生多次
-<code>move</code>，也不会有超出拥有者(<code>owner</code>)的借用(<code>&amp;borrow</code>)发生。责任划分很清晰，只要自己脑子清醒，完全不担心异步的时候会泄漏。</p>
-<p>程序员无法显式 <code>delete</code>，只能遵守 Rust
-语法，编译器依据变量生命周期将相关变量的 <code>drop</code>
-插入到正确位置，通常是离开块级作用域的位置。</p>
-<figure>
-<img src="/images/rust-drop.png" alt="Rust Drop" />
-<figcaption aria-hidden="true">Rust Drop</figcaption>
-</figure>
-<p><a
-target="_blank" rel="noopener" href="https://doc.rust-lang.org/rust-by-example/scope/raii.html">https://doc.rust-lang.org/rust-by-example/scope/raii.html</a></p>
-<p>同步示例如下：</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Entity</span> &#123;</span><br><span class="line">  connection: &amp;Connection</span><br><span class="line">  file: File</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">Drop</span> <span class="keyword">for</span> <span class="title class_">Entity</span> &#123;</span><br><span class="line">  <span class="keyword">fn</span> <span class="title function_">drop</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) &#123;</span><br><span class="line">    file.<span class="title function_ invoke__">write</span>(EOF); <span class="comment">// &lt;- 文件关闭前写入终止符</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">conn</span> = <span class="title function_ invoke__">makeConnection</span>();</span><br><span class="line"><span class="keyword">let</span> <span class="variable">file</span> = <span class="title function_ invoke__">openFile</span>();</span><br><span class="line"><span class="keyword">let</span> <span class="variable">entity</span> = Entity &#123;</span><br><span class="line">  connection: &amp;conn, <span class="comment">// &lt;- 将 conn 借用给 entity</span></span><br><span class="line">  file: file <span class="comment">// &lt;- 将 file 所有权转移给 entity</span></span><br><span class="line">&#125; <span class="comment">// &lt;- 从此以后，file 将不可被访问</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">send</span>(entity: Entity) &#123;</span><br><span class="line">  <span class="comment">// logic</span></span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">  <span class="comment">// &lt;- 编译器会在此处插入释放 entity</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_ invoke__">send</span>(entity) <span class="comment">// &lt;- 将 entity 所有权移交给 send 函数</span></span><br><span class="line"><span class="comment">// &lt;- 编译器会在此处插入释放 conn</span></span><br><span class="line"><span class="comment">// &lt;- 因 entity 与 file 所有权已转移，此处不会重复释放 entity 与 file</span></span><br></pre></td></tr></table></figure>
-<p>异步示例如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fn <span class="title function_">move_block</span><span class="params">()</span> -&gt; impl Future&lt;Output = ()&gt; &#123;</span><br><span class="line">    <span class="type">let</span> <span class="variable">my_string</span> <span class="operator">=</span> <span class="string">&quot;foo&quot;</span>.to_string();</span><br><span class="line">    async move &#123; <span class="comment">// &lt;- my_string 被 move 到此 block scope</span></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        println!(<span class="string">&quot;&#123;&#125;&quot;</span>, my_string); <span class="comment">// &lt;- my_string 在此处可以见</span></span><br><span class="line">        <span class="comment">// &lt;- 编译器将在此处插入 my_string drop 代码 </span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// &lt;- my_string 将不再可见，本函数失去 my_string 所有权，不再插入 drop 代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>闭包捕获</strong>造成的资源逃逸与将引用赋值给<strong>类/结构体</strong>帮助资源逃逸在语言本质上是同一个问题，所以
-Rust 可以用相同的方法来处理它们。</p>
-<h1 id="总结">总结</h1>
-<p>理论上来说垃圾回收器(<strong>Garbage
-collector</strong>)无法解决资源安全问题，可能有人会认为：</p>
-<blockquote>
-<p>“给 Java 语言添加 <code>Destructor</code>
-，这样开发者就可以在析构函数中实现资源释放逻辑，交给 GC
-在回收内存时自动调用 <code>destory()/dispose()</code>
-，问题不就解决了吗？“</p>
-</blockquote>
-<p>实际上这条路是走不通的，GC
-根据算法不同，所参考的策略也不同，其收集(<code>collect</code>)/释放(<code>free</code>)动作必定会执行，但没有保证什么时候会执行，以什么顺序执行。因为考察
-GC 性能指标时，更关注的是吞吐量而不是回收实时性，如果内存没有压力，GC
-倾向于不回收。</p>
-<p>这一行为可能会导致意想不到的后果，比如业务逻辑 A
-结束时，文件资源对象的引用计数已经为零，通知下一个逻辑 B
-可以处理此文件，而 B
-尝试打开文件时却发现文件不完整，因为关闭文件的系统调用尚未被 GC
-执行😵。</p>
-<p>Rust
-给出了一套完善的解决方案，它不仅解决了诸多内存安全问题，还顺带解决了资源安全问题。基于所有权机制和严格的编译器检查，强迫程序员写出资源安全的代码，仅需要程序员正确实现
-<code>impl Drop for [...]</code> 。</p>
-<p>我认为 Rust 实现的所有权与 RAII 是当下最完善的资源管理机制。</p>
-<ul>
-<li>与 <code>try-catch-finally</code>
-相比，不需要在每次使用资源时，都格外小心是否双重释放(<code>double delete</code>
-这在 Java 中是个很常见且令人头痛的问题)。</li>
-<li>与 <code>ResourceMonad</code> 相比，不会产生资源逃逸。</li>
-<li>是一门全新的语言，不像 C++ 一样有沉重的历史包袱。</li>
-</ul>
-<p>即使不使用 Rust
-编码，依然可以借鉴它的思想，因为其语法本身就是资源管理的最佳实践，学习它可以帮助自己在其他语言中避开错误的写法。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://famer.me/2021/05/17/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="ming yang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="My Space">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | My Space">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/17/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-17 00:00:00" itemprop="dateCreated datePublished" datetime="2021-05-17T00:00:00+08:00">2021-05-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-11 22:02:23" itemprop="dateModified" datetime="2026-03-11T22:02:23+08:00">2026-03-11</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
-first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
-more info. If you get any problems when using Hexo, you can find the
-answer in <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
-you can ask me on <a
-target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
       
     </div>
