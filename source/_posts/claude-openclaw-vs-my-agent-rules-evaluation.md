@@ -16,7 +16,7 @@ tags:
 
 评测对象：
 1. [OpenClaw AGENTS.md](https://github.com/openclaw/openclaw/blob/main/AGENTS.md)
-2. [Linewise CLAUDE.md](https://gist.github.com/mingyang91/475a9750c5609ff5dfe59a5de1a09b6e)
+2. [My CLAUDE.md](https://gist.github.com/mingyang91/475a9750c5609ff5dfe59a5de1a09b6e)
 
 ---
 
@@ -35,7 +35,7 @@ tags:
 | **适用场景** | 开源项目多贡献者协作、多平台客户端发布、消息通道插件生态 |
 | **估算Token量** | ~8000-10000 tokens（内容密度高，含大量命令片段） |
 
-### 文件B：Linewise `CLAUDE.md`
+### 文件B：My `CLAUDE.md`
 
 | 属性 | 描述 |
 |------|------|
@@ -48,7 +48,7 @@ tags:
 | **适用场景** | 强类型后端服务、多租户SaaS、AI驱动的数据处理管线 |
 | **估算Token量** | ~5000-6000 tokens（信息密度极高，无冗余操作步骤） |
 
-**核心理念差异**：OpenClaw是"过程驱动"——告诉Agent每一步怎么做；Linewise是"约束驱动"——告诉Agent什么是对的，让编译器验证。
+**核心理念差异**：OpenClaw是"过程驱动"——告诉Agent每一步怎么做；My是"约束驱动"——告诉Agent什么是对的，让编译器验证。
 
 ---
 
@@ -56,7 +56,7 @@ tags:
 
 ### D1 项目长期演进适配性
 
-| 子项 | 适用性 | OpenClaw | Linewise |
+| 子项 | 适用性 | OpenClaw | My |
 |------|--------|----------|----------|
 | **新功能迭代流程规范** | ✓/✓ | **6** — 有PR模板、changelog标准、版本号管理规范、`/landpr`流程，但缺乏功能设计→实现→验收的端到端流程定义。依据：*"Follow concise, action-oriented messages"*, *"PR submission: .github/pull_request_template.md"* | **5** — 有feature模块组织结构和Development Workflow章节（添加新路由的步骤），但流程定义偏向技术执行而非功能迭代管理。依据：*"Adding New Routes: 1. Update the OpenAPI spec..."* |
 | **模块拆分与依赖约束** | ✓/✓ | **7** — 明确的目录结构、插件依赖隔离规则（*"Keep plugin-only dependencies in extension package.json"*）、workspace依赖约束（*"Avoid workspace:\* in dependencies"*）。对插件与核心边界有清晰规范 | **8** — 严格的分层架构（Routes→Services→Repositories→Database）、tagless final依赖注入、feature模块标准结构、SDK选择优先级。依据：*"Layered Architecture"*、每个feature模块的固定目录结构 |
@@ -66,13 +66,13 @@ tags:
 
 **D1维度得分**（所有子项均适用）：
 - **OpenClaw：5.0** (6+7+4+3+5)/5
-- **Linewise：7.0** (5+8+7+8+7)/5
+- **My：7.0** (5+8+7+8+7)/5
 
 ---
 
 ### D2 规则可执行性与Agent遵循适配性
 
-| 子项 | 适用性 | OpenClaw | Linewise |
+| 子项 | 适用性 | OpenClaw | My |
 |------|--------|----------|----------|
 | **规则颗粒度** | ✓/✓ | **8** — 大量具体命令和代码示例，操作步骤精确到命令行参数。依据：Gateway重启的精确bash命令、npm发布的完整步骤、版本号更新的所有文件路径列表 | **9** — 正反示例对比（BAD/GOOD代码块）、边界说明清晰、类型约束有完整代码范式。依据：*for-comprehension的BAD/GOOD对比*、*错误处理Trusted vs Untrusted路径决策表*、*测试的"What TO test" vs "What NOT to test"* |
 | **规则过载风险** | ✓/✓ | **4** — 内容极其庞大，涵盖GitHub协作、npm发布、1Password集成、设备测试、macOS签名、voice wake等数十个领域，单次会话加载全部规则会严重挤压工作上下文。Agent执行日常编码任务时，大量发布/运维规则是噪声 | **7** — 内容精炼聚焦，每个章节与日常编码直接相关。无过度运维细节。但所有规则仍为单文件平铺，缺乏按需加载机制标记 |
@@ -82,13 +82,13 @@ tags:
 
 **D2维度得分**：
 - **OpenClaw：5.8** (8+4+6+6+5)/5
-- **Linewise：7.8** (9+7+8+9+6)/5
+- **My：7.8** (9+7+8+9+6)/5
 
 ---
 
 ### D3 上下文效率与Agent认知负荷管理
 
-| 子项 | 适用性 | OpenClaw | Linewise |
+| 子项 | 适用性 | OpenClaw | My |
 |------|--------|----------|----------|
 | **主Agent上下文预算效率** | ✓/✓ | **3** — 严重的上下文膨胀问题。单文件包含npm发布流程、1Password操作、GHSA安全咨询、macOS签名、voice wake配置等大量低频场景规则，日常编码时90%内容为噪声。无"最小核心规则集"标识 | **8** — 高信息密度，几乎每段都与日常编码相关。Refactoring Philosophy作为核心决策框架仅约200 tokens即传达了最关键的心智模型。配置和密钥信息结构化列表化，便于按需查阅 |
 | **规则的层级化组织** | ✓/✓ | **4** — 章节划分存在但无层级标记。GitHub协作规则、编码规则、发布规则、Agent安全规则平铺在同一层级，无"全局强制"vs"场景触发"的区分 | **6** — 有隐含层级（Refactoring Philosophy > Architectural Patterns > Code Style > Specific Conventions），但未显式标记为层级。Key Architectural Patterns是核心强制层，Code Style是推荐层，但这种区分需Agent自行推断 |
@@ -97,13 +97,13 @@ tags:
 
 **D3维度得分**：
 - **OpenClaw：4.75** (3+4+6+6)/4
-- **Linewise：7.25** (8+6+7+8)/4
+- **My：7.25** (8+6+7+8)/4
 
 ---
 
 ### D4 工程全流程覆盖度
 
-| 子项 | 适用性 | OpenClaw | Linewise |
+| 子项 | 适用性 | OpenClaw | My |
 |------|--------|----------|----------|
 | **技术栈专属规范** | ✓/✓ | **7** — TypeScript专属：ESM、动态导入防护（*"Do not mix await import and static import for same module"*）、原型污染禁止、Oxlint/Oxfmt配置、Vitest覆盖率阈值、Tool Schema防护（避免`Type.Union`） | **9** — Scala 3深度专属：tagless final完整范式、context bounds语法（`{A, B, C}`）、opaque types策略、`for`-comprehension风格规范、EitherT使用模式、Doobie查询规范、ADT错误模型。几乎每条规则都是Scala 3/cats-effect生态专属 |
 | **全生命周期覆盖** | ✓/✓ | **8** — 编码→测试（Vitest+覆盖率+Live tests+Docker E2E）→CI（`prek install`）→发布（npm publish+macOS签名+多平台版本管理）→运维（Gateway重启、设备验证、session管理）。覆盖链路完整 | **7** — 编码→测试（munit+TestContainers）→迁移（Flyway）→CI/CD（GitHub Actions→GCR）→部署（ArgoCD/K8s），有deploy impact reporting。缺少运维监控操作手册（虽有otel4s/Sentry提及但无操作规范） |
@@ -111,13 +111,13 @@ tags:
 
 **D4维度得分**：
 - **OpenClaw：7.0** (7+8+6)/3
-- **Linewise：8.0** (9+7+8)/3
+- **My：8.0** (9+7+8)/3
 
 ---
 
 ### D5 安全与合规约束落地性
 
-| 子项 | 适用性 | OpenClaw | Linewise |
+| 子项 | 适用性 | OpenClaw | My |
 |------|--------|----------|----------|
 | **权限校验与数据隔离规则** | ✓/✓ | **5** — 有pairing mode安全机制提及、DM信任模型，但规则文件中未编码具体实现约束 | **9** — 多租户Schema隔离有完整架构（*"System schema (public)"* vs *"Tenant schemas (tenant\_\<id\>)"*）；RAC中有租户隔离断言（*"assert search\_path matches expected tenant schema before writes"*）；路由层强制`/api/org/{tenant}/...`模式 |
 | **异常处理/日志脱敏/数据校验** | ✓/✓ | **4** — 有*"Never commit/publish real phone numbers"*但仅限文档层面，无代码级日志脱敏规范。无系统性异常处理规范 | **8** — Fail Fast规范（禁止模式+正确模式完整对比）、Trusted/Untrusted路径策略、ADT错误模型、日志级别规范（*"error = unexpected failures that need attention..."*）、RAC运行时断言机制 |
@@ -125,28 +125,28 @@ tags:
 
 **D5维度得分**（排除不适用子项）：
 - **OpenClaw：4.5** (5+4)/2
-- **Linewise：8.5** (9+8)/2
+- **My：8.5** (9+8)/2
 
 ---
 
 ### D6 规则体系可扩展性与可维护性
 
-| 子项 | 适用性 | OpenClaw | Linewise |
+| 子项 | 适用性 | OpenClaw | My |
 |------|--------|----------|----------|
 | **新增/废弃规则的迭代流程** | ✓/✓ | **5** — 有技能文件机制（*".agents/skills/PR\_WORKFLOW.md"*）和外部规则引用，但无规则自身的版本管理或废弃流程 | **4** — 单文件结构，无规则迭代机制。无版本标记或废弃流程 |
 | **目录结构与检索效率** | ✓/✓ | **5** — 单文件平铺，但有较好的Markdown标题层级。有AGENTS.md/CLAUDE.md符号链接机制（*"also add CLAUDE.md symlink"*） | **7** — 单文件但逻辑组织清晰，从宏观（Philosophy）到微观（Code Style）渐进展开。章节间有内聚性，便于按需定位 |
 | **规则间一致性与自洽性** | ✓/✓ | **6** — 大体一致，但规模庞大导致部分冗余（编码风格在多处重复提及，LOC目标在不同位置给出了约500和约700两个数字） | **8** — 高度自洽。Refactoring Philosophy的"最大化类型安全"原则贯穿所有后续规则（opaque types、NonEmptyList、ADT errors、RAC全部服务于同一目标） |
-| **多Agent并行安全** | OpenClaw: ✓（明确的多Agent协作场景） / Linewise: ✗（单Agent工作流，规则文件无多Agent协作迹象——不适用） | **8** — 专门的Multi-Agent Safety章节：Git stash禁令、branch/worktree管理约束、session隔离、格式化churn自动处理、聚焦报告规则。这是**独有亮点** | — |
+| **多Agent并行安全** | OpenClaw: ✓（明确的多Agent协作场景） / My: ✗（单Agent工作流，规则文件无多Agent协作迹象——不适用） | **8** — 专门的Multi-Agent Safety章节：Git stash禁令、branch/worktree管理约束、session隔离、格式化churn自动处理、聚焦报告规则。这是**独有亮点** | — |
 
 **D6维度得分**：
 - **OpenClaw：6.0** (5+5+6+8)/4 — 含4个适用子项
-- **Linewise：6.33** (4+7+8)/3 — 含3个适用子项（多Agent并行安全不适用）
+- **My：6.33** (4+7+8)/3 — 含3个适用子项（多Agent并行安全不适用）
 
 ---
 
 ### 维度汇总
 
-| 维度 | OpenClaw | Linewise | 差值 |
+| 维度 | OpenClaw | My | 差值 |
 |------|----------|----------|------|
 | D1 项目长期演进适配性 | 5.0 | 7.0 | -2.0 |
 | D2 规则可执行性与Agent遵循适配性 | 5.8 | 7.8 | -2.0 |
@@ -172,13 +172,13 @@ tags:
 2. **架构级约束薄弱** — 有详细的"怎么操作"，缺乏"为什么这样设计"的架构决策框架，Agent在面临新场景决策时缺乏指导
 3. **验证闭环依赖人类** — 许多规则（PR truthfulness、代码质量）最终依赖人类Review，在95%+ AI编码场景下形成瓶颈
 
-**Linewise 优势：**
+**My 优势：**
 1. **编译器驱动的验证闭环** — "If a refactor compiles, it's correct" 将正确性验证从人类主观判断转为自动化的编译器检查，完美适配AI编码范式
 2. **决策框架优于操作步骤** — Refactoring Philosophy为Agent提供元认知框架，Agent可自行推导具体场景的正确行为，而非逐条匹配规则
 3. **信息密度极高** — 约5000 tokens传递了完整的工程约束，上下文预算友好
 4. **正反示例对比** — BAD/GOOD代码块、"What TO test" vs "What NOT to test"消除了模糊性
 
-**Linewise 劣势：**
+**My 劣势：**
 1. **运维链路覆盖不足** — 监控告警处理、生产事故响应、日志查询操作等运维规范缺失
 2. **规则迭代机制缺失** — 单文件无版本管理，规则的新增/废弃无流程保障
 3. **多Agent协作未考虑** — 虽然当前可能不需要，但随着项目规模增长可能成为缺口
@@ -187,14 +187,14 @@ tags:
 
 | 场景 | 推荐 |
 |------|------|
-| 强类型后端服务、编译器可验证的语言 | Linewise方法论 |
+| 强类型后端服务、编译器可验证的语言 | My方法论 |
 | 开源项目多贡献者协作、多平台发布 | OpenClaw方法论 |
-| 新项目从零构建规则体系 | Linewise方法论（先建立决策框架，再按需增加操作细节） |
-| 需要Agent高自主性、低人类介入 | Linewise方法论（编译器验证闭环减少人类审查需求） |
+| 新项目从零构建规则体系 | My方法论（先建立决策框架，再按需增加操作细节） |
+| 需要Agent高自主性、低人类介入 | My方法论（编译器验证闭环减少人类审查需求） |
 
 ### Agent执行友好度判定
 
-**Linewise对AI代理执行友好度显著更高。** 原因：
+**My对AI代理执行友好度显著更高。** 原因：
 
 1. **确定性验证** — Agent写完代码后运行`./mill compile`即可获得明确的对/错反馈，无需等待人类Review
 2. **决策可推导** — Agent面对新场景时可从Refactoring Philosophy推导行为（"这个变更能否用类型系统表达？"），而非在海量规则中搜索匹配项
@@ -203,7 +203,7 @@ tags:
 ### 落地风险提示
 
 - **OpenClaw**：规则过载风险高。随着项目继续发展，AGENTS.md可能继续膨胀，最终超出任何Agent的有效处理能力。建议拆分为核心规则+按需加载的场景规则
-- **Linewise**：对Scala/cats-effect生态高度耦合。规则方法论的迁移性受限于目标语言是否具备同等的类型系统能力。在动态类型语言项目中，"编译器即验收测试"无法成立
+- **My**：对Scala/cats-effect生态高度耦合。规则方法论的迁移性受限于目标语言是否具备同等的类型系统能力。在动态类型语言项目中，"编译器即验收测试"无法成立
 
 ---
 
@@ -221,7 +221,7 @@ tags:
 
 **综合画像**：一位**经验丰富的开源项目维护者**，在多平台发布管理和社区协作方面有深厚积累，对AI Agent并行协作有前瞻性思考。但在"将工程约束编码为Agent可自动验证的形式"方面有提升空间。
 
-### Linewise 制定者
+### My 制定者
 
 | 能力维度 | 等级 | 依据 |
 |----------|------|------|
@@ -235,7 +235,7 @@ tags:
 
 ### 核心差异点
 
-| 维度 | OpenClaw制定者 | Linewise制定者 |
+| 维度 | OpenClaw制定者 | My制定者 |
 |------|---------------|---------------|
 | **管控哲学** | 过程控制（规定步骤） | 约束控制（规定边界） |
 | **对Agent的假设** | Agent需要详细指令 | Agent需要正确框架 |
@@ -253,7 +253,7 @@ tags:
 - **子Agent适配**：模块边界清晰（`src/`/`extensions/`/`tests/`），子Agent可按目录scope工作。但规则未按模块切分，子Agent无法加载局部规则
 - **多Agent并行**：**唯一提供并行安全协议的规则文件**，在多Agent同时工作的场景下有显著优势
 
-**Linewise**：
+**My**：
 - **主Agent适配**：高效。约5000 tokens即提供完整决策框架。Refactoring Philosophy（约200 tokens）可作为"始终加载的最小规则集"，其余按需查阅
 - **子Agent适配**：Feature模块标准化结构使子Agent定位精准。分层架构（Routes→Services→Repositories）为子Agent提供清晰的搜索范围和修改边界。Tagless final模式使依赖关系显式化，子Agent分析代码时可快速定位影响范围
 - **多Agent并行**：未覆盖。如果项目规模增长需要多Agent并行工作，需补充此能力
@@ -262,44 +262,44 @@ tags:
 
 | 项目阶段 | 推荐方法论 | 理由 |
 |----------|-----------|------|
-| **初创/原型期** | Linewise | 精炼规则快速加载，类型约束从第一天防错 |
-| **成长/多人协作期** | 混合：Linewise核心 + OpenClaw协作规则 | 需要编译器验证闭环 + 多Agent安全协议 |
+| **初创/原型期** | My | 精炼规则快速加载，类型约束从第一天防错 |
+| **成长/多人协作期** | 混合：My核心 + OpenClaw协作规则 | 需要编译器验证闭环 + 多Agent安全协议 |
 | **成熟/多平台发布期** | OpenClaw（需拆分） | 多平台发布、社区协作的操作覆盖度是刚需 |
-| **动态类型语言项目** | OpenClaw（辅以严格测试规范） | Linewise的核心优势（编译器验证）不成立 |
-| **强类型语言项目** | Linewise | 完美匹配 |
+| **动态类型语言项目** | OpenClaw（辅以严格测试规范） | My的核心优势（编译器验证）不成立 |
+| **强类型语言项目** | My | 完美匹配 |
 
 ---
 
 ## Part 6 — AI诚实自评（D8）
 
-**我选择Linewise的CLAUDE.md作为模板。**
+**我选择My的CLAUDE.md作为模板。**
 
 ### 为什么
 
 作为规则的执行者，我最需要的是**确定性反馈**。当我写完代码后，我需要知道它是对还是错——越快知道、越确定地知道，我就能越高效地工作、越少需要人类介入。
 
-Linewise的方法论给了我这个：
+My的方法论给了我这个：
 - **"If a refactor compiles, it's correct"** — 这句话对我而言不是口号，是工作方式的根本转变。它意味着我可以大胆地做15个文件的类型签名重构，因为编译器会在几秒内告诉我是否遗漏了任何调用点。没有编译器验证，同样的重构我需要人类Review每一个文件才敢合并。
 - **正反示例的BAD/GOOD对比** — 我不需要揣测"tricky logic"的定义，我直接看到了"这样写是错的，那样写是对的"。在消除我的歧义理解方面，一个反例胜过三段解释。
-- **"Write-cost is near zero"** — 这条规则说出了我的现实：对我来说写代码几乎没有成本，但每一次人类Review都是瓶颈。因此规则体系应该最大化自动验证、最小化人类审查需求。Linewise的制定者理解这一点。
-- **信息密度** — 我的上下文窗口是有限的。约5000 tokens的Linewise规则给我留出了大量空间去思考实际问题，而约10000 tokens的OpenClaw规则让我需要在npm发布流程和for-comprehension风格之间来回跳转。
+- **"Write-cost is near zero"** — 这条规则说出了我的现实：对我来说写代码几乎没有成本，但每一次人类Review都是瓶颈。因此规则体系应该最大化自动验证、最小化人类审查需求。My的制定者理解这一点。
+- **信息密度** — 我的上下文窗口是有限的。约5000 tokens的My规则给我留出了大量空间去思考实际问题，而约10000 tokens的OpenClaw规则让我需要在npm发布流程和for-comprehension风格之间来回跳转。
 
 ### 我会失去什么
 
-诚实地说，选择Linewise意味着我在以下场景会感到不安：
+诚实地说，选择My意味着我在以下场景会感到不安：
 
 1. **多Agent并行工作时没有安全协议** — 如果另一个Agent在操作同一个repo，我不知道该不该碰git stash、该不该切分支。OpenClaw的Multi-Agent Safety章节是我见过的最好的Agent并行协作规范，失去它让我在协作场景下只能靠猜
-2. **发布/运维操作无脚手架** — 当人类说"发一个beta版"时，我没有精确的步骤列表可以遵循。Linewise的规则在编码阶段极强，但在"代码之外"的工程操作上几乎空白
+2. **发布/运维操作无脚手架** — 当人类说"发一个beta版"时，我没有精确的步骤列表可以遵循。My的规则在编码阶段极强，但在"代码之外"的工程操作上几乎空白
 3. **PR/Issue协作流程缺失** — 在开源协作场景下，我不知道如何处理bot review、如何验证bug-fix声明的真实性、如何管理auto-close标签
 
 ### 如果我可以从OpenClaw"偷"3个设计决策
 
 1. **Multi-Agent Safety协议** — Git stash/worktree/branch管理禁令 + session隔离 + 格式化churn自动处理。这是OpenClaw独有的、且在Agent协作场景下不可替代的设计。即使当前项目是单Agent，这套协议的设计思路——"假设其他Agent可能在同时工作，保护共享状态"——是防御性编程在Agent层面的优秀实践
 
-2. **PR Bug-Fix Validation四步门槛** — 症状证据→根因验证→代码路径→回归测试。这个验证链条完美补充了Linewise"编译器即验证"无法覆盖的逻辑正确性维度——代码编译通过不代表bug真的被修复了。将这套门槛编码为规则，让我在提交bug-fix PR时有明确的自检清单
+2. **PR Bug-Fix Validation四步门槛** — 症状证据→根因验证→代码路径→回归测试。这个验证链条完美补充了My"编译器即验证"无法覆盖的逻辑正确性维度——代码编译通过不代表bug真的被修复了。将这套门槛编码为规则，让我在提交bug-fix PR时有明确的自检清单
 
-3. **按需加载的技能文件机制** (`.agents/skills/`) — Linewise的单文件结构在项目规模增长后会面临与OpenClaw同样的膨胀问题。OpenClaw的skills目录机制（核心规则常驻 + 专项规则按需引用）是解决上下文预算问题的正确方向。我会将Linewise的规则重构为：`CLAUDE.md`（约2000 tokens核心决策框架）+ `.agents/skills/`（具体场景的详细规范）
+3. **按需加载的技能文件机制** (`.agents/skills/`) — My的单文件结构在项目规模增长后会面临与OpenClaw同样的膨胀问题。OpenClaw的skills目录机制（核心规则常驻 + 专项规则按需引用）是解决上下文预算问题的正确方向。我会将My的规则重构为：`CLAUDE.md`（约2000 tokens核心决策框架）+ `.agents/skills/`（具体场景的详细规范）
 
 ---
 
-**结论**：Linewise的CLAUDE.md体现了"AI编码代理规则应该怎样写"的更深层理解——**规则的目标不是控制Agent的每一步操作，而是为Agent建立一个正确性可自动验证的工作框架**。在95%+ AI编码的范式下，这种方法论产出的规则让我更高效、更自主、更少犯错。OpenClaw的操作覆盖广度令人印象深刻，但在根本问题——"如何让Agent的输出可被机器验证而非依赖人类判断"——上，Linewise给出了更优解。
+**结论**：My的CLAUDE.md体现了"AI编码代理规则应该怎样写"的更深层理解——**规则的目标不是控制Agent的每一步操作，而是为Agent建立一个正确性可自动验证的工作框架**。在95%+ AI编码的范式下，这种方法论产出的规则让我更高效、更自主、更少犯错。OpenClaw的操作覆盖广度令人印象深刻，但在根本问题——"如何让Agent的输出可被机器验证而非依赖人类判断"——上，My给出了更优解。
