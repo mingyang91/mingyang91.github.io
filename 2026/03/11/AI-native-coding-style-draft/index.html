@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-13T06:59:13.551Z">
+<meta property="article:modified_time" content="2026-03-13T08:00:45.795Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -206,7 +206,7 @@ Style：不是为了可读性，是为了护栏</span></a></li></ol></li><li cla
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-13 14:59:13" itemprop="dateModified" datetime="2026-03-13T14:59:13+08:00">2026-03-13</time>
+      <time title="Modified: 2026-03-13 16:00:45" itemprop="dateModified" datetime="2026-03-13T16:00:45+08:00">2026-03-13</time>
     </span>
 
   
@@ -677,9 +677,18 @@ AI 来说是无歧义的符号推理，处理起来很轻松。</p>
 </blockquote>
 <p>FP 的成本（实现层的认知负担）落在 AI 身上——AI 不在乎。 FP
 的收益（显式、可验证的类型契约）交给人类——人类只需要确认"对，这个函数确实应该可能失败"。</p>
+<p>而且 AI 不只是"不在乎"FP 的复杂度——它在 FP
+的模型里实际上<strong>更不容易出错</strong>。就像计算器算
+<code>1+1</code> 和 <code>114514+1919810</code> 花的时间一样，AI
+处理类型体操和处理普通赋值语句的单行成本也差不多。但项目不是一行代码，而是几万行代码长年累积。可变状态
++ 时序推理意味着每多一行代码，AI 需要追踪的状态空间指数增长；不可变 +
+组合则是线性增长。几万行累积下来，错误率差距是量级的。更关键的是，类型系统提供<strong>确定性的即时反馈</strong>——编译失败就是失败，大幅消除了"看起来对了但运行时才炸"的可能性。当然不是完全消除：涉及外部系统、硬件调用、网络超时的场景，类型系统管不到。但在它能管到的范围内（空值、错误路径、参数类型混淆），反馈是即时且确定的。写动态语言的反馈链路就长得多：写完
+→ 跑测试 → 发现失败 → 猜是哪一步的状态出了问题 → 回溯。</p>
+<p>AI 让某些能力变得廉价——类型体操、符号推理、复杂的 monad transformer
+stacks。<strong>无法廉价化的才是真正珍贵的：判断系统应该做什么，定义正确的抽象边界，决定哪些约束值得编码到类型里。</strong>
+计算器不能替代数学家，AI 不能替代架构师。</p>
 <p>函数式编程社区等了几十年的"主流化"，没想到推手不是人类程序员的审美转变，而是
-AI 对显式类型信息的刚需。</p>
-<p>而人类要做的，只是把脑力从"读懂
+AI 对显式类型信息的刚需。而人类要做的，只是把脑力从"读懂
 <code>semiflatMap</code>"解放出来，花在更值得的地方：<strong>定义系统应该做什么，而不是操心系统怎么做。</strong></p>
 <h2 id="下一代-ai-native-语言">下一代 AI-native 语言</h2>
 <p>如果把本文的逻辑推到极致：<strong>下一代 AI-native
