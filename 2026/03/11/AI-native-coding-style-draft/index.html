@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-13T15:44:45.494Z">
+<meta property="article:modified_time" content="2026-03-13T15:45:16.829Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -207,7 +207,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-13 23:44:45" itemprop="dateModified" datetime="2026-03-13T23:44:45+08:00">2026-03-13</time>
+      <time title="Modified: 2026-03-13 23:45:16" itemprop="dateModified" datetime="2026-03-13T23:45:16+08:00">2026-03-13</time>
     </span>
 
   
@@ -715,7 +715,10 @@ bug，直到用户问"我的数据去哪了"才被发现。</p>
 拿到的是未经篡改的原始异常栈和错误类型，而不是某个中间层
 <code>handleErrorWith</code> 之后吐出来的
 <code>fallbackValue</code>——那种情况下你甚至不知道真正的异常是什么、发生在哪一层。严苛一致的编码约束让整个项目的错误传播路径是可预测的：错误从哪里产生，就会沿着类型签名声明的路径一路传播到最外层，不会在中途被某个防御性代码偷偷拐走。debug
-agent 只需要沿着这条路径追溯，就能快速定位故障的真实位置。</p>
+agent 只需要沿着这条路径追溯，就能快速定位故障的真实位置——而不是在被
+<code>handleErrorWith</code>
+截断的错误链面前两眼一黑，被迫阅读数个文件去猜测真正的异常源头，尝试修复，发现猜错了，再读更多文件，再猜，如此循环。<strong>每一个被吞掉的错误，都是在给未来的
+debug agent 制造一次盲目试错的循环。</strong></p>
 <p><strong>绝对化表述是对抗训练偏差的校准参数。</strong>
 就像矫正视力的镜片——镜片本身是"歪"的，但戴上之后看到的世界是正的。</p>
 <p>这也意味着：<strong>规则文件的绝对化程度应该随模型能力变化而调整。</strong>
