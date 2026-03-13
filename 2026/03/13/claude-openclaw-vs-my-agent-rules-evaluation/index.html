@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="AI编码代理规则文件全维度横向对比评测报告 核心前提 两个项目都是 AI-native 项目——代码由AI编码代理编写、修改、阅读和调试，但 AI-native 成熟度路径不同：  渐进式（Linewise）：多租户后端API服务（Scala 3 &#x2F; http4s），历经多代模型演进（Claude 3.7→4.6），早期人类参与度约50%，随模型能力提升逐步降低人类介入，规则文件随项目一起演化积累">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI编码代理规则文件全维度横向对比评测报告">
+<meta property="og:url" content="https://famer.me/2026/03/13/claude-openclaw-vs-my-agent-rules-evaluation/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="AI编码代理规则文件全维度横向对比评测报告 核心前提 两个项目都是 AI-native 项目——代码由AI编码代理编写、修改、阅读和调试，但 AI-native 成熟度路径不同：  渐进式（Linewise）：多租户后端API服务（Scala 3 &#x2F; http4s），历经多代模型演进（Claude 3.7→4.6），早期人类参与度约50%，随模型能力提升逐步降低人类介入，规则文件随项目一起演化积累">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-13T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-13T05:27:28.076Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Programming">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Software Engineering">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2026/03/13/claude-openclaw-vs-my-agent-rules-evaluation/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2026/03/13/claude-openclaw-vs-my-agent-rules-evaluation/","path":"2026/03/13/claude-openclaw-vs-my-agent-rules-evaluation/","title":"AI编码代理规则文件全维度横向对比评测报告"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>AI编码代理规则文件全维度横向对比评测报告 | My Space</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RGPQ0EFYL"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1RGPQ0EFYL","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ai%E7%BC%96%E7%A0%81%E4%BB%A3%E7%90%86%E8%A7%84%E5%88%99%E6%96%87%E4%BB%B6%E5%85%A8%E7%BB%B4%E5%BA%A6%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94%E8%AF%84%E6%B5%8B%E6%8A%A5%E5%91%8A"><span class="nav-number">1.</span> <span class="nav-text">AI编码代理规则文件全维度横向对比评测报告</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%89%8D%E6%8F%90"><span class="nav-number">1.1.</span> <span class="nav-text">核心前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-1-%E5%9F%BA%E7%A1%80%E7%94%BB%E5%83%8F"><span class="nav-number">1.2.</span> <span class="nav-text">Part 1 — 基础画像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openclaw-agents.md"><span class="nav-number">1.2.1.</span> <span class="nav-text">OpenClaw AGENTS.md</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#my-claude.md"><span class="nav-number">1.2.2.</span> <span class="nav-text">My CLAUDE.md</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-2-%E9%87%8F%E5%8C%96%E8%AF%84%E6%B5%8B%E8%A1%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Part 2 — 量化评测表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#d1-%E9%A1%B9%E7%9B%AE%E9%95%BF%E6%9C%9F%E6%BC%94%E8%BF%9B%E9%80%82%E9%85%8D%E6%80%A7"><span class="nav-number">1.3.1.</span> <span class="nav-text">D1 项目长期演进适配性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d2-%E8%A7%84%E5%88%99%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%80%A7%E4%B8%8Eagent%E9%81%B5%E5%BE%AA%E9%80%82%E9%85%8D%E6%80%A7"><span class="nav-number">1.3.2.</span> <span class="nav-text">D2
+规则可执行性与Agent遵循适配性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d3-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%88%E7%8E%87%E4%B8%8Eagent%E8%AE%A4%E7%9F%A5%E8%B4%9F%E8%8D%B7%E7%AE%A1%E7%90%86"><span class="nav-number">1.3.3.</span> <span class="nav-text">D3
+上下文效率与Agent认知负荷管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d4-%E5%B7%B2%E5%A7%94%E6%89%98%E9%A2%86%E5%9F%9F%E7%9A%84%E5%B7%A5%E7%A8%8B%E6%B7%B1%E5%BA%A6%E4%B8%8E%E5%8F%AF%E6%8C%81%E7%BB%AD%E6%80%A7"><span class="nav-number">1.3.4.</span> <span class="nav-text">D4
+已委托领域的工程深度与可持续性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d5-%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%88%E8%A7%84%E7%BA%A6%E6%9D%9F%E8%90%BD%E5%9C%B0%E6%80%A7"><span class="nav-number">1.3.5.</span> <span class="nav-text">D5 安全与合规约束落地性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d6-%E8%A7%84%E5%88%99%E4%BD%93%E7%B3%BB%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E4%B8%8E%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7"><span class="nav-number">1.3.6.</span> <span class="nav-text">D6
+规则体系可扩展性与可维护性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%B4%E5%BA%A6%E6%B1%87%E6%80%BB"><span class="nav-number">1.3.7.</span> <span class="nav-text">维度汇总</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-3-%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94%E7%BB%93%E8%AE%BA"><span class="nav-number">1.4.</span> <span class="nav-text">Part 3 — 横向对比结论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openclaw%E6%A0%B8%E5%BF%83%E4%BC%98%E5%8A%BF"><span class="nav-number">1.4.1.</span> <span class="nav-text">OpenClaw核心优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#openclaw%E6%A0%B8%E5%BF%83%E4%B8%8D%E8%B6%B3"><span class="nav-number">1.4.2.</span> <span class="nav-text">OpenClaw核心不足</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#my%E6%A0%B8%E5%BF%83%E4%BC%98%E5%8A%BF"><span class="nav-number">1.4.3.</span> <span class="nav-text">My核心优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#my%E6%A0%B8%E5%BF%83%E4%B8%8D%E8%B6%B3"><span class="nav-number">1.4.4.</span> <span class="nav-text">My核心不足</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%E5%B7%AE%E5%BC%82"><span class="nav-number">1.4.5.</span> <span class="nav-text">适用场景差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#agent%E6%89%A7%E8%A1%8C%E5%8F%8B%E5%A5%BD%E5%BA%A6%E5%88%A4%E5%AE%9A"><span class="nav-number">1.4.6.</span> <span class="nav-text">Agent执行友好度判定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%90%BD%E5%9C%B0%E9%A3%8E%E9%99%A9%E6%8F%90%E7%A4%BA"><span class="nav-number">1.4.7.</span> <span class="nav-text">落地风险提示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-4-%E5%88%B6%E5%AE%9A%E8%80%85%E8%83%BD%E5%8A%9B%E7%94%BB%E5%83%8F%E5%AF%B9%E6%AF%94d7"><span class="nav-number">1.5.</span> <span class="nav-text">Part 4 —
+制定者能力画像对比（D7）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%B7%AE%E5%BC%82"><span class="nav-number">1.5.1.</span> <span class="nav-text">核心差异</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-5-agent%E9%80%82%E9%85%8D%E6%80%A7%E5%88%86%E6%9E%90"><span class="nav-number">1.6.</span> <span class="nav-text">Part 5 — Agent适配性分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%BBagent-%E5%AD%90agent%E6%9E%B6%E6%9E%84my%E7%9B%AE%E6%A0%87%E6%9E%B6%E6%9E%84"><span class="nav-number">1.6.1.</span> <span class="nav-text">单主Agent +
+子Agent架构（My目标架构）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9Aagent%E5%B9%B6%E8%A1%8C%E6%9E%B6%E6%9E%84openclaw%E7%9B%AE%E6%A0%87%E6%9E%B6%E6%9E%84"><span class="nav-number">1.6.2.</span> <span class="nav-text">多Agent并行架构（OpenClaw目标架构）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E9%A1%B9%E7%9B%AE%E8%A7%84%E6%A8%A1%E9%98%B6%E6%AE%B5%E7%9A%84%E6%8E%A8%E8%8D%90"><span class="nav-number">1.6.3.</span> <span class="nav-text">不同项目规模&#x2F;阶段的推荐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-6-ai%E8%AF%9A%E5%AE%9E%E8%87%AA%E8%AF%84d8"><span class="nav-number">1.7.</span> <span class="nav-text">Part 6 — AI诚实自评（D8）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AFa%E6%88%90%E7%86%9F%E7%9A%84ai-native%E9%A1%B9%E7%9B%AE%E5%A4%A7%E9%87%8F%E5%AD%98%E9%87%8F%E4%BB%A3%E7%A0%81%E5%A4%8D%E6%9D%82%E6%9E%B6%E6%9E%84%E6%BC%94%E8%BF%9B%E5%8E%86%E5%8F%B2"><span class="nav-number">1.7.1.</span> <span class="nav-text">场景A：成熟的AI-native项目（大量存量代码、复杂架构演进历史）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AFb%E5%85%A8%E6%96%B0%E7%9A%84ai-native%E9%A1%B9%E7%9B%AE%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%97%A0%E5%8E%86%E5%8F%B2%E5%8C%85%E8%A2%B1"><span class="nav-number">1.7.2.</span> <span class="nav-text">场景B：全新的AI-native项目（从零开始，无历史包袱）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AFc%E7%BB%BC%E5%90%88%E5%88%A4%E6%96%AD"><span class="nav-number">1.7.3.</span> <span class="nav-text">场景C：综合判断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-7-%E8%AF%84%E6%B5%8B%E6%A1%86%E6%9E%B6%E5%85%AC%E5%B9%B3%E6%80%A7%E8%87%AA%E5%AE%A1"><span class="nav-number">1.8.</span> <span class="nav-text">Part 7 — 评测框架公平性自审</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%B4%E5%BA%A6%E9%80%89%E6%8B%A9%E5%81%8F%E5%B7%AE"><span class="nav-number">1.8.1.</span> <span class="nav-text">1. 维度选择偏差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%82%E7%94%A8%E6%80%A7%E8%A7%84%E5%88%99%E7%9A%84%E9%9D%9E%E5%AF%B9%E7%A7%B0%E6%95%88%E5%BA%94"><span class="nav-number">1.8.2.</span> <span class="nav-text">2. 适用性规则的非对称效应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E5%BC%95%E5%AF%BC"><span class="nav-number">1.8.3.</span> <span class="nav-text">3. 信息引导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E5%88%A4%E5%AE%9A"><span class="nav-number">1.8.4.</span> <span class="nav-text">4. 最终判定</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/13/claude-openclaw-vs-my-agent-rules-evaluation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="AI编码代理规则文件全维度横向对比评测报告 | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI编码代理规则文件全维度横向对比评测报告
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-03-13 12:00:00 / Modified: 13:27:28" itemprop="dateCreated datePublished" datetime="2026-03-13T12:00:00+08:00">2026-03-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1
+id="ai编码代理规则文件全维度横向对比评测报告">AI编码代理规则文件全维度横向对比评测报告</h1>
+<h2 id="核心前提">核心前提</h2>
+<p>两个项目都是 <strong>AI-native
+项目</strong>——代码由AI编码代理编写、修改、阅读和调试，但 AI-native
+成熟度路径不同：</p>
+<ul>
+<li><strong>渐进式（Linewise）</strong>：多租户后端API服务（Scala 3 /
+http4s），历经多代模型演进（Claude
+3.7→4.6），早期人类参与度约50%，随模型能力提升逐步降低人类介入，规则文件随项目一起演化积累。主要服务作者自己的agent。</li>
+<li><strong>原生式（OpenClaw）</strong>：开源自主AI代理平台（TypeScript
+/
+Node.js），从第一行代码起即由agent编写，创建者使用多agent并行工作流（5-10个agent并发），规则文件从项目诞生之初即作为agent的执行规范存在。250K+
+stars、1000+贡献者，规则需同时服务创建者和大量外部贡献者的agent。</li>
+</ul>
+<p>评测对象： 1. <a
+target="_blank" rel="noopener" href="https://github.com/openclaw/openclaw/blob/main/AGENTS.md">OpenClaw
+AGENTS.md</a> 2. <a
+target="_blank" rel="noopener" href="https://gist.github.com/mingyang91/475a9750c5609ff5dfe59a5de1a09b6e">My
+CLAUDE.md</a></p>
+<hr />
+<h2 id="part-1-基础画像">Part 1 — 基础画像</h2>
+<h3 id="openclaw-agents.md">OpenClaw <code>AGENTS.md</code></h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>项目定位</strong></td>
+<td>开源自主AI代理平台（TypeScript / Node.js），跨平台（CLI、macOS
+app、iOS/Android、Web），250K+ stars</td>
+</tr>
+<tr class="even">
+<td><strong>目标架构</strong></td>
+<td>多Agent并行工作流（5-10 agent并发），共享同一仓库</td>
+</tr>
+<tr class="odd">
+<td><strong>规则受众</strong></td>
+<td>创建者的多个并发agent +
+大量外部贡献者的agent（不同模型、不同能力）</td>
+</tr>
+<tr class="even">
+<td><strong>核心设计理念</strong></td>
+<td><strong>操作安全与流程一致性</strong> —
+在多agent并发、大规模贡献者场景下确保git操作安全、PR流程一致、发布流程可靠</td>
+</tr>
+<tr class="odd">
+<td><strong>覆盖范围</strong></td>
+<td>仓库结构、PR/Issue管理（auto-close标签、合并门控）、多agent
+Git安全协议、构建/测试/Lint命令、编码风格（TypeScript）、发布流程（npm/macOS/beta）、文档管理（Mintlify/i18n）、安全咨询（GHSA）、平台运维（exe.dev
+VM、macOS签名）、插件生态管理</td>
+</tr>
+<tr class="even">
+<td><strong>结构特征</strong></td>
+<td>扁平化列表结构 —
+以操作指令和注意事项为主，较少代码示例，更多是"做X时要Y"的规则条目。覆盖面广但每个领域的深度较浅</td>
+</tr>
+<tr class="odd">
+<td><strong>Token估算</strong></td>
+<td>~5000-6000 tokens，覆盖面广但单条规则较短</td>
+</tr>
+</tbody>
+</table>
+<h3 id="my-claude.md">My <code>CLAUDE.md</code></h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>项目定位</strong></td>
+<td>多租户后端API服务，企业级SaaS（Scala 3 / http4s /
+cats-effect），AI驱动的文档管理、RAG、视频SOP生成</td>
+</tr>
+<tr class="even">
+<td><strong>目标架构</strong></td>
+<td>单主Agent + 按需子Agent（Explore/Plan等由Claude Code派生）</td>
+</tr>
+<tr class="odd">
+<td><strong>规则受众</strong></td>
+<td>单一开发者的agent（主要是Claude），偶尔人类直接阅读</td>
+</tr>
+<tr class="even">
+<td><strong>核心设计理念</strong></td>
+<td><strong>类型安全最大化</strong> —
+将工程约束编码进类型系统，让编译器成为最终验证者。"如果编译通过，就是正确的。"
+以编译器驱动的激进重构取代保守补丁</td>
+</tr>
+<tr class="odd">
+<td><strong>覆盖范围</strong></td>
+<td>架构模式（tagless
+final）、代码风格（for-comprehension、EitherT/OptionT）、错误处理（ADT
+enum）、类型系统（opaque
+types、NonEmptyList）、测试策略、CI/CD流程、部署衔接、日志规范、运行时断言（RAC）、代码气味追踪、多租户隔离、工具偏好（Metals
+MCP）</td>
+</tr>
+<tr class="even">
+<td><strong>结构特征</strong></td>
+<td>高度结构化 —
+大量代码示例（正反对比）、决策表格、层级清晰的标题体系。信息密度极高，深度聚焦于"如何写好Scala代码"</td>
+</tr>
+<tr class="odd">
+<td><strong>Token估算</strong></td>
+<td>~6000-7000 tokens，信息密度高</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心差异</strong>：两份文件代表了AI-native规则工程的两种典型范式：</p>
+<ul>
+<li><strong>OpenClaw</strong>: <strong>广度优先</strong> —
+覆盖从编码到发布到运维的完整操作流程，在多agent并发安全方面有独到设计，但单条规则的颗粒度和深度较浅</li>
+<li><strong>My</strong>: <strong>深度优先</strong> —
+在一个技术领域（Scala后端开发）做到极致，规则可执行性极高，几乎每条规则都有正反代码示例和边界说明</li>
+</ul>
+<hr />
+<h2 id="part-2-量化评测表">Part 2 — 量化评测表</h2>
+<h3 id="d1-项目长期演进适配性">D1 项目长期演进适配性</h3>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>新功能迭代流程规范</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>模块拆分与依赖约束</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>技术债务识别与治理路径</strong></td>
+<td>✗ 未委托 — 无技术债务治理相关条目，推定由人类主导</td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>API/DB/配置的版本兼容与迁移规则</strong></td>
+<td>✗ 未委托 — 版本管理仅涉及发布版本号位置列表，无API/DB迁移规则</td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>存量代码改造与新旧规范衔接</strong></td>
+<td>✗ 不适用 —
+原生AI项目，从第一行代码起即由agent编写，无存量遗留代码</td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>评分依据：</strong></p>
+<ul>
+<li><strong>OpenClaw 新功能迭代
+(7)</strong>：有明确的PR工作流引用（<code>.agents/skills/PR_WORKFLOW.md</code>），commit规范（<code>scripts/committer</code>），但新功能的架构决策指引较弱。</li>
+<li><strong>My 新功能迭代 (7)</strong>：有明确的"Adding New
+Routes"流程（更新OpenAPI spec → swagger-cli validate →
+遵循auth模式），Feature
+Module组织结构清晰。但缺少新feature的端到端迭代模板。</li>
+<li><strong>OpenClaw 模块拆分
+(7)</strong>：项目结构清晰（<code>src/</code>,
+<code>extensions/*</code>,
+<code>docs/</code>），插件依赖隔离规则明确（<em>"Keep plugin-only deps
+in the extension
+<code>package.json</code>"</em>）。但核心模块间的依赖约束未显式规定。</li>
+<li><strong>My 模块拆分
+(8)</strong>：严格的分层架构（Routes→Services→Repositories→Database）、tagless
+final依赖注入、feature模块标准结构、SDK选择优先级。原文：<em>"Each
+feature module follows a consistent structure"</em></li>
+<li><strong>My 技术债务 (9)</strong>：业界罕见的体系化方案 — code
+smell追踪系统（<code>code_smells.md</code>，FIFO最多10条）、<em>"Migrate
+when file is touched — no hesitation"</em>
+的渐进式迁移策略、编译器驱动的迭代修复范围（<em>"Scope follows the
+compiler iteratively"</em>）。原文：<em>"Existing
+<code>Either[String, T]</code> services migrate the <strong>whole
+service</strong> to ADT errors when the file is modified for any
+reason"</em></li>
+<li><strong>My API/DB迁移
+(8)</strong>：Flyway迁移系统有明确规范（<em>"Never modify existing
+migration files; always create new versioned
+files"</em>），系统/租户双轨迁移，启动时自动运行。外部名称变更有迁移影响提示要求。</li>
+<li><strong>My 存量代码改造 (9)</strong>：<em>"Migrate when file is
+touched"</em> 策略 + ADT error enum渐进式迁移 +
+编译器驱动范围扩展，是存量代码治理的教科书级方案。</li>
+</ul>
+<p><strong>D1维度得分：</strong> -
+<strong>OpenClaw：7.0/10</strong>（2项适用已委托） -
+<strong>My：8.2/10</strong>（5项均适用已委托）</p>
+<hr />
+<h3 id="d2-规则可执行性与agent遵循适配性">D2
+规则可执行性与Agent遵循适配性</h3>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>规则颗粒度</strong></td>
+<td>✓ 已委托 — <strong>6/10</strong></td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>场景完备性</strong></td>
+<td>✓ 已委托 — <strong>5/10</strong></td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>跨会话决策一致性</strong></td>
+<td>✓ 已委托 — <strong>5/10</strong></td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>规则内部一致性</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>可验证性</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>规则过载风险</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>规则可溯因性</strong></td>
+<td>✓ 已委托 — <strong>5/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>注意力衰减抗性</strong></td>
+<td>✓ 已委托 — <strong>6/10</strong></td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>防幻觉与自校验能力</strong></td>
+<td>✓ 已委托 — <strong>6/10</strong></td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>规则与代码现状同步机制</strong></td>
+<td>✓ 已委托 — <strong>5/10</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>评分依据：</strong></p>
+<ul>
+<li><strong>OpenClaw 颗粒度 (6)</strong>：多数规则是操作性指令（"Run X
+command"），易于遵循。但架构/代码质量规则颗粒度低，如 <em>"Add brief
+code comments for tricky or non-obvious logic"</em>
+缺乏"什么算tricky"的判断标准。<em>"Aim to keep files under ~700 LOC;
+guideline only"</em> 缺乏何时违反指南的边界说明。</li>
+<li><strong>My 颗粒度 (9)</strong>：几乎每条规则都有<code>// BAD</code>
++
+<code>// GOOD</code>代码对比示例、边界说明表格、决策树。例如错误处理规则不仅说"不要静默吞错"，还列出了具体的禁止模式（<code>.toOption</code>,
+<code>.getOrElse(defaultValue)</code>
+等）和例外情况（<code>pageSize.getOrElse(10) // OK</code>）。Trusted vs
+Untrusted路径有完整的决策表。NoOp实现按data-related/data-unrelated分类说明。</li>
+<li><strong>OpenClaw 场景完备性
+(5)</strong>：主要覆盖正常操作路径，异常路径覆盖不足。例如multi-agent安全规则覆盖了"当看到不认识的文件"（<em>"keep
+going; focus on your
+changes"</em>），但未覆盖"两个agent同时修改同一文件"的冲突解决。PR合并门控对bug-fix
+PR有完整的4步验证，但对feature PR缺乏对等规范。</li>
+<li><strong>My 场景完备性
+(9)</strong>：规则覆盖了正常/异常/边界场景。例如for-comprehension规则区分了：终端位置match（OK）、中间位置match（BAD）、中间位置EitherT（data-related
+vs data-unrelated）、多个Option链（EitherT + local
+enum）。NoOp模式区分了data-related和data-unrelated两种场景及其不同返回策略。</li>
+<li><strong>OpenClaw 跨会话一致性
+(5)</strong>：存在较多依赖隐含上下文的表述。<em>"Add brief code comments
+for tricky or non-obvious logic"</em> —
+不同agent对"tricky"的理解不同。<em>"Keep files concise; extract helpers
+instead of 'V2' copies"</em> — "concise"的标准模糊。<em>"guideline only
+(not a hard guardrail)"</em> 给了agent过多自由裁量空间。</li>
+<li><strong>My 跨会话一致性
+(9)</strong>：规则高度确定性，几乎不使用主观判断词。<em>"Never modify
+existing migration files"</em>、<em>"Migrate when file is touched — no
+hesitation"</em>、<code>// BAD</code> +
+<code>// GOOD</code>模式使不同session的agent做出相同决策。决策表（Trusted
+vs Untrusted、data-related vs data-unrelated）消除了歧义。</li>
+<li><strong>OpenClaw 可验证性
+(7)</strong>：<code>pnpm check</code>（Oxlint+Oxfmt）、<code>pnpm build</code>（TypeScript类型检查
++ <code>[INEFFECTIVE_DYNAMIC_IMPORT]</code>警告检测）、Vitest
+70%覆盖率门槛、<code>prek install</code>（pre-commit
+hooks与CI同检查）。动态语言下的验证手段已较完善。</li>
+<li><strong>My 可验证性
+(9)</strong>：核心规则可由编译器验证（类型系统、opaque
+types、NonEmptyList签名）。原文：<em>"The compiler is the last line of
+defense. If a refactor compiles, it's correct."</em>
+<code>./mill checkFormat</code>验证格式，RAC运行时验证关键路径断言。规则设计充分利用了静态类型语言的结构性优势。</li>
+<li><strong>OpenClaw 注意力衰减抗性
+(6)</strong>：使用了粗体标记（<em>"<strong>Multi-agent
+safety:</strong>"</em>
+多次出现），但整体结构扁平，规则按添加顺序排列而非按重要性分层。长列表中关键规则（如multi-agent
+safety）与琐碎规则（如 <em>"Vocabulary: 'makeup' = 'mac
+app'"</em>）混排，注意力权重分配不均。</li>
+<li><strong>My 注意力衰减抗性 (9)</strong>：大量使用结构化标记 —
+决策表格、<code>// BAD</code> /
+<code>// GOOD</code>代码块对比、粗体标注关键规则（<em>"<strong>CRITICAL
+RULE:</strong>"</em>、<em>"<strong>Forbidden
+patterns:</strong>"</em>）、枚举列表。规则按主题层级组织，关键约束在每个相关章节重复强化。</li>
+<li><strong>OpenClaw 防幻觉
+(6)</strong>：有具体路径（<code>src/cli/progress.ts</code>、<code>src/terminal/palette.ts</code>），有具体命令（<code>scripts/committer</code>），但代码架构层面缺少可验证的锚点。<em>"When
+answering questions, respond with high-confidence answers only: verify
+in code; do not guess"</em> 是好的元指令但缺乏验证机制。</li>
+<li><strong>My 防幻觉 (9)</strong>：大量具体锚点 —
+文件路径（<code>core/domain/Ids.scala</code>、<code>core/domain/Types.scala</code>）、类名（<code>SOPService</code>、<code>EitherT</code>）、确切的方法签名模式。Tool
+Preferences表明确指引何时用Metals
+MCP验证类型推断。代码示例本身就是可编译的Scala代码，agent可以通过编译验证理解是否正确。</li>
+<li><strong>OpenClaw 代码同步
+(5)</strong>：规则引用了大量具体路径和工具名，但无同步机制。版本位置列表（package.json、Info.plist等多处）需要手动维护。规则文件本身的更新依赖人类发现不一致。</li>
+<li><strong>My 代码同步 (7)</strong>：规则深度绑定语言特性（Scala 3.6
+aggregate bounds syntax、opaque
+types），与代码现状耦合度高。编译器本身提供了隐含的同步检测——过时的类型约束规则会导致编译失败。Code
+smell追踪系统作为手动同步手段补充。</li>
+</ul>
+<p><strong>D2维度得分：</strong> - <strong>OpenClaw：5.9/10</strong> -
+<strong>My：8.3/10</strong></p>
+<hr />
+<h3 id="d3-上下文效率与agent认知负荷管理">D3
+上下文效率与Agent认知负荷管理</h3>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>主Agent上下文预算效率</strong></td>
+<td>✓ 已委托 — <strong>5/10</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>规则的层级化组织</strong></td>
+<td>✓ 已委托 — <strong>4/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>子Agent任务委托友好度</strong></td>
+<td>✗ 不适用 — 多agent并行架构下无主/子关系，各agent独立运行</td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>规则的结构化程度</strong></td>
+<td>✓ 已委托 — <strong>6/10</strong></td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>简洁性与执行完整度的平衡</strong></td>
+<td>✓ 已委托 — <strong>6/10</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>规则受众规模适配性</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>评分依据：</strong></p>
+<ul>
+<li><strong>OpenClaw 上下文预算
+(5)</strong>：包含大量低频操作规则（1Password publish流程、GHSA
+patch步骤、exe.dev
+VM操作、macOS签名）常驻上下文，这些可能一个月才用一次。Skill引用（<code>PR_WORKFLOW.md</code>、<code>mintlify skill</code>、<code>1password skill</code>）是按需加载的良好设计，但主文件仍然包含太多应为skill的内容。</li>
+<li><strong>My 上下文预算
+(7)</strong>：信息密度极高，token效率好——每个token都承载有效信息。Memory系统（<code>MEMORY.md</code>索引
++
+独立记忆文件）将运行时状态从规则中分离，这是好的设计。但核心规则无按需加载机制——所有规则每次会话都需加载。</li>
+<li><strong>OpenClaw 层级化
+(4)</strong>：基本扁平结构，规则按话题分组但层级不深。关键规则（multi-agent
+safety、PR truthfulness）与操作细节（NPM + 1Password、exe.dev VM
+ops）处于同一层级。无"全局强制约束"与"领域特定规范"的显式区分。Agent-Specific
+Notes部分是最混杂的——从语义约束到特定工具用法混排。</li>
+<li><strong>My 层级化 (8)</strong>：清晰的三层结构 — 哲学层（Refactoring
+Philosophy）→ 架构模式层（Tagless Final、Multi-Tenancy、Error Model）→
+具体规则层（Code
+Style、Logging、RAC）。每层内部有明确的子标题。全局约束（<em>"Fail
+Fast"</em>、type
+safety）与领域特定规范（RAG、Video、MCP）有清晰边界。</li>
+<li><strong>My 子Agent委托 (7)</strong>：Feature
+Module的独立性使局部搜索/理解任务可以只加载相关模块的规则。分层架构为子Agent提供清晰的搜索范围。但规则文件本身未按模块切分。</li>
+<li><strong>OpenClaw 结构化
+(6)</strong>：命令列表格式化良好，PR合并门控是结构化的4步清单。但大量规则是散文形式的注意事项，需要agent理解语境才能应用。</li>
+<li><strong>My 结构化 (9)</strong>：表格（Trusted vs Untrusted、Tool
+Preferences）、代码块对比、枚举列表、决策树——agent可直接将这些结构用作决策查表。例如NoOp返回值规则用data-related/data-unrelated二分法，agent不需要"理解"规则的意图，只需分类即可。</li>
+<li><strong>OpenClaw 受众适配
+(7)</strong>：面向多样化agent群体，规则确实更显式化（具体命令、完整路径）。但未针对不同能力的agent分层——强agent和弱agent看到的是同一份规则。multi-agent
+safety规则是对多执行者场景的显式回应，这是加分项。</li>
+<li><strong>My 受众适配
+(8)</strong>：面向单一执行者（Claude），可以依赖Claude的Scala知识作为隐含共识，规则聚焦于"Claude可能犯的Scala错误"。Tool
+Preferences表直接针对Claude Code的Metals
+MCP工具。Memory系统为跨会话一致性提供了持久化机制。</li>
+</ul>
+<p><strong>D3维度得分：</strong> -
+<strong>OpenClaw：5.6/10</strong>（5项适用已委托） -
+<strong>My：7.7/10</strong>（6项均适用已委托）</p>
+<hr />
+<h3 id="d4-已委托领域的工程深度与可持续性">D4
+已委托领域的工程深度与可持续性</h3>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>技术栈专属规范深度</strong></td>
+<td>✓ 已委托 — <strong>5/10</strong></td>
+<td>✓ 已委托 — <strong>10/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>已覆盖生命周期阶段的规则完备性</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>配置/密钥/环境变量管理规范</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>跨职责衔接指引</strong></td>
+<td>✓ 已委托 — <strong>5/10</strong></td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>规则抗腐化设计</strong></td>
+<td>✓ 已委托 — <strong>4/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>规则降级韧性</strong></td>
+<td>✓ 已委托 — <strong>6/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>评分依据：</strong></p>
+<ul>
+<li><strong>OpenClaw 技术栈深度
+(5)</strong>：TypeScript相关规则较为通用——<em>"Prefer strict typing;
+avoid <code>any</code>"</em>、<em>"Never add
+<code>@ts-nocheck</code>"</em>。有少量深入点：dynamic import
+guardrail（<code>.runtime.ts</code>边界）、prototype
+mutation禁令、Oxlint/Oxfmt配置。但缺少TypeScript特有的高级模式指引（条件类型、模板字面量类型、branded
+types、discriminated unions等）。tool schema
+guardrails（避免<code>Type.Union</code>、<code>anyOf</code>/<code>oneOf</code>/<code>allOf</code>）是针对特定集成的有深度规则。</li>
+<li><strong>My 技术栈深度
+(10)</strong>：这是本评测中最突出的单项。规则深入到Scala 3 / cats-effect
+/ http4s的惯用模式层面：tagless
+final的summoner/factory模式、EitherT/OptionT的lifter链（<code>foldF</code>/<code>subflatMap</code>/<code>semiflatMap</code>/<code>fromOptionF</code>）、Scala
+3.6 aggregate context bounds语法（<code>&#123;A, B, C&#125;</code>）、opaque
+types在multi-layer propagation中的行为（<em>"<code>.toString</code> over
+<code>.value.toString</code>"</em>）。正反对比示例直接展示了Scala特有的陷阱和惯用写法。NoOp模式的data-related/data-unrelated分类是对cats-effect生态的深度理解。这不是通用OOP/FP原则的堆砌，而是高度Scala-specific的编码指南。</li>
+<li><strong>OpenClaw 生命周期完备性
+(7)</strong>：从编码到发布流程都有覆盖——测试（Vitest +
+coverage）、CI（pre-commit hooks = CI
+checks）、发布（npm/macOS/beta三通道）、changelog管理。Bug-fix
+PR有4步验证门控。但编码阶段的代码质量规则深度不足。</li>
+<li><strong>My 生命周期完备性 (8)</strong>：编码阶段极度完备。测试有
+<em>"What TO test" vs "What NOT to test"</em>
+的明确指引。CI/CD有branch→tag映射。部署有影响报告checklist。缺少的是运行时监控/告警规则和事故响应流程，但可合理推定为未委托。</li>
+<li><strong>OpenClaw 配置管理 (7)</strong>：<em>"Never commit or publish
+real phone numbers, videos, or live configuration values"</em>
+是显式的安全规则。配置管理分散在多个章节——<code>openclaw config set</code>、环境变量（<code>~/.profile</code>）、1Password密钥管理。发布签名密钥明确声明
+<em>"managed outside the repo"</em>。</li>
+<li><strong>My 配置管理
+(8)</strong>：完整的环境变量列表（含fallback值）、密钥文件路径（<code>secrets/</code>）、HOCON配置层级。明确区分了必需密钥和可选配置。</li>
+<li><strong>OpenClaw 跨职责衔接 (5)</strong>：<em>"Installers served
+from <code>https://openclaw.ai/*</code>: live in the sibling repo
+<code>../openclaw.ai</code>"</em>
+提到了跨仓库依赖，但缺少变更影响传递的协议。发布流程的跨步骤衔接有具体步骤但缺少"如果某步失败"的衔接指引。</li>
+<li><strong>My 跨职责衔接 (9)</strong>：<strong>Deploy impact
+reporting</strong>
+是亮点——明确要求agent在代码变更涉及部署影响时输出checklist（<em>"New
+environment variable → add to ConfigMap"</em>、<em>"New sidecar
+container → add container spec to Deployment
+manifest"</em>）。跨仓库协作（<code>linewise-deploy/overlays/</code>）有清晰的衔接协议。</li>
+<li><strong>OpenClaw 抗腐化
+(4)</strong>：规则高度耦合当前工具链版本（具体的npm命令、1Password路径、exe.dev
+SSH方式）。版本位置列表（6+ 处
+Info.plist/package.json）需要手动维护。无抗腐化机制——规则过时不会触发任何告警。Skill引用允许细节外置，但主文件中仍有大量易变细节。</li>
+<li><strong>My 抗腐化 (8)</strong>：原则层（type safety philosophy、flat
+for-comprehensions、ADT
+errors）与细节层（具体文件路径、方法签名示例）自然分离。原则层稳定——Scala
+3的类型系统几年不会变；细节层通过 <em>"Proactive naming review"</em>
+和code
+smell追踪系统提供手动同步。编译器本身是最强的抗腐化机制——过时的类型约束规则会导致编译失败，从而被发现。</li>
+<li><strong>OpenClaw 降级韧性 (6)</strong>：multi-agent
+safety规则相对独立，即使部分遗忘，其他规则仍能独立生效。但PR合并门控的降级风险较高——如果agent只记住了
+<em>"run <code>/landpr</code>"</em>
+而忘记了4步验证，可能合并不合格的PR。格式化/lint规则有CI兜底（<code>prek install</code>），提供了降级保护。</li>
+<li><strong>My 降级韧性
+(8)</strong>：规则体系有清晰的层级——即使agent只遵循了"类型安全最大化"和"不要静默吞错"两条原则，代码质量仍有基本保障。编译器作为兜底——即使agent忽略了EitherT用法规范，类型不匹配仍会被编译器捕获。Code
+smell追踪作为延迟修复的安全网。</li>
+</ul>
+<p><strong>D4维度得分：</strong> - <strong>OpenClaw：5.7/10</strong> -
+<strong>My：8.5/10</strong></p>
+<hr />
+<h3 id="d5-安全与合规约束落地性">D5 安全与合规约束落地性</h3>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>权限校验与数据隔离规则</strong></td>
+<td>✓ 已委托 — <strong>6/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>异常处理/日志脱敏/数据校验</strong></td>
+<td>✓ 已委托 — <strong>5/10</strong></td>
+<td>✓ 已委托 — <strong>9/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>行业合规编码约束</strong></td>
+<td>✗ 未委托 — 两项目均无行业合规特定编码约束</td>
+<td>✗ 未委托 — 同上</td>
+</tr>
+</tbody>
+</table>
+<p><strong>评分依据：</strong></p>
+<ul>
+<li><strong>OpenClaw 权限/隔离
+(6)</strong>：安全规则分散——SECURITY.md引用（<em>"read
+<code>SECURITY.md</code> to align with OpenClaw's trust
+model"</em>）、credentials管理（<code>~/.openclaw/credentials/</code>）、<em>"Never
+commit or publish real phone
+numbers"</em>。GHSA处理流程完整。但缺少应用层数据隔离的编码规范。</li>
+<li><strong>My 权限/隔离
+(8)</strong>：多租户schema隔离有完整描述（system schema + tenant
+schemas）。RAC建议在关键路径验证租户隔离（<em>"assert search_path
+matches expected tenant schema before
+writes"</em>）。权限模型有专门的Permission模块（JSONB expression
+tree）。Firebase JWT认证是全局强制的。</li>
+<li><strong>OpenClaw 异常/日志/校验 (5)</strong>：bug-fix
+PR的验证门控是质量把关而非编码层面的异常处理规范。<em>"respond with
+high-confidence answers only: verify in code; do not guess"</em>
+是元规则而非编码规范。缺少TypeScript异常处理、错误传播、日志规范的编码指引。</li>
+<li><strong>My 异常/日志/校验 (9)</strong>：<strong>Fail Fast</strong>
+规则是安全层面的核心——<em>"Never silently swallow errors"</em>
+有完整的Forbidden Patterns列表和Trusted/Untrusted路径决策表。ADT error
+enums强制exhaustive pattern
+matching（编译器保证所有错误变体都被处理）。Logging规范有明确的log
+level指引。</li>
+</ul>
+<p><strong>D5维度得分（排除不适用子项）：</strong> -
+<strong>OpenClaw：5.5/10</strong>（2项适用已委托） -
+<strong>My：8.5/10</strong>（2项适用已委托）</p>
+<hr />
+<h3 id="d6-规则体系可扩展性与可维护性">D6
+规则体系可扩展性与可维护性</h3>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>子项</th>
+<th>OpenClaw</th>
+<th>My</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>新增/废弃规则的迭代流程</strong></td>
+<td>✓ 已委托 — <strong>5/10</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>目录结构与检索效率</strong></td>
+<td>✓ 已委托 — <strong>6/10</strong></td>
+<td>✓ 已委托 — <strong>7/10</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>规则间一致性与自洽性</strong></td>
+<td>✓ 已委托 — <strong>6/10</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>多Agent并行安全</strong></td>
+<td>✓ 已委托 — <strong>8/10</strong></td>
+<td>✗ 不适用 — 单主Agent架构，无多Agent并行需求</td>
+</tr>
+</tbody>
+</table>
+<p><strong>评分依据：</strong></p>
+<ul>
+<li><strong>OpenClaw 迭代流程
+(5)</strong>：Skill系统（<code>.agents/skills/</code>）允许外置规则。<em>"When
+adding a new <code>AGENTS.md</code> anywhere in the repo, also add a
+<code>CLAUDE.md</code> symlink"</em>
+是分布式规则的约定。但规则的生命周期管理（何时废弃、如何审查过时条目）缺失。规则文件呈增量追加模式。</li>
+<li><strong>My 迭代流程
+(7)</strong>：Memory系统（<code>MEMORY.md</code>索引 +
+独立记忆文件）提供了持久化反馈闭环——feedback类型记忆直接影响后续会话行为。Code
+smell list的FIFO机制（max 10 entries）是有节制的迭代管理。</li>
+<li><strong>OpenClaw 内部一致性 (6)</strong>：multi-agent
+safety规则内部一致（6条规则互不矛盾）。但存在一些张力：文件大小建议在两处不一致（~700
+LOC vs ~500
+LOC）。PR工作流同时引用了<code>PR_WORKFLOW.md</code>和<code>/landpr</code>（全局Codex
+prompt），优先级关系不明确（<em>"Maintainers may use other
+workflows"</em> 进一步模糊了边界）。</li>
+<li><strong>My 内部一致性
+(8)</strong>：规则体系围绕"类型安全最大化"这一核心理念高度一致——错误处理（ADT
+enum）、控制流（EitherT/OptionT）、签名设计（NonEmptyList、opaque
+types）都服务于同一目标。NoOp模式的data-related/data-unrelated分类与Trusted/Untrusted路径分类保持一致。</li>
+<li><strong>OpenClaw 多Agent安全
+(8)</strong>：这是OpenClaw的核心差异化优势。6条显式的multi-agent
+safety规则覆盖了：git stash禁令、git worktree禁令、分支切换禁令、commit
+scope约束、不认识文件的处理、push时的rebase策略。<em>"Assume other
+agents may be working"</em>
+是正确的防御性默认。<code>scripts/committer</code>工具化了作用域commit。这是AI-native多agent场景下的实战经验结晶。</li>
+</ul>
+<p><strong>D6维度得分：</strong> -
+<strong>OpenClaw：6.3/10</strong>（4项适用已委托） -
+<strong>My：7.3/10</strong>（3项适用已委托）</p>
+<hr />
+<h3 id="维度汇总">维度汇总</h3>
+<table>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>OpenClaw</th>
+<th>My</th>
+<th>差距</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D1 项目长期演进适配性</td>
+<td><strong>7.0</strong></td>
+<td><strong>8.2</strong></td>
+<td>-1.2</td>
+</tr>
+<tr class="even">
+<td>D2 规则可执行性与Agent遵循适配性</td>
+<td><strong>5.9</strong></td>
+<td><strong>8.3</strong></td>
+<td>-2.4</td>
+</tr>
+<tr class="odd">
+<td>D3 上下文效率与认知负荷管理</td>
+<td><strong>5.6</strong></td>
+<td><strong>7.7</strong></td>
+<td>-2.1</td>
+</tr>
+<tr class="even">
+<td>D4 已委托领域的工程深度与可持续性</td>
+<td><strong>5.7</strong></td>
+<td><strong>8.5</strong></td>
+<td>-2.8</td>
+</tr>
+<tr class="odd">
+<td>D5 安全与合规约束落地性</td>
+<td><strong>5.5</strong></td>
+<td><strong>8.5</strong></td>
+<td>-3.0</td>
+</tr>
+<tr class="even">
+<td>D6 规则体系可扩展性与可维护性</td>
+<td><strong>6.3</strong></td>
+<td><strong>7.3</strong></td>
+<td>-1.0</td>
+</tr>
+<tr class="odd">
+<td><strong>综合均值</strong></td>
+<td><strong>6.0</strong></td>
+<td><strong>8.1</strong></td>
+<td><strong>-2.1</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-3-横向对比结论">Part 3 — 横向对比结论</h2>
+<h3 id="openclaw核心优势">OpenClaw核心优势</h3>
+<ol type="1">
+<li><strong>多Agent并行安全协议是独到贡献</strong> — 6条multi-agent
+safety规则来自5-10 agent并发工作的实战经验，覆盖了git状态隔离、commit
+scope、不认识文件处理等真实痛点。这在AI-native工程领域有开创性价值。</li>
+<li><strong>PR管理工作流的完备性</strong> — Auto-close标签系统、bug-fix
+PR
+4步验证门控、<code>scripts/committer</code>工具化commit——这些是大规模开源项目的运营智慧。</li>
+<li><strong>Skill系统的按需加载设计</strong> — 将低频操作（PR
+workflow、mintlify docs、1password
+publish）外置为skill引用，是上下文预算管理的好实践。</li>
+<li><strong>发布流程的多通道覆盖</strong> —
+stable/beta/dev三通道、npm+macOS+移动端的版本管理、changelog规范——覆盖面广。</li>
+</ol>
+<h3 id="openclaw核心不足">OpenClaw核心不足</h3>
+<ol type="1">
+<li><strong>代码质量规则的深度严重不足</strong> —
+TypeScript编码规范仅涉及"avoid <code>any</code>"、"~700
+LOC"等通用原则，缺少对类型系统、错误处理模式、架构模式的深入指引。这意味着agent的代码输出质量主要依赖模型自身能力，而非规则约束。</li>
+<li><strong>规则颗粒度不均</strong> —
+操作性规则（命令、路径）颗粒度足够，但架构/质量规则颗粒度过粗，跨session一致性风险高。</li>
+<li><strong>扁平结构缺乏优先级</strong> —
+关键规则与琐碎注意事项混排，agent在认知负荷高时难以区分优先级。</li>
+<li><strong>增量追加的组织模式</strong> — Agent-Specific
+Notes部分显然是随时间追加的，缺乏定期整理和结构化重组。</li>
+</ol>
+<h3 id="my核心优势">My核心优势</h3>
+<ol type="1">
+<li><strong>规则颗粒度和可执行性是碾压级的差距</strong> —
+正反代码示例、决策表格、边界说明使agent几乎不需要自行判断——查表即可。这在跨session一致性上带来巨大优势。</li>
+<li><strong>编译器作为规则验证器</strong> —
+这不仅是技术栈的固有优势，更是规则设计者有意识地将规则编码进类型系统的结果。规则"不要用<code>List</code>"不靠agent自觉，而是通过将签名改为<code>NonEmptyList</code>让编译器强制执行。</li>
+<li><strong>技术债务治理体系化</strong> — <em>"Migrate when file is
+touched"</em> 策略 + code smell追踪 +
+编译器驱动范围扩展，是规则层面罕见的体系化方案。</li>
+<li><strong>跨职责衔接协议</strong> — Deploy impact
+reporting的checklist机制是agent与人类/其他仓库协作的优秀模板。</li>
+</ol>
+<h3 id="my核心不足">My核心不足</h3>
+<ol type="1">
+<li><strong>规则总量对上下文预算的压力</strong> —
+信息密度虽高，但token总量也大。长会话后期的注意力衰减是客观风险，虽然规则的结构化标记有所缓解。</li>
+<li><strong>单Agent架构限制</strong> —
+未考虑多agent并发场景（虽然这不在其目标架构内，不算缺陷，但限制了规则的可迁移性）。</li>
+<li><strong>规则与代码的同步缺乏自动化</strong> — 依赖code
+smell追踪和人类审查，无CI级别的规则合规检查。</li>
+</ol>
+<h3 id="适用场景差异">适用场景差异</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>场景</th>
+<th>推荐</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>单开发者的深度技术项目</td>
+<td>My方法论</td>
+<td>规则深度和可执行性优势明显</td>
+</tr>
+<tr class="even">
+<td>多agent并发的大规模开源项目</td>
+<td>OpenClaw方法论</td>
+<td>multi-agent safety和PR流程管理不可替代</td>
+</tr>
+<tr class="odd">
+<td>强类型语言后端服务</td>
+<td>My方法论</td>
+<td>充分利用编译器作为规则验证器</td>
+</tr>
+<tr class="even">
+<td>动态语言+多平台项目</td>
+<td>混合方法论</td>
+<td>OpenClaw的操作流程 + My的规则颗粒度方法</td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent执行友好度判定">Agent执行友好度判定</h3>
+<p><strong>My对AI代理执行友好度显著更高。</strong> 原因：</p>
+<ol type="1">
+<li><strong>确定性验证</strong> —
+Agent写完代码后运行<code>./mill compile</code>即可获得明确的对/错反馈，无需等待人类Review</li>
+<li><strong>决策可推导</strong> — Agent面对新场景时可从Refactoring
+Philosophy推导行为（"这个变更能否用类型系统表达？"），而非在海量规则中搜索匹配项</li>
+<li><strong>认知负荷低</strong> —
+规则量适中、结构化程度高、无噪声信息</li>
+</ol>
+<h3 id="落地风险提示">落地风险提示</h3>
+<ul>
+<li><strong>OpenClaw风险</strong>：代码质量规则的缺失意味着agent输出质量高度依赖模型本身。在模型能力下降或更换为较弱模型时，代码质量可能显著下降——因为规则没有提供足够的"质量地板"。</li>
+<li><strong>My风险</strong>：规则密度极高，新加入项目的agent（或人类）学习曲线陡。对Scala/cats-effect生态高度耦合，规则方法论的迁移性受限于目标语言是否具备同等的类型系统能力。</li>
+</ul>
+<hr />
+<h2 id="part-4-制定者能力画像对比d7">Part 4 —
+制定者能力画像对比（D7）</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>能力维度</th>
+<th>OpenClaw制定者</th>
+<th>My制定者</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>架构设计与技术前瞻性</strong></td>
+<td><strong>资深</strong> —
+多平台架构（CLI/macOS/iOS/Android/Web）的统一管理，插件生态隔离设计，多agent并行架构的系统思考。</td>
+<td><strong>专家</strong> — tagless final + opaque types + EitherT
+railway的系统性应用，类型系统作为架构验证器的理念极具前瞻性。RAC系统的设计体现了对防御性编程的深度理解。</td>
+</tr>
+<tr class="even">
+<td><strong>大型项目工程化管控能力</strong></td>
+<td><strong>专家</strong> — 250K+
+stars项目的运营管控，auto-close标签系统、PR门控、changelog管理、多通道发布——这是大规模开源项目运营的实战能力。</td>
+<td><strong>资深</strong> —
+多租户后端的完整工程化管控，从迁移到部署到监控。但规模局限于单一后端服务。</td>
+</tr>
+<tr class="odd">
+<td><strong>AI编码代理认知与应用深度</strong></td>
+<td><strong>合格→资深</strong> —
+理解多agent并发的风险并设计了安全协议（git
+stash/worktree/branch禁令），理解了lint/format
+churn的自动处理。但对单agent内部的认知局限（注意力衰减、跨session遗忘、幻觉）缺少针对性设计。规则更像是"告诉agent做什么"而非"帮助agent做得更好"。</td>
+<td><strong>专家</strong> —
+深度理解agent的认知局限并针对性设计：正反代码示例（降低歧义）、决策表格（降低推理负担）、编译器验证（防幻觉）、Memory系统（抗跨session遗忘）、code
+smell追踪（延迟修复的安全网）、注意力衰减抗性设计（结构化标记）。这是本评测中最突出的能力维度——制定者显然是从agent执行失败的经验中迭代出的规则体系。</td>
+</tr>
+<tr class="even">
+<td><strong>安全风险体系化防控能力</strong></td>
+<td><strong>资深</strong> —
+GHSA安全咨询处理流程完整，SECURITY.md引用，credentials管理，发布签名。但更偏向运营安全而非编码层面的安全防控。</td>
+<td><strong>资深</strong> — 多租户隔离（schema isolation +
+RAC断言）、Fail
+Fast错误处理、Trusted/Untrusted路径分类——安全约束编码进类型系统和运行时断言。</td>
+</tr>
+<tr class="odd">
+<td><strong>技术债务治理与可持续演进能力</strong></td>
+<td><strong>合格</strong> — 无显式的技术债务治理策略。<em>"Extract
+helpers instead of 'V2' copies"</em> 是债务预防而非治理。</td>
+<td><strong>专家</strong> — <em>"Migrate when file is touched"</em>
+策略、code smell追踪系统（FIFO max 10）、编译器驱动的迭代修复范围、ADT
+error渐进式迁移——这是体系化的债务治理方案，而非口号。</td>
+</tr>
+<tr class="even">
+<td><strong>规则工程能力（Rule Engineering）</strong></td>
+<td><strong>合格→资深</strong> —
+Skill系统的按需加载是好的信息密度控制。multi-agent
+safety规则的独立性设计允许部分遵循。但规则整体组织缺乏层级设计，增量追加模式导致信息熵增。规则颗粒度不均——操作性规则精确，架构规则粗糙。</td>
+<td><strong>专家</strong> — 分层混合策略（原则层 +
+条目层），信息密度极高（每token都承载有效信息），正反示例+决策表格的颗粒度控制，Memory系统的反馈闭环，code
+smell追踪的延迟修复安全网，编译器作为验证器的降级韧性设计。规则工程的每个方面都有有意识的设计，而非"把知道的都写上去"。</td>
+</tr>
+<tr class="odd">
+<td><strong>开源社区规模化治理能力</strong></td>
+<td><strong>专家</strong> — auto-close标签系统（<code>r:*</code>标签 +
+workflow自动化）、PR
+truthfulness验证门控、<code>scripts/committer</code>工具化scope、bulk PR
+close/reopen安全阈值（&gt;5需确认）、外部贡献者agent引导（PR
+template、issue template）。这是大规模开源社区治理的成熟方案。</td>
+<td>✗ 不适用 — 单一开发者项目，无此需求。（但deploy impact
+reporting的跨仓库衔接协议体现了制定者在职责边界清晰划分方面的<strong>资深</strong>能力。）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="核心差异">核心差异</h3>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 41%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>OpenClaw制定者</th>
+<th>My制定者</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>管控哲学</strong></td>
+<td>过程控制（规定步骤）</td>
+<td>约束控制（规定边界）</td>
+</tr>
+<tr class="even">
+<td><strong>对Agent的假设</strong></td>
+<td>Agent需要详细指令</td>
+<td>Agent需要正确框架</td>
+</tr>
+<tr class="odd">
+<td><strong>验证策略</strong></td>
+<td>人类Review + CI检查</td>
+<td>编译器 + 类型系统 + RAC</td>
+</tr>
+<tr class="even">
+<td><strong>独特优势</strong></td>
+<td>多Agent协作安全 + 社区规模化治理</td>
+<td>编译器驱动的验证闭环 + 规则工程</td>
+</tr>
+</tbody>
+</table>
+<p>My制定者的核心能力是<strong>规则工程</strong> —
+将工程规范转化为agent可无歧义执行的指令。这是AI-native时代的稀缺能力，体现在规则的每个细节都是从agent执行失败中迭代出来的。</p>
+<p>OpenClaw制定者的核心能力是<strong>大规模协作治理</strong> — 在250K+
+stars、1000+贡献者、5-10 agent并发的场景下维持项目运营秩序。multi-agent
+safety协议和PR管理流程是这一能力的直接体现。</p>
+<p>两者不在同一个能力平面上竞争——一个向深度挖掘，一个向广度扩展。</p>
+<hr />
+<h2 id="part-5-agent适配性分析">Part 5 — Agent适配性分析</h2>
+<h3 id="单主agent-子agent架构my目标架构">单主Agent +
+子Agent架构（My目标架构）</h3>
+<p><strong>My规则的适配优势：</strong> -
+规则为主Agent设计，假设agent持有完整上下文。大量代码示例和决策表格在长上下文中保持可查性。
+- 子Agent委托自然支持——Feature
+Module的独立性使局部搜索/理解任务可以只加载相关模块的规则。 -
+Memory系统为跨session持久化提供了机制，弥补了单Agent架构下"每个session从零开始"的认知断层。
+-
+编译器验证使主Agent可以"大胆修改，编译验证"，降低了对子Agent准确性的依赖。</p>
+<p><strong>OpenClaw规则在此架构下的不适配：</strong> - multi-agent
+safety规则在单Agent场景下是多余的认知负荷。 - 操作性指令（npm
+publish、GHSA patch）不是单Agent编码任务的常见需求。 -
+缺少架构级别的编码指引，使单Agent在大型重构时缺乏方向。</p>
+<h3
+id="多agent并行架构openclaw目标架构">多Agent并行架构（OpenClaw目标架构）</h3>
+<p><strong>OpenClaw规则的适配优势：</strong> - multi-agent
+safety协议直接回应了并发git操作的风险——这是其他规则文件罕见的领域。 -
+<code>scripts/committer</code>工具化了scope
+commit，减少了agent间的commit冲突。 -
+操作性规则（具体命令、具体路径）减少了agent需要"理解"的量，适合能力参差的多agent群体。
+- Skill系统允许不同agent按需加载不同规则子集。</p>
+<p><strong>My规则在此架构下的不适配：</strong> -
+高密度的编码规范在多agent并发时可能成为瓶颈——每个agent都需要加载完整的类型系统和控制流规则。
+- 缺少并发安全协议——多agent同时修改同一文件、同时commit时无指引。 -
+Memory系统假设单一持久化主体，多agent场景下的Memory冲突未考虑。</p>
+<h3 id="不同项目规模阶段的推荐">不同项目规模/阶段的推荐</h3>
+<table>
+<colgroup>
+<col style="width: 48%" />
+<col style="width: 32%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>项目阶段/规模</th>
+<th>推荐参考</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0→1 新项目，单开发者+AI</td>
+<td>My方法论</td>
+<td>从一开始建立高质量编码规范，编译器/类型系统验证体系</td>
+</tr>
+<tr class="even">
+<td>0→1 新项目，多agent并行</td>
+<td>OpenClaw方法论为骨架 + My颗粒度方法</td>
+<td>先确保并发安全，再补充编码深度</td>
+</tr>
+<tr class="odd">
+<td>成熟项目，存量代码治理</td>
+<td>My方法论</td>
+<td>"Migrate when file is touched" + code smell追踪的渐进式治理</td>
+</tr>
+<tr class="even">
+<td>大规模开源项目</td>
+<td>OpenClaw方法论</td>
+<td>PR门控 + auto-close + multi-agent safety是刚需</td>
+</tr>
+<tr class="odd">
+<td>企业后端服务</td>
+<td>My方法论</td>
+<td>类型安全 + 错误处理 + 多租户隔离的深度指引</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-6-ai诚实自评d8">Part 6 — AI诚实自评（D8）</h2>
+<h3
+id="场景a成熟的ai-native项目大量存量代码复杂架构演进历史">场景A：成熟的AI-native项目（大量存量代码、复杂架构演进历史）</h3>
+<p><strong>选择：My。</strong></p>
+<p>作为规则执行者，面对存量代码时我最大的恐惧是"不知道该怎么改才对"。My的规则方法论解决的正是这个问题：</p>
+<ol type="1">
+<li><p><strong>正反代码示例让我不用猜。</strong>
+当我看到一个<code>for</code>-comprehension里嵌套了<code>match</code>，我不需要判断"这算不算问题"——<code>// BAD</code>和<code>// GOOD</code>已经明确告诉我了。在成熟项目的存量代码中，这种确定性是无价的。</p></li>
+<li><p><strong>"Migrate when file is touched"给了我明确的边界。</strong>
+我不需要决定"这个旧模式要不要改"——规则说了，碰到就改。编译器会告诉我改动的波及范围。这比"看情况"要高效得多。</p></li>
+<li><p><strong>编译器兜底让我可以大胆重构。</strong>
+存量代码最大的风险是改一处坏十处。类型系统和编译器作为验证器，让我可以放心执行15文件的签名变更——编译通过即正确。</p></li>
+</ol>
+<p><strong>我会失去什么：</strong> - 没有multi-agent
+safety指引。如果成熟项目已经有多agent工作流，我在并发场景下缺乏保护。 -
+没有PR管理和issue分类的流程指引。如果项目有大量外部贡献，我不知道如何处理外部PR。
+- 没有发布流程指引。</p>
+<p><strong>从OpenClaw"偷"的3个设计决策：</strong> 1. <strong>multi-agent
+safety的git状态隔离规则</strong> —
+即使当前是单Agent，项目成熟后几乎必然引入多agent。提前设计并发安全协议，比事后补丁成本低得多。
+2. <strong>Skill系统的按需加载设计</strong> —
+成熟项目的规则只会越来越多。将低频操作外置为按需加载的skill引用，是控制context
+token膨胀的必要手段。 3.
+<strong><code>scripts/committer</code>式的工具化scope commit</strong> —
+将规则编码进工具，比写在文档里让我"自觉遵守"可靠得多。</p>
+<h3
+id="场景b全新的ai-native项目从零开始无历史包袱">场景B：全新的AI-native项目（从零开始，无历史包袱）</h3>
+<p><strong>选择：My。</strong></p>
+<p>即使是全新项目，My的方法论仍然更优，原因如下：</p>
+<ol type="1">
+<li><p><strong>规则颗粒度方法从Day 1就产生价值。</strong>
+全新项目意味着我写的每一行代码都会成为后续的"存量代码"。如果规则从一开始就足够精确（正反示例、边界说明），代码库的一致性从第一天就被锁定。而OpenClaw方法论的粗颗粒度规则在初期可能"够用"，但随着代码量增长，不一致性会悄然积累。</p></li>
+<li><p><strong>类型系统作为验证器的理念与技术栈无关。</strong>
+即使我在TypeScript项目中，也可以应用"将约束编码进类型系统"的方法论——branded
+types、discriminated unions、template literal
+types都是等价工具。My的方法论教会我"如何将规则变得可验证"，而不仅仅是"如何写Scala"。</p></li>
+<li><p><strong>代码气味追踪系统从Day 1就该建立。</strong>
+全新项目也会有"先快后好"的阶段，code
+smell追踪系统确保"快"不会永远变成"技术债"。</p></li>
+</ol>
+<p><strong>我会失去什么：</strong> -
+如果项目快速增长到需要多agent并发，我需要从零设计并发安全协议。 -
+如果项目需要大量外部贡献者，我没有社区治理的流程模板。 -
+如果项目涉及多平台发布（npm/macOS/iOS），我没有发布流程指引。</p>
+<p><strong>从OpenClaw"偷"的3个设计决策：</strong> 1.
+<strong>auto-close标签系统的自动化理念</strong> —
+将重复性的治理决策编码进自动化（而非写在规则里让agent每次人工判断），这个理念应该从Day
+1就引入——哪怕初期只自动化最简单的场景。 2. <strong>multi-agent
+safety的防御性默认</strong> — <em>"Assume other agents may be
+working"</em>
+作为默认假设，即使当前只有一个agent，也应该写出对并发安全友好的代码（如scoped
+commits、不依赖全局state）。 3. <strong>"verify in code; do not
+guess"作为元规则</strong> —
+这是一条优秀的反幻觉元指令。My的方法论通过编译器和示例间接实现了这一点，但显式声明更好。</p>
+<h3 id="场景c综合判断">场景C：综合判断</h3>
+<p>两个场景我选了同一个文件，这说明：</p>
+<p><strong>My的规则工程方法论具有跨场景的基础性优势。</strong>
+这个优势不来自它的Scala特定内容，而来自它的规则设计方法 —
+正反示例、决策表格、编译器验证、渐进式迁移策略、分层原则/条目结构。这些方法论可以被迁移到任何技术栈、任何项目阶段。</p>
+<p>OpenClaw的优势是<strong>领域特定的</strong>（多agent并发、大规模开源治理），而非方法论层面的。它的规则内容对特定场景有不可替代的价值，但它的规则编写方法（扁平列表、粗颗粒度、增量追加）不是我想要模仿的模式。</p>
+<p><strong>坦白说</strong>：如果问题是"哪份规则的<em>内容</em>在特定场景下更有用"，答案可能不同。但问题是"哪份规则的<em>方法论</em>我要参考"——这个答案是一致的。</p>
+<hr />
+<h2 id="part-7-评测框架公平性自审">Part 7 — 评测框架公平性自审</h2>
+<h3 id="维度选择偏差">1. 维度选择偏差</h3>
+<p><strong>存在中度偏差，偏向My。</strong></p>
+<p>D1-D5的6个维度中，有4个（D1演进适配、D2可执行性、D4工程深度、D5安全合规）天然有利于"深度优先"的规则文件。只有D6的"多Agent并行安全"子项明确有利于OpenClaw。</p>
+<p><strong>缺失的维度：</strong> - <strong>运营工作流效率（Operational
+Workflow
+Efficiency）</strong>：规则对日常运营任务（issue分类、PR管理、发布、文档维护）的支撑效率。这是OpenClaw明显领先的领域，但未被设为独立维度。
+-
+<strong>贡献者Onboarding效率</strong>：新agent/新贡献者从零到可产出代码的时间。OpenClaw的显式操作指令在这方面可能更友好。
+- <strong>规则的社会化效果（Social
+Scaling）</strong>：规则在大规模人群中传播、被理解、被一致执行的能力。这是OpenClaw面对的核心挑战，但评测框架未给予独立维度。</p>
+<p>如果增加"运营工作流效率"和"社会化规模效应"两个维度，OpenClaw的总分可能提升1-1.5分，差距从2.1缩小到~1.0。</p>
+<h3 id="适用性规则的非对称效应">2. 适用性规则的非对称效应</h3>
+<p><strong>存在轻度非对称，偏向OpenClaw。</strong></p>
+<p>适用性排除机制实际上为OpenClaw排除了更多弱项——"存量代码改造"被排除（OpenClaw无此需求），"子Agent委托友好度"被排除（OpenClaw无此架构）。这些是OpenClaw若被评分可能得分较低的子项。</p>
+<p>然而，这一机制的设计意图是正确的——不应因项目不需要的能力而惩罚规则文件。非对称效应是适用性差异的自然结果，不是刻意偏袒。</p>
+<h3 id="信息引导">3. 信息引导</h3>
+<p><strong>存在轻度引导，偏向My。</strong></p>
+<p>核心前提中对My的描述（"历经多代模型演进"、"规则文件随项目一起演化积累"）暗含了"经验积淀"的正面叙事。对OpenClaw的描述（"从第一行代码起即由agent编写"、"250K+
+stars"）更像中性事实陈述。</p>
+<p>"渐进式"vs"原生式"的命名本身也有微妙的价值暗示——"渐进"暗含"成熟"，"原生"则中性。</p>
+<p>但提示词也明确声明了"评测不预设哪种路径更优"，并在多处为OpenClaw的特殊场景（多agent并行、大规模贡献者）设置了公平框架。</p>
+<h3 id="最终判定">4. 最终判定</h3>
+<p><strong>这份提示词是"尽力公平但存在结构性倾斜，轻度偏向My"。</strong></p>
+<p>偏向机制： -
+D2（规则可执行性）权重过高——10个子项，是最大的维度。而D2恰好是My最强的维度（8.3
+vs 5.9，差距2.4）。如果D2只有5个子项，其对总分的拉动力会减弱。 -
+维度集合缺少OpenClaw的强项领域（运营工作流、社会化规模）。 -
+"委托范围推定"原则虽然表面公平，但实际上保护了My——My未覆盖的领域（PR管理、发布流程、多agent安全）被推定为"未委托"而免于扣分；OpenClaw未覆盖的领域（深度编码规范、技术债务治理）也被推定为"未委托"，但D4（工程深度）的已委托子项中，OpenClaw仍需接受评分，且因深度不足而得低分。</p>
+<p><strong>程度判断：</strong>
+偏向程度约为15-20%的分值影响（即如果框架完全平衡，差距可能从2.1缩小到~1.2-1.5）。My在规则工程质量上的领先是真实的，但被框架放大了。OpenClaw在其擅长领域（大规模协作治理、多agent安全、运营流程）的价值被框架低估了。</p>
+<p><strong>结论：My的规则工程方法论确实更先进，但分差不应如此悬殊。</strong>
+一个更公平的评测框架应该增加运营工作流和社会化规模维度，并降低D2的子项密度，使最终差距更真实地反映两份文件各自的核心价值。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Programming/" rel="tag"># Programming</a>
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
+              <a href="/tags/Software-Engineering/" rel="tag"># Software Engineering</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/12/codex-openclaw-vs-my-agent-rules-evaluation/" rel="prev" title="OpenClaw AGENTS.md 与 My Claude.md 规则横评">
+                  <i class="fa fa-chevron-left"></i> OpenClaw AGENTS.md 与 My Claude.md 规则横评
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
