@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-13T06:32:40.864Z">
+<meta property="article:modified_time" content="2026-03-13T06:59:13.551Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -206,7 +206,7 @@ Style：不是为了可读性，是为了护栏</span></a></li></ol></li><li cla
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-13 14:32:40" itemprop="dateModified" datetime="2026-03-13T14:32:40+08:00">2026-03-13</time>
+      <time title="Modified: 2026-03-13 14:59:13" itemprop="dateModified" datetime="2026-03-13T14:59:13+08:00">2026-03-13</time>
     </span>
 
   
@@ -383,10 +383,10 @@ Claude：railway style（链式组合子）对你来说比 nested match/case
 <p>它的回答很诚实：<strong>两者对它的认知成本完全一样。</strong></p>
 <p>但它接着说：<strong>railway style
 的真正价值不是可读性，而是它让"写错"变得更难。</strong></p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 嵌套 match —— 很容易忘记一个分支，或者悄悄丢掉错误细节</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  result &lt;- service.doSomething(...)</span><br><span class="line">  response &lt;- result <span class="keyword">match</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Right</span>(v) =&gt; <span class="type">Ok</span>(v.asJson)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Left</span>(_)  =&gt; <span class="type">BadRequest</span>()  <span class="comment">// 诱惑：随手丢掉错误信息</span></span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// Railway —— 组合子强制你显式处理两条路径</span></span><br><span class="line"><span class="type">EitherT</span>(service.doSomething(body)).foldF(</span><br><span class="line">  err   =&gt; <span class="type">BadRequest</span>(err.asJson),  <span class="comment">// 错误就在这里，很难忽略</span></span><br><span class="line">  value =&gt; <span class="type">Ok</span>(value.asJson)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>嵌套 match 中，AI 可能意外遮蔽变量、遗漏错误上下文、引入多余的
-<code>flatMap</code> 层让 for-comprehension 变得更难审查。Railway
-组合子在结构上就排除了这些可能性。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 嵌套 match —— 中间步骤必须手动 lift，错误处理散落在各处</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  result &lt;- service.validate(body)</span><br><span class="line">  user   &lt;- result <span class="keyword">match</span>                         <span class="comment">// mid-chain match</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Right</span>(u)  =&gt; u.pure[<span class="type">F</span>]                  <span class="comment">// 手动 lift</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Left</span>(err) =&gt; <span class="string">&quot;default_user&quot;</span>.pure[<span class="type">F</span>]     <span class="comment">// 诱惑：用默认值吞掉错误</span></span><br><span class="line">  score  &lt;- service.fetchScore(user)</span><br><span class="line">  response &lt;- <span class="type">Ok</span>(score.asJson)</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// Railway —— 错误自动沿链传播，只在终点处理一次</span></span><br><span class="line"><span class="type">EitherT</span>(service.validate(body))</span><br><span class="line">  .semiflatMap(user =&gt; service.fetchScore(user))  <span class="comment">// 错误？自动短路，不需要处理</span></span><br><span class="line">  .foldF(</span><br><span class="line">    err   =&gt; <span class="type">BadRequest</span>(err.asJson),</span><br><span class="line">    score =&gt; <span class="type">Ok</span>(score.asJson)</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+<p>关键区别在中间步骤：嵌套 match 迫使 AI
+在每个分支处当场决定怎么处理错误——用默认值吞掉是最省事的选择；Railway
+链中错误自动传播，AI 只写 happy path，错误处理推迟到终点。</p>
 <p>Claude
 的原话：<strong>"这条规则对我来说零成本遵守，但它产出的代码更统一、更抗静默错误丢弃。最大的赢家不是我，是你们人类审查者。"</strong></p>
 <p>AI-native 的代码风格选择，标准不是"AI
@@ -653,9 +653,8 @@ AI 在任务结束时自动输出部署影响清单：</p>
 <h2 id="真正的门槛">真正的门槛</h2>
 <p>很多人说"拥抱 AI"没有门槛，有 token 就行。</p>
 <p><strong>还挺有门槛的。</strong></p>
-<p>看看 OpenClaw（cursor 的开源替代品）——那么多 vibe coding
-大师，甚至已经被 OpenAI 收编了，也没写出来多好的 agents.md
-文件。为什么？因为 <strong>agent
+<p>看看 OpenClaw ——那么多 vibe coding 大师，甚至已经被 OpenAI
+收编了，也没写出来多好的 agents.md 文件。为什么？因为 <strong>agent
 需要非常清晰具体的指引才能做事</strong>，而写出这种指引需要两个条件：</p>
 <ol type="1">
 <li>你自己得足够理解你要 AI 做什么（领域专精）</li>
