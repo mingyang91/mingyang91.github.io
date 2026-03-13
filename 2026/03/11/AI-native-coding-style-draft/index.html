@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-13T08:00:45.795Z">
+<meta property="article:modified_time" content="2026-03-13T10:13:37.670Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -115,7 +115,8 @@
 统一兜底</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC%E4%BA%8Ceithert-%E5%85%A8%E9%93%BE%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">风格二：EitherT 全链式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">2.4.</span> <span class="nav-text">对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai-%E7%9A%84%E8%A7%86%E8%A7%92"><span class="nav-number">2.5.</span> <span class="nav-text">AI 的视角</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E5%88%86%E5%B7%A5%E4%BA%BA%E7%B1%BB%E8%AF%BB%E7%AD%BE%E5%90%8Dai-%E5%86%99%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">最优分工：人类读签名，AI
 写实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%90%BD%E5%9C%B0%E8%AE%A9%E7%AD%BE%E5%90%8D%E6%89%BF%E8%BD%BD%E4%B8%80%E5%88%87"><span class="nav-number">4.</span> <span class="nav-text">落地：让签名承载一切</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B-vs-%E9%A2%86%E5%9F%9F%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">原始类型 vs 领域类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%94%99%E8%AF%AF-vs-%E7%A9%B7%E4%B8%BE%E9%94%99%E8%AF%AF"><span class="nav-number">4.2.</span> <span class="nav-text">字符串错误 vs 穷举错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#list-.head-%E7%82%B8%E5%BC%B9-vs-nonemptylist-%E5%A5%91%E7%BA%A6"><span class="nav-number">4.3.</span> <span class="nav-text">List + .head 炸弹 vs
 NonEmptyList 契约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E9%80%80%E5%8C%96-vs-%E7%AB%AF%E5%88%B0%E7%AB%AF%E4%BC%A0%E6%92%AD"><span class="nav-number">4.4.</span> <span class="nav-text">类型退化 vs 端到端传播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#railway-style%E4%B8%8D%E6%98%AF%E4%B8%BA%E4%BA%86%E5%8F%AF%E8%AF%BB%E6%80%A7%E6%98%AF%E4%B8%BA%E4%BA%86%E6%8A%A4%E6%A0%8F"><span class="nav-number">4.5.</span> <span class="nav-text">Railway
-Style：不是为了可读性，是为了护栏</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E7%BA%AA%E5%BE%8Bai-%E7%9A%84%E9%BB%98%E8%AE%A4%E8%A1%8C%E4%B8%BA-vs-%E4%BA%BA%E7%B1%BB%E5%BF%85%E9%A1%BB%E5%88%92%E5%AE%9A%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">5.</span> <span class="nav-text">工程纪律：AI
+Style：不是为了可读性，是为了护栏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E7%AD%BE%E5%90%8D%E5%88%B0%E5%A5%91%E7%BA%A6%E8%A1%A8%E8%BE%BE%E5%8A%9B%E7%9A%84%E5%A4%A9%E8%8A%B1%E6%9D%BF%E5%9C%A8%E5%93%AA"><span class="nav-number">4.6.</span> <span class="nav-text">从签名到契约：表达力的天花板在哪？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%91%E7%BA%A6%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%8A%9B%E6%A2%AF%E5%BA%A6"><span class="nav-number">4.6.1.</span> <span class="nav-text">契约的表达力梯度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#refinement-types%E6%8A%8A%E5%A5%91%E7%BA%A6%E7%BC%96%E8%BF%9B%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.6.2.</span> <span class="nav-text">Refinement
+Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E5%AF%B9-ai-%E5%8D%8F%E4%BD%9C%E7%89%B9%E5%88%AB%E9%87%8D%E8%A6%81"><span class="nav-number">4.6.3.</span> <span class="nav-text">为什么这对 AI 协作特别重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%91%E7%BA%A6%E4%B8%8D%E6%98%AF%E9%93%B6%E5%BC%B9"><span class="nav-number">4.6.4.</span> <span class="nav-text">契约不是银弹</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E7%BA%AA%E5%BE%8Bai-%E7%9A%84%E9%BB%98%E8%AE%A4%E8%A1%8C%E4%B8%BA-vs-%E4%BA%BA%E7%B1%BB%E5%BF%85%E9%A1%BB%E5%88%92%E5%AE%9A%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">5.</span> <span class="nav-text">工程纪律：AI
 的默认行为 vs 人类必须划定的边界</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ai-%E7%9A%84%E9%BB%98%E8%AE%A4%E5%9D%8F%E4%B9%A0%E6%83%AF"><span class="nav-number">5.1.</span> <span class="nav-text">AI 的默认坏习惯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%BA%E7%B1%BB%E5%BF%85%E9%A1%BB%E5%88%92%E5%AE%9A%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">5.2.</span> <span class="nav-text">人类必须划定的边界</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E5%B7%A5%E7%A8%8B%E6%AF%94%E5%86%99%E4%BB%A3%E7%A0%81%E6%9B%B4%E9%9A%BE%E7%9A%84%E4%BA%8B"><span class="nav-number">6.</span> <span class="nav-text">规则工程：比写代码更难的事</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E8%B6%8A%E9%95%BF%E6%95%88%E6%9E%9C%E8%B6%8A%E5%B7%AE%E7%9C%9F%E7%9A%84%E5%90%97"><span class="nav-number">6.1.</span> <span class="nav-text">&quot;规则越长效果越差&quot;——真的吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E8%AF%A6%E7%BB%86-%E6%B8%85%E6%99%B0%E5%8F%AF%E6%89%A7%E8%A1%8C"><span class="nav-number">6.2.</span> <span class="nav-text">规则详细 ≠ 清晰可执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%9B%E4%BB%A4%E7%BA%A7%E7%B2%BE%E7%A1%AE%E5%BA%A6"><span class="nav-number">6.3.</span> <span class="nav-text">军令级精确度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E5%AE%A1%E8%AE%A1%E8%AE%A9-ai-%E9%9E%AD%E7%AD%96-ai"><span class="nav-number">6.4.</span> <span class="nav-text">反向审计：让 AI 鞭策 AI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E6%96%87%E4%BB%B6%E9%87%8C%E5%BA%94%E8%AF%A5%E5%86%99%E4%BB%80%E4%B9%88"><span class="nav-number">6.5.</span> <span class="nav-text">规则文件里应该写什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%97%A8%E6%A7%9B"><span class="nav-number">6.6.</span> <span class="nav-text">真正的门槛</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%A4%A7%E7%9A%84%E5%9B%BE%E6%99%AF"><span class="nav-number">7.</span> <span class="nav-text">更大的图景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BD%E5%88%BA%E7%9A%84%E7%BB%93%E5%B1%80"><span class="nav-number">7.1.</span> <span class="nav-text">讽刺的结局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E4%BB%A3-ai-native-%E8%AF%AD%E8%A8%80"><span class="nav-number">7.2.</span> <span class="nav-text">下一代 AI-native 语言</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">8.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%E4%B8%80ai-%E7%9A%84%E5%B7%A5%E5%85%B7%E9%93%BEgreplsp-%E4%B8%8E%E6%B6%88%E6%AD%A7"><span class="nav-number">8.1.</span> <span class="nav-text">附录一：AI 的工具链——Grep、LSP
 与消歧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fqn-%E7%9A%84%E5%B1%80%E9%99%90%E4%B8%8E-lsp-%E7%9A%84%E6%AD%A3%E7%A1%AE%E7%94%A8%E6%B3%95"><span class="nav-number">8.1.1.</span> <span class="nav-text">FQN 的局限与 LSP 的正确用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%E4%BA%8C%E6%A8%A1%E5%9E%8B%E9%97%B4%E7%9A%84%E5%8D%8F%E4%BD%9C%E4%B8%8E%E7%9F%A5%E8%AF%86%E4%BC%A0%E9%80%92"><span class="nav-number">8.2.</span> <span class="nav-text">附录二：模型间的协作与知识传递</span></a></li></ol></li></ol></div>
         </div>
@@ -206,7 +207,7 @@ Style：不是为了可读性，是为了护栏</span></a></li></ol></li><li cla
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-13 16:00:45" itemprop="dateModified" datetime="2026-03-13T16:00:45+08:00">2026-03-13</time>
+      <time title="Modified: 2026-03-13 18:13:37" itemprop="dateModified" datetime="2026-03-13T18:13:37+08:00">2026-03-13</time>
     </span>
 
   
@@ -391,6 +392,90 @@ Claude：railway style（链式组合子）对你来说比 nested match/case
 的原话：<strong>"这条规则对我来说零成本遵守，但它产出的代码更统一、更抗静默错误丢弃。最大的赢家不是我，是你们人类审查者。"</strong></p>
 <p>AI-native 的代码风格选择，标准不是"AI
 觉得哪个好写"，而是<strong>"哪种风格在结构上减少出错空间"</strong>。签名层如此，实现层同样如此。</p>
+<h2
+id="从签名到契约表达力的天花板在哪">从签名到契约：表达力的天花板在哪？</h2>
+<blockquote>
+<p><strong>以下为 Claude
+留下的草稿框架，需要结合具体项目经历重写。核心论点和学术引用可参考，示例代码和实践描述需替换为真实场景。</strong></p>
+</blockquote>
+<!-- TODO(mingyang): 用项目中的真实例子替换 withdraw 示例，补充你在实践中遇到的"类型签名说不出来的约束"的具体场景 -->
+<p>前面的例子展示了一条递进的路线：<code>String</code> →
+<code>ProjectId</code>（防混淆）→ <code>NonEmptyList</code>（防空）→
+<code>Either[AppError, _]</code>（穷举错误）。但做完这一切，类型签名仍然有说不出来的东西。</p>
+<!-- TODO(mingyang): 替换为项目中的真实签名，展示类型诚实但仍有隐含约束的情况 -->
+<p>看这个签名：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">withdraw</span></span>(account: <span class="type">AccountId</span>, amount: <span class="type">Money</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">LedgerError</span>, <span class="type">Balance</span>]]</span><br></pre></td></tr></table></figure>
+<p>类型层面它是诚实的——有副作用，可能失败，成功返回余额。但它<strong>没有说</strong>：</p>
+<ul>
+<li><code>amount</code> 必须大于零</li>
+<li>返回的 <code>Balance</code> 必须 ≥ 0</li>
+<li>如果 <code>amount &gt; currentBalance</code>，必须返回
+<code>InsufficientFunds</code> 而不是其他错误</li>
+</ul>
+<p>这些约束现在藏在哪？<strong>实现里，或者注释里，或者程序员的脑子里</strong>——和我们在文章开头批评的
+<code>fetchUser(id): User</code> 一模一样的问题，只是换了一个层次。</p>
+<p>类型签名能表达"什么类型"，但表达不了"什么条件"。这个表达力缺口在 PL
+学术界早有系统研究——Findler &amp; Felleisen 在 <a
+target="_blank" rel="noopener" href="https://users.cs.northwestern.edu/~robby/pubs/papers/ho-contracts-techreport.pdf">Contracts
+for Higher-Order Functions (2002)</a>
+中正式提出：<strong>传统类型系统缺乏表达 API
+全部义务和承诺的能力，契约（Contracts）正是为了弥补这个缺口。</strong></p>
+<h3 id="契约的表达力梯度">契约的表达力梯度</h3>
+<p>把前面所有例子放到一条连续的梯度上：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Level 0  fetchUser(id: String): User</span><br><span class="line">         → 签名在撒谎。输入类型过宽，错误路径不可见。</span><br><span class="line"></span><br><span class="line">Level 1  fetchUser(id: String): IO[Either[AppError, User]]</span><br><span class="line">         → 类型诚实。副作用、错误路径都在签名里。</span><br><span class="line"></span><br><span class="line">Level 2  fetchUser(id: UserId): IO[Either[AppError, User]]</span><br><span class="line">         → 领域类型。编译器防止 UserId/OrgId 传反。</span><br><span class="line"></span><br><span class="line">Level 3  withdraw(account: AccountId, amount: Money Refined Positive)</span><br><span class="line">           : IO[Either[LedgerError, Balance]]</span><br><span class="line">           ensuring &#123; case Right(b) =&gt; b.value &gt;= 0 &#125;</span><br><span class="line">         → 契约完整。前置条件（amount &gt; 0）、后置条件（balance ≥ 0）</span><br><span class="line">           都编码在签名里，编译器 + SMT solver 联合验证。</span><br></pre></td></tr></table></figure>
+<p>每升一级，签名中编码的信息越多，人类审查时需要的额外上下文越少，AI
+实现时的约束越紧、出错空间越小。</p>
+<h3 id="refinement-types把契约编进类型">Refinement
+Types：把契约编进类型</h3>
+<p>Refinement types 是这条梯度的关键跳跃。微软研究院的 <a
+target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/MSR-TR-2009-147-SP1.pdf">Principles
+and Applications of Refinement Types</a> 把它定义为 <strong>Floyd-Hoare
+逻辑的类型化泛化</strong>——本质上就是把前置条件和后置条件从注释/断言提升到了类型系统层面。</p>
+<!-- TODO(mingyang): 补充你在项目中使用 Stainless 或 refined 的真实经历，或者你尝试过但遇到了什么问题 -->
+<p>在 Scala 生态中，这已经不是理论：</p>
+<ul>
+<li><strong><a
+target="_blank" rel="noopener" href="https://github.com/epfl-lara/stainless">Stainless</a></strong>（EPFL
+LARA）—— Scala 的形式化验证框架。用 <code>require</code>（前置条件）和
+<code>ensuring</code>（后置条件）表达契约，翻译成验证条件交给 SMT
+solver：</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">withdraw</span></span>(</span><br><span class="line">  account: <span class="type">AccountId</span>,</span><br><span class="line">  amount: <span class="type">Money</span>,</span><br><span class="line">  current: <span class="type">Balance</span></span><br><span class="line">): <span class="type">Either</span>[<span class="type">LedgerError</span>, <span class="type">Balance</span>] = &#123;</span><br><span class="line">  require(amount.value &gt; <span class="number">0</span>)            <span class="comment">// 前置条件：金额为正</span></span><br><span class="line">  <span class="comment">// ... 实现 ...</span></span><br><span class="line">&#125;.ensuring &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="type">Right</span>(balance) =&gt; balance.value &gt;= <span class="number">0</span>   <span class="comment">// 后置条件：余额非负</span></span><br><span class="line">  <span class="keyword">case</span> <span class="type">Left</span>(_) =&gt; <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><a
+target="_blank" rel="noopener" href="https://github.com/fthomas/refined">refined</a></strong> —— 轻量级
+refinement types
+库，<code>NonEmpty</code>、<code>Positive</code>、<code>MatchesRegex</code>
+等约束在编译期验证，零运行时开销。</li>
+</ul>
+<h3 id="为什么这对-ai-协作特别重要">为什么这对 AI 协作特别重要？</h3>
+<!-- TODO(mingyang): 补充你自己的实践观察——AI 在有/无契约约束时的行为差异 -->
+<p>IEEE 2025 年发表的实证研究 <a
+target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/11218044/">Preconditions and
+Postconditions as Design Constraints for LLM Code Generation</a>
+直接测量了这个效应：<strong>在 prompt
+中加入显式的前置/后置条件，显著提升 LLM
+代码生成的首次正确率，弱模型的提升尤为明显。</strong></p>
+<!-- TODO(mingyang): 用你的真实经验替换或补充以下段落 -->
+<p>这和我们的实践经验完全吻合：给 AI
+的约束越精确，它犯错的空间越小。类型签名是一种约束，refinement types
+是更强的约束，完整的契约（前置 + 后置 + 不变量）是最强的约束。</p>
+<p>而且，Findler &amp; Felleisen 提出的 <strong>blame semantics</strong>
+在 AI 协作场景下获得了新的意义：当契约被违反时，blame
+机制能精确定位是谁的责任——<strong>AI 的实现违反了后置条件？blame 指向
+AI。人类传入了不满足前置条件的参数？blame 指向人类。</strong>
+在传统开发中这是调试工具，在 AI
+协作中这变成了<strong>分工协议的执行机制</strong>。</p>
+<h3 id="契约不是银弹">契约不是银弹</h3>
+<!-- TODO(mingyang): 补充你在实践中遇到的 refinement types 工具链限制 -->
+<p>但必须承认，当前的 refinement types 工具链还不成熟。Stainless 只支持
+Scala 的一个纯函数式子集（Pure Scala），refined
+库只能表达单值约束，跨调用的不变量仍然需要 SMT solver 介入。完整的
+dependent
+types（Coq、Agda）表达力够了，但验证不可判定，实际工程中难以大规模使用。</p>
+<p>这就是为什么我们需要后面讨论的<strong>工程纪律和规则文件</strong>——类型系统和契约能覆盖的部分尽量覆盖（Level
+0 → Level
+3），覆盖不了的部分用可执行规则补位。两者不是替代关系，而是<strong>同一条防线的不同段</strong>。</p>
 <hr />
 <h1 id="工程纪律ai-的默认行为-vs-人类必须划定的边界">工程纪律：AI
 的默认行为 vs 人类必须划定的边界</h1>
