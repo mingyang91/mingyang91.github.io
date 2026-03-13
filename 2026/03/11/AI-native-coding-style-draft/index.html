@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-13T14:03:47.453Z">
+<meta property="article:modified_time" content="2026-03-13T15:30:46.859Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -207,7 +207,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-13 22:03:47" itemprop="dateModified" datetime="2026-03-13T22:03:47+08:00">2026-03-13</time>
+      <time title="Modified: 2026-03-13 23:30:46" itemprop="dateModified" datetime="2026-03-13T23:30:46+08:00">2026-03-13</time>
     </span>
 
   
@@ -670,18 +670,34 @@ Grep（这个文本出现在哪）</strong>。光有好工具不够，你得教 
 href="#附录一ai-的工具链grep-lsp-与消歧">附录一</a>。）</p>
 <h3
 id="为什么规则文件里充满了绝对化表述">为什么规则文件里充满了绝对化表述</h3>
-<p>读过我的规则文件的人可能会注意到大量绝对化的断言——"编译器报错必须修复，不许绕过"、"类型系统的判断是最终裁决"、"编译通过即正确"。严格来说，这些并不总是对的：编译器有
-bug，类型系统有表达力盲区，编译通过不代表业务逻辑正确。</p>
-<p>但这是<strong>故意的</strong>。</p>
-<p>编码模型的训练数据里包含了海量的"现实世界代码"——而现实世界代码的主体是什么？是用
-<code>@SuppressWarnings</code> 压掉编译器警告、用
-<code>.asInstanceOf</code> 绕过类型检查、用 <code>// noinspection</code>
-让 IDE
-闭嘴的权宜之计。模型在训练阶段见过太多"编译器说不行，但我有办法绕过去"的成功案例。结果就是：<strong>模型的默认倾向是把编译器当作可以协商的建议者，而不是必须遵守的裁判。</strong></p>
-<p>绝对化表述的作用不是描述真理，而是<strong>对抗这种训练偏差</strong>。当规则文件说"编译器的判断是最终裁决"，它的真实意思不是"编译器永远正确"，而是"在你想绕过编译器之前，先假设是你写错了"。这是一个反方向的力，把模型从"默认寻找绕过方式"拉回到"默认信任工具链、修正自己的代码"。就像矫正视力的镜片——镜片本身是"歪"的，但戴上之后看到的世界是正的。</p>
+<p>读过我的规则文件的人可能会注意到大量绝对化的断言——"信任编译器，不做额外防御性编程"、"类型系统的判断是最终裁决"、"禁止
+<code>.getOrElse</code>
+静默吞掉错误"。严格来说，这些并不总是对的：编译器有
+bug，类型系统有表达力盲区，有些场景确实需要默认值。</p>
+<p>但这是<strong>故意的</strong>，而且服务于两个目的。</p>
+<p><strong>第一，信任类型体操的防护。</strong>
+前面几节我们花了大量精力把约束编码到类型系统里——<code>opaque type</code>
+防混淆、<code>sealed trait</code> 穷举错误、<code>NonEmptyList</code>
+防空。既然已经在类型层面投入了这些成本，就应该信任编译器能守住这些防线，<strong>不需要在运行时再加一层防御性检查</strong>。绝对化表述的第一层意思是：编译器已经在守门了，你不需要在门后面再修一堵墙。</p>
+<p><strong>第二，对抗模型的训练偏差。</strong>
+这是更隐蔽的问题。模型在训练阶段见过太多"遇到类型不匹配就用
+<code>.asInstanceOf</code> 绕过"、"遇到 <code>Either</code> 就用
+<code>.getOrElse(默认值)</code> 吞掉
+Left"的代码。这些在训练集中是高频的"成功"模式——代码确实能编译通过、确实能跑。结果就是：<strong>当模型遇到严格的类型约束时，它的第一反应往往不是修正自己的逻辑，而是找捷径绕过约束。</strong></p>
+<p>这个偏差在实践中反复出现。我最常纠正的一个行为：agent 遇到一个返回
+<code>Either[AppError, T]</code>
+的函数，为了让当前代码编译通过，会默认加一个
+<code>.getOrElse(someDefault)</code>
+把错误静默吞掉。来自配置文件的数据——吞掉。来自数据库的查询结果——吞掉。来自用户提交的输入——吞掉。每一个被吞掉的错误都是一个藏在地毯下的
+bug，直到用户问"我的数据去哪了"才被发现。</p>
+<p>所以规则文件里写的是：<strong>除非业务场景明确要求 Option
+的默认值，否则禁止用 <code>.getOrElse</code> 静默吞掉
+<code>Either</code> 的 Left。</strong>
+这条规则从字面上看是"绝对禁止"，但它的真实意思是：把默认行为从"吞掉错误"翻转为"传播错误"，只有在人类显式决定"这里确实应该用默认值"时才例外。</p>
+<p>两个目的归结到同一个原则：<strong>绝对化表述是对抗训练偏差的校准参数。</strong>
+就像矫正视力的镜片——镜片本身是"歪"的，但戴上之后看到的世界是正的。</p>
 <p>这也意味着：<strong>规则文件的绝对化程度应该随模型能力变化而调整。</strong>
-如果未来的模型训练数据质量提升，或者 RLHF
-对齐策略改变了默认偏好，模型不再倾向于绕过编译器，那"绝对信任编译器"的规则就可以放松为"优先信任编译器"甚至移除。规则文件不是宪法，它是针对特定模型版本的校准参数。</p>
+如果未来的模型不再倾向于绕过类型检查、不再默认吞掉错误，那这些"绝对禁止"就可以放松为"优先避免"甚至移除。规则文件不是宪法，它是针对特定模型版本的校准参数。</p>
 <h2 id="反向审计让-ai-鞭策-ai">反向审计：让 AI 鞭策 AI</h2>
 <p>我发现的最有效的方法是：<strong>让 Claude
 反向审计规则文件本身。</strong></p>
