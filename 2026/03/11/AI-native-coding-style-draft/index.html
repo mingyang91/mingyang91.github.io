@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-13T15:30:46.859Z">
+<meta property="article:modified_time" content="2026-03-13T15:32:04.430Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -207,7 +207,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-13 23:30:46" itemprop="dateModified" datetime="2026-03-13T23:30:46+08:00">2026-03-13</time>
+      <time title="Modified: 2026-03-13 23:32:04" itemprop="dateModified" datetime="2026-03-13T23:32:04+08:00">2026-03-13</time>
     </span>
 
   
@@ -678,7 +678,16 @@ bug，类型系统有表达力盲区，有些场景确实需要默认值。</p>
 <p><strong>第一，信任类型体操的防护。</strong>
 前面几节我们花了大量精力把约束编码到类型系统里——<code>opaque type</code>
 防混淆、<code>sealed trait</code> 穷举错误、<code>NonEmptyList</code>
-防空。既然已经在类型层面投入了这些成本，就应该信任编译器能守住这些防线，<strong>不需要在运行时再加一层防御性检查</strong>。绝对化表述的第一层意思是：编译器已经在守门了，你不需要在门后面再修一堵墙。</p>
+防空。既然已经在类型层面投入了这些成本，就应该信任编译器能守住这些防线，<strong>不需要在运行时再加一层防御性检查</strong>。</p>
+<p>举个具体的例子：前面提到的
+<code>NonEmptyList</code>。当一个函数签名写的是
+<code>NonEmptyList[String]</code>，agent
+应该<strong>绝对信任</strong>这个类型——它不可能是空的，不需要在函数体里加
+<code>if (list.isEmpty)</code>
+的防御检查。这个"不可能为空"不是注释里的承诺，不是文档里的约定，而是编译器强制保证的不变量。加防御检查不仅多余，而且有害——它向阅读代码的人（和下一个
+session 的
+agent）暗示"这个类型可能为空"，污染了类型系统已经建立的信任链。</p>
+<p>绝对化表述的第一层意思是：编译器已经在守门了，你不需要在门后面再修一堵墙。</p>
 <p><strong>第二，对抗模型的训练偏差。</strong>
 这是更隐蔽的问题。模型在训练阶段见过太多"遇到类型不匹配就用
 <code>.asInstanceOf</code> 绕过"、"遇到 <code>Either</code> 就用
