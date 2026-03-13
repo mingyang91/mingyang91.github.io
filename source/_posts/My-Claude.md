@@ -18,14 +18,13 @@ tags:
 这是我的项目在 vibe 一年后的提交统计图，受到 opus 4.6 1M-context 的帮助，最近一个月我用 5k usd token 烧出了7-8 个超大型 feature 和从 Kotlin 到 Scala 的彻底重写，代码量也大幅降低到了3万行出头，系统健康程度远超半年前。
 ![backend repository contributors](backend-contributors.png)
 ---
-
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
 
-A multi-tenant backend service built with **http4s** (Scala 3 / cats-effect). It provides document management, AI-powered features (embeddings, RAG), video SOP generation, and real-time communication capabilities.
+Linewise API is a multi-tenant backend service built with **http4s** (Scala 3 / cats-effect). It provides document management, AI-powered features (embeddings, RAG), video SOP generation, and real-time communication capabilities.
 
 ## Refactoring Philosophy
 
@@ -88,8 +87,8 @@ docker-compose down
 ## Project Structure
 
 ```
-src/main/scala/com/example/
-├── App.scala                   # Main entry point (IOApp.Simple)
+src/main/scala/io/linewise/
+├── LinewiseApp.scala           # Main entry point (IOApp.Simple)
 ├── core/                       # Shared infrastructure
 │   ├── auth/                   # Firebase auth, claims parsing
 │   ├── config/                 # AppConfig (pureconfig HOCON)
@@ -138,10 +137,10 @@ Main config: `src/main/resources/application.conf` (HOCON format, parsed by pure
 
 **Environment Variables:**
 - `DATABASE_URL` - PostgreSQL JDBC URL (or `secrets/database/url` file)
-- `JWT_SECRET` - JWT signing secret
-- `GCS_BUCKET` - GCS bucket for documents
+- `JWT_SECRET` - JWT signing secret (fallback: "linewise")
+- `GCS_BUCKET` - GCS bucket for documents (fallback: "linewise-documents")
 - `GCS_HOSTNAME` - Optional GCS hostname
-- `TRANSCODE_GCS_BUCKET` - GCS bucket for transcoded videos
+- `TRANSCODE_GCS_BUCKET` - GCS bucket for transcoded videos (fallback: "linewise-transcode")
 - `TRANSCODE_GCS_HOSTNAME` - Optional transcode GCS hostname
 - `ENABLE_OTEL` - Enable OpenTelemetry (fallback: false)
 - `SENTRY_DSN` - Sentry error tracking DSN (optional)
@@ -181,21 +180,25 @@ def routes[F[_]: {Async, SOPService, PermissionService}]: AuthedRoutes[Authentic
 SOPService[F].getSOP(tenant, id)
 ```
 
-**NoOp Result Patterns - Caller Decides:**
+**NoOp Result Patterns:**
 
-NoOp implementations return results (not throw exceptions). The caller decides if it's an error:
+NoOp implementations are used for: **(a) test runners / local partial testing**, and **(b) feature-flag-disabled services** in `LinewiseApp.scala`. NoOp returns results (not throw exceptions). The caller decides if it's an error.
+
+**Data-related vs data-unrelated services:**
+- **Data-related** (RAG, video processing, document ops, SOP): NoOp must return **error** (`Left("Service not available")`). `Option` methods return `None` — but note this means "not found", which is semantically different from "service disabled". For `Either`-returning methods (create, update, delete), always return `Left` so the caller knows the operation was not performed. Data-related services should use `F[Either[E, T]]` by default (not `F[T]` or `F[Option[T]]` for mutation), because they involve the persistence layer which can fail.
+- **Data-unrelated** (logging, metrics, telemetry): NoOp can return **success** (`Right(())`). Skipping side-effect-only operations is harmless.
 
 ```scala
-// NoOp returns result indicating "not processed"
+// Data-related NoOp — Either methods return Left, Option methods return None
 class SOPServiceNoop[F[_]: Applicative] extends SOPService[F]:
-  // Either methods → Left with error message
   def createSOP(...) = Left("Service not available").pure[F]
+  def getSOP(...)    = None.pure[F]   // None = "not found" (not "disabled")
+  def deleteSOP(...) = Left("Service not available").pure[F]
 
-  // Option methods → None
-  def getSOP(...) = None.pure[F]
-
-  // Idempotent operations → Right(()) (success - nothing to do)
-  def deleteSOP(...) = Right(()).pure[F]
+// Data-unrelated NoOp — success (nothing to do is fine)
+class MetricsServiceNoop[F[_]: Applicative] extends MetricsService[F]:
+  def recordLatency(...)   = Right(()).pure[F]
+  def incrementCounter(...) = Right(()).pure[F]
 ```
 
 **Method-level context bounds for partial dependencies:**
@@ -214,9 +217,10 @@ def routes[F[_]: {Async, UserService, S3Service}]: AuthedRoutes[...] = ...
 def routes[F[_]: {Async, UserService}]: AuthedRoutes[...] = ...
 ```
 
-**Wiring with givens in App:**
+**Wiring with givens in LinewiseApp:**
 ```scala
 given SOPService[IO] = SOPService.make[IO](xa)
+// Feature-flag-disabled services use NoOp
 given RAGService[IO] =
   if Config.enableRAG then RAGService.make[IO](httpClient)
   else RAGService.noop[IO]
@@ -229,31 +233,107 @@ val routes = SOPRoutes.routes[IO]  // Givens in scope
 Prefer flat `for`/`yield` over nested `match`/`case` inside effectful blocks. Lift `Either`/`Option` into `F` so the `for` stays linear:
 
 ```scala
-// BAD — nested match breaks the for-comprehension flow
+// BAD — nested match in MID-CHAIN breaks the for-comprehension flow
 for
   result <- service.doSomething(...)
+  value  <- result match  // BAD: match in middle, more steps follow
+    case Right(v)  => v.pure[F]
+    case Left(err) => Sync[F].raiseError(err)
+  next   <- process(value)
+  response <- Ok(next.asJson)
+yield response
+
+// ALSO BAD — .flatMap with case inside for-comprehension
+for
+  body <- req.req.as[Body]
+  result <- service.getItem(id).flatMap {
+    case Some(item) => Ok(item.asJson)
+    case None       => NotFound(...)
+  }
+yield result
+
+// GOOD — plain match at TERMINAL position (pure response mapping, no side effects)
+for
+  body   <- req.req.as[Body]
+  result <- service.doSomething(body)
   response <- result match
     case Right(value) => Ok(value.asJson)
     case Left(err)    => BadRequest(err.asJson)
 yield response
 
-// GOOD — lift Either/Option into F
+// GOOD — lift Either/Option into F (throw on error — trusted paths only)
 for
   value <- Sync[F].fromEither(parseJson(raw).leftMap(e => RuntimeException(e.message)))
   response <- Ok(value)
 yield response
 
-// GOOD — use EitherT.foldF when both paths have logic
+// GOOD — EitherT.foldF when branches have SIDE EFFECTS (logging, audit, cleanup)
 for
   body <- req.req.as[Body]
   response <- EitherT(service.doSomething(body)).foldF(
     err  => Logger[F].warn(s"Failed: $err") *> BadRequest(err.asJson),
-    value => Created(value.asJson)
+    value => audit.record(value.id) *> Created(value.asJson)
   )
 yield response
+
+// MID-CHAIN Either coloring — depends on data-related vs data-unrelated:
+// Data-unrelated mid-chain op (metrics): discard Left, log, continue IO chain
+for
+  body   <- req.req.as[Body]
+  saved  <- store.save(body)
+  _      <- metrics.record(saved.id).flatMap {
+    case Right(_)  => Applicative[F].unit
+    case Left(err) => Logger[F].warn(s"Metrics failed: $err")  // discard, non-critical
+  }
+  response <- Ok(saved.asJson)
+yield response
+
+// Data-related mid-chain op (store.save): propagate Either — refactor chain to EitherT
+for
+  body <- req.req.as[Body]
+  response <- EitherT(validate(body))
+    .semiflatMap(valid => store.save(valid))   // F[Either[E, A]] — error must propagate
+    .subflatMap(identity)                       // flatten nested Either
+    .foldF(
+      err   => BadRequest(err.asJson),
+      saved => Ok(saved.asJson)
+    )
+yield response
+
+// GOOD — F[Option[A]]: use OptionT for single Option check
+for
+  body <- req.req.as[Body]
+  result <- OptionT(service.getItem(id))
+    .semiflatMap(item => Ok(item.asJson))
+    .getOrElseF(NotFound(ErrorResponse.notFound("Not found").asJson))
+yield result
+
+// GOOD — chained Options with different error statuses: EitherT + local enum
+private enum LookupError:
+  case NotFound
+  case NoUri
+
+for
+  body <- req.req.as[Body]
+  result <- EitherT
+    .fromOptionF(service.getItem(id), LookupError.NotFound)
+    .subflatMap(item => item.uri.toRight(LookupError.NoUri))
+    .semiflatMap(uri => doWork(uri))
+    .foldF(
+      { case LookupError.NotFound => NotFound(...)
+        case LookupError.NoUri    => BadRequest(...) },
+      _ => Accepted(...)
+    )
+yield result
 ```
 
-**Key lifters:** `Sync[F].fromEither`, `Sync[F].fromOption`, `EitherT(...).foldF`.
+**Key lifters:**
+- `EitherT(...).foldF` — `F[Either[E, A]]` → handle both branches
+- `EitherT.fromOptionF` — `F[Option[A]]` → `EitherT[F, E, A]`
+- `.subflatMap` — pure `A => Either[E, B]` inside EitherT chain
+- `.semiflatMap` — effectful `A => F[B]` on happy path
+- `OptionT(...).semiflatMap(...).getOrElseF(...)` — `F[Option[A]]` → handle None
+- `Sync[F].fromEither`, `Sync[F].fromOption` — lift pure values (throw on error)
 
 **No premature helpers:** Don't extract single-use private methods that just wrap a `match`. Inline the logic at the call site.
 
@@ -297,7 +377,7 @@ All tenant routes follow the pattern: `/api/org/{tenant}/...`
 
 **CRITICAL RULE:** Never silently swallow errors. Arbitrary tolerance pollutes the database and hides bugs.
 
-**Forbidden patterns (ALWAYS):**
+**Forbidden patterns:**
 ```scala
 // BAD - silently converts errors to None/null
 json.as[T].toOption
@@ -305,14 +385,20 @@ json.as[T].getOrElse(defaultValue)
 either.toOption
 Try(x).toOption
 result.getOrElse(null)
+parse(userInput).getOrElse(0.75)  // BAD - hides parse failure
+
+// OK - .getOrElse for optional config with a sensible default
+pageSize.getOrElse(10)            // OK - Option[Int] with default, no error to swallow
 ```
 
 **Error Handling Strategy - Trusted vs Untrusted Paths:**
 
-| Path Type                | Examples                                                              | Strategy                                                                        |
-| ------------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| **Trusted (internal)**   | Config files, system settings, DB schema data, internal serialization | **Throw exception** - low probability of error, if it fails it's a bug          |
-| **Untrusted (external)** | User input, AI-generated content, external API responses              | **Catch and report** - high probability of error, report back to user/AI to fix |
+| Path Type                | Examples                                                                                                                                      | Strategy                                                                                                                                   |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Trusted (internal)**   | Config files, system settings, DB schema data, internal serialization, **persisted DB data**, internal service calls, cache, GCS/K8s metadata | **Throw exception** - low probability of error, if it fails it's a bug. For infra (GCS/K8s), human runs data migration after code changes. |
+| **Untrusted (external)** | User input, AI-generated content, external API responses (**before** persistence)                                                             | **Catch and report** - high probability of error, report back to user/AI to fix                                                            |
+
+**Persisted data is trusted.** Strict enc/dec at the write boundary ensures bad-format data never reaches the DB. If malformed data is read back from DB, it's a human/migration bug — throw, don't defensively handle.
 
 ```scala
 // TRUSTED PATH - throw on failure (system internal data)
@@ -321,10 +407,14 @@ val config = configJson.as[AppConfig].getOrElse(
 )
 
 // UNTRUSTED PATH - catch and report to caller (user/AI content)
-val result = userJson.as[UserContent] match {
-  case Right(v) => v
-  case Left(err) => return BadRequest(s"Invalid content format: ${err.message}")
-}
+// Use EitherT/match at terminal position — never use `return`
+for
+  body <- req.req.as[UserContent]
+  result <- service.process(body)
+  response <- result match
+    case Right(v)  => Ok(v.asJson)
+    case Left(err) => BadRequest(s"Invalid content format: ${err.message}".asJson)
+yield response
 ```
 
 ### Typed Error Model (ADT Errors)
@@ -363,7 +453,7 @@ trait RagIndexService[F[_]]:
 - **Compose, don't flatten.** When service A calls service B, wrap B's error: `case Embedding(cause: EmbeddingError)`, not `case EmbeddingFailed(message: String)`.
 - **Route mapping:** Each error variant maps to exactly one HTTP status. The match is exhaustive — compiler enforces handling every variant.
 - **Define in feature's `models.scala`.**
-- **Migrate incrementally.** New services use typed errors. Existing `Either[String, T]` services migrate when next modified.
+- **Migrate when file is touched — no hesitation.** New services use typed errors. Existing `Either[String, T]` services migrate the **whole service** to ADT errors when the file is modified for any reason — even a typo fix or comment edit. The trigger is touching the file, not the size of the change. Touching the file means QA/regression testing covers it, making it the perfect time. Scope follows the compiler iteratively — if the route file you're editing calls a service with `Either[String, T]`, migrate that service file too.
 
 ### Feature Module Organization
 
@@ -414,6 +504,25 @@ All routes require Firebase JWT auth:
 - `/api/system/tenants/` - Tenant admin
 - `/api/system/users/` - User management
 
+## Tool Preferences
+
+**Override Grep with Metals MCP when the question is "what does the compiler resolve this to?"**
+
+Grep is the default and works for most searches. But it fails silently on these Scala-specific scenarios — use Metals instead:
+
+| Scenario                                                                        | Tool                      |
+| ------------------------------------------------------------------------------- | ------------------------- |
+| What type is this expression / what does it return?                             | `mcp__metals__inspect`    |
+| Which given/implicit is resolved at this call site?                             | `mcp__metals__inspect`    |
+| Which overloaded method is called here?                                         | `mcp__metals__inspect`    |
+| What's the underlying type of an opaque type?                                   | `mcp__metals__inspect`    |
+| What does a wildcard import bring into scope?                                   | `mcp__metals__inspect`    |
+| Who calls this method / all implementations of a trait? (semantic, not textual) | `mcp__metals__get-usages` |
+
+Other Metals tools: `glob-search` (find symbols by name), `get-docs` (ScalaDoc), `compile-file` (single-file compile check), `list-modules`, `list-scalafix-rules`.
+
+**Signal to switch:** When you grep and get 10+ candidates with no way to disambiguate — that means you need Metals, not a better regex. Fall back to Grep/Glob for non-Scala files, string literals, config values, SQL, or when Metals is unavailable.
+
 ## Development Workflow
 
 ### Adding New Routes
@@ -439,9 +548,21 @@ Use scalafmt (configured in `.scalafmt.conf`):
 - **Type-level constraints flow E2E.** Encode invariants in types (opaque types, `NonEmptyList`, refined types) and propagate them through **all** layer signatures: route → service → repository. Never downgrade a constraint to a weaker type and re-validate internally — that hides the requirement from callers and defeats compile-time safety. Unwrap/weaken only at the true system boundary: SQL interpolation, Java SDK calls, job parameter serialization.
 - **`.toString` over `.value.toString`.** Opaque types erase at runtime, so `s"...$opaqueId"` and `opaqueId.toString` just work — no need to unwrap first.
 - **`NonEmptyList` over `List` + `.get`/`.head`.** When a method logically requires non-empty input (batch embeddings, `IN` clauses, etc.), use `NonEmptyList[T]` in the **signature** — including repository methods — instead of `List[T]` with a runtime `.toNel.get` or `.head`. Callers use `NonEmptyList.fromList` to handle the empty case at the call site.
-- **No premature helpers.** Don't extract single-use private methods. Inline at call site.
-- **Generic over specific.** One `queryParam[T]` not three type-specific parsers.
-- **Proactive naming review.** When reading or modifying code, flag misleading, stale, or inconsistent names to the user. For **internal names** (classes, properties, methods) — recommend renaming directly. For **external names** (request/response DTOs, DB-serialized JSONB fields) — suggest the better name but note migration implications. Common smells: Kotlin-era suffixes (`Kt`), field names that don't match their type (`name` holding an ID), stale comments referencing deleted code, generic names that obscure domain meaning.
+- **No premature helpers.** If the logic can be composed from <5 Scala/cats operators, always inline at call site — never extract a helper. If >=5 operators, **ask the user** before extracting (in plan mode or popup dialog). When consensus is reached on a new helper, add/link it in this document so future sessions know to use it. **Always use helpers already listed here** (e.g., `AsyncOps`) — don't expand them inline. Before writing any new helper, search the codebase for existing ones that do the same thing.
+- **Generic over specific (stdlib/cats only).** Prefer composing well-tested Scala/cats operators generically (one `queryParam[T]` using `QueryParamDecoder[T]`) over type-specific parsers. "Generic" means leveraging stdlib type classes, not extracting custom helper functions — those still follow the <5 operator rule.
+- **Proactive naming review.** When modifying code, flag misleading, stale, or inconsistent names to the user. **Scope follows the compiler iteratively** — same as smell detection: start with changed files, then follow compilation errors outward. For **internal names** (classes, properties, methods) — recommend renaming directly. For **external names** (request/response DTOs, DB-serialized JSONB fields) — suggest the better name but note migration implications. Common smells: Kotlin-era suffixes (`Kt`), field names that don't match their type (`name` holding an ID), stale comments referencing deleted code, generic names that obscure domain meaning.
+- **Proactive code smell detection.** Scope follows the compiler iteratively: (1) find smell in current file, (2) fix it, (3) compile → if it fails because other files import the changed symbol, fix those too, (4) repeat until compilation passes. If **reading unrelated code** (not in the compilation chain) and spotting a violation — **add it to the smell list** (see Code Smell Tracking below), do not fix. This applies to all rules: type safety, error handling, control flow, naming, logging, etc.
+
+### Code Smell Tracking
+
+When spotting code smells in **unrelated code** (not in the current compilation chain), add them to the persistent smell list file at `<project-root>/memory/code_smells.md` instead of just warning in the response.
+
+**Rules:**
+- **Max 10 entries.** If adding an 11th, delete the oldest entry (FIFO eviction).
+- **Prioritize by severity.** Most critical smells first (silent error swallowing > naming inconsistency).
+- **At end of every task**, remind the user about pending smells and suggest fixing them in a dedicated session.
+- **Each entry** includes: file path, line number, rule violated, brief description.
+- **Remove entries** when the smell is fixed (either by the user or in a subsequent session).
 
 ### Logging
 
@@ -452,9 +573,9 @@ Use scalafmt (configured in `.scalafmt.conf`):
 
 ### Runtime Assertion Checks (RAC)
 
-**Insert runtime assertions on critical paths.** RACs catch inconsistent state early, before it propagates downstream and corrupts data. Always enabled in dev/testing; switchable off in production via config flag.
+**Suggest runtime assertions on critical paths (advisory, not mandatory).** RACs catch inconsistent state early, before it propagates downstream and corrupts data. Always enabled in dev/testing; switchable off in production via config flag. Final decision on whether to add RAC is made during code review — do not treat missing RAC as a code smell.
 
-**Implementation:** Use a shared `RAC.assert(condition, message)` helper that checks a config flag. When disabled, assertions are no-ops. When enabled, they throw immediately.
+**Implementation:** Use the shared `RAC.assert(condition, message)` helper (`io.linewise.core.RAC`) that checks a config flag. When disabled, assertions are no-ops. When enabled, they throw immediately.
 
 **What should have RAC:**
 - **Money/balance operations** — assert balance >= 0 after debit, assert credit + debit = expected total
@@ -474,20 +595,21 @@ Use scalafmt (configured in `.scalafmt.conf`):
 **IMPORTANT: Do NOT build and push Docker images from local machine.** Always commit and push to git to trigger CI for building images. Only build locally if explicitly requested by the user.
 
 **Branches and Docker Tags:**
-- `develop` branch → `gcr.io/${PROJECT_ID}/api:develop`
-- `testing` branch → `gcr.io/${PROJECT_ID}/api:testing`
-- `master` branch → `gcr.io/${PROJECT_ID}/api:latest` and `:master`
-- Git tag `vX.Y.Z` → `gcr.io/${PROJECT_ID}/api:vX.Y.Z`
+- `develop` branch → `gcr.io/${PROJECT_ID}/linewise-api:develop`
+- `testing` branch → `gcr.io/${PROJECT_ID}/linewise-api:testing`
+- `master` branch → `gcr.io/${PROJECT_ID}/linewise-api:latest` and `:master`
+- Git tag `vX.Y.Z` → `gcr.io/${PROJECT_ID}/linewise-api:vX.Y.Z`
 
 **Git Push:**
-- If SSH push fails (e.g. VPN/proxy blocks port 22), switch to HTTPS temporarily.
+- If SSH push fails (e.g. VPN/proxy blocks port 22), switch to HTTPS temporarily:
+  `git remote set-url origin https://github.com/Vision-Nexus/linewise-api.git`
 
 **Deployment:**
 - GitHub Actions workflow: `.github/workflows/build-and-push-gcr.yml`
 - Builds with Mill, then Docker image, pushes to Google Container Registry
 - Requires `GCR_SERVICE_ACCOUNT` secret (GCP service account JSON)
 - Deployed via **ArgoCD on Kubernetes** (not docker-compose or manual shell)
-- Deploy manifests live in a separate repo: `deploy/overlays/{dev,testing,prod}`
+- Deploy manifests live in a separate repo: `linewise-deploy/overlays/{dev,testing,prod}`
 
 **Deploy impact reporting:** When a code change involves deploy-affecting changes, output a summary of what needs to be updated in the deploy repo. Examples:
 - **New environment variable** → add to ConfigMap or Secret in the overlay, reference in Deployment env
@@ -520,7 +642,7 @@ Format the output as a checklist the user can apply to the deploy repo. Do NOT s
 
 ## Important Files
 
-- `App.scala` - Main entry point, service initialization, givens wiring
+- `LinewiseApp.scala` - Main entry point, service initialization, givens wiring
 - `build.mill` - Mill build definition, dependencies
 - `application.conf` - HOCON configuration with environment variable overrides
 - `Dockerfile` - Multi-stage build with Mill, FFmpeg for video processing
