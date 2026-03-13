@@ -244,22 +244,26 @@ Route: ProjectId → Service: ProjectId → Repo: ProjectId → SQL 边界: unwr
 但它接着说：**railway style 的真正价值不是可读性，而是它让"写错"变得更难。**
 
 ```scala
-// 嵌套 match —— 很容易忘记一个分支，或者悄悄丢掉错误细节
+// 嵌套 match —— 中间步骤必须手动 lift，错误处理散落在各处
 for
-  result <- service.doSomething(...)
-  response <- result match
-    case Right(v) => Ok(v.asJson)
-    case Left(_)  => BadRequest()  // 诱惑：随手丢掉错误信息
+  result <- service.validate(body)
+  user   <- result match                         // mid-chain match
+    case Right(u)  => u.pure[F]                  // 手动 lift
+    case Left(err) => "default_user".pure[F]     // 诱惑：用默认值吞掉错误
+  score  <- service.fetchScore(user)
+  response <- Ok(score.asJson)
 yield response
 
-// Railway —— 组合子强制你显式处理两条路径
-EitherT(service.doSomething(body)).foldF(
-  err   => BadRequest(err.asJson),  // 错误就在这里，很难忽略
-  value => Ok(value.asJson)
-)
+// Railway —— 错误自动沿链传播，只在终点处理一次
+EitherT(service.validate(body))
+  .semiflatMap(user => service.fetchScore(user))  // 错误？自动短路，不需要处理
+  .foldF(
+    err   => BadRequest(err.asJson),
+    score => Ok(score.asJson)
+  )
 ```
 
-嵌套 match 中，AI 可能意外遮蔽变量、遗漏错误上下文、引入多余的 `flatMap` 层让 for-comprehension 变得更难审查。Railway 组合子在结构上就排除了这些可能性。
+关键区别在中间步骤：嵌套 match 迫使 AI 在每个分支处当场决定怎么处理错误——用默认值吞掉是最省事的选择；Railway 链中错误自动传播，AI 只写 happy path，错误处理推迟到终点。
 
 Claude 的原话：**"这条规则对我来说零成本遵守，但它产出的代码更统一、更抗静默错误丢弃。最大的赢家不是我，是你们人类审查者。"**
 
