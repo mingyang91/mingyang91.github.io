@@ -27,7 +27,7 @@
 <meta property="og:description" content="观前提醒 该文件为我个人自用的CLAUDE.md规则文件，维护生产项目已有一年时间，从 Cursor + opus 3.7 时代至现在Claude-Code + opus 4.6时代。 请注意：该文件也仅可用于 Claude code opus 4.6，我不是对 codex 和 gemini 有偏见，OpenAI 的 25k USD credits 今年6月份就要过期了，它（gpt-5.4-xhi">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-10T15:37:43.000Z">
-<meta property="article:modified_time" content="2026-03-13T05:27:28.073Z">
+<meta property="article:modified_time" content="2026-03-13T06:23:29.674Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -109,13 +109,13 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%82%E5%89%8D%E6%8F%90%E9%86%92"><span class="nav-number">1.</span> <span class="nav-text">观前提醒</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#claude.md"><span class="nav-number">2.</span> <span class="nav-text">CLAUDE.md</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#overview"><span class="nav-number">2.1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refactoring-philosophy"><span class="nav-number">2.2.</span> <span class="nav-text">Refactoring Philosophy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#technology-stack"><span class="nav-number">2.3.</span> <span class="nav-text">Technology Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-run-commands"><span class="nav-number">2.4.</span> <span class="nav-text">Build &amp; Run Commands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#project-structure"><span class="nav-number">2.5.</span> <span class="nav-text">Project Structure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configuration"><span class="nav-number">2.6.</span> <span class="nav-text">Configuration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#key-architectural-patterns"><span class="nav-number">2.7.</span> <span class="nav-text">Key Architectural Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tagless-final-pattern"><span class="nav-number">2.7.1.</span> <span class="nav-text">Tagless Final Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-style-flat-for-comprehensions"><span class="nav-number">2.7.2.</span> <span class="nav-text">Code Style: Flat
-for-comprehensions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdklibrary-priority-order"><span class="nav-number">2.7.3.</span> <span class="nav-text">SDK&#x2F;Library Priority Order</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-tenancy-with-schema-isolation"><span class="nav-number">2.7.4.</span> <span class="nav-text">Multi-Tenancy with Schema
-Isolation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fail-fast---no-silent-error-swallowing"><span class="nav-number">2.7.5.</span> <span class="nav-text">Fail Fast - No Silent
-Error Swallowing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#typed-error-model-adt-errors"><span class="nav-number">2.7.6.</span> <span class="nav-text">Typed Error Model (ADT
-Errors)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#feature-module-organization"><span class="nav-number">2.7.7.</span> <span class="nav-text">Feature Module Organization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#testing-strategy"><span class="nav-number">2.7.8.</span> <span class="nav-text">Testing Strategy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#api-routes"><span class="nav-number">2.8.</span> <span class="nav-text">API Routes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#development-workflow"><span class="nav-number">2.9.</span> <span class="nav-text">Development Workflow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#adding-new-routes"><span class="nav-number">2.9.1.</span> <span class="nav-text">Adding New Routes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-formatting"><span class="nav-number">2.9.2.</span> <span class="nav-text">Code Formatting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logging"><span class="nav-number">2.9.3.</span> <span class="nav-text">Logging</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runtime-assertion-checks-rac"><span class="nav-number">2.9.4.</span> <span class="nav-text">Runtime Assertion Checks
-(RAC)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cicd-pipeline"><span class="nav-number">2.10.</span> <span class="nav-text">CI&#x2F;CD Pipeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#key-dependencies-services"><span class="nav-number">2.11.</span> <span class="nav-text">Key Dependencies &amp; Services</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#external-services-integration"><span class="nav-number">2.11.1.</span> <span class="nav-text">External Services
-Integration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#optional-features"><span class="nav-number">2.11.2.</span> <span class="nav-text">Optional Features</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#important-files"><span class="nav-number">2.12.</span> <span class="nav-text">Important Files</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%82%E5%89%8D%E6%8F%90%E9%86%92"><span class="nav-number">1.</span> <span class="nav-text">观前提醒</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#overview"><span class="nav-number">1.1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refactoring-philosophy"><span class="nav-number">1.2.</span> <span class="nav-text">Refactoring Philosophy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#technology-stack"><span class="nav-number">1.3.</span> <span class="nav-text">Technology Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-run-commands"><span class="nav-number">1.4.</span> <span class="nav-text">Build &amp; Run Commands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#project-structure"><span class="nav-number">1.5.</span> <span class="nav-text">Project Structure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configuration"><span class="nav-number">1.6.</span> <span class="nav-text">Configuration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#key-architectural-patterns"><span class="nav-number">1.7.</span> <span class="nav-text">Key Architectural Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tagless-final-pattern"><span class="nav-number">1.7.1.</span> <span class="nav-text">Tagless Final Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-style-flat-for-comprehensions"><span class="nav-number">1.7.2.</span> <span class="nav-text">Code Style: Flat
+for-comprehensions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdklibrary-priority-order"><span class="nav-number">1.7.3.</span> <span class="nav-text">SDK&#x2F;Library Priority Order</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-tenancy-with-schema-isolation"><span class="nav-number">1.7.4.</span> <span class="nav-text">Multi-Tenancy with Schema
+Isolation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fail-fast---no-silent-error-swallowing"><span class="nav-number">1.7.5.</span> <span class="nav-text">Fail Fast - No Silent
+Error Swallowing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#typed-error-model-adt-errors"><span class="nav-number">1.7.6.</span> <span class="nav-text">Typed Error Model (ADT
+Errors)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#feature-module-organization"><span class="nav-number">1.7.7.</span> <span class="nav-text">Feature Module Organization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#testing-strategy"><span class="nav-number">1.7.8.</span> <span class="nav-text">Testing Strategy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#api-routes"><span class="nav-number">1.8.</span> <span class="nav-text">API Routes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tool-preferences"><span class="nav-number">1.9.</span> <span class="nav-text">Tool Preferences</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#development-workflow"><span class="nav-number">1.10.</span> <span class="nav-text">Development Workflow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#adding-new-routes"><span class="nav-number">1.10.1.</span> <span class="nav-text">Adding New Routes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-formatting"><span class="nav-number">1.10.2.</span> <span class="nav-text">Code Formatting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-smell-tracking"><span class="nav-number">1.10.3.</span> <span class="nav-text">Code Smell Tracking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logging"><span class="nav-number">1.10.4.</span> <span class="nav-text">Logging</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runtime-assertion-checks-rac"><span class="nav-number">1.10.5.</span> <span class="nav-text">Runtime Assertion Checks
+(RAC)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cicd-pipeline"><span class="nav-number">1.11.</span> <span class="nav-text">CI&#x2F;CD Pipeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#key-dependencies-services"><span class="nav-number">1.12.</span> <span class="nav-text">Key Dependencies &amp; Services</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#external-services-integration"><span class="nav-number">1.12.1.</span> <span class="nav-text">External Services
+Integration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#optional-features"><span class="nav-number">1.12.2.</span> <span class="nav-text">Optional Features</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#important-files"><span class="nav-number">1.13.</span> <span class="nav-text">Important Files</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -204,7 +204,7 @@ Integration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-13 13:27:28" itemprop="dateModified" datetime="2026-03-13T13:27:28+08:00">2026-03-13</time>
+      <time title="Modified: 2026-03-13 14:23:29" itemprop="dateModified" datetime="2026-03-13T14:23:29+08:00">2026-03-13</time>
     </span>
 
   
@@ -233,15 +233,14 @@ Claude
 Kotlin 到 Scala
 的彻底重写，代码量也大幅降低到了3万行出头，系统健康程度远超半年前。 <img
 src="backend-contributors.png" alt="backend repository contributors" />
----</p>
-<h1 id="claude.md">CLAUDE.md</h1>
+--- # CLAUDE.md</p>
 <p>This file provides guidance to Claude Code (claude.ai/code) when
 working with code in this repository.</p>
 <h2 id="overview">Overview</h2>
-<p>A multi-tenant backend service built with <strong>http4s</strong>
-(Scala 3 / cats-effect). It provides document management, AI-powered
-features (embeddings, RAG), video SOP generation, and real-time
-communication capabilities.</p>
+<p>Linewise API is a multi-tenant backend service built with
+<strong>http4s</strong> (Scala 3 / cats-effect). It provides document
+management, AI-powered features (embeddings, RAG), video SOP generation,
+and real-time communication capabilities.</p>
 <h2 id="refactoring-philosophy">Refactoring Philosophy</h2>
 <p><strong>Prefer radical type-level refactors over conservative
 patches.</strong> This is a statically-typed Scala 3 codebase with
@@ -294,20 +293,22 @@ integration for video processing jobs</li>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Compile</span></span><br><span class="line">./mill compile</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run (dev)</span></span><br><span class="line">./mill run</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run all tests</span></span><br><span class="line">./mill <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Build classpath distribution (lib/ with all JARs)</span></span><br><span class="line">./mill dist</span><br><span class="line"></span><br><span class="line"><span class="comment"># Format code</span></span><br><span class="line">./mill reformat</span><br><span class="line"></span><br><span class="line"><span class="comment"># Check formatting</span></span><br><span class="line">./mill checkFormat</span><br><span class="line"></span><br><span class="line"><span class="comment"># Clean build artifacts</span></span><br><span class="line">./mill clean</span><br></pre></td></tr></table></figure>
 <p><strong>Database setup:</strong> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Start PostgreSQL with pgvector extension</span></span><br><span class="line">docker-compose up -d</span><br><span class="line"></span><br><span class="line"><span class="comment"># Stop database</span></span><br><span class="line">docker-compose down</span><br></pre></td></tr></table></figure></p>
 <h2 id="project-structure">Project Structure</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">src/main/scala/com/example/</span><br><span class="line">├── App.scala                   # Main entry point (IOApp.Simple)</span><br><span class="line">├── core/                       # Shared infrastructure</span><br><span class="line">│   ├── auth/                   # Firebase auth, claims parsing</span><br><span class="line">│   ├── config/                 # AppConfig (pureconfig HOCON)</span><br><span class="line">│   └── database/               # Doobie transactor, multi-tenant, Flyway</span><br><span class="line">├── features/                   # Feature modules</span><br><span class="line">│   ├── bookmark/               # Bookmark management</span><br><span class="line">│   ├── chat/                   # Chat sessions</span><br><span class="line">│   ├── copy/                   # Content copy</span><br><span class="line">│   ├── document/               # Document CRUD, embeddings, GCS</span><br><span class="line">│   ├── folder/                 # Folder management</span><br><span class="line">│   ├── librechat/              # LibreChat integration</span><br><span class="line">│   ├── mfareset/               # MFA reset</span><br><span class="line">│   ├── permission/             # Resource-scoped permissions</span><br><span class="line">│   ├── project/                # Projects, membership, RBAC</span><br><span class="line">│   ├── quota/                  # Usage quota tracking</span><br><span class="line">│   ├── rag/                    # RAG indexing &amp; retrieval (pgvector)</span><br><span class="line">│   ├── reindex/                # Reindex jobs</span><br><span class="line">│   ├── settings/               # System/tenant settings</span><br><span class="line">│   ├── sop/                    # SOP generation (video → steps)</span><br><span class="line">│   ├── system/                 # Tenant admin endpoints</span><br><span class="line">│   ├── transcode/              # Video transcoding</span><br><span class="line">│   ├── user/                   # User profiles &amp; preferences</span><br><span class="line">│   ├── video/                  # Video clips, descriptions, fingerprints</span><br><span class="line">│   └── webauthn/               # WebAuthn/passkeys</span><br><span class="line">├── http/                       # HTTP layer</span><br><span class="line">│   ├── routes/                 # Route handlers</span><br><span class="line">│   ├── AuthMiddleware.scala</span><br><span class="line">│   └── ErrorHandlingMiddleware.scala</span><br><span class="line">├── infrastructure/             # External integrations</span><br><span class="line">│   ├── firebase/               # Firebase auth &amp; email</span><br><span class="line">│   ├── ffmpeg/                 # FFmpeg wrapper</span><br><span class="line">│   ├── gcs/                    # Google Cloud Storage</span><br><span class="line">│   ├── genai/                  # Gemini video analysis</span><br><span class="line">│   ├── kubernetes/             # K8s job delegation</span><br><span class="line">│   ├── sentry/                 # Error tracking</span><br><span class="line">│   ├── telemetry/              # otel4s tracing</span><br><span class="line">│   ├── videointelligence/      # Video Intelligence API</span><br><span class="line">│   ├── videoseal/              # Neural watermarking</span><br><span class="line">│   └── vertexai/               # Vertex AI, MCP server (30 tools)</span><br><span class="line">└── jobs/                       # Quartz job schedulers</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">src/main/scala/io/linewise/</span><br><span class="line">├── LinewiseApp.scala           # Main entry point (IOApp.Simple)</span><br><span class="line">├── core/                       # Shared infrastructure</span><br><span class="line">│   ├── auth/                   # Firebase auth, claims parsing</span><br><span class="line">│   ├── config/                 # AppConfig (pureconfig HOCON)</span><br><span class="line">│   └── database/               # Doobie transactor, multi-tenant, Flyway</span><br><span class="line">├── features/                   # Feature modules</span><br><span class="line">│   ├── bookmark/               # Bookmark management</span><br><span class="line">│   ├── chat/                   # Chat sessions</span><br><span class="line">│   ├── copy/                   # Content copy</span><br><span class="line">│   ├── document/               # Document CRUD, embeddings, GCS</span><br><span class="line">│   ├── folder/                 # Folder management</span><br><span class="line">│   ├── librechat/              # LibreChat integration</span><br><span class="line">│   ├── mfareset/               # MFA reset</span><br><span class="line">│   ├── permission/             # Resource-scoped permissions</span><br><span class="line">│   ├── project/                # Projects, membership, RBAC</span><br><span class="line">│   ├── quota/                  # Usage quota tracking</span><br><span class="line">│   ├── rag/                    # RAG indexing &amp; retrieval (pgvector)</span><br><span class="line">│   ├── reindex/                # Reindex jobs</span><br><span class="line">│   ├── settings/               # System/tenant settings</span><br><span class="line">│   ├── sop/                    # SOP generation (video → steps)</span><br><span class="line">│   ├── system/                 # Tenant admin endpoints</span><br><span class="line">│   ├── transcode/              # Video transcoding</span><br><span class="line">│   ├── user/                   # User profiles &amp; preferences</span><br><span class="line">│   ├── video/                  # Video clips, descriptions, fingerprints</span><br><span class="line">│   └── webauthn/               # WebAuthn/passkeys</span><br><span class="line">├── http/                       # HTTP layer</span><br><span class="line">│   ├── routes/                 # Route handlers</span><br><span class="line">│   ├── AuthMiddleware.scala</span><br><span class="line">│   └── ErrorHandlingMiddleware.scala</span><br><span class="line">├── infrastructure/             # External integrations</span><br><span class="line">│   ├── firebase/               # Firebase auth &amp; email</span><br><span class="line">│   ├── ffmpeg/                 # FFmpeg wrapper</span><br><span class="line">│   ├── gcs/                    # Google Cloud Storage</span><br><span class="line">│   ├── genai/                  # Gemini video analysis</span><br><span class="line">│   ├── kubernetes/             # K8s job delegation</span><br><span class="line">│   ├── sentry/                 # Error tracking</span><br><span class="line">│   ├── telemetry/              # otel4s tracing</span><br><span class="line">│   ├── videointelligence/      # Video Intelligence API</span><br><span class="line">│   ├── videoseal/              # Neural watermarking</span><br><span class="line">│   └── vertexai/               # Vertex AI, MCP server (30 tools)</span><br><span class="line">└── jobs/                       # Quartz job schedulers</span><br></pre></td></tr></table></figure>
 <h2 id="configuration">Configuration</h2>
 <p>Main config: <code>src/main/resources/application.conf</code> (HOCON
 format, parsed by pureconfig)</p>
 <p><strong>Environment Variables:</strong> - <code>DATABASE_URL</code> -
 PostgreSQL JDBC URL (or <code>secrets/database/url</code> file) -
-<code>JWT_SECRET</code> - JWT signing secret - <code>GCS_BUCKET</code> -
-GCS bucket for documents - <code>GCS_HOSTNAME</code> - Optional GCS
+<code>JWT_SECRET</code> - JWT signing secret (fallback: "linewise") -
+<code>GCS_BUCKET</code> - GCS bucket for documents (fallback:
+"linewise-documents") - <code>GCS_HOSTNAME</code> - Optional GCS
 hostname - <code>TRANSCODE_GCS_BUCKET</code> - GCS bucket for transcoded
-videos - <code>TRANSCODE_GCS_HOSTNAME</code> - Optional transcode GCS
-hostname - <code>ENABLE_OTEL</code> - Enable OpenTelemetry (fallback:
-false) - <code>SENTRY_DSN</code> - Sentry error tracking DSN (optional)
-- <code>SENTRY_ENV</code> - Sentry environment (fallback: "development")
-- <code>KUBERNETES_JOBS_ENABLED</code> - Enable K8s job delegation for
+videos (fallback: "linewise-transcode") -
+<code>TRANSCODE_GCS_HOSTNAME</code> - Optional transcode GCS hostname -
+<code>ENABLE_OTEL</code> - Enable OpenTelemetry (fallback: false) -
+<code>SENTRY_DSN</code> - Sentry error tracking DSN (optional) -
+<code>SENTRY_ENV</code> - Sentry environment (fallback: "development") -
+<code>KUBERNETES_JOBS_ENABLED</code> - Enable K8s job delegation for
 video processing (fallback: false) - <code>KUBERNETES_NAMESPACE</code> -
 K8s namespace for jobs (fallback: "default") -
 <code>FIREBASE_API_KEY</code> - Firebase API key (for MCP browser login)
@@ -323,26 +324,50 @@ PostgreSQL JDBC URL (optional, defaults to localhost)</p>
 <p>The codebase uses <strong>tagless final</strong> with context bounds
 for dependency injection:</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Service trait with F[_] type parameter</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">SOPService</span>[<span class="type">F</span>[_]]</span>:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getSOP</span></span>(tenant: <span class="type">TenantContext</span>, id: <span class="type">UUID</span>): <span class="type">F</span>[<span class="type">Option</span>[<span class="type">SOP</span>]]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createSOP</span></span>(...): <span class="type">F</span>[<span class="type">Either</span>[<span class="type">String</span>, <span class="type">SOP</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Companion object with summoner and factories</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">SOPService</span></span>:</span><br><span class="line">  <span class="keyword">inline</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>[<span class="type">F</span>[_]](<span class="keyword">using</span> ev: <span class="type">SOPService</span>[<span class="type">F</span>]): <span class="type">SOPService</span>[<span class="type">F</span>] = ev  <span class="comment">// Summoner</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">make</span></span>[<span class="type">F</span>[_]: <span class="type">Sync</span>](xa: <span class="type">Transactor</span>[<span class="type">F</span>]): <span class="type">SOPService</span>[<span class="type">F</span>] = ...         <span class="comment">// Live implementation</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">noop</span></span>[<span class="type">F</span>[_]: <span class="type">Applicative</span>]: <span class="type">SOPService</span>[<span class="type">F</span>] = ...                     <span class="comment">// NoOp implementation</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Routes use context bounds</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">routes</span></span>[<span class="type">F</span>[_]: &#123;<span class="type">Async</span>, <span class="type">SOPService</span>, <span class="type">PermissionService</span>&#125;]: <span class="type">AuthedRoutes</span>[<span class="type">AuthenticatedUser</span>, <span class="type">F</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Access via summoner</span></span><br><span class="line"><span class="type">SOPService</span>[<span class="type">F</span>].getSOP(tenant, id)</span><br></pre></td></tr></table></figure>
-<p><strong>NoOp Result Patterns - Caller Decides:</strong></p>
-<p>NoOp implementations return results (not throw exceptions). The
-caller decides if it's an error:</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NoOp returns result indicating &quot;not processed&quot;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SOPServiceNoop</span>[<span class="type">F</span>[_]</span>: <span class="type">Applicative</span>] <span class="keyword">extends</span> <span class="type">SOPService</span>[<span class="type">F</span>]:</span><br><span class="line">  <span class="comment">// Either methods → Left with error message</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createSOP</span></span>(...) = <span class="type">Left</span>(<span class="string">&quot;Service not available&quot;</span>).pure[<span class="type">F</span>]</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Option methods → None</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getSOP</span></span>(...) = <span class="type">None</span>.pure[<span class="type">F</span>]</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Idempotent operations → Right(()) (success - nothing to do)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">deleteSOP</span></span>(...) = <span class="type">Right</span>(()).pure[<span class="type">F</span>]</span><br></pre></td></tr></table></figure>
+<p><strong>NoOp Result Patterns:</strong></p>
+<p>NoOp implementations are used for: <strong>(a) test runners / local
+partial testing</strong>, and <strong>(b) feature-flag-disabled
+services</strong> in <code>LinewiseApp.scala</code>. NoOp returns
+results (not throw exceptions). The caller decides if it's an error.</p>
+<p><strong>Data-related vs data-unrelated services:</strong> -
+<strong>Data-related</strong> (RAG, video processing, document ops,
+SOP): NoOp must return <strong>error</strong>
+(<code>Left("Service not available")</code>). <code>Option</code>
+methods return <code>None</code> — but note this means "not found",
+which is semantically different from "service disabled". For
+<code>Either</code>-returning methods (create, update, delete), always
+return <code>Left</code> so the caller knows the operation was not
+performed. Data-related services should use <code>F[Either[E, T]]</code>
+by default (not <code>F[T]</code> or <code>F[Option[T]]</code> for
+mutation), because they involve the persistence layer which can fail. -
+<strong>Data-unrelated</strong> (logging, metrics, telemetry): NoOp can
+return <strong>success</strong> (<code>Right(())</code>). Skipping
+side-effect-only operations is harmless.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Data-related NoOp — Either methods return Left, Option methods return None</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SOPServiceNoop</span>[<span class="type">F</span>[_]</span>: <span class="type">Applicative</span>] <span class="keyword">extends</span> <span class="type">SOPService</span>[<span class="type">F</span>]:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createSOP</span></span>(...) = <span class="type">Left</span>(<span class="string">&quot;Service not available&quot;</span>).pure[<span class="type">F</span>]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getSOP</span></span>(...)    = <span class="type">None</span>.pure[<span class="type">F</span>]   <span class="comment">// None = &quot;not found&quot; (not &quot;disabled&quot;)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">deleteSOP</span></span>(...) = <span class="type">Left</span>(<span class="string">&quot;Service not available&quot;</span>).pure[<span class="type">F</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Data-unrelated NoOp — success (nothing to do is fine)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MetricsServiceNoop</span>[<span class="type">F</span>[_]</span>: <span class="type">Applicative</span>] <span class="keyword">extends</span> <span class="type">MetricsService</span>[<span class="type">F</span>]:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">recordLatency</span></span>(...)   = <span class="type">Right</span>(()).pure[<span class="type">F</span>]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">incrementCounter</span></span>(...) = <span class="type">Right</span>(()).pure[<span class="type">F</span>]</span><br></pre></td></tr></table></figure>
 <p><strong>Method-level context bounds for partial
 dependencies:</strong></p>
 <p>When only some methods on a service need an extra capability, use a
 method-level <code>using</code> parameter instead of requiring it on the
 whole class:</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">UserService</span>[<span class="type">F</span>[_]]</span>:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getUser</span></span>(tenant: <span class="type">TenantContext</span>, id: <span class="type">UUID</span>): <span class="type">F</span>[<span class="type">Option</span>[<span class="type">User</span>]]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">avatar</span></span>(tenant: <span class="type">TenantContext</span>, id: <span class="type">UUID</span>)(<span class="keyword">using</span> <span class="type">S3Service</span>[<span class="type">F</span>]): <span class="type">F</span>[<span class="type">Option</span>[<span class="type">Array</span>[<span class="type">Byte</span>]]]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Routes that call avatar need S3Service in scope:</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">routes</span></span>[<span class="type">F</span>[_]: &#123;<span class="type">Async</span>, <span class="type">UserService</span>, <span class="type">S3Service</span>&#125;]: <span class="type">AuthedRoutes</span>[...] = ...</span><br><span class="line"></span><br><span class="line"><span class="comment">// Routes that don&#x27;t call avatar don&#x27;t need S3Service:</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">routes</span></span>[<span class="type">F</span>[_]: &#123;<span class="type">Async</span>, <span class="type">UserService</span>&#125;]: <span class="type">AuthedRoutes</span>[...] = ...</span><br></pre></td></tr></table></figure>
-<p><strong>Wiring with givens in App:</strong> <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">given</span> <span class="type">SOPService</span>[<span class="type">IO</span>] = <span class="type">SOPService</span>.make[<span class="type">IO</span>](xa)</span><br><span class="line"><span class="keyword">given</span> <span class="type">RAGService</span>[<span class="type">IO</span>] =</span><br><span class="line">  <span class="keyword">if</span> <span class="type">Config</span>.enableRAG <span class="keyword">then</span> <span class="type">RAGService</span>.make[<span class="type">IO</span>](httpClient)</span><br><span class="line">  <span class="keyword">else</span> <span class="type">RAGService</span>.noop[<span class="type">IO</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> routes = <span class="type">SOPRoutes</span>.routes[<span class="type">IO</span>]  <span class="comment">// Givens in scope</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Wiring with givens in LinewiseApp:</strong> <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">given</span> <span class="type">SOPService</span>[<span class="type">IO</span>] = <span class="type">SOPService</span>.make[<span class="type">IO</span>](xa)</span><br><span class="line"><span class="comment">// Feature-flag-disabled services use NoOp</span></span><br><span class="line"><span class="keyword">given</span> <span class="type">RAGService</span>[<span class="type">IO</span>] =</span><br><span class="line">  <span class="keyword">if</span> <span class="type">Config</span>.enableRAG <span class="keyword">then</span> <span class="type">RAGService</span>.make[<span class="type">IO</span>](httpClient)</span><br><span class="line">  <span class="keyword">else</span> <span class="type">RAGService</span>.noop[<span class="type">IO</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> routes = <span class="type">SOPRoutes</span>.routes[<span class="type">IO</span>]  <span class="comment">// Givens in scope</span></span><br></pre></td></tr></table></figure></p>
 <h3 id="code-style-flat-for-comprehensions">Code Style: Flat
 <code>for</code>-comprehensions</h3>
 <p>Prefer flat <code>for</code>/<code>yield</code> over nested
 <code>match</code>/<code>case</code> inside effectful blocks. Lift
 <code>Either</code>/<code>Option</code> into <code>F</code> so the
 <code>for</code> stays linear:</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BAD — nested match breaks the for-comprehension flow</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  result &lt;- service.doSomething(...)</span><br><span class="line">  response &lt;- result <span class="keyword">match</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Right</span>(value) =&gt; <span class="type">Ok</span>(value.asJson)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Left</span>(err)    =&gt; <span class="type">BadRequest</span>(err.asJson)</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOD — lift Either/Option into F</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  value &lt;- <span class="type">Sync</span>[<span class="type">F</span>].fromEither(parseJson(raw).leftMap(e =&gt; <span class="type">RuntimeException</span>(e.message)))</span><br><span class="line">  response &lt;- <span class="type">Ok</span>(value)</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOD — use EitherT.foldF when both paths have logic</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body &lt;- req.req.as[<span class="type">Body</span>]</span><br><span class="line">  response &lt;- <span class="type">EitherT</span>(service.doSomething(body)).foldF(</span><br><span class="line">    err  =&gt; <span class="type">Logger</span>[<span class="type">F</span>].warn(<span class="string">s&quot;Failed: <span class="subst">$err</span>&quot;</span>) *&gt; <span class="type">BadRequest</span>(err.asJson),</span><br><span class="line">    value =&gt; <span class="type">Created</span>(value.asJson)</span><br><span class="line">  )</span><br><span class="line"><span class="keyword">yield</span> response</span><br></pre></td></tr></table></figure>
-<p><strong>Key lifters:</strong> <code>Sync[F].fromEither</code>,
-<code>Sync[F].fromOption</code>, <code>EitherT(...).foldF</code>.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BAD — nested match in MID-CHAIN breaks the for-comprehension flow</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  result &lt;- service.doSomething(...)</span><br><span class="line">  value  &lt;- result <span class="keyword">match</span>  <span class="comment">// BAD: match in middle, more steps follow</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Right</span>(v)  =&gt; v.pure[<span class="type">F</span>]</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Left</span>(err) =&gt; <span class="type">Sync</span>[<span class="type">F</span>].raiseError(err)</span><br><span class="line">  next   &lt;- process(value)</span><br><span class="line">  response &lt;- <span class="type">Ok</span>(next.asJson)</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// ALSO BAD — .flatMap with case inside for-comprehension</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body &lt;- req.req.as[<span class="type">Body</span>]</span><br><span class="line">  result &lt;- service.getItem(id).flatMap &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Some</span>(item) =&gt; <span class="type">Ok</span>(item.asJson)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">None</span>       =&gt; <span class="type">NotFound</span>(...)</span><br><span class="line">  &#125;</span><br><span class="line"><span class="keyword">yield</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOD — plain match at TERMINAL position (pure response mapping, no side effects)</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body   &lt;- req.req.as[<span class="type">Body</span>]</span><br><span class="line">  result &lt;- service.doSomething(body)</span><br><span class="line">  response &lt;- result <span class="keyword">match</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Right</span>(value) =&gt; <span class="type">Ok</span>(value.asJson)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Left</span>(err)    =&gt; <span class="type">BadRequest</span>(err.asJson)</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOD — lift Either/Option into F (throw on error — trusted paths only)</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  value &lt;- <span class="type">Sync</span>[<span class="type">F</span>].fromEither(parseJson(raw).leftMap(e =&gt; <span class="type">RuntimeException</span>(e.message)))</span><br><span class="line">  response &lt;- <span class="type">Ok</span>(value)</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOD — EitherT.foldF when branches have SIDE EFFECTS (logging, audit, cleanup)</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body &lt;- req.req.as[<span class="type">Body</span>]</span><br><span class="line">  response &lt;- <span class="type">EitherT</span>(service.doSomething(body)).foldF(</span><br><span class="line">    err  =&gt; <span class="type">Logger</span>[<span class="type">F</span>].warn(<span class="string">s&quot;Failed: <span class="subst">$err</span>&quot;</span>) *&gt; <span class="type">BadRequest</span>(err.asJson),</span><br><span class="line">    value =&gt; audit.record(value.id) *&gt; <span class="type">Created</span>(value.asJson)</span><br><span class="line">  )</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// MID-CHAIN Either coloring — depends on data-related vs data-unrelated:</span></span><br><span class="line"><span class="comment">// Data-unrelated mid-chain op (metrics): discard Left, log, continue IO chain</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body   &lt;- req.req.as[<span class="type">Body</span>]</span><br><span class="line">  saved  &lt;- store.save(body)</span><br><span class="line">  _      &lt;- metrics.record(saved.id).flatMap &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Right</span>(_)  =&gt; <span class="type">Applicative</span>[<span class="type">F</span>].unit</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Left</span>(err) =&gt; <span class="type">Logger</span>[<span class="type">F</span>].warn(<span class="string">s&quot;Metrics failed: <span class="subst">$err</span>&quot;</span>)  <span class="comment">// discard, non-critical</span></span><br><span class="line">  &#125;</span><br><span class="line">  response &lt;- <span class="type">Ok</span>(saved.asJson)</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// Data-related mid-chain op (store.save): propagate Either — refactor chain to EitherT</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body &lt;- req.req.as[<span class="type">Body</span>]</span><br><span class="line">  response &lt;- <span class="type">EitherT</span>(validate(body))</span><br><span class="line">    .semiflatMap(valid =&gt; store.save(valid))   <span class="comment">// F[Either[E, A]] — error must propagate</span></span><br><span class="line">    .subflatMap(identity)                       <span class="comment">// flatten nested Either</span></span><br><span class="line">    .foldF(</span><br><span class="line">      err   =&gt; <span class="type">BadRequest</span>(err.asJson),</span><br><span class="line">      saved =&gt; <span class="type">Ok</span>(saved.asJson)</span><br><span class="line">    )</span><br><span class="line"><span class="keyword">yield</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOD — F[Option[A]]: use OptionT for single Option check</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body &lt;- req.req.as[<span class="type">Body</span>]</span><br><span class="line">  result &lt;- <span class="type">OptionT</span>(service.getItem(id))</span><br><span class="line">    .semiflatMap(item =&gt; <span class="type">Ok</span>(item.asJson))</span><br><span class="line">    .getOrElseF(<span class="type">NotFound</span>(<span class="type">ErrorResponse</span>.notFound(<span class="string">&quot;Not found&quot;</span>).asJson))</span><br><span class="line"><span class="keyword">yield</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOD — chained Options with different error statuses: EitherT + local enum</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">enum</span> <span class="type">LookupError</span>:</span><br><span class="line">  <span class="keyword">case</span> <span class="type">NotFound</span></span><br><span class="line">  <span class="keyword">case</span> <span class="type">NoUri</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body &lt;- req.req.as[<span class="type">Body</span>]</span><br><span class="line">  result &lt;- <span class="type">EitherT</span></span><br><span class="line">    .fromOptionF(service.getItem(id), <span class="type">LookupError</span>.<span class="type">NotFound</span>)</span><br><span class="line">    .subflatMap(item =&gt; item.uri.toRight(<span class="type">LookupError</span>.<span class="type">NoUri</span>))</span><br><span class="line">    .semiflatMap(uri =&gt; doWork(uri))</span><br><span class="line">    .foldF(</span><br><span class="line">      &#123; <span class="keyword">case</span> <span class="type">LookupError</span>.<span class="type">NotFound</span> =&gt; <span class="type">NotFound</span>(...)</span><br><span class="line">        <span class="keyword">case</span> <span class="type">LookupError</span>.<span class="type">NoUri</span>    =&gt; <span class="type">BadRequest</span>(...) &#125;,</span><br><span class="line">      _ =&gt; <span class="type">Accepted</span>(...)</span><br><span class="line">    )</span><br><span class="line"><span class="keyword">yield</span> result</span><br></pre></td></tr></table></figure>
+<p><strong>Key lifters:</strong> - <code>EitherT(...).foldF</code> —
+<code>F[Either[E, A]]</code> → handle both branches -
+<code>EitherT.fromOptionF</code> — <code>F[Option[A]]</code> →
+<code>EitherT[F, E, A]</code> - <code>.subflatMap</code> — pure
+<code>A =&gt; Either[E, B]</code> inside EitherT chain -
+<code>.semiflatMap</code> — effectful <code>A =&gt; F[B]</code> on happy
+path - <code>OptionT(...).semiflatMap(...).getOrElseF(...)</code> —
+<code>F[Option[A]]</code> → handle None -
+<code>Sync[F].fromEither</code>, <code>Sync[F].fromOption</code> — lift
+pure values (throw on error)</p>
 <p><strong>No premature helpers:</strong> Don't extract single-use
 private methods that just wrap a <code>match</code>. Inline the logic at
 the call site.</p>
@@ -403,13 +428,13 @@ pattern: <code>/api/org/&#123;tenant&#125;/...</code></p>
 Error Swallowing</h3>
 <p><strong>CRITICAL RULE:</strong> Never silently swallow errors.
 Arbitrary tolerance pollutes the database and hides bugs.</p>
-<p><strong>Forbidden patterns (ALWAYS):</strong> <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BAD - silently converts errors to None/null</span></span><br><span class="line">json.as[<span class="type">T</span>].toOption</span><br><span class="line">json.as[<span class="type">T</span>].getOrElse(defaultValue)</span><br><span class="line">either.toOption</span><br><span class="line"><span class="type">Try</span>(x).toOption</span><br><span class="line">result.getOrElse(<span class="literal">null</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>Forbidden patterns:</strong> <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BAD - silently converts errors to None/null</span></span><br><span class="line">json.as[<span class="type">T</span>].toOption</span><br><span class="line">json.as[<span class="type">T</span>].getOrElse(defaultValue)</span><br><span class="line">either.toOption</span><br><span class="line"><span class="type">Try</span>(x).toOption</span><br><span class="line">result.getOrElse(<span class="literal">null</span>)</span><br><span class="line">parse(userInput).getOrElse(<span class="number">0.75</span>)  <span class="comment">// BAD - hides parse failure</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// OK - .getOrElse for optional config with a sensible default</span></span><br><span class="line">pageSize.getOrElse(<span class="number">10</span>)            <span class="comment">// OK - Option[Int] with default, no error to swallow</span></span><br></pre></td></tr></table></figure></p>
 <p><strong>Error Handling Strategy - Trusted vs Untrusted
 Paths:</strong></p>
 <table>
 <colgroup>
-<col style="width: 13%" />
-<col style="width: 40%" />
+<col style="width: 7%" />
+<col style="width: 46%" />
 <col style="width: 45%" />
 </colgroup>
 <thead>
@@ -423,19 +448,26 @@ Paths:</strong></p>
 <tr class="odd">
 <td><strong>Trusted (internal)</strong></td>
 <td>Config files, system settings, DB schema data, internal
-serialization</td>
+serialization, <strong>persisted DB data</strong>, internal service
+calls, cache, GCS/K8s metadata</td>
 <td><strong>Throw exception</strong> - low probability of error, if it
-fails it's a bug</td>
+fails it's a bug. For infra (GCS/K8s), human runs data migration after
+code changes.</td>
 </tr>
 <tr class="even">
 <td><strong>Untrusted (external)</strong></td>
-<td>User input, AI-generated content, external API responses</td>
+<td>User input, AI-generated content, external API responses
+(<strong>before</strong> persistence)</td>
 <td><strong>Catch and report</strong> - high probability of error,
 report back to user/AI to fix</td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TRUSTED PATH - throw on failure (system internal data)</span></span><br><span class="line"><span class="keyword">val</span> config = configJson.as[<span class="type">AppConfig</span>].getOrElse(</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">RuntimeException</span>(<span class="string">s&quot;Config decode failed: <span class="subst">$&#123;configJson&#125;</span>&quot;</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// UNTRUSTED PATH - catch and report to caller (user/AI content)</span></span><br><span class="line"><span class="keyword">val</span> result = userJson.as[<span class="type">UserContent</span>] <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="type">Right</span>(v) =&gt; v</span><br><span class="line">  <span class="keyword">case</span> <span class="type">Left</span>(err) =&gt; <span class="keyword">return</span> <span class="type">BadRequest</span>(<span class="string">s&quot;Invalid content format: <span class="subst">$&#123;err.message&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Persisted data is trusted.</strong> Strict enc/dec at the
+write boundary ensures bad-format data never reaches the DB. If
+malformed data is read back from DB, it's a human/migration bug — throw,
+don't defensively handle.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TRUSTED PATH - throw on failure (system internal data)</span></span><br><span class="line"><span class="keyword">val</span> config = configJson.as[<span class="type">AppConfig</span>].getOrElse(</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">RuntimeException</span>(<span class="string">s&quot;Config decode failed: <span class="subst">$&#123;configJson&#125;</span>&quot;</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// UNTRUSTED PATH - catch and report to caller (user/AI content)</span></span><br><span class="line"><span class="comment">// Use EitherT/match at terminal position — never use `return`</span></span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">  body &lt;- req.req.as[<span class="type">UserContent</span>]</span><br><span class="line">  result &lt;- service.process(body)</span><br><span class="line">  response &lt;- result <span class="keyword">match</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Right</span>(v)  =&gt; <span class="type">Ok</span>(v.asJson)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Left</span>(err) =&gt; <span class="type">BadRequest</span>(<span class="string">s&quot;Invalid content format: <span class="subst">$&#123;err.message&#125;</span>&quot;</span>.asJson)</span><br><span class="line"><span class="keyword">yield</span> response</span><br></pre></td></tr></table></figure>
 <h3 id="typed-error-model-adt-errors">Typed Error Model (ADT
 Errors)</h3>
 <p><strong>Use <code>enum</code> error types, not
@@ -459,9 +491,15 @@ flatten.</strong> When service A calls service B, wrap B's error:
 mapping:</strong> Each error variant maps to exactly one HTTP status.
 The match is exhaustive — compiler enforces handling every variant. -
 <strong>Define in feature's <code>models.scala</code>.</strong> -
-<strong>Migrate incrementally.</strong> New services use typed errors.
-Existing <code>Either[String, T]</code> services migrate when next
-modified.</p>
+<strong>Migrate when file is touched — no hesitation.</strong> New
+services use typed errors. Existing <code>Either[String, T]</code>
+services migrate the <strong>whole service</strong> to ADT errors when
+the file is modified for any reason — even a typo fix or comment edit.
+The trigger is touching the file, not the size of the change. Touching
+the file means QA/regression testing covers it, making it the perfect
+time. Scope follows the compiler iteratively — if the route file you're
+editing calls a service with <code>Either[String, T]</code>, migrate
+that service file too.</p>
 <h3 id="feature-module-organization">Feature Module Organization</h3>
 <p>Each feature module follows a consistent structure:
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">features/&lt;feature&gt;/</span><br><span class="line">├── &lt;Feature&gt;Service.scala      # Business logic (tagless final trait + impl)</span><br><span class="line">├── &lt;Feature&gt;Repository.scala   # Data access layer (Doobie queries)</span><br><span class="line">├── models.scala                # Domain objects and DTOs</span><br><span class="line">└── README.md                   # Feature documentation</span><br></pre></td></tr></table></figure></p>
@@ -489,6 +527,58 @@ our components together</p>
 <code>/api/org/&#123;tenant&#125;/projects/&#123;id&#125;/bookmarks/</code> - Bookmarks -
 <code>/api/system/tenants/</code> - Tenant admin -
 <code>/api/system/users/</code> - User management</p>
+<h2 id="tool-preferences">Tool Preferences</h2>
+<p><strong>Override Grep with Metals MCP when the question is "what does
+the compiler resolve this to?"</strong></p>
+<p>Grep is the default and works for most searches. But it fails
+silently on these Scala-specific scenarios — use Metals instead:</p>
+<table>
+<colgroup>
+<col style="width: 75%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>What type is this expression / what does it return?</td>
+<td><code>mcp__metals__inspect</code></td>
+</tr>
+<tr class="even">
+<td>Which given/implicit is resolved at this call site?</td>
+<td><code>mcp__metals__inspect</code></td>
+</tr>
+<tr class="odd">
+<td>Which overloaded method is called here?</td>
+<td><code>mcp__metals__inspect</code></td>
+</tr>
+<tr class="even">
+<td>What's the underlying type of an opaque type?</td>
+<td><code>mcp__metals__inspect</code></td>
+</tr>
+<tr class="odd">
+<td>What does a wildcard import bring into scope?</td>
+<td><code>mcp__metals__inspect</code></td>
+</tr>
+<tr class="even">
+<td>Who calls this method / all implementations of a trait? (semantic,
+not textual)</td>
+<td><code>mcp__metals__get-usages</code></td>
+</tr>
+</tbody>
+</table>
+<p>Other Metals tools: <code>glob-search</code> (find symbols by name),
+<code>get-docs</code> (ScalaDoc), <code>compile-file</code> (single-file
+compile check), <code>list-modules</code>,
+<code>list-scalafix-rules</code>.</p>
+<p><strong>Signal to switch:</strong> When you grep and get 10+
+candidates with no way to disambiguate — that means you need Metals, not
+a better regex. Fall back to Grep/Glob for non-Scala files, string
+literals, config values, SQL, or when Metals is unavailable.</p>
 <h2 id="development-workflow">Development Workflow</h2>
 <h3 id="adding-new-routes">Adding New Routes</h3>
 <p>When adding or modifying routes:</p>
@@ -531,18 +621,52 @@ a method logically requires non-empty input (batch embeddings,
 <code>List[T]</code> with a runtime <code>.toNel.get</code> or
 <code>.head</code>. Callers use <code>NonEmptyList.fromList</code> to
 handle the empty case at the call site. - <strong>No premature
-helpers.</strong> Don't extract single-use private methods. Inline at
-call site. - <strong>Generic over specific.</strong> One
-<code>queryParam[T]</code> not three type-specific parsers. -
-<strong>Proactive naming review.</strong> When reading or modifying
-code, flag misleading, stale, or inconsistent names to the user. For
-<strong>internal names</strong> (classes, properties, methods) —
-recommend renaming directly. For <strong>external names</strong>
-(request/response DTOs, DB-serialized JSONB fields) — suggest the better
-name but note migration implications. Common smells: Kotlin-era suffixes
-(<code>Kt</code>), field names that don't match their type
-(<code>name</code> holding an ID), stale comments referencing deleted
-code, generic names that obscure domain meaning.</p>
+helpers.</strong> If the logic can be composed from &lt;5 Scala/cats
+operators, always inline at call site — never extract a helper. If
+&gt;=5 operators, <strong>ask the user</strong> before extracting (in
+plan mode or popup dialog). When consensus is reached on a new helper,
+add/link it in this document so future sessions know to use it.
+<strong>Always use helpers already listed here</strong> (e.g.,
+<code>AsyncOps</code>) — don't expand them inline. Before writing any
+new helper, search the codebase for existing ones that do the same
+thing. - <strong>Generic over specific (stdlib/cats only).</strong>
+Prefer composing well-tested Scala/cats operators generically (one
+<code>queryParam[T]</code> using <code>QueryParamDecoder[T]</code>) over
+type-specific parsers. "Generic" means leveraging stdlib type classes,
+not extracting custom helper functions — those still follow the &lt;5
+operator rule. - <strong>Proactive naming review.</strong> When
+modifying code, flag misleading, stale, or inconsistent names to the
+user. <strong>Scope follows the compiler iteratively</strong> — same as
+smell detection: start with changed files, then follow compilation
+errors outward. For <strong>internal names</strong> (classes,
+properties, methods) — recommend renaming directly. For <strong>external
+names</strong> (request/response DTOs, DB-serialized JSONB fields) —
+suggest the better name but note migration implications. Common smells:
+Kotlin-era suffixes (<code>Kt</code>), field names that don't match
+their type (<code>name</code> holding an ID), stale comments referencing
+deleted code, generic names that obscure domain meaning. -
+<strong>Proactive code smell detection.</strong> Scope follows the
+compiler iteratively: (1) find smell in current file, (2) fix it, (3)
+compile → if it fails because other files import the changed symbol, fix
+those too, (4) repeat until compilation passes. If <strong>reading
+unrelated code</strong> (not in the compilation chain) and spotting a
+violation — <strong>add it to the smell list</strong> (see Code Smell
+Tracking below), do not fix. This applies to all rules: type safety,
+error handling, control flow, naming, logging, etc.</p>
+<h3 id="code-smell-tracking">Code Smell Tracking</h3>
+<p>When spotting code smells in <strong>unrelated code</strong> (not in
+the current compilation chain), add them to the persistent smell list
+file at <code>&lt;project-root&gt;/memory/code_smells.md</code> instead
+of just warning in the response.</p>
+<p><strong>Rules:</strong> - <strong>Max 10 entries.</strong> If adding
+an 11th, delete the oldest entry (FIFO eviction). - <strong>Prioritize
+by severity.</strong> Most critical smells first (silent error
+swallowing &gt; naming inconsistency). - <strong>At end of every
+task</strong>, remind the user about pending smells and suggest fixing
+them in a dedicated session. - <strong>Each entry</strong> includes:
+file path, line number, rule violated, brief description. -
+<strong>Remove entries</strong> when the smell is fixed (either by the
+user or in a subsequent session).</p>
 <h3 id="logging">Logging</h3>
 <ul>
 <li><strong>Use <code>val logger</code> (not context-bound
@@ -566,13 +690,16 @@ state.</li>
 </ul>
 <h3 id="runtime-assertion-checks-rac">Runtime Assertion Checks
 (RAC)</h3>
-<p><strong>Insert runtime assertions on critical paths.</strong> RACs
-catch inconsistent state early, before it propagates downstream and
-corrupts data. Always enabled in dev/testing; switchable off in
-production via config flag.</p>
-<p><strong>Implementation:</strong> Use a shared
-<code>RAC.assert(condition, message)</code> helper that checks a config
-flag. When disabled, assertions are no-ops. When enabled, they throw
+<p><strong>Suggest runtime assertions on critical paths (advisory, not
+mandatory).</strong> RACs catch inconsistent state early, before it
+propagates downstream and corrupts data. Always enabled in dev/testing;
+switchable off in production via config flag. Final decision on whether
+to add RAC is made during code review — do not treat missing RAC as a
+code smell.</p>
+<p><strong>Implementation:</strong> Use the shared
+<code>RAC.assert(condition, message)</code> helper
+(<code>io.linewise.core.RAC</code>) that checks a config flag. When
+disabled, assertions are no-ops. When enabled, they throw
 immediately.</p>
 <p><strong>What should have RAC:</strong> - <strong>Money/balance
 operations</strong> — assert balance &gt;= 0 after debit, assert credit
@@ -601,21 +728,23 @@ machine.</strong> Always commit and push to git to trigger CI for
 building images. Only build locally if explicitly requested by the
 user.</p>
 <p><strong>Branches and Docker Tags:</strong> - <code>develop</code>
-branch → <code>gcr.io/$&#123;PROJECT_ID&#125;/api:develop</code> -
+branch → <code>gcr.io/$&#123;PROJECT_ID&#125;/linewise-api:develop</code> -
 <code>testing</code> branch →
-<code>gcr.io/$&#123;PROJECT_ID&#125;/api:testing</code> - <code>master</code>
-branch → <code>gcr.io/$&#123;PROJECT_ID&#125;/api:latest</code> and
+<code>gcr.io/$&#123;PROJECT_ID&#125;/linewise-api:testing</code> -
+<code>master</code> branch →
+<code>gcr.io/$&#123;PROJECT_ID&#125;/linewise-api:latest</code> and
 <code>:master</code> - Git tag <code>vX.Y.Z</code> →
-<code>gcr.io/$&#123;PROJECT_ID&#125;/api:vX.Y.Z</code></p>
+<code>gcr.io/$&#123;PROJECT_ID&#125;/linewise-api:vX.Y.Z</code></p>
 <p><strong>Git Push:</strong> - If SSH push fails (e.g. VPN/proxy blocks
-port 22), switch to HTTPS temporarily.</p>
+port 22), switch to HTTPS temporarily:
+<code>git remote set-url origin https://github.com/Vision-Nexus/linewise-api.git</code></p>
 <p><strong>Deployment:</strong> - GitHub Actions workflow:
 <code>.github/workflows/build-and-push-gcr.yml</code> - Builds with
 Mill, then Docker image, pushes to Google Container Registry - Requires
 <code>GCR_SERVICE_ACCOUNT</code> secret (GCP service account JSON) -
 Deployed via <strong>ArgoCD on Kubernetes</strong> (not docker-compose
 or manual shell) - Deploy manifests live in a separate repo:
-<code>deploy/overlays/&#123;dev,testing,prod&#125;</code></p>
+<code>linewise-deploy/overlays/&#123;dev,testing,prod&#125;</code></p>
 <p><strong>Deploy impact reporting:</strong> When a code change involves
 deploy-affecting changes, output a summary of what needs to be updated
 in the deploy repo. Examples: - <strong>New environment
@@ -653,8 +782,8 @@ Scala OpenTelemetry integration (set <code>ENABLE_OTEL=true</code>) -
 <code>SENTRY_DSN</code>)</p>
 <h2 id="important-files">Important Files</h2>
 <ul>
-<li><code>App.scala</code> - Main entry point, service initialization,
-givens wiring</li>
+<li><code>LinewiseApp.scala</code> - Main entry point, service
+initialization, givens wiring</li>
 <li><code>build.mill</code> - Mill build definition, dependencies</li>
 <li><code>application.conf</code> - HOCON configuration with environment
 variable overrides</li>
