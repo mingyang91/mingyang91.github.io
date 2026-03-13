@@ -235,35 +235,89 @@ Route: ProjectId → Service: ProjectId → Repo: ProjectId → SQL 边界: unwr
 
 传统写法里，到了 Service 层你看到一个 `String id`，得往上追三层才知道这是什么 ID。AI-native 写法里，**任何一层的签名都是自解释的**——这恰恰是"人类只读签名"这个分工模型能成立的前提。
 
-## Railway Style：不是为了可读性，是为了护栏
+## 实现层的错误处理：三种风格的真实成本
 
 签名即契约解决了"函数边界上的信息完整性"。但在实现层面，同一个逻辑也有不同的组织方式。我曾问 Claude：railway style（链式组合子）对你来说比 nested match/case 更容易处理吗？
 
 它的回答很诚实：**两者对它的认知成本完全一样。**
 
-但它接着说：**railway style 的真正价值不是可读性，而是它让"写错"变得更难。**
+这个回答其实不够精确。深入追问后，真正的对比轴不是"嵌套 vs 链式"，而是**错误处理的信息局部性**。实际上存在三种风格，它们对 AI 的处理成本有明显差异：
+
+### 风格 A：Early Return Guards + 短路操作符
+
+```rust
+fn get_profile(id: &str) -> Result<HttpResult, AppError> {
+    if id.is_empty() { return Err(InvalidInput("empty id")) }
+
+    let user = fetch_user(id)?;           // ? 遇到 Err 自动短路
+    let valid = validate(user)?;
+    let score = fetch_score(&valid.email)?;
+    let profile = Profile { user: valid, score };
+    save_profile(&profile)?;
+
+    Ok(HttpResult::ok(profile.to_json()))
+}
+```
+
+每个 guard 是独立的决策点——条件和结果在同一行，自包含。`?` 操作符是隐式的 railway：遇到 `Err` 自动短路返回，不需要手动处理。**AI 处理第 5 行不需要记住第 2 行的分支结构。**
+
+### 风格 B：EitherT Railway 链
 
 ```scala
-// 嵌套 match —— 中间步骤必须手动 lift，错误处理散落在各处
-for
-  result <- service.validate(body)
-  user   <- result match                         // mid-chain match
-    case Right(u)  => u.pure[F]                  // 手动 lift
-    case Left(err) => "default_user".pure[F]     // 诱惑：用默认值吞掉错误
-  score  <- service.fetchScore(user)
-  response <- Ok(score.asJson)
-yield response
-
-// Railway —— 错误自动沿链传播，只在终点处理一次
 EitherT(service.validate(body))
-  .semiflatMap(user => service.fetchScore(user))  // 错误？自动短路，不需要处理
+  .semiflatMap(user => service.fetchScore(user))  // 错误？自动短路
   .foldF(
     err   => BadRequest(err.asJson),
     score => Ok(score.asJson)
   )
 ```
 
-关键区别在中间步骤：嵌套 match 迫使 AI 在每个分支处当场决定怎么处理错误——用默认值吞掉是最省事的选择；Railway 链中错误自动传播，AI 只写 happy path，错误处理推迟到终点。
+错误自动沿链传播，只在终点处理一次。AI 只写 happy path，不需要在中间步骤决定怎么处理错误。
+
+### 风格 C：深度嵌套 if-else
+
+```rust
+fn get_profile(id: &str) -> Result<HttpResult, AppError> {
+    if !id.is_empty() {
+        match fetch_user(id) {
+            Ok(user) => {
+                match validate(user) {
+                    Ok(valid) => {
+                        match fetch_score(&valid.email) {
+                            Ok(score) => {
+                                // 真正的逻辑埋在第四层缩进
+                                let profile = Profile { user: valid, score };
+                                Ok(HttpResult::ok(profile.to_json()))
+                            }
+                            Err(e) => Err(e)
+                        }
+                    }
+                    Err(e) => Err(e)
+                }
+            }
+            Err(e) => Err(e)
+        }
+    } else {
+        Err(InvalidInput("empty id"))  // 这个 else 对应最外层的 if，距离很远
+    }
+}
+```
+
+happy path 藏在最深层缩进里，`else` 分支和它对应的条件距离很远。AI 必须做长距离的括号配对推理才能理解控制流。
+
+### 真正的对比
+
+|              | 错误处理位置                 | AI 处理成本 | 人类阅读感受 |
+| ------------ | --------------------------- | ---------- | ----------- |
+| Early Return + `?` | 就地短路，线性流       | **最低**——每行自包含 | 最舒适 |
+| EitherT Railway    | 自动传播，终点处理     | **低**——需知道组合子语义，但信息局部 | 需要学习成本 |
+| 深度嵌套 if-else    | 远距离 else 分支      | **最高**——长距离 brace 匹配 | 噩梦 |
+
+一个关键洞察：**Rust 的 `?` 本质上就是语法糖化的 railway。** 它和 `EitherT` 的 `semiflatMap` 做的是同一件事——遇到错误自动短路传播——只是穿着命令式的外衣。这说明 railway 语义和人类可读性并不矛盾，语言层面的设计可以让两者兼得。
+
+风格 A 和 B 对 AI 的认知成本接近，且都具备 railway 的核心优势：**错误自动传播，AI 不需要在中间步骤当场决定怎么处理错误——用默认值吞掉是最省事的选择，而 railway 语义从结构上消除了这个诱惑。**
+
+但原文说"两者认知成本完全一样"不够准确。更准确的说法是：**风格 A 和 B 的成本接近且都很低，风格 C 的成本显著更高。** 真正的分界线不是"链式 vs 命令式"，而是"线性流（无论语法形式）vs 深度嵌套"。
 
 Claude 的原话：**"这条规则对我来说零成本遵守，但它产出的代码更统一、更抗静默错误丢弃。最大的赢家不是我，是你们人类审查者。"**
 
