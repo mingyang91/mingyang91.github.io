@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-13T14:02:43.260Z">
+<meta property="article:modified_time" content="2026-03-13T14:03:47.453Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -207,7 +207,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-13 22:02:43" itemprop="dateModified" datetime="2026-03-13T22:02:43+08:00">2026-03-13</time>
+      <time title="Modified: 2026-03-13 22:03:47" itemprop="dateModified" datetime="2026-03-13T22:03:47+08:00">2026-03-13</time>
     </span>
 
   
@@ -670,15 +670,18 @@ Grep（这个文本出现在哪）</strong>。光有好工具不够，你得教 
 href="#附录一ai-的工具链grep-lsp-与消歧">附录一</a>。）</p>
 <h3
 id="为什么规则文件里充满了绝对化表述">为什么规则文件里充满了绝对化表述</h3>
-<p>读过我的规则文件的人可能会注意到：里面大量使用"<strong>禁止</strong>"、"<strong>必须</strong>"、"<strong>永远不要</strong>"这类绝对化措辞。严格来说，这些绝对化表述并不总是正确的——现实中几乎任何规则都有例外。</p>
+<p>读过我的规则文件的人可能会注意到大量绝对化的断言——"编译器报错必须修复，不许绕过"、"类型系统的判断是最终裁决"、"编译通过即正确"。严格来说，这些并不总是对的：编译器有
+bug，类型系统有表达力盲区，编译通过不代表业务逻辑正确。</p>
 <p>但这是<strong>故意的</strong>。</p>
-<p>编码模型的训练数据里包含了海量的"现实世界代码"——而现实世界代码的主体是什么？是最小化影响的补丁、过度防御性编程、用
-<code>.getOrElse(默认值)</code>
-吞掉异常装作没事、能跑就行的权宜之计。这些代码在训练集中的比例远大于精心设计的架构代码。结果就是：<strong>模型的默认倾向（prior）是朝着"最小阻力路径"走的。</strong></p>
-<p>绝对化表述的作用不是描述真理，而是<strong>对抗训练偏差</strong>。它是一个反方向的力，把模型从"默认走最小阻力路径"拉回到"遵循项目的工程标准"。就像矫正视力的眼镜——镜片本身是"歪"的，但戴上之后看到的世界是正的。</p>
+<p>编码模型的训练数据里包含了海量的"现实世界代码"——而现实世界代码的主体是什么？是用
+<code>@SuppressWarnings</code> 压掉编译器警告、用
+<code>.asInstanceOf</code> 绕过类型检查、用 <code>// noinspection</code>
+让 IDE
+闭嘴的权宜之计。模型在训练阶段见过太多"编译器说不行，但我有办法绕过去"的成功案例。结果就是：<strong>模型的默认倾向是把编译器当作可以协商的建议者，而不是必须遵守的裁判。</strong></p>
+<p>绝对化表述的作用不是描述真理，而是<strong>对抗这种训练偏差</strong>。当规则文件说"编译器的判断是最终裁决"，它的真实意思不是"编译器永远正确"，而是"在你想绕过编译器之前，先假设是你写错了"。这是一个反方向的力，把模型从"默认寻找绕过方式"拉回到"默认信任工具链、修正自己的代码"。就像矫正视力的镜片——镜片本身是"歪"的，但戴上之后看到的世界是正的。</p>
 <p>这也意味着：<strong>规则文件的绝对化程度应该随模型能力变化而调整。</strong>
 如果未来的模型训练数据质量提升，或者 RLHF
-对齐策略改变了默认偏好，那些曾经需要用"禁止"来矫正的行为可能变成了模型的自然选择——此时绝对化表述就可以放松为"优先"甚至移除。规则文件不是宪法，它是针对特定模型版本的校准参数。</p>
+对齐策略改变了默认偏好，模型不再倾向于绕过编译器，那"绝对信任编译器"的规则就可以放松为"优先信任编译器"甚至移除。规则文件不是宪法，它是针对特定模型版本的校准参数。</p>
 <h2 id="反向审计让-ai-鞭策-ai">反向审计：让 AI 鞭策 AI</h2>
 <p>我发现的最有效的方法是：<strong>让 Claude
 反向审计规则文件本身。</strong></p>
