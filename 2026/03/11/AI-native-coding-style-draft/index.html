@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-13T10:43:02.473Z">
+<meta property="article:modified_time" content="2026-03-13T13:20:19.737Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -207,7 +207,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-13 18:43:02" itemprop="dateModified" datetime="2026-03-13T18:43:02+08:00">2026-03-13</time>
+      <time title="Modified: 2026-03-13 21:20:19" itemprop="dateModified" datetime="2026-03-13T21:20:19+08:00">2026-03-13</time>
     </span>
 
   
@@ -955,15 +955,25 @@ opus，一个扮演"激进重构派"，一个扮演"稳定优先派"——它们
 <li><strong>跨 session 流程约束</strong>（§6 中的 Code Smell
 Tracking、memory 文件等）。这些机制完全是为了补偿无状态推理的缺陷。</li>
 </ul>
-<p>如果未来出现具备<strong>持久记忆和持续学习能力</strong>的架构——不是
-RWKV 那样的固定大小压缩状态，而是真正能跨 session
-积累对项目编码风格的深层理解——那么第二类结论中的很大一部分可能需要推翻重写。</p>
-<p>道理很简单：<strong>一个内化了项目风格的持久化
-agent，优于每次从零开始的新手 agent + memory.md + CLAUDE.md。</strong>
-就像一个在团队待了两年的资深工程师，不需要每天早上重新读一遍编码规范。当前我们用规则文件和
-memory
-机制搭建的脚手架，本质上是在用文本文件模拟这个资深工程师的长期记忆——能用，但笨拙，且有上下文窗口的
-token 预算上限。如果模型本身具备了这种记忆能力，脚手架就可以拆掉了。</p>
+<p>甚至不需要等到"完美记忆"的那一天。哪怕是一小步——比如 RWKV
+这类具备持久化状态的架构，如果推理能力能接近当前 transformer
+的水平——就已经能改变游戏规则。</p>
+<p>想象这样一个工作流：你花几周时间和一个 agent
+协作，它在持久化状态中逐渐积累了对项目编码风格、架构决策、模块边界的理解。然后当你需要并行处理多个任务时，<strong>从这个状态
+fork 出多个 session</strong>——每个 fork
+都继承了同一份项目认知，可以独立去做 code review、refactor、bug
+fix，而不需要每个 session 都从零开始读 CLAUDE.md 和 memory 文件。</p>
+<p>这和当前的工作模式是本质不同的。现在每开一个新
+session，都是一个<strong>新手 agent +
+文本化的规则文件</strong>。你必须把所有隐性知识——"这个项目用 tagless
+final"、"NoOp 实现数据相关的要返回失败"、"持久化后的数据是
+trusted"——全部文字化写进规则文件，然后祈祷 agent
+能在有限的上下文窗口里正确理解它们。规则文件本质上是在用文本模拟长期记忆——能用，但笨拙，且有
+token 预算上限。</p>
+<p>而一个积累了项目理解的持久化状态，就像一个在团队待了几个月的工程师：不需要每天早上重新读编码规范，不需要把"我们为什么选择这个架构"写成文档才能记住。<strong>你不再需要文字化描述所有规则，因为规则已经内化在状态里了。</strong></p>
+<p>到那时，本文第二类结论中的大部分——规则文件的精确措辞、跨 session 的
+memory 机制、Code Smell Tracking 的文件系统
+workaround——都可以大幅简化甚至拆除。规则工程不会消失，但从"事无巨细地文字化"退化为"偶尔纠偏"，负担量级完全不同。</p>
 <p>但那一天到来之前，脚手架仍然是必需品。</p>
 
     </div>
