@@ -27,7 +27,7 @@
 <meta property="og:description" content="时代变了，大人 事实上越来越多的项目中，代码的主要作者已经是 AI 了，你身边的同事已经悄悄买了 glm coding plan 甚至中转站的 Codex 套餐，每天上班需求扔给 AI 后，自己则聚焦于：把尿喝白，把股炒红，把电充绿，把事办黄。人类的角色正在从&quot;写代码&quot;转向&quot;把产品经理的 PRD 扔给 AI，装模作样 Review AI 代码，再适当的调用一下 pua skills（能干干，不能干">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-15T07:15:18.089Z">
+<meta property="article:modified_time" content="2026-03-15T07:41:59.387Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -210,7 +210,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-15 15:15:18" itemprop="dateModified" datetime="2026-03-15T15:15:18+08:00">2026-03-15</time>
+      <time title="Modified: 2026-03-15 15:41:59" itemprop="dateModified" datetime="2026-03-15T15:41:59+08:00">2026-03-15</time>
     </span>
 
   
@@ -231,14 +231,14 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
 PRD 扔给 AI，装模作样 Review AI 代码，再适当的调用一下 pua
 skills（能干干，不能干滚，你不干有的是 AI 干。），以及让 AI
 代写工作总结和回怼邮件"。</p>
-<p>这带来一个根本性的问题：<strong>如果代码主要由 AI
-编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？</strong></p>
-<p>我的观点是：实现不需要，但接口需要。</p>
-<p>人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但
+<p>既然都已经这样了，那能不能干脆那样：<strong>代码都是 AI
+编写、维护、debug、阅读，那还需要人类可读性干嘛？</strong>
+马圣都说了：直接让 AI 生成机器码，一步到位。</p>
+<p>当然，我没马圣那么极端，我的观点是：逻辑实现可以不用那么照顾人类感受了，但接口定义需要。</p>
+<p>人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和头发都是消耗，但
 AI
-不会累。这意味着存在一个最优分工：<strong>人类只审查函数签名（契约），AI
-负责签名之下的全部实现。</strong></p>
-<p>问题在于，要让这个分工成立，签名本身必须包含足够的信息。而这正是两种编码风格的根本分歧。</p>
+不会累。那编码阶段是不是可以这样分工：<strong>牛马（AI）负责实现，老板（人类）喝喝咖啡，逛逛论坛，然后稍微检查一下契约（函数签名）</strong></p>
+<p>想法不错，但问题在于，要让这个分工成立，契约（签名）本身必须包含足够的信息。而这正是主流（过程式）和不入流（函数式）编码风格的根本分歧。</p>
 <hr />
 <h1 id="签名层的两种风格">签名层的两种风格</h1>
 <p>同一个业务逻辑——根据用户 ID 构建 Profile 并返回 JSON。</p>
