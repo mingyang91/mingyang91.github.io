@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
+    <meta name="description" content="时代变了，大人 事实上越来越多的项目中，代码的主要作者已经是 AI 了，你身边的同事可能悄悄买了中转站的 Codex 套餐，需求扔给 AI 后，自己则聚焦于：把尿喝白，把股炒红，把电充绿，把事办黄。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的观点是：实现不需">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【草稿】AI 时代的编码分工：谁该迁就谁的风格？">
 <meta property="og:url" content="https://famer.me/2026/03/11/AI-native-coding-style-draft/index.html">
 <meta property="og:site_name" content="My Space">
-<meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
+<meta property="og:description" content="时代变了，大人 事实上越来越多的项目中，代码的主要作者已经是 AI 了，你身边的同事可能悄悄买了中转站的 Codex 套餐，需求扔给 AI 后，自己则聚焦于：把尿喝白，把股炒红，把电充绿，把事办黄。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的观点是：实现不需">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-15T05:56:25.027Z">
+<meta property="article:modified_time" content="2026-03-15T06:55:25.173Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -111,7 +111,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%9C%A8%E5%8F%91%E7%94%9F%E7%9A%84%E5%8F%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">一个正在发生的变化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AD%BE%E5%90%8D%E5%B1%82%E7%9A%84%E4%B8%A4%E7%A7%8D%E9%A3%8E%E6%A0%BC"><span class="nav-number">2.</span> <span class="nav-text">签名层的两种风格</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E7%94%A8%E5%AE%9A%E4%B9%89"><span class="nav-number">2.1.</span> <span class="nav-text">共用定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC%E4%B8%80spring-%E5%BC%8F-try-catch-%E7%BB%9F%E4%B8%80%E5%85%9C%E5%BA%95"><span class="nav-number">2.2.</span> <span class="nav-text">风格一：Spring 式 try-catch
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%B6%E4%BB%A3%E5%8F%98%E4%BA%86%E5%A4%A7%E4%BA%BA"><span class="nav-number">1.</span> <span class="nav-text">时代变了，大人</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AD%BE%E5%90%8D%E5%B1%82%E7%9A%84%E4%B8%A4%E7%A7%8D%E9%A3%8E%E6%A0%BC"><span class="nav-number">2.</span> <span class="nav-text">签名层的两种风格</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E7%94%A8%E5%AE%9A%E4%B9%89"><span class="nav-number">2.1.</span> <span class="nav-text">共用定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC%E4%B8%80spring-%E5%BC%8F-try-catch-%E7%BB%9F%E4%B8%80%E5%85%9C%E5%BA%95"><span class="nav-number">2.2.</span> <span class="nav-text">风格一：Spring 式 try-catch
 统一兜底</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC%E4%BA%8Ceithert-%E5%85%A8%E9%93%BE%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">风格二：EitherT 全链式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">2.4.</span> <span class="nav-text">对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai-%E7%9A%84%E8%A7%86%E8%A7%92"><span class="nav-number">2.5.</span> <span class="nav-text">AI 的视角</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E5%88%86%E5%B7%A5%E4%BA%BA%E7%B1%BB%E8%AF%BB%E7%AD%BE%E5%90%8Dai-%E5%86%99%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">最优分工：人类读签名，AI
 写实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%90%BD%E5%9C%B0%E8%AE%A9%E7%AD%BE%E5%90%8D%E6%89%BF%E8%BD%BD%E4%B8%80%E5%88%87"><span class="nav-number">4.</span> <span class="nav-text">落地：让签名承载一切</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B-vs-%E9%A2%86%E5%9F%9F%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">原始类型 vs 领域类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%94%99%E8%AF%AF-vs-%E7%A9%B7%E4%B8%BE%E9%94%99%E8%AF%AF"><span class="nav-number">4.2.</span> <span class="nav-text">字符串错误 vs 穷举错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#list-.head-%E7%82%B8%E5%BC%B9-vs-nonemptylist-%E5%A5%91%E7%BA%A6"><span class="nav-number">4.3.</span> <span class="nav-text">List + .head 炸弹 vs
 NonEmptyList 契约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E9%80%80%E5%8C%96-vs-%E7%AB%AF%E5%88%B0%E7%AB%AF%E4%BC%A0%E6%92%AD"><span class="nav-number">4.4.</span> <span class="nav-text">类型退化 vs 端到端传播</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%B1%82%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%BA%BF%E6%80%A7%E6%B5%81-vs-%E6%B7%B1%E5%BA%A6%E5%B5%8C%E5%A5%97"><span class="nav-number">5.</span> <span class="nav-text">实现层的错误处理：线性流 vs
@@ -210,7 +210,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-15 13:56:25" itemprop="dateModified" datetime="2026-03-15T13:56:25+08:00">2026-03-15</time>
+      <time title="Modified: 2026-03-15 14:55:25" itemprop="dateModified" datetime="2026-03-15T14:55:25+08:00">2026-03-15</time>
     </span>
 
   
@@ -223,12 +223,13 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="一个正在发生的变化">一个正在发生的变化</h1>
-<p>越来越多的项目中，代码的主要作者已经是
-AI。人类的角色正在从"写代码"转向"定义意图、审查契约、验收结果"。</p>
+        <h1 id="时代变了大人">时代变了，大人</h1>
+<p>事实上越来越多的项目中，代码的主要作者已经是 AI
+了，你身边的同事可能悄悄买了中转站的 Codex 套餐，需求扔给 AI
+后，自己则聚焦于：把尿喝白，把股炒红，把电充绿，<del>把事办黄</del>。人类的角色正在从"写代码"转向"定义意图、审查契约、验收结果"。</p>
 <p>这带来一个根本性的问题：<strong>如果代码主要由 AI
 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？</strong></p>
-<p>我的答案是：实现不需要，但接口需要。</p>
+<p>我的观点是：实现不需要，但接口需要。</p>
 <p>人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但
 AI
 不会累。这意味着存在一个最优分工：<strong>人类只审查函数签名（契约），AI
