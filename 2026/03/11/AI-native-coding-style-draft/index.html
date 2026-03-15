@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-14T10:06:10.626Z">
+<meta property="article:modified_time" content="2026-03-15T01:37:26.541Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -119,7 +119,7 @@ NonEmptyList 契约</span></a></li><li class="nav-item nav-level-2"><a class="na
 Guards + 短路操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC-beithert-railway-%E9%93%BE"><span class="nav-number">5.0.2.</span> <span class="nav-text">风格 B：EitherT Railway 链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC-c%E6%B7%B1%E5%BA%A6%E5%B5%8C%E5%A5%97-if-else"><span class="nav-number">5.0.3.</span> <span class="nav-text">风格 C：深度嵌套 if-else</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">5.0.4.</span> <span class="nav-text">真正的对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E7%AD%BE%E5%90%8D%E5%88%B0%E5%A5%91%E7%BA%A6%E8%A1%A8%E8%BE%BE%E5%8A%9B%E7%9A%84%E5%A4%A9%E8%8A%B1%E6%9D%BF%E5%9C%A8%E5%93%AA"><span class="nav-number">6.</span> <span class="nav-text">从签名到契约：表达力的天花板在哪？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%91%E7%BA%A6%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%8A%9B%E6%A2%AF%E5%BA%A6"><span class="nav-number">6.0.1.</span> <span class="nav-text">契约的表达力梯度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#refinement-types%E6%8A%8A%E5%A5%91%E7%BA%A6%E7%BC%96%E8%BF%9B%E7%B1%BB%E5%9E%8B"><span class="nav-number">6.0.2.</span> <span class="nav-text">Refinement
 Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E5%AF%B9-ai-%E5%8D%8F%E4%BD%9C%E7%89%B9%E5%88%AB%E9%87%8D%E8%A6%81"><span class="nav-number">6.0.3.</span> <span class="nav-text">为什么这对 AI 协作特别重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%91%E7%BA%A6%E4%B8%8D%E6%98%AF%E9%93%B6%E5%BC%B9"><span class="nav-number">6.0.4.</span> <span class="nav-text">契约不是银弹</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E7%BA%AA%E5%BE%8Bai-%E7%9A%84%E9%BB%98%E8%AE%A4%E8%A1%8C%E4%B8%BA-vs-%E4%BA%BA%E7%B1%BB%E5%BF%85%E9%A1%BB%E5%88%92%E5%AE%9A%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">7.</span> <span class="nav-text">工程纪律：AI
 的默认行为 vs 人类必须划定的边界</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ai-%E7%9A%84%E9%BB%98%E8%AE%A4%E5%9D%8F%E4%B9%A0%E6%83%AF"><span class="nav-number">7.1.</span> <span class="nav-text">AI 的默认坏习惯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%BA%E7%B1%BB%E5%BF%85%E9%A1%BB%E5%88%92%E5%AE%9A%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">7.2.</span> <span class="nav-text">人类必须划定的边界</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E5%B7%A5%E7%A8%8B%E6%AF%94%E5%86%99%E4%BB%A3%E7%A0%81%E6%9B%B4%E9%9A%BE%E7%9A%84%E4%BA%8B"><span class="nav-number">8.</span> <span class="nav-text">规则工程：比写代码更难的事</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E8%B6%8A%E9%95%BF%E6%95%88%E6%9E%9C%E8%B6%8A%E5%B7%AE%E7%9C%9F%E7%9A%84%E5%90%97"><span class="nav-number">8.1.</span> <span class="nav-text">&quot;规则越长效果越差&quot;——真的吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E8%AF%A6%E7%BB%86-%E6%B8%85%E6%99%B0%E5%8F%AF%E6%89%A7%E8%A1%8C"><span class="nav-number">8.2.</span> <span class="nav-text">规则详细 ≠ 清晰可执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%9B%E4%BB%A4%E7%BA%A7%E7%B2%BE%E7%A1%AE%E5%BA%A6"><span class="nav-number">8.3.</span> <span class="nav-text">军令级精确度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%9B%E4%BB%A4%E7%9A%84%E7%9C%9F%E6%AD%A3%E5%90%AB%E4%B9%89%E6%97%A0%E6%AD%A7%E4%B9%89%E6%89%A7%E8%A1%8C-%E6%97%A0%E6%9D%A1%E4%BB%B6%E4%BA%92%E4%BF%A1"><span class="nav-number">8.3.1.</span> <span class="nav-text">军令的真正含义：无歧义执行
-+ 无条件互信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A7%84%E5%88%99%E6%96%87%E4%BB%B6%E9%87%8C%E5%85%85%E6%BB%A1%E4%BA%86%E7%BB%9D%E5%AF%B9%E5%8C%96%E8%A1%A8%E8%BF%B0"><span class="nav-number">8.3.2.</span> <span class="nav-text">为什么规则文件里充满了绝对化表述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E5%AE%A1%E8%AE%A1%E8%AE%A9-ai-%E9%9E%AD%E7%AD%96-ai"><span class="nav-number">8.4.</span> <span class="nav-text">反向审计：让 AI 鞭策 AI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E6%96%87%E4%BB%B6%E9%87%8C%E5%BA%94%E8%AF%A5%E5%86%99%E4%BB%80%E4%B9%88"><span class="nav-number">8.5.</span> <span class="nav-text">规则文件里应该写什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%97%A8%E6%A7%9B"><span class="nav-number">8.6.</span> <span class="nav-text">真正的门槛</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%A4%A7%E7%9A%84%E5%9B%BE%E6%99%AF"><span class="nav-number">9.</span> <span class="nav-text">更大的图景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BD%E5%88%BA%E7%9A%84%E7%BB%93%E5%B1%80"><span class="nav-number">9.1.</span> <span class="nav-text">讽刺的结局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%8B%E4%B8%8D%E6%87%82-ai-%E5%86%99%E7%9A%84%E4%BB%A3%E7%A0%81%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">9.2.</span> <span class="nav-text">&quot;看不懂 AI 写的代码怎么办？&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#token-%E7%BB%8F%E6%B5%8E%E5%AD%A6%E4%BF%A1%E4%BB%BB%E9%93%BE%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%9B%9E%E6%8A%A5"><span class="nav-number">9.3.</span> <span class="nav-text">Token
++ 无条件互信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A7%84%E5%88%99%E6%96%87%E4%BB%B6%E9%87%8C%E5%85%85%E6%BB%A1%E4%BA%86%E7%BB%9D%E5%AF%B9%E5%8C%96%E8%A1%A8%E8%BF%B0"><span class="nav-number">8.3.2.</span> <span class="nav-text">为什么规则文件里充满了绝对化表述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E5%AE%A1%E8%AE%A1%E8%AE%A9-ai-%E9%9E%AD%E7%AD%96-ai"><span class="nav-number">8.4.</span> <span class="nav-text">反向审计：让 AI 鞭策 AI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E5%88%99%E6%96%87%E4%BB%B6%E9%87%8C%E5%BA%94%E8%AF%A5%E5%86%99%E4%BB%80%E4%B9%88"><span class="nav-number">8.5.</span> <span class="nav-text">规则文件里应该写什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E9%97%A8%E6%A7%9B"><span class="nav-number">8.6.</span> <span class="nav-text">真正的门槛</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%A4%A7%E7%9A%84%E5%9B%BE%E6%99%AF"><span class="nav-number">9.</span> <span class="nav-text">更大的图景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BD%E5%88%BA%E7%9A%84%E7%BB%93%E5%B1%80"><span class="nav-number">9.1.</span> <span class="nav-text">讽刺的结局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai-native-adhd-native"><span class="nav-number">9.2.</span> <span class="nav-text">AI-native &#x3D; ADHD-native</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%8B%E4%B8%8D%E6%87%82-ai-%E5%86%99%E7%9A%84%E4%BB%A3%E7%A0%81%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">9.3.</span> <span class="nav-text">&quot;看不懂 AI 写的代码怎么办？&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#token-%E7%BB%8F%E6%B5%8E%E5%AD%A6%E4%BF%A1%E4%BB%BB%E9%93%BE%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%9B%9E%E6%8A%A5"><span class="nav-number">9.4.</span> <span class="nav-text">Token
 经济学：信任链的工程回报</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9C%E6%99%AF"><span class="nav-number">10.</span> <span class="nav-text">远景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%98%AF%E8%B4%9F%E5%80%BA%E8%BF%98%E6%98%AF%E8%B5%84%E4%BA%A7"><span class="nav-number">10.1.</span> <span class="nav-text">代码是负债还是资产？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E4%BB%A3-ai-native-%E8%AF%AD%E8%A8%80"><span class="nav-number">10.2.</span> <span class="nav-text">下一代 AI-native 语言</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4%E5%A3%B0%E6%98%8E"><span class="nav-number">11.</span> <span class="nav-text">适用范围声明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">12.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%E4%B8%80ai-%E7%9A%84%E5%B7%A5%E5%85%B7%E9%93%BEgreplsp-%E4%B8%8E%E6%B6%88%E6%AD%A7"><span class="nav-number">12.1.</span> <span class="nav-text">附录一：AI 的工具链——Grep、LSP
 与消歧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fqn-%E7%9A%84%E5%B1%80%E9%99%90%E4%B8%8E-lsp-%E7%9A%84%E6%AD%A3%E7%A1%AE%E7%94%A8%E6%B3%95"><span class="nav-number">12.1.1.</span> <span class="nav-text">FQN 的局限与 LSP 的正确用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%E4%BA%8C%E6%A8%A1%E5%9E%8B%E9%97%B4%E7%9A%84%E5%8D%8F%E4%BD%9C%E4%B8%8E%E7%9F%A5%E8%AF%86%E4%BC%A0%E9%80%92"><span class="nav-number">12.2.</span> <span class="nav-text">附录二：模型间的协作与知识传递</span></a></li></ol></li></ol></div>
         </div>
@@ -210,7 +210,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-14 18:06:10" itemprop="dateModified" datetime="2026-03-14T18:06:10+08:00">2026-03-14</time>
+      <time title="Modified: 2026-03-15 09:37:26" itemprop="dateModified" datetime="2026-03-15T09:37:26+08:00">2026-03-15</time>
     </span>
 
   
@@ -563,6 +563,22 @@ AI 的伤害远大于对人类。定期让 AI
 功能叠加是线性增长，功能交叉是组合爆炸。一个函数干三件事，AI
 理解错任何一件都会全盘出错。对 AI
 来说，模块边界就是理解边界——边界越清晰，AI 犯错的概率越低。</p>
+<p><strong>抑制临时帮助函数。</strong> AI 的训练数据里充满了 DRY（Don't
+Repeat
+Yourself）原则的成功案例，所以它遇到两段相似逻辑时的第一反应就是抽取一个
+<code>private def toXxx</code>、<code>private def convertYyy</code>。但
+DRY
+有一个隐含前提：<strong>抽取复用函数的人和未来使用这个函数的人共享同一份记忆。</strong>
+人类团队里这个前提勉强成立——大家在同一个代码仓库里工作，通过 code review
+知道公共函数的存在。但 agent 之间<strong>没有共享记忆</strong>。每个新
+session 都是一张白纸，它不知道三个月前另一个 session
+已经写了一个功能几乎相同的帮助函数。结果就是：迭代维护一个月后，项目里出现了十几个
+HTTP client
+的封装——<code>HttpHelper</code>、<code>ApiClient</code>、<code>RequestUtil</code>、<code>HttpService</code>——散落在不同的文件和模块里，签名各异，功能大致相同，每个都是某个
+session 认为"这里需要封装一下"的产物，但没有一个 session
+知道其他人已经封装过了。越 DRY 越重复，这是 agent
+无状态特性下的反直觉陷阱。规则：<strong>优先内联，不要过早抽取帮助函数；只有当同一个文件内出现三次以上完全相同的逻辑时才考虑抽取，且必须放在该文件内部而非公共
+utils。</strong></p>
 <p><strong>代码即文档。</strong> 不维护 markdown
 设计文档——类型签名就是接口契约，测试用例就是行为规范。一年的生产实践证明，让
 AI 维护 markdown
@@ -675,8 +691,11 @@ href="#附录一ai-的工具链grep-lsp-与消歧">附录一</a>。）</p>
 <h3 id="军令的真正含义无歧义执行-无条件互信">军令的真正含义：无歧义执行
 + 无条件互信</h3>
 <p>前面说规则文件要像军令一样精确。但军令不只是"写得清楚"——军令能运转的前提是<strong>信任链</strong>。</p>
-<p>想想《流浪地球》里的点火场景：每个发动机的负责团队只需要做一件事——<strong>时间一到就点火。</strong>
-你不需要操心隔壁发动机会不会启动失败，不需要在自己的点火程序里加一段"万一别的发动机没点着怎么办"的逻辑。因为军令已经明确了每个人的职责，而<strong>我们的人一定可以完成任务</strong>。</p>
+<p>想想《流浪地球2》里周喆直下令点火的场景。互联网尚未恢复，各国代表犹豫不决，他只说了一句：</p>
+<blockquote>
+<p><strong>"倒计时结束就点火，我相信，我们的人一定可以完成任务。"</strong></p>
+</blockquote>
+<p>不需要确认隔壁发动机是否就绪，不需要在自己的点火程序里加一段"万一别的发动机没点着怎么办"的逻辑。倒计时结束，就点火。</p>
 <p>Agent 之间的协作也是同样的道理。当一个 agent
 在写业务逻辑时，它看到签名
 <code>fetchUser(id: UserId): IO[Either[AppError, User]]</code>，它应该<strong>无条件相信</strong>这个签名——相信上游
@@ -922,6 +941,85 @@ stacks。<strong>无法廉价化的才是真正珍贵的：判断系统应该做
 <p>函数式编程社区等了几十年的"主流化"，没想到推手不是人类程序员的审美转变，而是
 AI 对显式类型信息的刚需。而人类要做的，只是把脑力从"读懂
 <code>semiflatMap</code>"解放出来，花在更值得的地方：<strong>定义系统应该做什么，而不是操心系统怎么做。</strong></p>
+<h2 id="ai-native-adhd-native">AI-native = ADHD-native</h2>
+<p>这一节很私人，但我认为它解释了一些不容易从纯技术角度理解的东西。</p>
+<p>我有
+ADHD。过去的工作中我经常犯各种小错误——变量名写反、状态忘记更新、多线程时序没考虑全。我的短期工作记忆很差，就像一个
+context window 受限的 agent：正在处理函数 A 的逻辑，跳去看函数 B，回来时
+A 的上下文已经丢了一半。跳到另一个任务再回来时，细节几乎全部蒸发。</p>
+<p>所以我整个人倒向 FP
+几乎是必然的。<strong>不可变数据意味着我不需要记住"这个变量现在是什么状态"；类型签名意味着我不需要记住"这个函数可能怎么失败"；编译器即时反馈意味着我忘了什么它会立刻告诉我。</strong>
+我用类型系统补偿自己的短期记忆缺陷，就像 agent 用签名契约补偿 context
+window 的限制——机制完全相同。</p>
+<p>但 ADHD
+不只有弱项。我的长期记忆和情景记忆很强——几个月前某个技术讨论中的一个细节，某篇论文里的一个反直觉结论，我能在完全不相关的场景下突然想起来。这种<strong>跨场景的无端联想</strong>，在人类团队讨论中经常被认为"跑题了"而被抑制丢弃。但在
+agent 协作中，这恰恰变成了一种优势：它就像一个唤醒 agent
+响应式知识调取的触发器——"你知道吗，这个问题和 Findler &amp; Felleisen
+2002 年的 blame semantics 有关"，然后 agent 会沿着这个线索深挖下去。</p>
+<p>把我和 AI 的认知特征放在一起看：</p>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 40%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>我（ADHD 人类）</th>
+<th>AI Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>短期记忆</td>
+<td>差，容易丢失上下文</td>
+<td>受限于 context window</td>
+</tr>
+<tr class="even">
+<td>长期记忆</td>
+<td>强，情景记忆丰富</td>
+<td>无（每个 session 从零开始）</td>
+</tr>
+<tr class="odd">
+<td>符号推理</td>
+<td>弱，容易犯低级错误</td>
+<td>强，但也会出错</td>
+</tr>
+<tr class="even">
+<td>状态空间推理</td>
+<td>很弱，可变状态追踪是噩梦</td>
+<td>相对弱，状态爆炸时错误率上升</td>
+</tr>
+<tr class="odd">
+<td>编译器反馈</td>
+<td>救命——补偿我的符号推理缺陷</td>
+<td>同样救命——纠正它的推理错误</td>
+</tr>
+<tr class="even">
+<td>架构直觉</td>
+<td>强——什么该拆、什么该合</td>
+<td>弱——倾向于局部最优</td>
+</tr>
+<tr class="odd">
+<td>跨域联想</td>
+<td>强——但在人类团队中常被抑制</td>
+<td>无——除非人类提示</td>
+</tr>
+</tbody>
+</table>
+<p><strong>我们的弱项高度重叠，强项恰好互补。</strong>
+我不擅长的具体实现、符号推理、状态追踪——AI 比我强。AI
+不擅长的架构决策、长期记忆、跨域联想——我比它强。而我们共同的弱项——复杂状态空间推理——编译器能补。</p>
+<p>这就是为什么本文的所有设计选择都指向同一个方向：<strong>让编译器能弥补的弱项由编译器弥补（类型系统、穷举检查），让
+AI 擅长的事由 AI
+做（实现、符号推理），让我擅长的事由我做（架构、规则、跨域联想）。</strong>
+我的架构设计必须改变方向以照顾我们共同的弱项——更解耦、更隔离、语义大于一切、面向函数式做顶层设计。</p>
+<p>AI-native coding style，某种程度上就是 ADHD-native coding
+style——不是因为 ADHD
+是好事，而是因为<strong>为认知缺陷做的补偿措施，恰好也是为 AI
+的能力边界做的最优适配。</strong>
+关于人类在这个分工模型中具体扮演什么角色、怎么工作、哪些认知习惯需要改变——这个话题太大，值得单独成文。</p>
 <h2 id="看不懂-ai-写的代码怎么办">"看不懂 AI 写的代码怎么办？"</h2>
 <p>这是最常见的反对意见。AI 写的 FP
 链式代码，<code>EitherT</code>、<code>semiflatMap</code>、<code>bimap</code>，人类看不懂，线上出故障了怎么
@@ -1041,10 +1139,49 @@ AI 恰恰让"持续维护"的成本降到了人类团队无法企及的水平。
 接管。差的只是最后一步：承认人类不需要读实现，然后把"人类可读性"从实现层的设计约束中彻底移除。</p>
 <hr />
 <h1 id="适用范围声明">适用范围声明</h1>
-<p>本文的所有实验、观察和结论，都基于当下主流的 transformer
-架构——<strong>固定上下文窗口、无跨 session
-状态、每次对话从零开始的无状态推理模型。</strong></p>
-<p>这个前提影响的是文章的哪些部分？并非全部。</p>
+<p>本文有两个前提，一个关于 AI 架构，一个关于项目类型。</p>
+<p><strong>AI 架构前提：</strong> 当下主流的 transformer
+架构——固定上下文窗口、无跨 session
+状态、每次对话从零开始的无状态推理模型。</p>
+<p><strong>项目类型前提：</strong>
+本文讨论的所有实践，适用于一类特定的软件项目：</p>
+<table>
+<thead>
+<tr class="header">
+<th>适用</th>
+<th>不适用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>后端系统、CRUD 为主的业务应用</td>
+<td>基础设施、编译器、嵌入式、硬件驱动</td>
+</tr>
+<tr class="even">
+<td>一般前端 UI 应用</td>
+<td>操作系统内核、实时系统</td>
+</tr>
+<tr class="odd">
+<td>模块间做加法（功能叠加）</td>
+<td>模块间强依赖（功能交叉）</td>
+</tr>
+<tr class="even">
+<td>软状态多、硬状态少</td>
+<td>硬状态多、软状态少</td>
+</tr>
+<tr class="odd">
+<td>数据状态持久化到外部存储</td>
+<td>状态在内存中实时维护</td>
+</tr>
+</tbody>
+</table>
+<p>核心区分标准是<strong>状态的性质</strong>。本文假设的典型场景是：状态最终持久化到数据库，内存中的状态是短暂的、可重建的（软状态）。在这种场景下，不可变
++ 函数式组合的成本很低，收益很高——正如前面所有章节论述的。</p>
+<p>但在硬状态主导的领域——比如编译器的 AST
+变换、嵌入式系统的寄存器操作、硬件驱动的中断处理——状态本身就是核心抽象，不可变数据结构的
+overhead
+不可接受，模块间的强耦合是物理约束而不是设计缺陷。在这些领域，本文的很多建议不仅不适用，甚至是有害的。</p>
+<p>AI 架构前提影响的是文章的哪些部分？并非全部。</p>
 <p><strong>架构无关的结论——不会因模型进化而改变：</strong></p>
 <ul>
 <li>签名/契约应该诚实完整（§1-§4）。不管什么推理架构，显式信息都优于隐式约定。这是信息论层面的判断，不是对特定模型能力的假设。</li>
