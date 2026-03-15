@@ -12,33 +12,23 @@ tags:
 
 事实上越来越多的项目中，代码的主要作者已经是 AI 了，你身边的同事已经悄悄买了 glm coding plan 甚至中转站的 Codex 套餐，每天上班需求扔给 AI 后，自己则聚焦于：把尿喝白，把股炒红，把电充绿，~~把事办黄~~。人类的角色正在从"写代码"转向"把产品经理的 PRD 扔给 AI，装模作样 Review AI 代码，再适当的调用一下 pua skills（能干干，不能干滚，你不干有的是 AI 干。），以及让 AI 代写工作总结和回怼邮件"。
 
-既然都已经这样了，那能不能干脆那样：**代码都是 AI 编写、维护、debug、阅读，那还需要人类可读性干嘛？** 马圣都说了：直接让 AI 生成机器码，一步到位。
+既然都已经那样了，那能不能干脆这样：**代码都是 AI 编写、维护、debug、阅读，那还需要人类可读性干嘛？** 马圣都说了：直接让 AI 生成机器码，一步到位。
 
 当然，我没马圣那么极端，我的观点是：逻辑实现可以不用那么照顾人类感受了，但接口定义需要。
 
 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和头发都是消耗，但 AI 不会累。那编码阶段是不是可以这样分工：**牛马（AI）负责实现，老板（人类）喝喝咖啡，逛逛论坛，然后稍微检查一下契约（函数签名）**
 
-想法不错，但问题在于，要让这个分工成立，契约（签名）本身必须包含足够的信息。而这正是主流（过程式）和不入流（函数式）编码风格的根本分歧。
+想法不错，但问题在于，要让这个分工成立，契约（签名）本身必须包含足够的信息。而这正是主流（过程式）和不入流（函数式）范式的根本区别。
 
 ---
 
-# 签名层的两种风格
+# 两种签名
 
 同一个业务逻辑——根据用户 ID 构建 Profile 并返回 JSON。
 
-## 共用定义
-
-```scala
-import io.circe.Json
-
-case class User(id: String, name: String, email: String)
-case class Profile(user: User, score: Int)
-case class HttpResult(status: Int, body: Json)
-```
-
 ## 风格一：Spring 式 try-catch 统一兜底
 
-这是键盘撒把米，鸡都能写的代码。错误模型是异常继承体系，业务代码就是一堆顺序赋值，出错就 throw，外面接住。
+键盘撒把米，鸡都能写的代码。错误模型是异常继承体系，业务代码就是一堆顺序赋值，出错就 throw，外面接住。
 
 ```java
 // ---- 异常继承体系 ----
@@ -68,13 +58,13 @@ Map<String, Object> getProfile(String id) {
 }
 ```
 
-人类看这段代码非常舒服。但请注意函数签名：
+写过代码的人看这段没啥困难。但你看函数签名：
 
 ```java
 public User fetchUser(String id)
 ```
 
-它在**撒谎**。这个函数可能抛 `NotFoundException`，可能抛 `RuntimeException`，可能抛任何东西——但签名里什么都没说。人类靠经验和记忆知道"哦，找不到用户就抛 NotFoundException"，但这个知识**不在代码里**，在程序员的脑子里。
+它在**撒谎**。这个函数可能抛 `NotFoundException`，可能抛 `RuntimeException`，可能抛任何东西——但签名里什么都没说。人类靠经验和记忆知道"哦，找不到用户就抛 `NotFoundException`"，但这个知识不在函数签名里，也不在这个函数体代码里，你不在 IDE 里从头到尾把所有调用树过一遍是无法穷举出来的。它甚至不在写下这个函数的开发者的脑子里。
 
 ## 风格二：EitherT 全链式
 
@@ -117,7 +107,7 @@ def getProfile(id: String): IO[HttpResult] =
     .value
 ```
 
-人类看到 `subflatMap`、`semiflatMap`、`bimap` 会头疼。但请注意函数签名：
+人看到 `subflatMap`、`semiflatMap`、`bimap` 会有种看天书的感觉。但请注意函数签名：
 
 ```scala
 def fetchUser(id: String): IO[Either[AppError, User]]
@@ -148,17 +138,17 @@ def fetchUser(id: String): IO[Either[AppError, User]]
 
 ---
 
-# 最优分工：人类读签名，AI 写实现
+# 最优分工：老板（人类）读约定，牛马（AI）写实现
 
 如果整个项目的代码都由 AI 编写、维护、debug，那么：
 
-**风格一的优势消失了**——实现的可读性不再重要，因为人类不需要逐行读实现。
-**风格一的劣势暴露了**——签名不包含错误信息，人类审查时无法仅凭签名判断正确性。
+**风格一的优势消失了**，实现的可读性不再重要，因为人类不需要逐行读实现。
+**风格一的劣势暴露了**，签名不包含错误信息，人类审查时无法仅凭签名判断正确性。
 
-**风格二的劣势消失了**——`subflatMap`、`semiflatMap` 再复杂也是 AI 的事，AI 不觉得累。
-**风格二的优势放大了**——签名即契约，人类只需要看一行就能确认"对，这个函数确实应该可能返回 `NotFound`"。
+**风格二的劣势消失了**，`subflatMap`、`semiflatMap` 再复杂也是牛马（AI）的事，牛马自己都说了不累，老板就别共情了。
+**风格二的优势放大了**，签名即契约，人只需要看一行就能确认"对，这个函数确实应该可能返回 `NotFound`"。
 
-这就是最优分工：
+这就是我发现的最优分工：
 
 ```
 人类：审查签名 ──→ "def fetchUser(id: String): IO[Either[AppError, User]]"
@@ -166,36 +156,35 @@ def fetchUser(id: String): IO[Either[AppError, User]]
                      ✓ 可能失败，失败类型是 AppError
                      ✓ 成功返回 User
                      ✓ 有副作用
-                     → 签名符合预期，通过。
+                     → 签名符合预期，测试用例全部通过。
 
-AI：  实现签名 ──→  EitherT(...)
-                      .subflatMap(...)
-                      .semiflatMap(...)
-                      .recoverWith(...)
-                      → 编译通过，类型对齐，测试通过。
+牛马（AI）：  实现签名 ──→  EitherT(...)
+                              .subflatMap(...)
+                              .semiflatMap(...)
+                              .recoverWith(...)
+                              → 编译通过，类型对齐，测试用例修复。
 ```
-
-人类不需要知道 `subflatMap` 是什么。人类只需要知道：**这个函数的输入是什么，输出是什么，可能怎么失败。** 类型签名告诉了一切。中间过程？那是 AI 的工作。
 
 ---
 
-# 落地：让签名承载一切
+# 落地：让签名承载更多信息
 
-错误处理只是一个切面。同样的"签名即契约"原则可以贯穿到代码的方方面面。以下每组对比，左边是 90% 项目的真实写法，右边是 AI-native 写法——人类只需要看签名就能感受到信息量的差异。
+错误处理只是最基础的用法，"签名即契约"原则还可以应用到代码的各个层面。以下每组对比，左边是 90% 项目的真实写法，右边是 AI-native 写法。只需要看签名就能感受到信息量的差异。
 
 ## 原始类型 vs 领域类型
 
+```java
+// 传统：两个参数都是 String，传反了等运行时炸吧
+Project getProject(String id, String orgId)
+```
 ```scala
-// 传统：两个参数都是 String，传反了编译不报错，运行时查不出来
-def getProject(id: String, orgId: String): Project
-
-// AI-native：传反了直接编译失败
+// AI-native：参数传反了编译失败
 def getProject(id: ProjectId, orgId: OrgId): IO[Option[Project]]
 ```
 
-传统签名有三个问题人类一眼看不出来：`id` 和 `orgId` 传反了怎么办？找不到怎么办？返回 null 还是抛 `RuntimeException`？全靠猜。AI-native 的签名里，`ProjectId`/`OrgId` 防止传反，`Option` 说"可能没有"，`IO` 说"有副作用"——**签名就是完整的契约**。
+传统签名有三个问题人类一眼看不出来：`id` 和 `orgId` 传反了怎么办？找不到怎么办？返回 `null`？还有参数传进去 `null` 怎么办？要不等炸了再说？AI-native 的签名里，`ProjectId`/`OrgId` 防止传反，`Option` 说"可能没有"，`IO` 说"有副作用"，不给牛马犯错的机会。
 
-而且 AI 写 90% 的代码，定义 opaque type 的"麻烦"根本不存在——那是 AI 的事。
+而且牛马写 90% 的代码，定义 opaque type 在牛马看来一点都不"啰嗦"，牛马还得谢谢你。
 
 ## 字符串错误 vs 穷举错误
 
@@ -208,7 +197,7 @@ def importUrl(url: String): IO[Either[ImportError, Document]]
 // sealed trait ImportError = InvalidUrl | Unreachable | Timeout  ← 编译器穷举检查
 ```
 
-传统写法的失败信息在哪？在 JavaDoc 里——**如果有人写的话**。实际上 JavaDoc 在诸位项目里一年更新几次，和代码行为对不对得上，我相信读者们有目共睹，注释和实现永远在赛跑，注释永远输。AI-native 的签名本身就是永远不会过时的文档，因为编译器会强制它和实现保持一致。
+传统写法的失败信息在哪？可能在 JavaDoc 里，**如果有人写的话**。实际上 JavaDoc 在诸位项目里一年更新几次，和代码行为对不对得上，我相信读者们感同身受，老板给我发的工资我给老板把功能实现了就很对得起老板了，我劝资本家不要不识好歹。要求再高我把文档删了提桶跑路。AI-native 的签名本身就是永远不会过时的文档，因为编（鞭）译器会狠狠地抽打跑偏的 AI 牛马。
 
 ## List + .head 炸弹 vs NonEmptyList 契约
 
