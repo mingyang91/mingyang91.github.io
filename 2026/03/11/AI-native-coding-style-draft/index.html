@@ -27,7 +27,7 @@
 <meta property="og:description" content="时代变了，大人 事实上越来越多的项目中，代码的主要作者已经是 AI 了，你身边的同事已经悄悄买了 glm coding plan 甚至中转站的 Codex 套餐，每天上班需求扔给 AI 后，自己则聚焦于：把尿喝白，把股炒红，把电充绿，把事办黄。人类的角色正在从&quot;写代码&quot;转向&quot;把产品经理的 PRD 扔给 AI，装模作样 Review AI 代码，再适当的调用一下 pua skills（能干干，不能干">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-15T10:07:09.560Z">
+<meta property="article:modified_time" content="2026-03-15T10:08:04.877Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -209,7 +209,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-15 18:07:09" itemprop="dateModified" datetime="2026-03-15T18:07:09+08:00">2026-03-15</time>
+      <time title="Modified: 2026-03-15 18:08:04" itemprop="dateModified" datetime="2026-03-15T18:08:04+08:00">2026-03-15</time>
     </span>
 
   
@@ -365,7 +365,7 @@ id="最优分工老板人类读约定牛马ai写实现">最优分工：老板（
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统：失败信息藏在实现里，签名里啥都没说</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">importUrl</span></span>(url: <span class="type">String</span>): <span class="type">Document</span>  <span class="comment">// throws RuntimeException, MalformedURLException, IOException...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AI-native：失败模式在签名里列得明明白白</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">importUrl</span></span>(url: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">ImportError</span>, <span class="type">Document</span>]]</span><br><span class="line"><span class="comment">// sealed trait ImportError = InvalidUrl | Unreachable | Timeout  ← 编译器穷举检查</span></span><br></pre></td></tr></table></figure>
 <p>传统写法的失败信息在哪？可能在 JavaDoc
 里，<strong>如果有人写的话</strong>。实际上 JavaDoc
-在诸位项目里一年更新几次，和代码行为对不对得上，我相信读者们感同身受，老板给我发的工资我给老板把功能实现了就很对得起老板了，我劝资本家不要不识好歹。要求再高我把文档删了提桶跑路。AI-native
+在诸位项目里一年更新几次，和代码行为对不对得上，我相信读者们感同身受，老板给我发的工资我给老板把功能实现了就很对得起老板了，我劝资本家不要不识好歹。要求再高我反向写文档投毒，再提桶跑路。AI-native
 的签名本身就是永远不会过时的文档，因为编（鞭）译器会狠狠地抽打跑偏的 AI
 牛马。</p>
 <h2 id="list-.head-炸弹-vs-nonemptylist-契约">List + .head 炸弹 vs
