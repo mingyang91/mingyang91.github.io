@@ -874,7 +874,20 @@ Orchestrator（架构师）
 
 **语言前提：** 本文的规则文件示例和工程实践基于 Scala。Scala 是多范式语言——它允许你写纯 FP，也允许你写命令式、OOP、甚至混合风格。这意味着**规则文件中大量约束的目的是把 agent 的行为约束到单一的 Pure-FP 范式下**，防止它在多种合法风格之间漂移。如果你的项目用的是 Haskell，这些约束中的很大一部分不需要写——语言本身已经强制了。
 
-如果本文翻译成 Rust 版，篇幅会大幅减少。Rust 的所有权系统和 borrow checker 已经在编译期消灭了大部分可变状态的问题，不需要靠规则文件来禁止。但即便是 Rust，我仍然会在规则中写：**禁止 agent 私自声明全局可变量（`static mut`、`lazy_static` + `Mutex` 等），局部可变量（`let mut`）禁止跨越超过 2 个作用域层级，更禁止逃逸出函数。** 同样，我会强制 agent 使用 `Has<T>` trait 来实现编译期依赖注入——这本质上就是 Rust 版的 tagless final：service 依赖通过泛型约束 `where Ctx: Has<UserRepo> + Has<AuthService>` 表达，而不是在函数参数里传一堆具体类型。签名层的设计原则不因语言而改变，只是语法不同。语言能管的交给语言，语言管不到的仍然需要规则补位——这个原则是跨语言的。
+如果本文翻译成 Rust 版，篇幅会大幅减少。Rust 的所有权系统和 borrow checker 已经在编译期消灭了大部分可变状态的问题，不需要靠规则文件来禁止。但即便是 Rust，我仍然会在规则中写：**禁止 agent 私自声明全局可变量（`static mut`、`lazy_static` + `Mutex` 等），局部可变量（`let mut`）禁止跨越超过 2 个作用域层级，更禁止逃逸出函数。** 同样，我会强制 agent 使用 `Has<T>` trait 来实现编译期依赖注入——这本质上就是 Rust 版的 tagless final：service 依赖通过泛型约束 `where Ctx: Has<UserRepo> + Has<AuthService>` 表达，而不是在函数参数里传一堆具体类型。签名层的设计原则不因语言而改变，只是语法不同。
+
+而且 Rust 的 `let-else` + `?` 对 agent 来说推理成本比 Scala 的 cats 体操还要低：
+
+```rust
+let Some(user) = user_svc.find(id).await else { return Err(DomainError::UserNotFound) };
+let Some(avatar) = user.get_avatar().await else { return Err(DomainError::AvatarMissing) };
+// ... 处理逻辑
+Ok(img_blob)
+```
+
+每一行都是自包含的：输入、判断、失败路径，全部在同一行内闭合。agent 处理第 2 行不需要回忆第 1 行的分支结构——这正是前面"实现层错误处理"一节中分析的**线性流**（风格 A），只是 Rust 用 `let-else` 把 early return guard 和模式匹配合二为一了。对 agent 而言，这比 `EitherT(...).subflatMap(...).semiflatMap(...)` 的推理路径更短、更局部、更不容易出错。
+
+语言能管的交给语言，语言管不到的仍然需要规则补位——这个原则是跨语言的。
 
 AI 架构前提影响的是文章的哪些部分？并非全部。
 
