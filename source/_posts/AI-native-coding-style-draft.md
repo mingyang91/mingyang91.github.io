@@ -889,7 +889,7 @@ Ok(img_blob)
 
 语言能管的交给语言，语言管不到的仍然需要规则补位——这个原则是跨语言的。
 
-但并非所有场景都该追求最低编写成本。不管 Scala 还是 Rust，我都会强制要求 AI 使用 Reactive Stream 模式。编写阶段推理 Reactive Stream 消耗的 token 可能是迭代器 + channel 方案的数倍（在 Rust 端甚至是数十倍乃至百倍，所有权、`&mut`、生命周期等约束甚至会逼着你改动几个月前已经定好的数据结构。）但这笔前期投入是值得的：未来不管是 debug 还是其他 agent 调用这个函数，都不需要打开实现去读——语义即行为，签名即契约。今天多烧的编写 token，换回的是将来每个 agent 省下的大量阅读和推理 token。
+但并非所有场景都该追求最低编写成本。不管 Scala 还是 Rust，我都会强制要求 AI 使用 Reactive Stream 模式。编写阶段推理 Reactive Stream 消耗的 token 可能是迭代器 + channel 方案的数倍（在 Rust 端甚至是数十倍乃至百倍，所有权、`&mut`、生命周期等约束甚至会逼着你改动几个月前已经定好的数据结构）。但这笔前期投入是值得的——因为 Reactive Stream 的 operator 本身就是行为的声明式描述，debug 时 agent 不需要追踪命令式代码里散落各处的状态变更，只需要盯着 operator 链看：消息被丢了？`.buffer(n, OverflowStrategy.dropHead)` 写得明明白白。顺序错乱了？`.unorderedFlatMap(...)` 就在那里。每个 operator 都是一句自解释的行为声明，bug 的原因直接写在 operator 名字上。命令式的等价实现呢？`LinkedBlockingQueue` 的容量限制藏在构造函数里，队列满了是阻塞还是丢弃取决于调用方用的是 `put()` 还是 `offer()`——散落在生产者代码的某个角落。顺序问题更隐蔽：`ExecutorService.submit()` 的多线程调度让消费顺序变成了运行时才能观测的行为，你在代码里找不到任何一行写着"这里不保序"。agent 要跨文件追踪队列初始化、生产者逻辑、线程池配置才能定位同样的 bug。今天多烧的编写 token，换回的是将来每个 agent 省下的大量阅读和推理 token。
 
 AI 架构前提影响的是文章的哪些部分？并非全部。
 
