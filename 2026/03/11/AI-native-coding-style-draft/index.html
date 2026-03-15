@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个正在发生的变化 越来越多的项目中，代码的主要作者已经是 AI。人类的角色正在从&quot;写代码&quot;转向&quot;定义意图、审查契约、验收结果&quot;。 这带来一个根本性的问题：如果代码主要由 AI 编写、维护、debug、阅读，那代码风格还需要照顾人类的阅读习惯吗？ 我的答案是：实现不需要，但接口需要。 人类的脑力是有限且宝贵的——长时间进行复杂的符号推理对眼睛和神经都是消耗。但 AI 不会累。这意味着存在一个最优分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-15T05:43:31.748Z">
+<meta property="article:modified_time" content="2026-03-15T05:52:50.486Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -210,7 +210,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-15 13:43:31" itemprop="dateModified" datetime="2026-03-15T13:43:31+08:00">2026-03-15</time>
+      <time title="Modified: 2026-03-15 13:52:50" itemprop="dateModified" datetime="2026-03-15T13:52:50+08:00">2026-03-15</time>
     </span>
 
   
@@ -1189,7 +1189,7 @@ AI 恰恰让"持续维护"的成本降到了人类团队无法企及的水平。
 <ul>
 <li><strong>人类层</strong>：纯粹的签名、契约、意图表达——可能更像一种声明式的规范语言</li>
 <li><strong>AI 层</strong>：为编译器和 AI
-优化的实现语言——可读性的重要程度降低，人类编写体验更不再是设计目标，信息密度和类型精度才重要</li>
+优化的实现语言——因为人类将主要精力放在审查契约层面，所以逻辑实现可读性的重要程度大幅降低，人类编写体验更不再是设计目标，信息密度和类型精度才重要</li>
 </ul>
 <p>这不是科幻。今天的 Scala 3、Rust、Haskell
 已经在朝这个方向走了——类型系统越来越表达力强大，实现层越来越被 AI
@@ -1238,6 +1238,23 @@ AI 恰恰让"持续维护"的成本降到了人类团队无法企及的水平。
 变换、嵌入式系统的寄存器操作、硬件驱动的中断处理——状态本身就是核心抽象，不可变数据结构的
 overhead
 不可接受，模块间的强耦合是物理约束而不是设计缺陷。在这些领域，本文的很多建议不仅不适用，甚至是有害的。</p>
+<p><strong>语言前提：</strong> 本文的规则文件示例和工程实践基于
+Scala。Scala 是多范式语言——它允许你写纯
+FP，也允许你写命令式、OOP、甚至混合风格。这意味着<strong>规则文件中大量约束的目的是把
+agent 的行为约束到单一的 Pure-FP
+范式下</strong>，防止它在多种合法风格之间漂移。如果你的项目用的是
+Haskell，这些约束中的很大一部分不需要写——语言本身已经强制了。</p>
+<p>如果本文翻译成 Rust 版，篇幅会大幅减少。Rust 的所有权系统和 borrow
+checker
+已经在编译期消灭了大部分可变状态的问题，不需要靠规则文件来禁止。但即便是
+Rust，我仍然会在规则中写：<strong>禁止 agent
+私自声明全局可变量（<code>static mut</code>、<code>lazy_static</code> +
+<code>Mutex</code> 等），局部可变量（<code>let mut</code>）禁止跨越超过
+2 个作用域层级，更禁止逃逸出函数。</strong> 同样，我会强制 agent 使用
+<code>Has&lt;T&gt;</code> trait 来实现编译期依赖注入——这本质上就是 Rust
+版的 tagless final：service 依赖通过泛型约束
+<code>where Ctx: Has&lt;UserRepo&gt; + Has&lt;AuthService&gt;</code>
+表达，而不是在函数参数里传一堆具体类型。签名层的设计原则不因语言而改变，只是语法不同。语言能管的交给语言，语言管不到的仍然需要规则补位——这个原则是跨语言的。</p>
 <p>AI 架构前提影响的是文章的哪些部分？并非全部。</p>
 <p><strong>架构无关的结论——不会因模型进化而改变：</strong></p>
 <ul>
