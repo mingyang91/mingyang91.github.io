@@ -197,7 +197,7 @@ def importUrl(url: String): IO[Either[ImportError, Document]]
 // sealed trait ImportError = InvalidUrl | Unreachable | Timeout  ← 编译器穷举检查
 ```
 
-传统写法的失败信息在哪？可能在 JavaDoc 里，**如果有人写的话**。实际上 JavaDoc 在诸位项目里一年更新几次，和代码行为对不对得上，我相信读者们感同身受，老板给我发的工资我给老板把功能实现了就很对得起老板了，我劝资本家不要不识好歹。要求再高我把文档删了提桶跑路。AI-native 的签名本身就是永远不会过时的文档，因为编（鞭）译器会狠狠地抽打跑偏的 AI 牛马。
+传统写法的失败信息在哪？可能在 JavaDoc 里，**如果有人写的话**。实际上 JavaDoc 在诸位项目里一年更新几次，和代码行为对不对得上，我相信读者们感同身受，老板给我发的工资我给老板把功能实现了就很对得起老板了，我劝资本家不要不识好歹。要求再高我反向写文档投毒，再提桶跑路。AI-native 的签名本身就是永远不会过时的文档，因为编（鞭）译器会狠狠地抽打跑偏的 AI 牛马。
 
 ## List + .head 炸弹 vs NonEmptyList 契约
 
