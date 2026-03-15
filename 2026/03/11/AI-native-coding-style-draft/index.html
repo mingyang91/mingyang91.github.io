@@ -27,7 +27,7 @@
 <meta property="og:description" content="时代变了，大人 事实上越来越多的项目中，代码的主要作者已经是 AI 了，你身边的同事已经悄悄买了 glm coding plan 甚至中转站的 Codex 套餐，每天上班需求扔给 AI 后，自己则聚焦于：把尿喝白，把股炒红，把电充绿，把事办黄。人类的角色正在从&quot;写代码&quot;转向&quot;把产品经理的 PRD 扔给 AI，装模作样 Review AI 代码，再适当的调用一下 pua skills（能干干，不能干">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-11T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-15T10:08:04.877Z">
+<meta property="article:modified_time" content="2026-03-15T12:45:59.039Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -113,7 +113,7 @@
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%B6%E4%BB%A3%E5%8F%98%E4%BA%86%E5%A4%A7%E4%BA%BA"><span class="nav-number">1.</span> <span class="nav-text">时代变了，大人</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E7%AD%BE%E5%90%8D"><span class="nav-number">2.</span> <span class="nav-text">两种签名</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC%E4%B8%80spring-%E5%BC%8F-try-catch-%E7%BB%9F%E4%B8%80%E5%85%9C%E5%BA%95"><span class="nav-number">2.1.</span> <span class="nav-text">风格一：Spring 式 try-catch
 统一兜底</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC%E4%BA%8Ceithert-%E5%85%A8%E9%93%BE%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">风格二：EitherT 全链式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">2.3.</span> <span class="nav-text">对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai-%E7%9A%84%E8%A7%86%E8%A7%92"><span class="nav-number">2.4.</span> <span class="nav-text">AI 的视角</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E5%88%86%E5%B7%A5%E8%80%81%E6%9D%BF%E4%BA%BA%E7%B1%BB%E8%AF%BB%E7%BA%A6%E5%AE%9A%E7%89%9B%E9%A9%ACai%E5%86%99%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">最优分工：老板（人类）读约定，牛马（AI）写实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%90%BD%E5%9C%B0%E8%AE%A9%E7%AD%BE%E5%90%8D%E6%89%BF%E8%BD%BD%E6%9B%B4%E5%A4%9A%E4%BF%A1%E6%81%AF"><span class="nav-number">4.</span> <span class="nav-text">落地：让签名承载更多信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B-vs-%E9%A2%86%E5%9F%9F%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">原始类型 vs 领域类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%94%99%E8%AF%AF-vs-%E7%A9%B7%E4%B8%BE%E9%94%99%E8%AF%AF"><span class="nav-number">4.2.</span> <span class="nav-text">字符串错误 vs 穷举错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#list-.head-%E7%82%B8%E5%BC%B9-vs-nonemptylist-%E5%A5%91%E7%BA%A6"><span class="nav-number">4.3.</span> <span class="nav-text">List + .head 炸弹 vs
-NonEmptyList 契约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E9%80%80%E5%8C%96-vs-%E7%AB%AF%E5%88%B0%E7%AB%AF%E4%BC%A0%E6%92%AD"><span class="nav-number">4.4.</span> <span class="nav-text">类型退化 vs 端到端传播</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%B1%82%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%BA%BF%E6%80%A7%E6%B5%81-vs-%E6%B7%B1%E5%BA%A6%E5%B5%8C%E5%A5%97"><span class="nav-number">5.</span> <span class="nav-text">实现层的错误处理：线性流 vs
+NonEmptyList 契约</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%B1%82%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%BA%BF%E6%80%A7%E6%B5%81-vs-%E6%B7%B1%E5%BA%A6%E5%B5%8C%E5%A5%97"><span class="nav-number">5.</span> <span class="nav-text">实现层的错误处理：线性流 vs
 深度嵌套</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC-aearly-return-guards-%E7%9F%AD%E8%B7%AF%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">5.0.1.</span> <span class="nav-text">风格 A：Early Return
 Guards + 短路操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC-beithert-railway-%E9%93%BE"><span class="nav-number">5.0.2.</span> <span class="nav-text">风格 B：EitherT Railway 链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC-c%E6%B7%B1%E5%BA%A6%E5%B5%8C%E5%A5%97-if-else"><span class="nav-number">5.0.3.</span> <span class="nav-text">风格 C：深度嵌套 if-else</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">5.0.4.</span> <span class="nav-text">真正的对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E7%AD%BE%E5%90%8D%E5%88%B0%E5%A5%91%E7%BA%A6%E8%A1%A8%E8%BE%BE%E5%8A%9B%E7%9A%84%E5%A4%A9%E8%8A%B1%E6%9D%BF%E5%9C%A8%E5%93%AA"><span class="nav-number">6.</span> <span class="nav-text">从签名到契约：表达力的天花板在哪？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%91%E7%BA%A6%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%8A%9B%E6%A2%AF%E5%BA%A6"><span class="nav-number">6.0.1.</span> <span class="nav-text">契约的表达力梯度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#refinement-types%E6%8A%8A%E5%A5%91%E7%BA%A6%E7%BC%96%E8%BF%9B%E7%B1%BB%E5%9E%8B"><span class="nav-number">6.0.2.</span> <span class="nav-text">Refinement
 Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E5%AF%B9-ai-%E5%8D%8F%E4%BD%9C%E7%89%B9%E5%88%AB%E9%87%8D%E8%A6%81"><span class="nav-number">6.0.3.</span> <span class="nav-text">为什么这对 AI 协作特别重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%91%E7%BA%A6%E4%B8%8D%E6%98%AF%E9%93%B6%E5%BC%B9"><span class="nav-number">6.0.4.</span> <span class="nav-text">契约不是银弹</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E7%BA%AA%E5%BE%8Bai-%E7%9A%84%E9%BB%98%E8%AE%A4%E8%A1%8C%E4%B8%BA-vs-%E4%BA%BA%E7%B1%BB%E5%BF%85%E9%A1%BB%E5%88%92%E5%AE%9A%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">7.</span> <span class="nav-text">工程纪律：AI
@@ -209,7 +209,7 @@ Types：把契约编进类型</span></a></li><li class="nav-item nav-level-3"><a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-15 18:08:04" itemprop="dateModified" datetime="2026-03-15T18:08:04+08:00">2026-03-15</time>
+      <time title="Modified: 2026-03-15 20:45:59" itemprop="dateModified" datetime="2026-03-15T20:45:59+08:00">2026-03-15</time>
     </span>
 
   
@@ -363,39 +363,38 @@ id="最优分工老板人类读约定牛马ai写实现">最优分工：老板（
 在牛马看来一点都不"啰嗦"，牛马还得谢谢你。</p>
 <h2 id="字符串错误-vs-穷举错误">字符串错误 vs 穷举错误</h2>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统：失败信息藏在实现里，签名里啥都没说</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">importUrl</span></span>(url: <span class="type">String</span>): <span class="type">Document</span>  <span class="comment">// throws RuntimeException, MalformedURLException, IOException...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AI-native：失败模式在签名里列得明明白白</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">importUrl</span></span>(url: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">ImportError</span>, <span class="type">Document</span>]]</span><br><span class="line"><span class="comment">// sealed trait ImportError = InvalidUrl | Unreachable | Timeout  ← 编译器穷举检查</span></span><br></pre></td></tr></table></figure>
-<p>传统写法的失败信息在哪？可能在 JavaDoc
+<p>传统写法的异常路径信息在哪？可能在 JavaDoc
 里，<strong>如果有人写的话</strong>。实际上 JavaDoc
-在诸位项目里一年更新几次，和代码行为对不对得上，我相信读者们感同身受，老板给我发的工资我给老板把功能实现了就很对得起老板了，我劝资本家不要不识好歹。要求再高我反向写文档投毒，再提桶跑路。AI-native
-的签名本身就是永远不会过时的文档，因为编（鞭）译器会狠狠地抽打跑偏的 AI
-牛马。</p>
+在诸位项目里一年更新几次，和代码行为对不对得上，我相信诸位心里有数。资本家给我发的那点工资我把功能实现了就很对得起资本家了，我劝资本家不要不识好歹。要求再高我反向写文档投毒，再提桶跑路。AI-native
+的签名本身就是永远一致的文档，因为鞭译器会狠狠地抽打跑偏的 AI 牛马。</p>
 <h2 id="list-.head-炸弹-vs-nonemptylist-契约">List + .head 炸弹 vs
 NonEmptyList 契约</h2>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统：List 可能为空，调用 .head 直接 NoSuchElementException</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchEmbed</span></span>(texts: <span class="type">List</span>[<span class="type">String</span>]): <span class="type">List</span>[<span class="type">Embedding</span>]</span><br><span class="line"><span class="comment">// 调用方：batchEmbed(userTexts)  ← userTexts 为空？炸了。没人检查。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AI-native：签名强制非空，调用方在 call site 处理空 case</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchEmbed</span></span>(texts: <span class="type">NonEmptyList</span>[<span class="type">String</span>]): <span class="type">IO</span>[<span class="type">NonEmptyList</span>[<span class="type">Embedding</span>]]</span><br></pre></td></tr></table></figure>
-<p>传统写法里"不能传空列表"是一个口头约定，或者注释里的一行
-<code>// texts must not be empty</code>。<strong>AI 不看注释。</strong>
-它会老老实实传一个空列表进去，然后
-<code>NoSuchElementException</code>。NonEmptyList
-把这个约定提升到了类型层面——调用方必须用
-<code>NonEmptyList.fromList</code> 处理空 case，否则编译不过。</p>
-<h2 id="类型退化-vs-端到端传播">类型退化 vs 端到端传播</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">传统：String 贯穿全栈，是 projectId 还是 orgId 还是 userId？运行时才知道。</span><br><span class="line">Controller: String → Service: String → DAO: String → SQL: String</span><br><span class="line"></span><br><span class="line">AI-native：从入口到 SQL 边界，类型精度不降级，只在真正的系统边界才 unwrap。</span><br><span class="line">Route: ProjectId → Service: ProjectId → Repo: ProjectId → SQL 边界: unwrap</span><br></pre></td></tr></table></figure>
-<p>传统写法里，到了 Service 层你看到一个
-<code>String id</code>，得往上追三层才知道这是什么 ID。AI-native
-写法里，<strong>任何一层的签名都是自解释的</strong>——这恰恰是"人类只读签名"这个分工模型能成立的前提。</p>
+<p>传统写法里"不能传空数组"是一个美好的愿望，或者注释里的一行
+<code>// texts must not be empty</code>。别说 AI
+了，人有几次写代码看注释的？还不是炸了再说。这个数组下游传进来就是空的，
+<code>NoSuchElementException</code>
+了找下游去。<code>NonEmptyList</code> 把这个约束提升到了类型层面，下一个
+AI 牛马必须用 <code>NonEmptyList.fromList</code> 处理空
+case，否则鞭译不过。</p>
+<p>并且，这种染色类型在 AI-native
+代码里强制要求贯穿全程，从接受外部输入（Request/Input）开始就要进行严格验证，并转换为着色（refined）类型，而只有到系统出口（Response/Output）时才可以转换为非着色类型（Int/Long/String）。这样一来，不论是新或者老
+AI 牛马，亦或者是 <code>/compact</code> 后的阿兹海默 AI
+牛马，不管在任何一层忘记约定胡来，都会被鞭译器鞭挞。</p>
 <hr />
 <h1 id="实现层的错误处理线性流-vs-深度嵌套">实现层的错误处理：线性流 vs
 深度嵌套</h1>
-<p>签名即契约解决了"函数边界上的信息完整性"。但在实现层面，同一个逻辑也有不同的组织方式。我曾问
+<p>前面讲的签名即契约只部分解决了"函数边界上的信息完整性"。但在实现层面，同一个逻辑也有不同的实现方式。我曾拷问
 Claude：railway style（链式组合子）对你来说比 nested match/case
 更容易处理吗？</p>
-<p>它的回答很诚实：<strong>两者对它的认知成本完全一样。</strong></p>
-<p>这个回答其实不够精确。深入追问后，真正的对比轴不是"嵌套 vs
-链式"，而是<strong>错误处理的信息局部性</strong>。实际上存在三种风格，它们对
-AI 的处理成本有明显差异：</p>
+<p>它的回答很敷衍：<strong>两者对它的认知成本完全一样。</strong></p>
+<p>我就知道你小子没说实话。深入拷问后，真正的对比角度不是"嵌套 vs
+链式"，而是<strong>错误处理的信息局部性</strong>。实际上存在三种风格，AI
+处理它们的 Token 成本有明显差异：</p>
 <h3 id="风格-aearly-return-guards-短路操作符">风格 A：Early Return
 Guards + 短路操作符</h3>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">get_profile</span>(id: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;HttpResult, AppError&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> id.<span class="title function_ invoke__">is_empty</span>() &#123; <span class="keyword">return</span> <span class="title function_ invoke__">Err</span>(<span class="title function_ invoke__">InvalidInput</span>(<span class="string">&quot;empty id&quot;</span>)) &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">user</span> = <span class="title function_ invoke__">fetch_user</span>(id)?;           <span class="comment">// ? 遇到 Err 自动短路</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">valid</span> = <span class="title function_ invoke__">validate</span>(user)?;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">score</span> = <span class="title function_ invoke__">fetch_score</span>(&amp;valid.email)?;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">profile</span> = Profile &#123; user: valid, score &#125;;</span><br><span class="line">    <span class="title function_ invoke__">save_profile</span>(&amp;profile)?;</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(HttpResult::<span class="title function_ invoke__">ok</span>(profile.<span class="title function_ invoke__">to_json</span>()))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>每个 guard 是独立的决策点——条件和结果在同一行，自包含。<code>?</code>
+<p>每个 guard 是独立的决策点，条件和结果在同一行，自包含。<code>?</code>
 操作符是隐式的 railway：遇到 <code>Err</code>
 自动短路返回，不需要手动处理。<strong>AI 处理第 5 行不需要记住第 2
 行的分支结构。</strong></p>
@@ -411,10 +410,10 @@ path，不需要在中间步骤决定怎么处理错误。</p>
 <h3 id="真正的对比">真正的对比</h3>
 <table>
 <colgroup>
-<col style="width: 21%" />
-<col style="width: 21%" />
-<col style="width: 42%" />
-<col style="width: 14%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 30%" />
+<col style="width: 39%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -435,32 +434,25 @@ path，不需要在中间步骤决定怎么处理错误。</p>
 <td>EitherT Railway</td>
 <td>自动传播，终点处理</td>
 <td><strong>低</strong>——需知道组合子语义，但信息局部</td>
-<td>需要学习成本</td>
+<td>FP 教徒，能看懂，不好写。非 FP 教徒，什么天书？</td>
 </tr>
 <tr class="odd">
 <td>深度嵌套 if-else</td>
 <td>远距离 else 分支</td>
 <td><strong>最高</strong>——长距离 brace 匹配</td>
-<td>噩梦</td>
+<td>反正大家都是这么写的，IDE 也能自动匹配括号</td>
 </tr>
 </tbody>
 </table>
-<p>一个关键洞察：<strong>Rust 的 <code>?</code> 本质上就是语法糖化的
+<p><strong>Rust 的 <code>?</code> 本质上就是语法糖化的
 railway。</strong> 它和 <code>EitherT</code> 的 <code>semiflatMap</code>
-做的是同一件事——遇到错误自动短路传播——只是穿着命令式的外衣。这说明
-railway 语义和人类可读性并不矛盾，语言层面的设计可以让两者兼得。</p>
-<p>风格 A 和 B 对 AI 的认知成本接近，且都具备 railway
-的核心优势：<strong>错误自动传播，AI
-不需要在中间步骤当场决定怎么处理错误——用默认值吞掉是最省事的选择，而
-railway 语义从结构上消除了这个诱惑。</strong></p>
-<p>但原文说"两者认知成本完全一样"不够准确。更准确的说法是：<strong>风格
-A 和 B 的成本接近且都很低，风格 C 的成本显著更高。</strong>
-真正的分界线不是"链式 vs 命令式"，而是"线性流（无论语法形式）vs
-深度嵌套"。</p>
-<p>Claude
-的原话：<strong>"这条规则对我来说零成本遵守，但它产出的代码更统一、更抗静默错误丢弃。最大的赢家不是我，是你们人类审查者。"</strong></p>
+做的是差不多的效果，遇到错误自动短路，只是穿着命令式的外衣。这说明
+railway 语义不止方便人类，还能方便 AI 牛马开展工作。</p>
+<p>拷问后 Claude
+对我如实交代：<strong>"这条规则对我来说零成本遵守，但它产出的代码更统一、更抗静默错误丢弃。最大的赢家不是我，是你们人类审查者。"</strong></p>
 <p>AI-native 的代码风格选择，标准不是"AI
-觉得哪个好写"，而是<strong>"哪种风格在结构上减少出错空间"</strong>。签名层如此，实现层同样如此。</p>
+牛马觉得哪个好写"，因为训练对齐偏差你很难问出来实话。而是<strong>"哪种风格能让
+AI 牛马减少出错空间"</strong>，签名层和实现层同样如此。</p>
 <hr />
 <h1
 id="从签名到契约表达力的天花板在哪">从签名到契约：表达力的天花板在哪？</h1>
