@@ -1,5 +1,5 @@
 ---
-title: Vibe Coding 一年实践后的冷思考
+title: 明系魔法吟唱之1 -- Vibe Coding 一年实践后的冷思考
 date: 2026-02-06 13:44:21
 tags:
   - AI

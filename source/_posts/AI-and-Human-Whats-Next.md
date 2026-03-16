@@ -1,6 +1,5 @@
 ---
-title: "AI & Human: What's Next"
-subtitle: AI与人类的下一章
+title: 明系魔法吟唱之3 -- AI 编程的下一章
 date: 2026-03-09 14:00:00
 tags:
   - AI

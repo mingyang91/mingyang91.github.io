@@ -1,5 +1,5 @@
 ---
-title: 我的Claude规则文件分享
+title: 明系魔法吟唱之3.1 -- 我的Claude规则文件分享
 date: 2026-03-10 23:37:43
 tags:
   - AI

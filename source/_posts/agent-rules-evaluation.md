@@ -1,5 +1,5 @@
 ---
-title: Agent 规则文件评测：我的 CLAUDE.md vs OpenClaw/AGENTS.md
+title: 明系魔法吟唱之3.14 -- Agent 规则文件评测：我的 vs OpenClaw
 date: 2026-03-12 20:00:00
 tags:
   - AI
