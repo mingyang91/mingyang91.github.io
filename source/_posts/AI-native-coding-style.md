@@ -8,7 +8,7 @@ tags:
   - Functional Programming
 ---
 
-> **英文文化适配版：** {% post_link AI-native-coding-style-english AI-Native Coding Style (English cultural adaptation) %}
+> **英文文化适配版：** {% post_link AI-native-coding-style-en AI-Native Coding Style (English cultural adaptation) %}
 
 # 时代变了，大人
 
