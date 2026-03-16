@@ -8,6 +8,8 @@ tags:
   - Functional Programming
 ---
 
+> **英文文化适配版：** {% post_link AI-native-coding-style-english AI-Native Coding Style (English cultural adaptation) %}
+
 # 时代变了，大人
 
 事实上越来越多的项目中，代码的主要作者已经是 AI 了，你身边的同事已经悄悄买了 glm coding plan 甚至中转站的 Codex 套餐，每天上班需求扔给 AI 后，自己则聚焦于：把尿喝白，把股炒红，把电充绿，~~把事办黄~~。人类的角色正在从"写代码"转向"把产品经理的 PRD 扔给 AI，装模作样 Review AI 代码，适当的调用一下 pua skills（你不干有的是 AI 干。），以及让 AI 代写工作总结和回怼邮件"。
