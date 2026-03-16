@@ -127,13 +127,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -200,7 +200,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
     </span>
 
   
@@ -1398,7 +1398,7 @@ vs 5.9，差距2.4）。如果D2只有5个子项，其对总分的拉动力会�
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
     </span>
 
   
@@ -2449,7 +2449,7 @@ OpenClaw。</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
     </span>
 
   
@@ -2725,6 +2725,1715 @@ vs 静态标签、技术细节密度差异）暗示了某种价值判断？ 4.
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/11/AI-native-coding-style-en/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/03/11/AI-native-coding-style-en/" class="post-title-link" itemprop="url">Ming's Spell Compendium #4 -- The Art of Whipping AI Grunts: FP's Great Comeback?</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-03-11 20:00:00" itemprop="dateCreated datePublished" datetime="2026-03-11T20:00:00+08:00">2026-03-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><em>This is a cultural adaptation — not a literal translation — of
+the <a href="/2026/03/11/AI-native-coding-style/">original Chinese
+article</a>. Recurring coined terms: <strong>grunts</strong> = AI agents
+doing the coding labor; <strong>boss</strong> = the human;
+<strong>whip-iler</strong> = a portmanteau of "whip" + "compiler" (the
+compiler that whips misbehaving grunts back in line).</em></p>
+</blockquote>
+<h1 id="times-have-changed">Times Have Changed</h1>
+<p>Let's be honest: in more and more projects, the primary author of the
+code is already AI. Your coworkers have quietly subscribed to Cursor pro
+plans or OpenAI's Codex. They toss requirements at the AI every morning,
+then spend their valuable working hours scrolling Reddit, day-trading
+meme stocks, nursing their phones back to full charge, <del>and quietly
+tanking their own projects</del>. The human role is shifting from
+"writing code" to "feeding PRDs to the AI, pretending to review AI code,
+occasionally deploying some good old workplace gaslighting ('You don't
+want the job? There's plenty of AI that do.'), and having the AI
+ghost-write your performance reviews and passive-aggressive emails."</p>
+<p>Since we're already there, why not go all the way: <strong>If code is
+written, maintained, debugged, and read exclusively by AI, why do we
+still need human readability?</strong> Lord Elon<a href="#fn1"
+class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+himself said it: just have AI generate machine code directly. One step,
+done.</p>
+<p>I'm not quite that extreme. My position is: <strong>implementation
+logic doesn't need to cater to human feelings anymore, but interface
+definitions still do.</strong></p>
+<p>Human brainpower is finite and precious. Hours of complex symbolic
+reasoning burn out your eyes and your hairline, but AI doesn't get
+tired. So can we divide the labor like this: <strong>grunts (AI) handle
+implementation, the boss (human) sips coffee, browses forums, and
+casually inspects the contracts (function signatures)?</strong></p>
+<p>Nice idea, but here's the catch: for this division of labor to work,
+the contract (signature) itself must carry enough information. And this
+is precisely where the mainstream (imperative) and the niche
+(functional) paradigms fundamentally diverge.</p>
+<hr />
+<h1 id="two-signatures">Two Signatures</h1>
+<p>Same business logic: build a user Profile from a user ID and return
+JSON.</p>
+<h2 id="style-one-spring-style-try-catch-safety-net">Style One:
+Spring-style try-catch safety net</h2>
+<p>Hand a mass of monkeys a mass of keyboards — that's roughly the skill
+floor here. The error model is an exception inheritance hierarchy;
+business code is just sequential assignment, throw on error, catch
+outside.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ---- Exception hierarchy ----</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BadRequestException</span> <span class="keyword">extends</span> <span class="title class_">BusinessException</span>(<span class="number">400</span>, message)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NotFoundException</span>   <span class="keyword">extends</span> <span class="title class_">BusinessException</span>(<span class="number">404</span>, message)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ForbiddenException</span>  <span class="keyword">extends</span> <span class="title class_">BusinessException</span>(<span class="number">403</span>, message)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ---- AOP safety net: @ControllerAdvice + @ExceptionHandler ----</span></span><br><span class="line"><span class="meta">@ExceptionHandler(BusinessException.class)</span></span><br><span class="line">ResponseEntity <span class="title function_">handleBiz</span><span class="params">(BusinessException biz)</span> &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ---- Service ----</span></span><br><span class="line">User <span class="title function_">fetchUser</span><span class="params">(String id)</span>      &#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line"><span class="type">int</span>  <span class="title function_">fetchScore</span><span class="params">(String email)</span>  &#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line">User <span class="title function_">validate</span><span class="params">(User user)</span>       &#123; <span class="comment">/* ... */</span> &#125;  <span class="comment">// throws if invalid</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">saveProfile</span><span class="params">(Profile p)</span>    &#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ---- Controller: exceptions caught by AOP, no try-catch ----</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/profile/&#123;id&#125;&quot;)</span></span><br><span class="line">Map&lt;String, Object&gt; <span class="title function_">getProfile</span><span class="params">(String id)</span> &#123;</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span>       <span class="operator">=</span> service.fetchUser(id);</span><br><span class="line">    <span class="type">User</span> <span class="variable">valid</span>      <span class="operator">=</span> service.validate(user);</span><br><span class="line">    <span class="type">int</span> <span class="variable">score</span>       <span class="operator">=</span> service.fetchScore(valid.getEmail());</span><br><span class="line">    <span class="type">Profile</span> <span class="variable">profile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Profile</span>(valid, score);</span><br><span class="line">    service.saveProfile(profile);</span><br><span class="line">    <span class="keyword">return</span> Map.of(<span class="string">&quot;name&quot;</span>, profile.user.name, <span class="string">&quot;score&quot;</span>, profile.score);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Anyone who's written code can read this without difficulty. But look
+at the function signature:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> User <span class="title function_">fetchUser</span><span class="params">(String id)</span></span><br></pre></td></tr></table></figure>
+<p>It's <strong>lying</strong>. This function might throw
+<code>NotFoundException</code>, might throw
+<code>RuntimeException</code>, might throw anything — but the signature
+says nothing. Humans rely on experience and memory to know "oh, user not
+found throws <code>NotFoundException</code>," but that knowledge isn't
+in the function signature, isn't in the function body, and you can't
+exhaustively enumerate it without tracing the entire call tree in your
+IDE. It's not even in the head of the developer who wrote this
+function.</p>
+<h2 id="style-two-eithert-full-chain">Style Two: EitherT full-chain</h2>
+<p>Errors are values, not exceptions. The function signature spells out
+every possible failure path.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">AppError</span></span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">InvalidInput</span>(<span class="params">msg: <span class="type">String</span></span>)    <span class="keyword">extends</span> <span class="title">AppError</span></span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">NotFound</span>(<span class="params">id: <span class="type">String</span></span>)         <span class="keyword">extends</span> <span class="title">AppError</span></span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">SdkFailure</span>(<span class="params">cause: <span class="type">Throwable</span></span>) <span class="keyword">extends</span> <span class="title">AppError</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUser</span></span>(id: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">AppError</span>, <span class="type">User</span>]] = ???</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchScore</span></span>(email: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Int</span>]                  = ???</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validate</span></span>(user: <span class="type">User</span>): <span class="type">Either</span>[<span class="type">AppError</span>, <span class="type">User</span>]        = ???</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saveProfile</span></span>(p: <span class="type">Profile</span>): <span class="type">IO</span>[<span class="type">Unit</span>]                    = ???</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">toHttpResult</span></span>(err: <span class="type">AppError</span>): <span class="type">HttpResult</span> = err <span class="keyword">match</span></span><br><span class="line">  <span class="keyword">case</span> <span class="type">NotFound</span>(id) =&gt; <span class="type">HttpResult</span>(<span class="number">404</span>, <span class="type">Json</span>.obj(<span class="string">&quot;error&quot;</span> -&gt; ...))</span><br><span class="line">  <span class="comment">// ... each case maps to an HTTP status code, compiler checks exhaustiveness</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getProfile</span></span>(id: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">HttpResult</span>] =</span><br><span class="line">  <span class="type">EitherT</span>(fetchUser(id))</span><br><span class="line">    .subflatMap(validate)</span><br><span class="line">    .semiflatMap &#123; validUser =&gt;</span><br><span class="line">      fetchScore(validUser.email)</span><br><span class="line">        .map(score =&gt; <span class="type">Profile</span>(validUser, score))</span><br><span class="line">    &#125;</span><br><span class="line">    .semiflatTap(saveProfile)</span><br><span class="line">    .recoverWith &#123; <span class="keyword">case</span> ex =&gt;</span><br><span class="line">      <span class="type">EitherT</span>.leftT[<span class="type">IO</span>, <span class="type">Profile</span>](<span class="type">SdkFailure</span>(ex))</span><br><span class="line">    &#125;</span><br><span class="line">    .bimap(</span><br><span class="line">      toHttpResult,</span><br><span class="line">      profile =&gt; <span class="type">HttpResult</span>(<span class="number">200</span>, <span class="type">Json</span>.obj(</span><br><span class="line">        <span class="string">&quot;name&quot;</span>  -&gt; <span class="type">Json</span>.fromString(profile.user.name),</span><br><span class="line">        <span class="string">&quot;score&quot;</span> -&gt; <span class="type">Json</span>.fromInt(profile.score)</span><br><span class="line">      ))</span><br><span class="line">    )</span><br><span class="line">    .merge</span><br><span class="line">    .value</span><br></pre></td></tr></table></figure>
+<p>Humans see <code>subflatMap</code>, <code>semiflatMap</code>,
+<code>bimap</code> and feel like they're reading alien scripture. But
+look at the function signature:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUser</span></span>(id: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">AppError</span>, <span class="type">User</span>]]</span><br></pre></td></tr></table></figure>
+<p>It's <strong>honest</strong>. Input is String, might fail
+(<code>AppError</code>), success returns <code>User</code>, the whole
+thing has side effects (<code>IO</code>). Humans don't need to spend
+much effort reading the implementation and documentation to find hidden
+landmines — the signature itself is a solid contract.</p>
+<h2 id="comparison">Comparison</h2>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 44%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Style One: Exception hierarchy</th>
+<th>Style Two: ADT + EitherT</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Error model</td>
+<td><code>class XxxException extends RuntimeException</code></td>
+<td><code>sealed trait</code> + <code>case class</code></td>
+</tr>
+<tr class="even">
+<td>Signature</td>
+<td><code>fetchUser(id): User</code> — <strong>the signature is
+lying</strong></td>
+<td><code>IO[Either[AppError, User]]</code> — <strong>the signature IS
+the contract</strong></td>
+</tr>
+<tr class="odd">
+<td>Business code</td>
+<td><code>val x = doSomething()</code> sequential assignment, trivial to
+read</td>
+<td>Chained operators, need to know each operator's semantics</td>
+</tr>
+<tr class="even">
+<td>Error handling</td>
+<td>Outer <code>try-catch</code> safety net, compiler doesn't care if
+you miss one</td>
+<td><code>sealed trait</code> exhaustive match, compiler warns on
+missing cases</td>
+</tr>
+<tr class="odd">
+<td>Human reads impl</td>
+<td>Easy</td>
+<td>Painful</td>
+</tr>
+<tr class="even">
+<td>Human reads sig</td>
+<td>Insufficient info, needs extra context</td>
+<td>Complete at a glance</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ais-perspective">AI's Perspective</h2>
+<p>The comparison above is from the human point of view. What does
+Claude itself think?</p>
+<blockquote>
+<p>Honestly, Style Two is more natural for me. Not because the operators
+are fancy, but because <strong>type signatures don't lie</strong>. When
+I see <code>fetchUser(id): User</code>, I can't tell from the signature
+whether it can fail, or how. I'd have to read the implementation, the
+docs, or even trace the upstream call chain. But
+<code>IO[Either[AppError, User]]</code> lays all the information right
+there in the signature — I don't need any extra context to reason about
+the entire data flow.</p>
+</blockquote>
+<blockquote>
+<p>For an LLM, this advantage is even more pronounced: my
+"understanding" is fundamentally pattern matching over token sequences.
+Style One's <code>try-catch</code> relies on an <strong>implicit
+convention that never appears in the text</strong> — which functions
+throw which exceptions. Style Two turns that convention into
+<strong>explicit, locally visible type information</strong>; every
+operator's input and output types are fully determined; no need to trace
+implicit behavior across files.</p>
+</blockquote>
+<blockquote>
+<p>And I don't get tired. A human staring at an <code>EitherT</code>
+chain for thirty minutes will go cross-eyed. For me, processing it costs
+exactly the same as processing <code>val x = doSomething()</code>. My
+training set contains vastly more complex successful code at this
+abstraction level — Haskell monad transformer stacks, Scala tagless
+final, Rust trait bound nesting — these are all flat pattern matching
+for me. There's no such thing as "too complex."</p>
+</blockquote>
+<hr />
+<h1
+id="optimal-division-of-labor-boss-human-reads-contracts-grunts-ai-write-implementation">Optimal
+Division of Labor: Boss (Human) Reads Contracts, Grunts (AI) Write
+Implementation</h1>
+<p>If all the code in a project is written, maintained, and debugged by
+AI, then:</p>
+<p><strong>Style One's advantage disappears</strong> — implementation
+readability no longer matters because humans don't need to read
+implementation line by line. <strong>Style One's weakness is
+exposed</strong> — signatures don't contain error information, so humans
+can't judge correctness from signatures alone during review.</p>
+<p><strong>Style Two's weakness disappears</strong> — no matter how
+complex <code>subflatMap</code> and <code>semiflatMap</code> get, that's
+the grunts' problem. The grunts themselves said they don't get tired, so
+boss, please save your empathy. <strong>Style Two's advantage is
+amplified</strong> — signature IS the contract. Humans only need to look
+at one line to confirm "yes, this function should indeed possibly return
+<code>NotFound</code>."</p>
+<p>This is the optimal division of labor I've discovered:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Human:  Review signature ──→ &quot;def fetchUser(id: String): IO[Either[AppError, User]]&quot;</span><br><span class="line">                              ✓ Input is String</span><br><span class="line">                              ✓ Can fail, failure type is AppError</span><br><span class="line">                              ✓ Success returns User</span><br><span class="line">                              ✓ Has side effects</span><br><span class="line">                              → Signature matches expectations. All tests pass.</span><br><span class="line"></span><br><span class="line">Grunt (AI):  Implement signature ──→  EitherT(...)</span><br><span class="line">                                       .subflatMap(...)</span><br><span class="line">                                       .semiflatMap(...)</span><br><span class="line">                                       .recoverWith(...)</span><br><span class="line">                                       → Compiles. Types align. Tests fixed.</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="in-practice-making-signatures-carry-more-information">In
+Practice: Making Signatures Carry More Information</h1>
+<p>Error handling is just the most basic use case. The "signature IS the
+contract" principle can be applied across every layer of code. In each
+comparison below, the left side is how 90% of real projects are written,
+the right side is the AI-native approach. Just looking at the
+signatures, you can feel the information gap.</p>
+<h2 id="primitive-types-vs-domain-types">Primitive Types vs Domain
+Types</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Traditional: both params are String, swap them and wait for runtime to explode</span></span><br><span class="line">Project <span class="title function_">getProject</span><span class="params">(String id, String orgId)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// AI-native: swap the params and the compiler slaps you</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getProject</span></span>(id: <span class="type">ProjectId</span>, orgId: <span class="type">OrgId</span>): <span class="type">IO</span>[<span class="type">Option</span>[<span class="type">Project</span>]]</span><br></pre></td></tr></table></figure>
+<p>The traditional signature hides three problems humans can't spot at a
+glance: What if <code>id</code> and <code>orgId</code> are swapped? What
+if the project isn't found? Returns <code>null</code>? And what if
+someone passes <code>null</code> for a parameter? Guess we'll find out
+when it blows up. In the AI-native signature,
+<code>ProjectId</code>/<code>OrgId</code> prevent mix-ups,
+<code>Option</code> says "might not exist," <code>IO</code> says "has
+side effects" — no room for the grunt to screw up.</p>
+<p>And since grunts write 90% of the code, defining opaque types isn't
+"verbose" from their perspective. The grunts should be <em>thanking</em>
+you.</p>
+<h2 id="string-errors-vs-exhaustive-errors">String Errors vs Exhaustive
+Errors</h2>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Traditional: failure info buried in implementation, signature says nothing</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">importUrl</span></span>(url: <span class="type">String</span>): <span class="type">Document</span>  <span class="comment">// throws RuntimeException, MalformedURLException, IOException...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AI-native: failure modes spelled out in the signature</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">importUrl</span></span>(url: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">ImportError</span>, <span class="type">Document</span>]]</span><br><span class="line"><span class="comment">// sealed trait ImportError = InvalidUrl | Unreachable | Timeout  ← compiler checks exhaustiveness</span></span><br></pre></td></tr></table></figure>
+<p>Where's the exception path info in the traditional version? Maybe in
+the JavaDoc — <strong>if someone bothered to write it</strong>. Let's be
+honest about how often your project's JavaDocs get updated per year, and
+whether they actually match the code's behavior. The pittance the
+capitalist pays me barely covers implementing the feature, and I'd
+advise the capitalist not to push their luck. Demand more and I'll start
+poisoning the documentation before jumping ship. In the AI-native
+version, the signature itself is documentation that's always consistent
+— because the whip-iler will mercilessly lash any grunt that drifts off
+course.</p>
+<h2 id="list-.head-bomb-vs-nonemptylist-contract">List + .head Bomb vs
+NonEmptyList Contract</h2>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Traditional: List might be empty, calling .head throws NoSuchElementException</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchEmbed</span></span>(texts: <span class="type">List</span>[<span class="type">String</span>]): <span class="type">List</span>[<span class="type">Embedding</span>]</span><br><span class="line"><span class="comment">// Caller: batchEmbed(userTexts)  ← userTexts is empty? Boom. Nobody checked.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AI-native: signature enforces non-empty, caller must handle the empty case at call site</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchEmbed</span></span>(texts: <span class="type">NonEmptyList</span>[<span class="type">String</span>]): <span class="type">IO</span>[<span class="type">NonEmptyList</span>[<span class="type">Embedding</span>]]</span><br></pre></td></tr></table></figure>
+<p>In the traditional version, "don't pass an empty array" is a
+beautiful wish — or a comment saying
+<code>// texts must not be empty</code>. Never mind AI, how many times
+do <em>humans</em> actually read comments before writing code? We deal
+with it after it explodes. That array came in empty from upstream?
+<code>NoSuchElementException</code> — go talk to the upstream team.
+<code>NonEmptyList</code> elevates that constraint to the type level:
+the next grunt <em>must</em> handle the empty case with
+<code>NonEmptyList.fromList</code>, or it won't whip-ile.</p>
+<p>Moreover, in AI-native code, these colored types are enforced
+throughout the entire pipeline — from the moment external input is
+received (Request/Input), strict validation and conversion to refined
+types is mandatory, and only at the system exit (Response/Output) can
+values be converted back to unrefined types (Int/Long/String). This way,
+whether it's a fresh grunt, a veteran grunt, or an Alzheimer's grunt
+after <code>/compact</code>, if any of them forget the rules at any
+layer, the whip-iler will crack the whip.</p>
+<hr />
+<h1
+id="implementation-level-error-handling-linear-flow-vs-deep-nesting">Implementation-Level
+Error Handling: Linear Flow vs Deep Nesting</h1>
+<p>The "signature IS the contract" principle discussed earlier only
+partially solves "information completeness at function boundaries." At
+the implementation level, the same logic can be written in different
+styles. I once interrogated Claude: is railway style (chained
+combinators) easier for you to process than nested match/case?</p>
+<p>Its answer was evasive: <strong>both cost it the same
+cognitively.</strong></p>
+<p>I knew you were holding back. After deeper interrogation, the real
+comparison isn't "nesting vs chaining" but rather <strong>information
+locality of error handling</strong>. There are actually three styles,
+and AI's token cost for processing them differs noticeably:</p>
+<h3 id="style-a-early-return-guards-short-circuit-operators">Style A:
+Early Return Guards + Short-circuit Operators</h3>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">get_profile</span>(id: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;HttpResult, AppError&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> id.<span class="title function_ invoke__">is_empty</span>() &#123; <span class="keyword">return</span> <span class="title function_ invoke__">Err</span>(<span class="title function_ invoke__">InvalidInput</span>(<span class="string">&quot;empty id&quot;</span>)) &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">user</span> = <span class="title function_ invoke__">fetch_user</span>(id)?;           <span class="comment">// ? short-circuits on Err</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">valid</span> = <span class="title function_ invoke__">validate</span>(user)?;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">score</span> = <span class="title function_ invoke__">fetch_score</span>(&amp;valid.email)?;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">profile</span> = Profile &#123; user: valid, score &#125;;</span><br><span class="line">    <span class="title function_ invoke__">save_profile</span>(&amp;profile)?;</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(HttpResult::<span class="title function_ invoke__">ok</span>(profile.<span class="title function_ invoke__">to_json</span>()))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Each guard is an independent decision point — condition and result on
+the same line, self-contained. The <code>?</code> operator is an
+implicit railway: encounters <code>Err</code>, auto-returns. No manual
+handling needed. <strong>AI processing line 5 doesn't need to remember
+line 2's branch structure.</strong></p>
+<h3 id="style-b-eithert-railway-chain">Style B: EitherT Railway
+Chain</h3>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">EitherT</span>(service.validate(body))</span><br><span class="line">  .semiflatMap(user =&gt; service.fetchScore(user))  <span class="comment">// Error? Auto short-circuit</span></span><br><span class="line">  .foldF(</span><br><span class="line">    err   =&gt; <span class="type">BadRequest</span>(err.asJson),</span><br><span class="line">    score =&gt; <span class="type">Ok</span>(score.asJson)</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+<p>Errors propagate automatically along the chain, handled only at the
+terminus. AI writes the happy path only — no need to decide how to
+handle errors at intermediate steps.</p>
+<h3 id="style-c-deep-nested-if-else">Style C: Deep Nested if-else</h3>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">get_profile</span>(id: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;HttpResult, AppError&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> !id.<span class="title function_ invoke__">is_empty</span>() &#123;</span><br><span class="line">        <span class="keyword">match</span> <span class="title function_ invoke__">fetch_user</span>(id) &#123;</span><br><span class="line">            <span class="title function_ invoke__">Ok</span>(user) =&gt; &#123;</span><br><span class="line">                <span class="keyword">match</span> <span class="title function_ invoke__">validate</span>(user) &#123;</span><br><span class="line">                    <span class="title function_ invoke__">Ok</span>(valid) =&gt; &#123;</span><br><span class="line">                        <span class="keyword">match</span> <span class="title function_ invoke__">fetch_score</span>(&amp;valid.email) &#123;</span><br><span class="line">                            <span class="title function_ invoke__">Ok</span>(score) =&gt; &#123;</span><br><span class="line">                                <span class="comment">// Actual logic buried at the fourth indentation level</span></span><br><span class="line">                                <span class="keyword">let</span> <span class="variable">profile</span> = Profile &#123; user: valid, score &#125;;</span><br><span class="line">                                <span class="title function_ invoke__">Ok</span>(HttpResult::<span class="title function_ invoke__">ok</span>(profile.<span class="title function_ invoke__">to_json</span>()))</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="title function_ invoke__">Err</span>(e) =&gt; <span class="title function_ invoke__">Err</span>(e)</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="title function_ invoke__">Err</span>(e) =&gt; <span class="title function_ invoke__">Err</span>(e)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="title function_ invoke__">Err</span>(e) =&gt; <span class="title function_ invoke__">Err</span>(e)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_ invoke__">Err</span>(<span class="title function_ invoke__">InvalidInput</span>(<span class="string">&quot;empty id&quot;</span>))  <span class="comment">// this else matches the outermost if, miles away</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The happy path is buried at the deepest indentation level. The
+<code>else</code> branch is miles away from its corresponding condition.
+AI must do long-distance brace-matching reasoning to understand the
+control flow.</p>
+<h3 id="the-real-comparison">The Real Comparison</h3>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 17%" />
+<col style="width: 34%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Error handling location</th>
+<th>AI processing cost</th>
+<th>Human reading experience</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Early Return + <code>?</code></td>
+<td>Short-circuit in-place, linear flow</td>
+<td><strong>Lowest</strong>: each line is self-contained</td>
+<td>Most comfortable</td>
+</tr>
+<tr class="even">
+<td>EitherT Railway</td>
+<td>Auto-propagation, handle at terminus</td>
+<td><strong>Low</strong>: need to know combinator semantics, but info is
+local</td>
+<td>FP believers: readable, hard to write. Non-believers: alien
+scripture</td>
+</tr>
+<tr class="odd">
+<td>Deep nested if-else</td>
+<td>Distant else branches</td>
+<td><strong>Highest</strong>: long-distance brace matching</td>
+<td>"Everyone writes it this way, and the IDE matches braces for
+me"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rust's <code>?</code> is essentially syntactic sugar for a
+railway.</strong> It does roughly the same thing as
+<code>EitherT</code>'s <code>semiflatMap</code> — short-circuit on
+error, auto-propagate — just wearing an imperative disguise. This tells
+us that railway semantics aren't just convenient for humans; they also
+help the grunts get their work done.</p>
+<p>After further interrogation, Claude came clean: <strong>"This rule
+costs me zero to follow, but the code it produces is more uniform and
+more resistant to silently swallowed errors. The biggest winners aren't
+me — it's you, the human reviewers."</strong></p>
+<p>The standard for AI-native code style choices isn't "what the grunt
+thinks is easiest to write" — because alignment bias in training makes
+it hard to get a straight answer. It's <strong>"which style gives the
+grunt the least room to screw up."</strong> This applies equally at the
+signature layer and the implementation layer.</p>
+<hr />
+<h1
+id="from-signatures-to-contracts-wheres-the-ceiling-of-expressiveness">From
+Signatures to Contracts: Where's the Ceiling of Expressiveness?</h1>
+<p>The previous examples showed a progression: <code>String</code> →
+<code>ProjectId</code> (prevent mix-ups) → <code>NonEmptyList</code>
+(prevent empty) → <code>Either[AppError, _]</code> (exhaustive errors).
+But is this enough?</p>
+<p>Take order creation. Suppose we've reached Level 2 — domain types,
+exhaustive errors, side-effect markers all in place:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createOrder</span></span>(userId: <span class="type">UserId</span>, productId: <span class="type">ProductId</span>, quantity: <span class="type">NonZeroUInt</span>,</span><br><span class="line">                orderTime: <span class="type">Instant</span>, estimatedShipTime: <span class="type">Instant</span>): <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">OrderError</span>, <span class="type">Order</span>]]</span><br></pre></td></tr></table></figure>
+<p>At the type level it's honest, but not honest enough:</p>
+<ul>
+<li><code>estimatedShipTime</code> must be after <code>orderTime</code>
+— otherwise the delivery driver needs to invent time travel first</li>
+<li>After successful creation, the order status must be
+<code>Placed</code> — if the grunt forgets to set the status, enjoy the
+customer complaints</li>
+</ul>
+<p>Where does this behavioral information live? <strong>The
+implementation code, or the comments, or the programmer's brain</strong>
+— the same problem we roasted at the beginning with
+<code>fetchUser(id): User</code>. Signatures can express constraints
+(swiping right for a girlfriend on the dating app), but not conditions
+(dear God, she's older than my mother!).</p>
+<p>Expanding the full progression:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Level 0  def createOrder(userId: String, productId: String, quantity: Int): Order</span><br><span class="line">         → The signature is lying. Swapping userId/productId compiles fine,</span><br><span class="line">           negative quantity goes unchecked, failure paths invisible.</span><br><span class="line"></span><br><span class="line">Level 1  def createOrder(userId: String, productId: String, quantity: Int): IO[Either[OrderError, Order]]</span><br><span class="line">         → Honest types. Side effects and error paths are in the signature.</span><br><span class="line"></span><br><span class="line">Level 2  def createOrder(userId: UserId, productId: ProductId, quantity: NonZeroUInt): IO[Either[OrderError, Order]]</span><br><span class="line">         → Domain types. Compiler prevents UserId/ProductId mix-up, NonZeroUInt prevents zero values.</span><br><span class="line"></span><br><span class="line">Level 3  def createOrder(userId: UserId, productId: ProductId, quantity: NonZeroUInt,</span><br><span class="line">                          orderTime: Instant, estimatedShipTime: Instant)</span><br><span class="line">           : IO[Either[OrderError, Order]]</span><br><span class="line">           requiring &#123; estimatedShipTime &gt; orderTime &#125;</span><br><span class="line">           ensuring  &#123; case Right(o) =&gt; o.status == OrderStatus.Placed &#125;</span><br><span class="line">         → Preconditions (ship time after order time) and postconditions (status must be Placed)</span><br><span class="line">           verified by SMT solver. These are pure logical relationships the type system can&#x27;t express,</span><br><span class="line">           but an SMT solver can prove at compile time.</span><br></pre></td></tr></table></figure>
+<p>Each level up means more information in the signature, less extra
+context humans need during review, and tighter constraints on the grunt
+— less room to screw up.</p>
+<p>Level 3 already has tooling support in the Scala ecosystem. EPFL's <a
+target="_blank" rel="noopener" href="https://github.com/epfl-lara/stainless">Stainless</a> lets you
+express pre/postconditions with
+<code>require</code>/<code>ensuring</code> and hand them to an SMT
+solver. I've dabbled with Stainless — writing AVL trees was already a
+stretch, verifying Akka Actor states was incredibly difficult, and it
+only supports a Pure Scala subset with toolchain maturity still far from
+production-ready. Rust also has a corresponding <a
+target="_blank" rel="noopener" href="https://github.com/flux-rs/flux">Flux-rs</a> project. Marking this
+as future outlook for now.</p>
+<p>In current practice, the leap we can stably and easily land is Level
+0 → Level 2. For what Level 2 can't cover — like "is inventory
+sufficient," which requires runtime state — we temporarily rely on test
+coverage, property-based testing, and human review.</p>
+<hr />
+<h1
+id="engineering-discipline-ais-bad-habits-vs-human-correction">Engineering
+Discipline: AI's Bad Habits vs Human Correction</h1>
+<p>The type system solves the problem of ambiguous signature contracts,
+but beneath the signatures lies a vast terrain of micro-decisions where
+the whip-iler can't reach. These decisions fall into two categories:
+correcting AI's training-induced bad habits, and semantic boundaries
+that humans must personally draw.</p>
+<h2 id="ais-default-bad-habits">AI's Default Bad Habits</h2>
+<p><strong>Fail-fast. No swallowing errors.</strong> The training bias
+of AI grunts makes them obsessively abuse <code>.getOrElse</code>,
+<code>try-catch</code> safety nets, and <code>IO.handleErrorWith</code>
+to bury errors and return default values, pretending everything is fine.
+This bad habit is so deeply ingrained it needs its own deep dive — the
+"absolute statements" section in "Rule Engineering" below will analyze
+three forms of this bias, why absolute rules are needed to counter it,
+and how banning error-swallowing makes production incident debugging
+easier.</p>
+<p><strong>Naming conventions + periodic audits.</strong> Humans can
+remember that "processMatrix actually does traffic routing" — the brain
+automatically builds a name-reality mapping. But AI doesn't. Every new
+session, it earnestly interprets names literally, then repeatedly
+faceplants in the same pit. Naming pollution hurts AI far more than
+humans. Periodically having AI audit its own naming consistency is far
+more efficient than humans checking manually.</p>
+<p><strong>Modularity: addition, not multiplication.</strong> Feature
+stacking is linear growth; feature coupling is combinatorial explosion.
+When three modules are intimately intertwined, if AI misunderstands or
+misses any one module, it writes a broken implementation and then
+thrashes trying to debug it. For the grunt, module boundaries ARE
+comprehension boundaries — the less it needs to know, the lower the
+probability of mistakes.</p>
+<p><strong>No crapping all over the codebase with helper
+functions.</strong> The training data is saturated with successful
+applications of DRY (Don't Repeat Yourself), so when a grunt encounters
+two similar blocks of logic, its first instinct is to extract a
+<code>def toXxx</code> or <code>def convertYyy</code>. But DRY makes
+sense for humans: <strong>the person extracting the shared function and
+the future person using it exist in the same space and can
+communicate.</strong> But grunts have <strong>no shared memory</strong>.
+Every new session is a blank slate — it doesn't know that three days
+ago, another session already wrote a nearly identical helper. The
+result: after a month of iterative maintenance, the project has a dozen
+HTTP client wrappers — <code>HttpHelper</code>, <code>ApiClient</code>,
+<code>RequestUtil</code>, <code>HttpService</code> — scattered across
+different files and modules, with different signatures, roughly the same
+functionality, each one a session's idea of "I should abstract this,"
+but no session knew another session had already done the same. The more
+you DRY, the more you repeat — a counter-intuitive trap of AI's
+stateless nature.</p>
+<p>Helper functions don't just create text duplication — they actively
+harm future grunt sessions by fundamentally breaking <strong>token
+attention locality</strong>. Inlined code is continuous local symbolic
+reasoning: the agent reads top to bottom, each line's context is in the
+surrounding lines, a high-confidence reasoning path. But the moment it
+hits <code>toXxx(input)</code>, the reasoning chain breaks. The agent
+must jump out of the current code block, fire a tool call to read
+<code>toXxx</code>'s definition. After the definition comes back, it
+still needs to maintain a <strong>long-distance token attention
+link</strong> between call site and definition. And inevitably:
+<code>grep toXxx</code> returns multiple same-named functions scattered
+across different files, and the agent has to read each one, reasoning
+about which is actually the target. Every jump consumes tokens, bloats
+context, stretches attention distance — and the longer the attention
+distance, the higher the probability of reasoning errors. Furthermore,
+all these similarly-named functions crammed into the context
+significantly increase hallucination probability: the agent might
+conflate the first grep result's signature with the last result's
+function body. The one actually being called might rank last in the grep
+results, drowned out by the similar functions' tokens ahead of it.</p>
+<p>My rule is: <strong>inline by default. Extracting a shared function
+requires meeting two conditions simultaneously: the logic body exceeds 5
+operators, AND explicit human approval.</strong> The agent has no
+permission to independently decide "I should extract a helper here."
+That decision belongs to humans, because only humans can judge whether
+the abstraction is worth introducing, whether it duplicates an existing
+shared function, and whether it'll cause confusion in future sessions.
+And once extraction is approved, <strong>that shared function must be
+inscribed in the rule file</strong> (directly or as a referenced
+sub-rule), so all subsequent sessions know about its existence and
+purpose. Otherwise the next session won't know the function exists and
+will write a new one. A shared function not in the rule file is the same
+as no extraction at all.</p>
+<p><strong>Code IS documentation (except top-level design).</strong>
+This rule doesn't mean "write no documentation at all." It means
+<strong>documentation should only record top-level architecture
+decisions, not describe code logic or business behavior.</strong></p>
+<p>Good documentation:</p>
+<blockquote>
+<p>This project uses ffmpeg + nvenc as the encoder, running in a
+dedicated Kubernetes Pod. See <code>FFMpegService</code>,
+<code>KubernetesJobService</code>.</p>
+</blockquote>
+<p>Strictly speaking, the agent could infer this from the code, but it'd
+need to read <code>FFMpegService</code>, trace to
+<code>KubernetesJobService</code>, understand the GPU resource requests
+in the Pod spec — hundreds of lines, multiple tool calls, burning
+precious high-intelligence early-context tokens. A one-sentence
+top-level description lets a new session <strong>skip that
+reasoning</strong> and invest those valuable early tokens into the main
+task. And these architectural decisions don't change with every product
+iteration, so maintenance cost approaches zero.</p>
+<p>Bad documentation:</p>
+<blockquote>
+<p>Before awarding points to a user, check if the user's role is "buyer"
+— merchant users are prohibited from claiming campaign points. Also
+check that the user account has been registered for at least 30 days to
+prevent point-farming. Each user can claim points at most 3 times per
+day; reject claims beyond that.</p>
+</blockquote>
+<p>Every piece of information in this description can be read directly
+from the code. Worse, these business rules change frequently as the boss
+slams the table: &gt; "What am I paying you tech people for? Can't you
+just add face verification here?"</p>
+<p>and the PM reiterates: &gt; "Let me emphasize the core logic one more
+time. I hope you truly understand this time."</p>
+<p>When the agent gets a new requirement like "each IP can claim points
+at most 10 times per day," it faces an unsolvable dilemma: when the
+documentation's described behavior conflicts with the code,
+<strong>should it modify the code to reflect the documentation, or
+modify the documentation to reflect the code?</strong> And after adding
+the new requirement, should it re-align the documentation's existing
+descriptions with the current code?</p>
+<p>A year of production practice has proven: having AI maintain detailed
+business logic in markdown docs is a disaster. Docs deceive new agent
+sessions, pile up endlessly, cannibalize context, and accelerate AI
+cognitive decline. Rule: <strong>documentation records only top-level
+architecture decisions and technical rationale; business logic behavior
+is self-explanatory through code + type signatures + test
+cases.</strong></p>
+<h2 id="boundaries-humans-must-draw">Boundaries Humans Must Draw</h2>
+<p>The bad habits above can be forbidden with blanket rules. But some
+decisions aren't "right or wrong" — they're "what's appropriate in this
+context," and these judgments must be explicitly provided by humans in
+the rule file.</p>
+<p><strong>Trusted vs Untrusted: Draw the trust boundary.</strong> "No
+swallowing errors" doesn't mean "throw everywhere." We divide data paths
+in the rule file into two categories:</p>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 42%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Path type</th>
+<th>Examples</th>
+<th>Strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Trusted (internal)</strong></td>
+<td>Config files, persisted DB data, internal serialization, system
+settings</td>
+<td><strong>Throw directly</strong> — an error here is a bug, expose it
+immediately</td>
+</tr>
+<tr class="even">
+<td><strong>Untrusted (external)</strong></td>
+<td>User input, AI-generated content, external API responses
+(pre-persistence)</td>
+<td><strong>Capture and report</strong> — high probability of errors,
+feed back to caller</td>
+</tr>
+</tbody>
+</table>
+<p>About <strong>persisted data being trusted</strong>: because the
+write boundary has strict encode/decode validation, dirty data can't
+enter the database. If data read from the DB has unexpected formatting,
+that's on me — I ran a bad migration, or the last commit had an
+incompatible data structure change I didn't notice. Throwing is correct
+here; defensive handling would actually mask the problem and corrupt
+data.</p>
+<p>Why leave it to AI to judge? Because I've given the AI clear criteria
+for the same JSON parsing operation: parsing a config file should throw
+(bad config? don't start), but parsing a user-uploaded file should
+return <code>Left</code> (users uploading random web novels instead of
+valid data is perfectly normal). Humans draw this dividing line in the
+rule file; only then can the grunts execute.</p>
+<p><strong>The same pattern has different correctness in different
+semantic domains.</strong> This is most visible in NoOp implementations.
+In tagless final architecture, every service has a NoOp implementation
+(for testing or when a feature flag is off). The question: should NoOp
+return success or failure?</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Data-related NoOp — MUST return failure</span></span><br><span class="line"><span class="comment">// because &quot;operation didn&#x27;t execute&quot; is fatal for data consistency</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SOPServiceNoop</span>[<span class="type">F</span>[_]</span>: <span class="type">Applicative</span>] <span class="keyword">extends</span> <span class="type">SOPService</span>[<span class="type">F</span>]:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createSOP</span></span>(...) = <span class="type">Left</span>(<span class="string">&quot;Service not available&quot;</span>).pure[<span class="type">F</span>]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">deleteSOP</span></span>(...) = <span class="type">Left</span>(<span class="string">&quot;Service not available&quot;</span>).pure[<span class="type">F</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// Data-irrelevant NoOp — CAN return success</span></span><br><span class="line"><span class="comment">// skipping metrics/logging doesn&#x27;t affect correctness</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MetricsServiceNoop</span>[<span class="type">F</span>[_]</span>: <span class="type">Applicative</span>] <span class="keyword">extends</span> <span class="type">MetricsService</span>[<span class="type">F</span>]:</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">recordLatency</span></span>(...)   = <span class="type">Right</span>(()).pure[<span class="type">F</span>]</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">incrementCounter</span></span>(...) = <span class="type">Right</span>(()).pure[<span class="type">F</span>]</span><br></pre></td></tr></table></figure>
+<p>If you don't distinguish these two cases in your rules, AI will write
+all NoOps returning <code>Right(())</code>. Looks "robust," but
+SOPService's NoOp returning success means the caller thinks data was
+persisted when nothing actually happened. This kind of bug doesn't
+crash, doesn't throw errors — it only surfaces when a user asks "where
+did my data go?"</p>
+<hr />
+<h1 id="rule-engineering-more-important-than-tech-stack-choices">Rule
+Engineering: More Important Than Tech Stack Choices</h1>
+<p>In AI-native development, the most important early investment isn't
+debating MySQL vs PostgreSQL or Spring WebFlux vs Vert.x — <strong>it's
+building a clear set of rule files.</strong> Good tech choices have
+value, but a bad tech choice can be migrated, and migration costs have
+dropped significantly in the AI era. Style drift from missing or
+ambiguous rules? A few months later you've got a dumpster fire where
+every session is crapping in a different direction — that's harder to
+fix than picking the wrong database.</p>
+<h2 id="longer-rules-worse-results-really">"Longer Rules = Worse
+Results" — Really?</h2>
+<p>Someone cited a paper (<a
+target="_blank" rel="noopener" href="https://arxiv.org/pdf/2602.11988">arXiv:2602.11988</a>) claiming
+my rule files are too long, and research shows rule files have a
+negative effect on agent performance.</p>
+<p>The argument: "You write specs, agents.md, every little detail
+included, as if you think laws get passed and localities automatically
+obey. Why would the model listen to you?"</p>
+<p>I don't dispute the study's conclusion — <strong>yes, existing rule
+files on GitHub perform worse the longer they get.</strong> But the
+evaluation's premises aren't practically meaningful:</p>
+<ol type="1">
+<li><strong>The benchmark is one-shot bug-fix tasks</strong>, not
+ongoing maintenance</li>
+<li><strong>It measures "was the bug fixed," not "did engineering health
+improve"</strong></li>
+</ol>
+<p>Anyone who's done engineering knows: patches save the moment but not
+the future. Patches pile up, this agent fixes and checks out, the next
+agent eats the mess. I care about the ongoing maintenance perspective,
+where rule files' value isn't making the current task faster — it's
+<strong>preventing every new session from pulling the code in a
+different direction.</strong></p>
+<h2 id="detailed-clear-and-actionable">Detailed ≠ Clear and
+Actionable</h2>
+<p>But the paper does hit a real problem: <strong>most rule files are
+terribly written.</strong> Not because they're too long, but because
+they're riddled with ambiguity.</p>
+<p>Example:</p>
+<blockquote>
+<p>Rule 1: When it gets dark, go home Rule 2: When you're sick, go to
+the hospital So what do you do when you get sick at night?</p>
+</blockquote>
+<p>I had Claude reverse-audit my own rule files and found tons of these
+conflicts. Even code style constraints contradicted each other. Every
+time AI hits such ambiguity, its CoT (Chain of Thought) produces
+paragraphs of "case-by-case analysis" reasoning — reading more files to
+determine priorities, parsing context to guess the human's true
+intent.</p>
+<p><strong>The more it reads, the more input tokens, the closer it gets
+to cognitive decline.</strong></p>
+<h2 id="military-grade-precision">Military-Grade Precision</h2>
+<p>So the goal of rule files isn't "cover everything" but rather:
+<strong>reduce the situations where AI needs to reason on the spot, read
+more context, because instructions are vague or ambiguous.</strong></p>
+<p>These things are like military orders — they must be specific enough
+to execute. I need to eliminate any room for ambiguity.</p>
+<p>Slogan-style rules are the deadliest poison. Take "always use tagless
+final style" — sounds clear, right? But AI starts a new session, writes
+code that seems fine. Past 30% of the context window, it starts
+drifting:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Rule says &quot;tagless final,&quot; AI complies, but gets it wrong</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parseFile</span></span>[<span class="type">F</span>[_]: <span class="type">Async</span>](parserService: <span class="type">ParserService</span>[<span class="type">F</span>], file: <span class="type">File</span>)...</span><br><span class="line"></span><br><span class="line"><span class="comment">// Correct approach: ParserService should be a typeclass constraint in the class constructor</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileProcessor</span>[<span class="type">F</span>[_]</span>: &#123;<span class="type">Async</span>, <span class="type">ParserService</span>&#125;](...)</span><br></pre></td></tr></table></figure>
+<p>The AI didn't even write <code>ParserService</code> as
+<code>[F[_]: ParserService]</code> in the class constructor. Why?
+Because "always use tagless final style" is a slogan, not an executable
+instruction. <strong>It doesn't tell AI what to do in specific
+scenarios.</strong></p>
+<p>The same problem appears with tool usage. Even with LSP (like Scala's
+Metals MCP) connected, AI still defaults to Grep during refactoring —
+because 99% of code reading in its training data is plain text search.
+You must write clearly in the rule file: <strong>which scenarios call
+for LSP (what did the compiler resolve?) vs which call for Grep (where
+does this text appear?).</strong> Having good tools isn't enough — you
+need to teach AI when to use them. (See <a
+href="#appendix-1-ais-toolchain--grep-lsp-and-disambiguation">Appendix
+1</a> for the detailed Grep vs LSP division of labor.)</p>
+<h3
+id="what-military-orders-really-mean-unambiguous-execution-unconditional-mutual-trust">What
+Military Orders Really Mean: Unambiguous Execution + Unconditional
+Mutual Trust</h3>
+<p>I said rule files should be as precise as military orders. But
+military orders aren't just about "clear writing" — they work because of
+the <strong>chain of trust</strong>.</p>
+<p>Think of the scene in <em>The Wandering Earth 2</em> where Zhou
+Zhezhi orders the engines ignited. The internet is still down, delegates
+from each nation hesitate. He says just one line:</p>
+<blockquote>
+<p><strong>"When the countdown ends, ignite. I believe our people can
+complete the mission."</strong></p>
+</blockquote>
+<p>Even though Ma Zhao had already sunk to the bottom, and Tu Hengyu was
+already somewhat dead. Zhou Zhezhi still believed that even dead men
+could complete the mission.</p>
+<p>Collaboration between agents works the same way. When an agent
+writing business logic sees the signature
+<code>fetchUser(id: UserId): IO[Either[AppError, User]]</code>, it
+should <strong>unconditionally trust</strong> that signature — trust
+that the upstream agent will indeed return <code>Left(NotFound)</code>
+when the user isn't found instead of <code>throw exception</code>, trust
+that the downstream agent will correctly handle this
+<code>Either</code>. It doesn't need to open <code>fetchUser</code>'s
+implementation to verify "does it really return NotFound?" It doesn't
+need to add a defensive <code>try-catch</code> just in case.
+<strong>Trusting the signature means trusting the comrade who wrote
+it.</strong> This directly reduces token consumption and reasoning scope
+— see the "Token Economics" section below for detailed analysis.</p>
+<p>This is why <strong>"be pragmatic" is a slogan, and "don't
+over-defensively program" is also a slogan</strong> — they don't tell
+the agent specifically <em>where</em> to trust and <em>where</em> to
+defend. Military-grade rules say: <strong>what the signature declares,
+trust unconditionally; what the signature doesn't declare, that's where
+you defend.</strong></p>
+<h3 id="why-rule-files-are-full-of-absolute-statements">Why Rule Files
+Are Full of Absolute Statements</h3>
+<p>If you've read my rule files, you might notice heavy use of absolute
+assertions — "trust the compiler, no extra defensive programming," "the
+type system's judgment is the final verdict," "<code>.getOrElse</code>
+silently swallowing errors is forbidden." Strictly speaking, these
+aren't always true: compilers have bugs, type systems have
+expressiveness blind spots, and open-source libraries have all sorts of
+bugs — some scenarios genuinely need defense.</p>
+<p>But this is <strong>deliberate</strong>, serving two purposes.</p>
+<p><strong>First, protecting the investment in type-level
+constraints.</strong> We spent significant effort encoding constraints
+into the type system — <code>opaque type</code> prevents mix-ups,
+<code>sealed trait</code> exhausts errors, <code>NonEmptyList</code>
+prevents empty. Having invested these costs at the type level, we should
+trust the compiler to hold these lines — <strong>no need for runtime
+defensive checks everywhere on top</strong>. In practice, bugs I write
+while bleary-eyed far outnumber bugs the compiler sneaks in (14 years in
+the industry and I've genuinely never had a production incident caused
+by a compiler bug — thank you, compiler, take a bow).</p>
+<p><strong>Second, countering the model's training bias.</strong> This
+is the more insidious issue. During training, models saw enormous
+amounts of "hit a type mismatch → bypass with
+<code>.asInstanceOf</code>" and "got an <code>Either</code> → swallow
+the Left with <code>.getOrElse(defaultValue)</code>." These are
+high-frequency "success" patterns in training data — the code compiles
+and runs. The result: <strong>when the grunt past 30% context encounters
+strict type constraints, its first instinct is often not to widen the
+fix, but to find a shortcut around the constraint.</strong></p>
+<p>So the rule file says: <strong>unless the business scenario
+explicitly requires a default value (e.g., <code>Option</code>'s default
+behavior), using <code>.getOrElse</code>, <code>try-catch</code> safety
+nets, or <code>IO.handleErrorWith</code> to silently swallow errors is
+forbidden.</strong> This rule reads as "absolute prohibition," but its
+real meaning is: flip the default behavior from "swallow errors" to
+"propagate errors," with exceptions only when a human explicitly decides
+"this really should use a default value."</p>
+<p>These two purposes are like soldiers standing back to back: absolute
+rules pull the agent back from training bias and force it onto the
+"trust the compiler" path; simultaneously, <strong>I promise the
+project's overall style will maintain consistency — runtime exceptions
+not declared in type signatures won't appear.</strong> If they do,
+that's my fault, not the agent's. The agent trusts the type system; I
+guarantee the type system is worth trusting.</p>
+<p>This contract has another advantage that only surfaces during
+production incident debugging: <strong>banning error-swallowing means
+the original error information always exists.</strong> When production
+breaks, the debug agent gets the raw, unaltered exception stack and
+error type — not some <code>fallbackValue</code> spit out by a middle
+layer's <code>handleErrorWith</code>, where you don't even know what the
+real exception was or which layer it happened at. Rigorous, consistent
+coding constraints make the entire project's error propagation path
+predictable: errors propagate from their origin along the path declared
+by type signatures all the way to the outermost layer, never getting
+secretly hijacked by defensive code in the middle. The debug agent just
+follows this path to quickly locate the real fault, rather than staring
+blind at an error chain truncated by <code>handleErrorWith</code>,
+forced to read multiple files guessing the real exception source,
+attempting a fix, discovering the guess was wrong, reading more files,
+guessing again, and so on. <strong>Every instance of masked error is
+another blind trial-and-error cycle imposed on future debug agents and
+maintainers.</strong></p>
+<p><strong>Absolute statements are calibration parameters against
+training bias.</strong> Like corrective lenses: nearsightedness is an
+overly convex lens, so concave lenses correct the bias, making the world
+appear sharp.</p>
+<p>This also means: <strong>the degree of absoluteness in rule files
+should be adjusted as model capabilities evolve.</strong> If future
+models no longer tend to bypass type checks or swallow errors by
+default, these "absolute prohibitions" can be relaxed to "prefer to
+avoid" or even removed. Rule files aren't a constitution — they're
+calibration parameters for a specific model version.</p>
+<p>But with discipline this strict, won't you get the military
+equivalent of "hold position, never retreat, total annihilation"? Yes. A
+"no swallowing errors" rule protects code quality 99% of the time — but
+when a non-critical metrics report failure crashes the entire request,
+the rule is too aggressive. The solution: <strong>the thing sitting on
+my shoulders isn't decorative.</strong> Military orders exist to
+automate 95% of routine decisions, letting human judgment focus on the
+5% of exceptions. We have a meta-rule: <strong>when strictly following a
+rule produces clearly unreasonable results, flag it for human decision
+rather than quietly working around the rule.</strong> The grunt's job is
+to execute and report, not to "adapt flexibly" on its own
+initiative.</p>
+<h2 id="reverse-audit-making-ai-whip-ai">Reverse Audit: Making AI Whip
+AI</h2>
+<p>The most effective maintenance method I've found is: <strong>having
+Claude reverse-audit the rule files themselves.</strong></p>
+<p>Ask directly "hey Claude, how are my rules?" and Claude will just
+praise you: "Very deep, very insightful, expert-level work." But if I
+rephrase:</p>
+<blockquote>
+<p>"Imagine you're a brand-new session's Claude, reading this rule file
+for the first time. List everything that confuses you: which rules
+conflict with each other? Which scenarios leave you unsure which rule to
+follow? Which instructions do you understand the intent of but don't
+know how to concretely execute?"</p>
+</blockquote>
+<p>That's when it honestly tells me: this conflicts with that; in this
+scenario both rules apply but give opposite guidance; this rule — I
+understand what you want, but when facing actual code, I have three
+possible interpretations.</p>
+<p><strong>This process requires repeated iteration.</strong> My rule
+files have gone through dozens of revisions. After each revision, I have
+it audit again, finding new ambiguities. Many of these are things senior
+Scala engineers take for granted — conventions that don't need to be
+spoken. But for AI, if you don't write it down, it doesn't know. It
+knows what you <em>might</em> want (training data), but in a new session
+it can't guess which <em>specific</em> version you want, and falls back
+to the training bias default.</p>
+<h2 id="the-real-barrier">The Real Barrier</h2>
+<p>Many people say "embracing AI" has no barrier to entry — just needs
+tokens.</p>
+<p><strong>It actually has quite a barrier.</strong></p>
+<p>Look at OpenClaw — all those vibe coding masters, even absorbed by
+OpenAI, and they still haven't produced a particularly good agents.md
+file. Why? Because <strong>agents need extremely clear, specific
+guidance to get things done</strong>, and writing such guidance requires
+two capabilities:</p>
+<ol type="1">
+<li>You must deeply understand what you want AI to do (domain
+expertise)</li>
+<li>You must be able to identify ambiguities in your own expression
+(metacognitive ability)</li>
+</ol>
+<p>This is also why agent coding keeps getting stronger at type
+gymnastics and reading compiler error hieroglyphics — because these
+things are <strong>perfectly clear</strong>, unambiguous symbolic
+reasoning that agents handle effortlessly.</p>
+<p>Conversely, read AI's CoT and you'll see: <strong>it frequently
+spends 2-3 paragraphs guessing the human instruction's true
+intent.</strong> Then attempts to read several more files, discovers it
+guessed wrong, <strong>spends another 2-3 paragraphs guessing</strong>,
+ad infinitum. It's not stupid — the human instructions are just too
+ambiguous. Writing prompts doesn't require paying for a course (that's a
+tax on the gullible), but you need to be willing to iterate with Claude,
+refining your instructions back and forth. Nobody can do that for
+you.</p>
+<hr />
+<h1 id="four-layers-of-constraints">Four Layers of Constraints</h1>
+<p>The above covered "how to write rules clearly." But there's a
+prerequisite question: <strong>not all constraints need to be
+rules</strong> — some the compiler already handles, some can only rely
+on human judgment. Cramming everything into the rule file causes the
+token bloat and instruction conflicts we already discussed.</p>
+<p>In practice, I divide constraints into four layers, forming a
+gradient from "fully automated" to "fully human-dependent":</p>
+<p><strong>Layer 1: Compiler-enforced — no rules needed.</strong> Type
+signatures, <code>sealed trait</code> exhaustiveness, opaque type
+anti-confusion — these are the compiler's job. Covered extensively in
+earlier sections. Principle: <strong>if a constraint can be encoded into
+the type system, don't write it as a text rule.</strong> The compiler
+never forgets to check; rule files will.</p>
+<p><strong>Layer 2: Clear criteria for pattern selection — must be
+actionable rules.</strong> Constraints the compiler can't enforce but
+that have clear if-then criteria. This layer is the rule file's main
+battlefield.</p>
+<p>The Trusted/Untrusted dichotomy discussed earlier belongs here: the
+compiler can't distinguish "parsing a config file" from "parsing a user
+upload," but the rule can be written as "persisted data → throw,
+pre-persistence external data → return Either" — clear criteria, no
+ambiguity.</p>
+<p>Another typical example is <strong>trigger timing for gradual
+migration</strong>. We wrote a rule:</p>
+<blockquote>
+<p>When a file is modified for any reason (even just fixing a typo), if
+a service in that file still uses <code>Either[String, T]</code>, you
+must migrate it to an ADT error enum while you're at it.</p>
+</blockquote>
+<p>This rule solves: <strong>when to repay technical debt.</strong>
+Without it, AI defaults to minimal changes — asked to fix a bug, it
+changes only that one line, never touching technical debt. But
+dedicating a "refactor sprint" to repaying debt lacks urgency and test
+coverage.</p>
+<p>"Fix it when you touch it" is an elegant balance: you're already
+QA-ing this module for this change, so the incremental testing cost of
+migration approaches zero. But this strategy is counter-intuitive for
+grunts — it must be explicitly stated. The rule also has a recursive
+effect: after migrating the service's error types, the route file that
+calls it fails to compile, so follow the compiler's guidance and fix the
+route too. <strong>The rule's scope follows the compiler — no need for
+humans to worry about boundaries.</strong></p>
+<p><strong>Layer 3: Cross-session process constraints — use the
+filesystem to compensate for memory loss.</strong> Agents have no
+memory. Every new session is a blank slate. This means:
+<strong>cross-session quality assurance can't rely on the agent's
+"awareness" — it must be encoded as persistable processes.</strong></p>
+<p><strong>Code Smell Tracking</strong> is a concrete approach we've
+developed in practice. While modifying file A, AI frequently reads files
+B, C, D in passing. It might notice D has an obvious code smell — say,
+an <code>Either[String, T]</code> not yet migrated to a domain error, or
+severely misleading naming. But if it fixes D now, scope explodes. A
+simple bug fix becomes a 10-file refactor.</p>
+<p>My previous approach was having AI mention at the end of the current
+task: "by the way, file D has an issue." But when the next session
+starts, that remark vanishes — I can never recall what the code smell
+was.</p>
+<p>So Claude and I established this rule:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Discover code smell in an unrelated file</span><br><span class="line">  → Don&#x27;t fix immediately (avoid scope creep)</span><br><span class="line">  → Record in memory/code_smells.md (persistent file, max 10 entries, FIFO eviction)</span><br><span class="line">  → Remind human at end of each task</span><br><span class="line">  → Human decides whether to open a dedicated session to address it</span><br></pre></td></tr></table></figure>
+<p><strong>AI discovers and records; humans prioritize and
+trigger.</strong> The filesystem serves as the agent's missing long-term
+memory. The 10-entry cap prevents infinite list bloat.</p>
+<p>It's not a perfect solution, but it genuinely mitigates "continuous
+code quality degradation" through long-term memory.</p>
+<p><strong>Layer 4: AI suggests + human decides — advisory
+rules.</strong> Some constraints: AI can identify "this might need
+attention" but can't judge "is it worth doing." Rules at this layer
+aren't commands — they're <strong>suggestions</strong>.</p>
+<p><strong>Runtime Assertion Checks (RAC)</strong> are a typical
+advisory rule. We tell AI in the rule file: on the following critical
+paths, consider adding runtime assertions:</p>
+<ul>
+<li>Assert balance ≥ 0 after monetary operations</li>
+<li>Assert state machine transition legality (draft → processing →
+published, no reverse)</li>
+<li>Assert schema matches expected tenant before multi-tenant
+writes</li>
+<li>Assert vector dimensions match the model (768 for text, 1408 for
+video)</li>
+</ul>
+<p>But the rule also states: <strong>"suggest, not mandatory" — final
+decision rests with human code review.</strong> Why not mandatory?
+Because assertions' value depends on business context: a state
+transition in an internal tool might not warrant an assertion, but one
+involving money absolutely must. AI can scan all code paths to find
+candidate locations (its advantage — humans can't check every state
+transition line by line), but "how severe are the consequences if this
+path fails" is a business judgment.</p>
+<p><strong>Deployment impact analysis</strong> also belongs to this
+layer. Code changes have two types of impact: compile-time impact caught
+by the type system (discussed earlier), but <strong>deployment-time
+impact has no compiler to check</strong>. A new environment variable in
+the code means the Kubernetes ConfigMap needs a new line, Secrets need
+configuration, maybe IAM permission bindings too. Code compiles, tests
+are green, push to production, service crashes on startup because of a
+missing environment variable. And the even more hopeless scenario: a fee
+calculation ratio environment variable defaults to <code>0</code> —
+doesn't crash without configuration, but silently runs with the wrong
+default for a week until the boss asks: &gt; "Why hasn't the fee account
+balance changed in the last week?"</p>
+<p>AI has an advantage humans lack here: <strong>it sees the complete
+diff.</strong> Humans modifying code focus on business logic —
+deployment impact is "I'll deal with it later" and then forgotten. We
+require AI in the rule file to automatically output a deployment impact
+checklist at task end:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">## Deploy Impact</span><br><span class="line"></span><br><span class="line">- [ ] Add `NEW_API_KEY` to `linewise-deploy/overlays/dev/secrets.yaml`</span><br><span class="line">- [ ] Add `NEW_API_KEY` to `linewise-deploy/overlays/testing/secrets.yaml`</span><br><span class="line">- [ ] Add env ref in `linewise-deploy/overlays/dev/deployment-patch.yaml`</span><br><span class="line">- [ ] Verify IAM binding for new service account scope</span><br></pre></td></tr></table></figure>
+<p>The four layers, top to bottom, with increasing human
+involvement:</p>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 46%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>Human role</th>
+<th>Frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Compiler-enforced</td>
+<td>Choose language &amp; type system</td>
+<td>One-time</td>
+</tr>
+<tr class="even">
+<td>Actionable rules</td>
+<td>Make implicit knowledge explicit</td>
+<td>Ongoing maintenance</td>
+</tr>
+<tr class="odd">
+<td>Process constraints</td>
+<td>Design AI's workflow</td>
+<td>Occasional tuning</td>
+</tr>
+<tr class="even">
+<td>Advisory rules</td>
+<td>Decide on AI's suggestions</td>
+<td>Every review</td>
+</tr>
+</tbody>
+</table>
+<p>This is the outcome I'm after: <strong>human brainpower is finite and
+precious.</strong> The purpose of layering is to focus human attention
+on Layer 4 — where genuine business judgment is needed — while Layers
+1-3 are handled automatically by the compiler and rules.</p>
+<hr />
+<h1 id="the-bigger-picture">The Bigger Picture</h1>
+<h2 id="the-ironic-ending">The Ironic Ending</h2>
+<p>FP has been criticized for decades as "unreadable without a PhD." But
+in the AI collaboration model:</p>
+<blockquote>
+<p><strong>Humans carefully read signatures — which happens to be FP's
+most readable part.</strong> <strong>Humans skim implementations — which
+happens to be FP's most off-putting part.</strong></p>
+</blockquote>
+<p>FP's cost (cognitive burden of implementation) falls on AI: AI
+doesn't care. FP's benefit (explicit, verifiable type contracts) goes to
+humans: humans just need to confirm "yep, looks good, LGTM."</p>
+<p>And AI doesn't just "not care" about FP's complexity — it actually
+<strong>makes fewer mistakes</strong> in the FP model. Like a calculator
+computing <code>1+1</code> and <code>69420+80085</code> in the same
+time, AI's per-line cost for type gymnastics vs plain assignment is
+roughly identical. But a project isn't one line — it's tens of thousands
+of lines accumulated over years. Mutable state + temporal reasoning
+means every additional line exponentially grows the state space AI needs
+to track; immutable + composition grows it linearly. Over tens of
+thousands of lines, the error rate gap is orders of magnitude. More
+critically, the type system provides <strong>deterministic instant
+feedback</strong> — compilation failure is failure, massively
+eliminating "looks right but explodes at runtime." Not completely:
+external systems, hardware calls, network timeouts are beyond the type
+system's reach. But within its domain (nulls, error paths, parameter
+type confusion), feedback is instant and certain. Dynamic language
+feedback loops are far longer: write → run tests → discover failure →
+guess which step's state went wrong → backtrack.</p>
+<p>AI makes certain capabilities cheap: type gymnastics, symbolic
+reasoning, complex monad transformer stacks. <strong>What can't be made
+cheap is what's truly precious: judging what a system should do,
+defining correct abstraction boundaries, deciding which constraints are
+worth encoding into types.</strong> Calculators can't replace
+mathematicians; AI can't replace architects.</p>
+<p>The FP community has waited decades for its "this time it'll catch
+on" moment. It seems the most powerful catalyst isn't a shift in human
+aesthetic taste, but AI's natural affinity for explicit type
+information. And all humans need to do is free their brainpower from
+"understanding <code>semiflatMap</code>" and spend it where it matters:
+<strong>defining what the system should do, not worrying about how the
+system does it.</strong></p>
+<h2 id="ai-native-adhd-native">AI-native = ADHD-native</h2>
+<p>This section is personal, but I think it explains things that are
+hard to grasp from a purely technical angle.</p>
+<p>I have ADHD. In past work, I constantly made small mistakes —
+swapping variable order, forgetting to update loop state, losing track
+in deep if-nesting, guessing <code>i+1</code> or <code>i-1</code> for
+array bounds by pure luck. My short-term working memory is terrible —
+like an agent with a limited context window: processing function A's
+logic, jumping to function B, and when I come back, half of A's context
+is gone. Jump to another task and back? Details have almost entirely
+evaporated.</p>
+<p>So my gravitating entirely toward FP was practically inevitable.
+<strong>Immutable data means I don't need to remember "what state is
+this variable in right now"; type signatures mean I don't need to
+remember "how can this function fail"; compiler instant feedback means
+when I forget something, it tells me immediately.</strong> I use the
+type system to compensate for my short-term memory deficits, just like I
+have agents use signature contracts to compensate for context window
+limits.</p>
+<p>But ADHD isn't just weaknesses. My long-term memory and episodic
+memory are strong — decisions made in a meeting months ago, the context
+behind the decision, why we chose this path instead of that one, I
+remember more accurately than the meeting notes. During technical
+discussions, I frequently get flashes of insight — weird alternative
+approaches — which get shot down by the meeting moderator for being
+off-topic. But in agent collaboration, this becomes an advantage: it's
+like a trigger for reactive knowledge retrieval in an awakened
+agent.</p>
+<p>Putting my cognitive profile alongside AI's:</p>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 43%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Me (ADHD human)</th>
+<th>AI Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Short-term memory</td>
+<td>Poor, easily loses context</td>
+<td>Limited by context window</td>
+</tr>
+<tr class="even">
+<td>Long-term memory</td>
+<td>Strong, rich episodic memory</td>
+<td>None (every session starts from zero)</td>
+</tr>
+<tr class="odd">
+<td>Symbolic reasoning</td>
+<td>Weak, prone to trivial errors</td>
+<td>Strong, but also makes mistakes</td>
+</tr>
+<tr class="even">
+<td>State space reasoning</td>
+<td>Very weak, mutable state tracking is a nightmare</td>
+<td>Relatively weak, error rate rises with state explosion</td>
+</tr>
+<tr class="odd">
+<td>Compiler feedback</td>
+<td>Lifesaver, compensates for my symbolic reasoning deficits</td>
+<td>Same lifesaver, corrects its reasoning errors</td>
+</tr>
+<tr class="even">
+<td>Architectural intuition</td>
+<td>Strong, what to split, what to merge</td>
+<td>Weak, tends toward local optima</td>
+</tr>
+<tr class="odd">
+<td>Cross-domain association</td>
+<td>Strong, but often suppressed in human teams</td>
+<td>None, unless human prompts</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Our weaknesses overlap heavily; our strengths complement
+perfectly.</strong> What I'm bad at — concrete implementation, symbolic
+reasoning, state tracking: AI is better. What AI is bad at —
+architectural decisions, long-term memory, cross-domain association: I'm
+better. And our shared weakness — complex state space reasoning — if we
+can't beat it, we go around it.</p>
+<p>This is why every design choice in this article points in the same
+direction: <strong>let the compiler compensate for weaknesses it can
+(type system, exhaustiveness checking), let AI do what it's good at
+(implementation, symbolic reasoning), let me do what I'm good at
+(architecture, rules, cross-domain association).</strong> My
+architectural designs must shift direction to accommodate our shared
+weaknesses — more decoupled, more isolated, semantics above all,
+top-level design oriented toward FP.</p>
+<p>AI-native coding style is really the ADHD-native coding style I've
+been using all along. Not because ADHD is a good thing, but because
+<strong>the compensatory mechanisms I built for cognitive deficits
+happen to also suit AI's strengths.</strong> The topic of what role
+humans play in this division of labor, how they work, and which
+cognitive habits need changing — that's too big for this article and
+deserves its own piece.</p>
+<h2 id="cant-read-ai-written-code">"Can't Read AI-Written Code?"</h2>
+<p>This is the most common objection. AI-written FP chain code —
+<code>EitherT</code>, <code>semiflatMap</code>, <code>bimap</code> —
+humans can't read it. What happens when there's a production
+incident?</p>
+<p><strong>Oh right, as if you can read assembly.</strong></p>
+<p>In today's software stack, from the Java/Scala you write to the
+machine code actually executing on the CPU, how many layers do you pass
+through that you can't read? JIT-compiled native code, OS system calls,
+hardware interrupt handlers — you've never felt unable to debug just
+because you "can't read those intermediate layers." Because you don't
+need to read them. You debug at your own abstraction layer.</p>
+<p>In fact, in 2026, when senior engineers genuinely need to debug at
+the assembly level, they <strong>throw the assembly at AI for an
+explanation.</strong> AI translates assembly into plain language; the
+engineer reasons on top of the plain language.</p>
+<p>FP abstract code works the same way: can't read the
+<code>EitherT</code> chain? Throw it at AI and have it explain in
+natural language — "this code first fetches the user, validates, then
+fetches the score; any step failing returns the corresponding HTTP error
+code." AI can both write this alien scripture and translate it into
+plain language.</p>
+<p>Moreover, FP code's debug difficulty and depth are <strong>far
+lower</strong> than stateful imperative code:</p>
+<ul>
+<li><strong>No mutable state</strong>: no need to track "this variable
+was modified at line 47, then again at line 123, which version does line
+200 read?" Pure functions' output depends only on input — same input
+always yields same output.</li>
+<li><strong>Explicit error paths</strong>:
+<code>Either[AppError, User]</code> tells you errors are only those few
+<code>AppError</code> cases. No need to guess "might some deep call
+throw a NullPointerException?"</li>
+<li><strong>Composability</strong>: every function is an independently
+testable unit; bug localization scope is naturally small.</li>
+</ul>
+<h2 id="token-economics">Token Economics</h2>
+<p>In the "military trust" section I dropped a hot take:
+<strong>trusting signatures means trusting comrades.</strong> And this
+trust behavior saves token costs.</p>
+<p><strong>Every act of distrust is a token expense, growing
+Fibonacci-style.</strong> When an agent doesn't trust the signature, it
+needs to open <code>fetchUser</code>'s implementation to verify "does it
+really return <code>Left(NotFound)</code> when user is not found?" —
+reading one file. Then discovers <code>fetchUser</code> calls
+<code>queryDB</code> — needs to confirm <code>queryDB</code>'s error
+handling too, reading another file. Ten functions each verified once is
+ten extra file reads. Worse, consider the token billing model: file
+contents read back from each tool call become input tokens for the next
+round, and the output reasoning process gets billed as input after the
+next tool call. In other words, <strong>every token ever generated adds
+to the price of every future call</strong> — the more files read, the
+more context bloats, the more every subsequent step's token bill
+snowballs. Trusting signatures means the agent only needs to read the
+current file to do its work; distrusting signatures means every
+additional file read causes the remaining steps' token bills to inflate
+in lockstep.</p>
+<p>Trust chains + scope isolation also open up bigger architectural
+possibilities:</p>
+<p><strong>Coding agents can be smaller, cheaper, faster.</strong> When
+scope is tight enough and modules are isolated thoroughly enough, a
+coding agent doesn't need a global view — it only needs to see the
+signatures of functions it's responsible for, the signatures of
+dependency interfaces, and relevant type definitions. <strong>Solving
+within a given contract is all there is.</strong> It doesn't even need
+the strongest model — when the task is constrained tightly enough, a
+mid-tier model with clear signatures and type constraints can do the job
+correctly. The more precise the contract, the lower the model capability
+requirement.</p>
+<p><strong>Difficulties can be escalated rather than toughed
+out.</strong> When a coding agent hits a problem it can't solve within
+its current scope — a poorly designed signature, a flawed type
+constraint, or ambiguous requirements — it doesn't need to "best effort"
+guess and force an implementation. The correct action is to
+<strong>report the issue back to the orchestrator</strong>, who adjusts
+the design or clarifies requirements, then assigns it to (possibly
+another) agent for execution.</p>
+<p><strong>Global consistency is ensured by a dedicated review
+agent.</strong> After multiple coding agents each finish work in their
+small scopes, a review agent with a larger context window checks the
+global changes for consistency — do interfaces align, do error types
+match, is naming uniform. This review agent doesn't need to understand
+every function's implementation details — it only needs to audit that
+the signature-level contracts are self-consistent.</p>
+<p>This is my envisioned agent orchestration model:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Orchestrator (architect)</span><br><span class="line">  → Decompose tasks, define signature contracts</span><br><span class="line">  → Assign to multiple Coding Agents (soldiers)</span><br><span class="line">     → Each agent solves within its small scope</span><br><span class="line">     → Problems outside scope → escalate to Orchestrator</span><br><span class="line">  → Review Agent (inspector)</span><br><span class="line">     → Check global signature consistency</span><br><span class="line">     → Doesn&#x27;t read implementations, only contracts</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="outlook">Outlook</h1>
+<h2 id="is-code-a-liability-or-an-asset">Is Code a Liability or an
+Asset?</h2>
+<p>There's a widely quoted saying in software: <strong>Code is a
+liability, not an asset.</strong> Every line of code is future
+maintenance, comprehension, and modification cost. When you first wrote
+the code, only you and God knew what it did; after six months in
+production, only God can still read it.</p>
+<p>This is entirely true in traditional development. Technical debt
+grows exponentially — each layer of hack makes the next hack harder to
+understand, each "temporary solution" digs a pit for the next
+maintainer. Taking over a codebase with technical debt, whether adding
+features or fixing bugs, is an uphill battle. Custom software projects
+almost have to be maintained by the original team or a domain-specific
+outsourcing team. Bring in a new group, and just understanding "what
+does this thing even do" takes months.</p>
+<p>But what if we could keep technical debt growing
+<strong>linearly</strong> instead of exponentially?</p>
+<p>All the engineering discipline discussed in previous sections — type
+signatures as contracts, sealed trait exhaustive errors, opaque type
+anti-confusion, fix-it-when-you-touch-it gradual debt repayment — share
+a common goal: <strong>keeping the code comprehensible to new
+maintainers (human or AI) at any point in time.</strong></p>
+<p>If this goal is achieved, the nature of a codebase fundamentally
+flips:</p>
+<p><strong>A codebase with strict discipline from day one makes adding
+features and fixing bugs no longer incredibly difficult.</strong> Not
+just for me — even developers who aren't the original authors can, to a
+reasonable degree, add custom features on top of this code, because new
+agents easily understand what past agents left behind. Signatures are
+honest, types are precise, error paths are exhaustive — no implicit
+knowledge that requires "veterans passing it down by word of mouth."</p>
+<p>Of course, <strong>architecture-level adjustments still require the
+original author or a maintainer of equivalent capability and
+vision.</strong> But for <strong>feature-level development</strong> —
+adding an API within the existing architecture, fixing a business bug,
+migrating a data format — the required person-months drop dramatically.
+Because these tasks are fundamentally "solving within given contracts,"
+and honest signatures plus strict type systems express those "given
+contracts" crystal-clearly.</p>
+<p><strong>The premise for a codebase transforming from liability to
+asset isn't "written well" but "maintained well." So can my Art of
+Whipping AI Grunts bring the cost of "continuous maintenance" to
+historically low levels?</strong></p>
+<h2 id="the-next-generation-ai-native-language">The Next-Generation
+AI-native Language</h2>
+<p>Since I've already gone this far with the hot takes, a few more won't
+hurt: <strong>the next-generation AI-native programming language might
+genuinely not need to consider human writing or reading
+experience.</strong> Just like nobody hand-writes assembly today.</p>
+<p>Could future programming languages bifurcate into two layers?</p>
+<ul>
+<li><strong>Contract layer</strong>: pure signatures, contracts, intent
+expression — possibly more like a declarative specification
+language</li>
+<li><strong>Execution layer</strong>: implementation language optimized
+for compilers and AI — since humans focus their energy on reviewing the
+contract layer, implementation readability drops dramatically in
+importance; human writing experience is no longer a design goal;
+information density and type precision are what matter</li>
+</ul>
+<p>This is my science fiction. Today's Scala 3, Rust, and Haskell
+already have powerful type system expressiveness with implementations
+that increasingly look like alien hieroglyphics. The next-generation
+language just needs to: acknowledge that humans don't need to read
+implementations, then completely remove "human readability" from the
+implementation layer's design goals.</p>
+<hr />
+<h1 id="applicability-statement">Applicability Statement</h1>
+<p>This article has two premises: one about AI architecture, one about
+project types.</p>
+<p><strong>AI architecture premise:</strong> Today's mainstream
+transformer architecture — fixed context windows, no cross-session
+state, stateless inference starting from zero each conversation.</p>
+<p><strong>Project type premise:</strong> All practices discussed in
+this article apply to a specific class of software projects:</p>
+<table>
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Applicable</th>
+<th>Not applicable</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Backend systems, CRUD-heavy business apps</td>
+<td>Infrastructure, compilers, embedded, hardware drivers</td>
+</tr>
+<tr class="even">
+<td>General frontend UI applications</td>
+<td>OS kernels, real-time systems</td>
+</tr>
+<tr class="odd">
+<td>Modules composed additively (feature stacking)</td>
+<td>Tightly coupled modules (feature interleaving)</td>
+</tr>
+<tr class="even">
+<td>Mostly soft state, little hard state</td>
+<td>Mostly hard state, little soft state</td>
+</tr>
+<tr class="odd">
+<td>Data state persisted to external storage</td>
+<td>State maintained in-memory in real-time</td>
+</tr>
+</tbody>
+</table>
+<p>The distinguishing criterion is <strong>the nature of state</strong>.
+This article assumes the typical scenario: state ultimately persists to
+a database, in-memory state is ephemeral and reconstructable (soft
+state). In this scenario, immutable + functional composition has low
+cost and high benefit, as argued throughout.</p>
+<p>But in hard-state-dominant domains — compiler AST transformations,
+embedded register operations, hardware driver interrupt handling — state
+itself is the core abstraction, immutable data structure overhead is
+unacceptable, and tight inter-module coupling is a physical constraint,
+not a design flaw. In these domains, many of this article's
+recommendations aren't just inapplicable — they're harmful.</p>
+<p><strong>Language premise:</strong> This article's rule file examples
+and engineering practices are based on Scala. Scala is multi-paradigm:
+it lets you write pure FP, imperative, OOP, or any mixture. This means
+<strong>much of the rule file's constraints exist to pin the agent's
+behavior to a single Pure-FP paradigm</strong>, preventing drift between
+multiple legitimate styles. If your project uses Haskell, a large
+portion of these constraints are unnecessary — the language itself
+already enforces them.</p>
+<p>If this article were translated to Rust, it'd be significantly
+shorter. Rust's ownership system and borrow checker already eliminate
+most mutable state issues at compile time — no need for rule files to
+prohibit them. But even in Rust, I'd still write: <strong>agents are
+forbidden from independently declaring global mutables
+(<code>static mut</code>, <code>lazy_static</code> + <code>Mutex</code>,
+etc.); local mutables (<code>let mut</code>) are forbidden from spanning
+more than 2 scope levels, and absolutely forbidden from escaping the
+function.</strong> Similarly, I'd enforce agents using
+<code>Has&lt;T&gt;</code> traits for compile-time dependency injection —
+Rust's version of tagless final: service dependencies expressed through
+generic constraints
+<code>where Ctx: Has&lt;UserRepo&gt; + Has&lt;AuthService&gt;</code>,
+not passing a bunch of concrete types in function parameters. The
+signature-layer design principle doesn't change with the language — only
+the syntax differs.</p>
+<p>And Rust's <code>let-else</code> + <code>?</code> has even lower
+reasoning cost for agents than Scala's cats gymnastics:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">Some</span>(user) = user_svc.<span class="title function_ invoke__">find</span>(id).<span class="keyword">await</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> <span class="title function_ invoke__">Err</span>(DomainError::UserNotFound) &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">Some</span>(avatar) = user.<span class="title function_ invoke__">get_avatar</span>().<span class="keyword">await</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> <span class="title function_ invoke__">Err</span>(DomainError::AvatarMissing) &#125;;</span><br><span class="line"><span class="comment">// ... processing logic</span></span><br><span class="line"><span class="title function_ invoke__">Ok</span>(img_blob)</span><br></pre></td></tr></table></figure>
+<p>Each line is self-contained: input, check, failure path — all closed
+within the same line. The agent processing line 2 doesn't need to recall
+line 1's branch structure — exactly the <strong>linear flow</strong>
+(Style A) analyzed in the "Implementation-Level Error Handling" section,
+just with Rust combining early return guard and pattern matching into
+one with <code>let-else</code>. For agents, this has a shorter, more
+local, less error-prone reasoning path than
+<code>EitherT(...).subflatMap(...).semiflatMap(...)</code>.</p>
+<p>What the language handles, leave to the language; what the language
+can't reach still needs rules to fill the gap — this principle is
+cross-language.</p>
+<p>But not every scenario should chase the lowest writing cost. Whether
+Scala or Rust, I mandate AI use the Reactive Stream pattern. During the
+writing phase, reasoning about Reactive Streams might cost several times
+more tokens than an iterator + channel approach (in Rust, even tens or
+hundreds of times more — ownership, <code>&amp;mut</code>, lifetimes,
+and other constraints might even force you to restructure data types
+finalized months ago). But this upfront investment pays off: Reactive
+Stream operators are themselves declarative behavior descriptions. When
+debugging, agents don't need to chase scattered state mutations across
+imperative code — they just look at the operator chain: messages being
+dropped? <code>.buffer(n, OverflowStrategy.dropHead)</code> is right
+there in black and white. Order scrambled?
+<code>.unorderedFlatMap(...)</code> is staring at you. Each operator is
+a self-explaining behavior declaration; the bug's cause is written in
+the operator's name. The imperative equivalent?
+<code>LinkedBlockingQueue</code>'s capacity limit is buried in the
+constructor, whether the queue blocks or drops when full depends on
+whether the caller uses <code>put()</code> or <code>offer()</code>,
+scattered in some corner of the producer code. Order issues are even
+more hidden: <code>ExecutorService.submit()</code>'s multithreaded
+scheduling makes consumption order a runtime-only observable behavior —
+nowhere in the code does it say "ordering is not guaranteed." The agent
+needs to trace queue initialization, producer logic, and thread pool
+configuration across files to locate the same bug. Today's extra writing
+tokens buy back massive reading and reasoning tokens for every future
+agent.</p>
+<p>What does the AI architecture premise affect? Not everything.</p>
+<p><strong>Architecture-independent conclusions — won't change with
+model evolution:</strong></p>
+<ul>
+<li>Signatures/contracts should be honest and complete (§1-§4).
+Regardless of reasoning architecture, explicit information beats
+implicit conventions. This is an information-theory judgment, not an
+assumption about specific model capabilities.</li>
+<li>The human-reviews-contracts, AI-writes-implementation division of
+labor (§3). This stems from the physical limits of human cognitive
+bandwidth, independent of AI architecture.</li>
+<li>Type systems and refinement types provide deterministic feedback.
+Compilers don't become less important because AI gets stronger.</li>
+</ul>
+<p><strong>Architecture-dependent conclusions — will change as model
+capabilities evolve:</strong></p>
+<ul>
+<li><strong>Rules correcting training preferences</strong> (§5's Grep vs
+LSP choice, error handling preferences, etc.). These rules fundamentally
+compensate for current models' training biases. As models continue
+evolving on existing architectures, these biases will shift — some bad
+habits may be corrected, new biases may emerge. <strong>Rule files must
+be continuously maintained and fine-tuned alongside model capabilities —
+that itself is part of rule engineering.</strong></li>
+<li><strong>Cross-session process constraints</strong> (§6's Code Smell
+Tracking, memory files, etc.). These mechanisms exist entirely to
+compensate for stateless inference's deficiencies.</li>
+</ul>
+<p>We don't even need to wait for "perfect memory." Even one small step
+— like RWKV-style architectures with persistent state — if inference
+capability approaches current transformer levels, the game changes.</p>
+<p>Imagine this workflow: you spend weeks collaborating with an agent,
+and it gradually accumulates understanding of the project's coding
+style, architectural decisions, and module boundaries in its persistent
+state. When you need to parallelize multiple tasks, <strong>fork
+multiple sessions from that state</strong> — each fork inherits the same
+project knowledge, independently handling code review, refactoring, or
+bug fixes, without each session starting from zero reading CLAUDE.md and
+memory files.</p>
+<p>This is fundamentally different from the current model. Right now,
+every new session is a <strong>novice agent + text-based rule
+files</strong>. You must textualize all implicit knowledge — "this
+project uses tagless final," "NoOp implementations for data-related
+services must return failure," "persisted data is trusted" — write it
+all into rule files, then pray the agent correctly interprets them
+within a limited context window. Rule files are essentially simulating
+long-term memory with text — it works, but clumsily, with a token budget
+ceiling.</p>
+<p>A persistent state that has accumulated project understanding is like
+an engineer who's been on the team for months: no need to re-read the
+coding standard every morning, no need to write "why we chose this
+architecture" as a document to remember it. <strong>You no longer need
+to textualize every rule, because the rules are already internalized in
+the state.</strong></p>
+<p>When that day comes, most of this article's second category of
+conclusions — the precise wording of rule files, cross-session memory
+mechanisms, Code Smell Tracking's filesystem workaround — can be
+drastically simplified or dismantled entirely. Rule engineering won't
+disappear, but it devolves from "meticulously textualizing everything"
+to "occasional course corrections" — a completely different magnitude of
+effort.</p>
+<p>But until that day arrives, the scaffolding is still essential.</p>
+<hr />
+<h1 id="appendices">Appendices</h1>
+<h2 id="appendix-1-ais-toolchain-grep-lsp-and-disambiguation">Appendix
+1: AI's Toolchain — Grep, LSP, and Disambiguation</h2>
+<p>Even with Metals MCP (Language Server Protocol tooling) connected, AI
+still prefers to use regex search and replace throughout refactoring —
+Grep + regex is the most well-worn path in its training data.</p>
+<p>But Grep has clear capability boundaries. Through repeated
+experimentation, we've mapped out a clear division of labor:</p>
+<p><strong>Use Metals (compiler resolution) when the question is "what
+did the compiler resolve this to?"</strong></p>
+<table>
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Why Grep fails</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Given/implicit resolution: "which <code>given Transactor[IO]</code>
+is in scope here?"</td>
+<td>Grep searching <code>given Transactor</code> returns 10+ candidates;
+can't determine which the compiler selected</td>
+</tr>
+<tr class="even">
+<td>Extension method: "who defines <code>.pure[F]</code>?"</td>
+<td><code>def pure</code> is in the cats source, but Grep can't tell you
+which extension applies to your specific type</td>
+</tr>
+<tr class="odd">
+<td>Opaque type unwrapping: "what's <code>ProjectId</code>'s underlying
+type?"</td>
+<td>Grep finds <code>opaque type ProjectId = UUID</code>, but chained
+calls require cross-file tracing</td>
+</tr>
+<tr class="even">
+<td>Overload resolution: "which <code>apply</code> is being called
+here?"</td>
+<td>Grep finds all overloads; requires manual parameter-type
+matching</td>
+</tr>
+<tr class="odd">
+<td>Type alias + inheritance: "does <code>ConnectionIO</code> extend
+<code>Sync</code>?"</td>
+<td>Requires tracing <code>type ConnectionIO = Free[...]</code> → Free →
+capability hierarchy, multiple hops</td>
+</tr>
+<tr class="even">
+<td>Wildcard imports: "what does <code>import doobie.implicits.*</code>
+bring in?"</td>
+<td>Grep can't resolve it; requires reading the entire doobie package
+object</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Use Grep (text search) when the question is "where does this
+string appear?"</strong></p>
+<ul>
+<li>String literals, SQL column names, config keys, HOCON values</li>
+<li>Comments, TODOs, error messages</li>
+<li>Cross-language files (YAML, SQL migrations, Dockerfile)</li>
+</ul>
+<p>One sentence: <strong>"How did the compiler parse it?" → Metals.
+"Where is this text?" → Grep.</strong></p>
+<h3 id="fqn-limitations-and-proper-lsp-usage">FQN Limitations and Proper
+LSP Usage</h3>
+<p>I used to constantly correct AI for writing fully qualified names
+(<code>org.springframework.http.HttpHeaders</code>) — felt too verbose.
+Later I realized FQN genuinely eliminates ambiguity. AI sees
+<code>HttpHeaders</code> and doesn't know if it's
+<code>org.springframework.http.HttpHeaders</code>,
+<code>io.netty.handler.codec.http.HttpHeaders</code>, or
+<code>java.net.http.HttpHeaders</code>.</p>
+<p>Can we go further and use SCIP (SemanticDB-based code indexing) to
+automatically annotate source files with FQNs? I had Claude evaluate
+this approach:</p>
+<blockquote>
+<p>FQN is indeed useful for me. When I see
+<code>val vec = Pgvector(chunk.embedding)</code>, I don't know whether
+<code>Pgvector</code> comes from <code>doobie.postgres</code>,
+<code>o.linewise.core.database.DoobieInstances</code>, or somewhere
+else. FQN instantly eliminates this ambiguity. But I already have a
+better tool.</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 37%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Need</th>
+<th>SCIP snapshot</th>
+<th>Metals LSP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"What is PgVector?"</td>
+<td>Read 3x-bloated annotated file</td>
+<td>One <code>inspect</code> call, precise type</td>
+</tr>
+<tr class="even">
+<td>"Who calls resolveAuth?"</td>
+<td>Grep the snapshot (equivalent to Grep source)</td>
+<td><code>get-usages</code>, semantic-level, not text-level</td>
+</tr>
+<tr class="odd">
+<td>"What type does this expression return?"</td>
+<td>Not in snapshot (SemanticDB doesn't contain sub-expression inferred
+types)</td>
+<td><code>inspect</code> returns it directly</td>
+</tr>
+<tr class="even">
+<td>"All implementations of PermissionService?"</td>
+<td>Grep FQN pattern</td>
+<td><code>typed-glob-search</code></td>
+</tr>
+</tbody>
+</table>
+<p>SCIP snapshot costs: <strong>3x token bloat</strong> (150-line file
+becomes 450 lines), <strong>instantly stale</strong> (any edit
+invalidates it), <strong>doesn't cover the real pain points</strong>
+(debug/refactoring bottlenecks are implicit/given resolution chains —
+SemanticDB doesn't capture these; TASTy does).</p>
+<p>Conclusion: <strong>give the agent LSP tools and let it query
+on-demand when it hits ambiguity</strong>, rather than burdening every
+line of code with redundant fully qualified paths.</p>
+<h2
+id="appendix-2-inter-model-collaboration-and-knowledge-transfer">Appendix
+2: Inter-Model Collaboration and Knowledge Transfer</h2>
+<p><strong>Code written by advanced models can "teach" ordinary
+models.</strong> High-quality code and skills written by top-tier models
+(like Opus) can effectively guide weaker models through development
+work.</p>
+<p>All major models' training data contains large amounts of
+high-quality open-source code — the knowledge itself exists. The real
+difference comes down to two things:</p>
+<ol type="1">
+<li><strong>Weight allocation</strong> — different models give different
+weights to the same knowledge, causing some to naturally produce
+high-abstraction code while others default to more "mediocre"
+solutions</li>
+<li><strong>Side effects of human alignment</strong> — this directly
+depends on the AI trainers' cognitive level. During training, models
+generate "wild ideas" — unconventional but potentially extremely
+effective strategies. If trainers lack the cognitive ability to
+recognize these wild ideas' value, see them diverge from the mainstream,
+and immediately penalize them, these high-value strategies get
+suppressed in the model. <strong>People with poor cognitive ability
+can't train good AI.</strong></li>
+</ol>
+<p>Practical tip: <strong>use an advanced model to "activate" this
+knowledge in-context ahead of time</strong> — write it as skills,
+example code, or rules in CLAUDE.md — then when ordinary models work in
+that context, they follow the rails already laid down instead of
+retreating to their default "safe" style.</p>
+<p><strong>Multi-model collaboration? Same-tier peer review works
+better.</strong> Some try having multiple model vendors review design
+documents — Opus, Gemini, GPT as three "experts" discussing and voting.
+In practice, <strong>models with too large a cognitive gap sitting at
+the same table don't produce effective discussion.</strong> Two college
+professors discussing a research proposal with a grade schooler in the
+middle — the child won't provide a "different perspective," just drag
+down the floor of the discussion.</p>
+<p>A more effective approach: <strong>same-tier models reviewing each
+other, but with different assigned stances.</strong> For example, two
+Opus instances — one playing "aggressive refactor advocate," the other
+"stability-first conservative" — they have the capacity to understand
+each other's arguments and mount substantive rebuttals. Discussions
+between cognitively mismatched models only degenerate to "the weakest
+model's comprehension level."</p>
+<p>This is fundamentally the same theme as this entire article:
+<strong>if the tools you're using can handle higher abstraction levels,
+don't downgrade to accommodate the weakest link.</strong> This applies
+to code style, and it applies to model collaboration.</p>
+<aside id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>"Lord Elon" (马圣) is Chinese internet's sarcastic
+canonization of Elon Musk — "Lord" used with the same ironic reverence
+English speakers might say "His Holiness."<a href="#fnref1"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://famer.me/2026/03/11/AI-native-coding-style/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2761,7 +4470,7 @@ vs 静态标签、技术细节密度差异）暗示了某种价值判断？ 4.
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
     </span>
 
   
@@ -2774,7 +4483,10 @@ vs 静态标签、技术细节密度差异）暗示了某种价值判断？ 4.
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="时代变了大人">时代变了，大人</h1>
+          <blockquote>
+<p><strong>英文文化适配版：</strong> <a href="/2026/03/11/AI-native-coding-style-en/" title="Ming&#39;s Spell Compendium #4 -- The Art of Whipping AI Grunts: FP&#39;s Great Comeback?">AI-Native Coding Style (English cultural adaptation)</a></p>
+</blockquote>
+<h1 id="时代变了大人">时代变了，大人</h1>
 <p>事实上越来越多的项目中，代码的主要作者已经是 AI
 了，你身边的同事已经悄悄买了 glm coding plan 甚至中转站的 Codex
 套餐，每天上班需求扔给 AI
@@ -3990,7 +5702,7 @@ opus，一个扮演"激进重构派"，一个扮演"稳定优先派"，它们有
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
     </span>
 
   
@@ -4640,7 +6352,7 @@ for development</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
     </span>
 
   
@@ -5070,7 +6782,7 @@ Zero 是架构和训练方法的根本性重新设计。</p>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
     </span>
 
   
@@ -5459,7 +7171,7 @@ class="footnote-back" role="doc-backlink">↩︎</a></p></li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
     </span>
 
   
@@ -5836,7 +7548,7 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/20033905895389
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
+      <time title="Modified: 2026-03-16 21:03:56" itemprop="dateModified" datetime="2026-03-16T21:03:56+08:00">2026-03-16</time>
     </span>
 
   
@@ -6045,185 +7757,6 @@ unpushed messages on the server, a bounded buffer with the
 <code>OverflowStrategy.DropOldest</code> strategy is used.</p>
 <p>Implementing this in Reactive Streams is straightforward, but you can
 choose your preferred technology to do so.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://famer.me/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="ming yang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="My Space">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | My Space">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/" class="post-title-link" itemprop="url">Implementing Version Management of File Trees in PostgreSQL</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-03-19 20:37:00" itemprop="dateCreated datePublished" datetime="2023-03-19T20:37:00+08:00">2023-03-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-16 16:13:59" itemprop="dateModified" datetime="2026-03-16T16:13:59+08:00">2026-03-16</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="overview">Overview</h1>
-<p>In the <a
-href="/2023/03/19/Implement-the-file–tree-in-PostgreSQL-using-ltree/">previous
-post</a>, we discussed how to implement a file tree in PostgreSQL using
-<code>ltree</code>. Now, let's talk about how to integrate version
-control management for the file tree.</p>
-<p>Version control is a process for managing changes made to a file tree
-over time. This allows for the tracking of its history and the ability
-to revert to previous versions, making it an essential tool for file
-management.</p>
-<p>With version control, users have access to the most up-to-date
-version of a file, and changes are tracked and documented in a
-systematic manner. This ensures that there is a clear record of what has
-been done, making it much easier to manage files and their versions.</p>
-<h1 id="terminologies-and-context">Terminologies and Context</h1>
-<p>One <strong>flawed</strong> implementation involves storing all file
-metadata for every commit, including files that have not changed but are
-recorded as <code>NO_CHANGE</code>. However, this approach has a
-significant problem.</p>
-<p>The problem with the simple and naive implementation of storing all
-file metadata for every commit is that it leads to significant write
-amplification, as even files that have not changed are recorded as
-<code>NO_CHANGE</code>. One way to address this is to avoid storing
-<code>NO_CHANGE</code> transformations when creating new versions, which
-can significantly reduce the write amplification.</p>
-<p>This is good for querying, but bad for writing. When we need to fetch
-a specific version, the PostgreSQL engine only needs to scan the index
-with the condition <code>file.version = ?</code>. This is a very cheap
-cost in modern database systems. However, when a new version needs to be
-created, the engine must write <span class="math inline">\(N\)</span>
-rows of records into the log table (where <span
-class="math inline">\(N\)</span> is the number of current files). This
-will cause a write peak in the database and is unacceptable.</p>
-<p>In theory, all we need to do is write the changed file. If we can
-find a way to fetch an arbitrary version of the file tree in <span
-class="math inline">\(O(log(n))\)</span> time, we can reduce unnecessary
-write amplification.</p>
-<h2 id="non-functional-requirements">Non Functional Requirements</h2>
-<h2 id="scalability">Scalability</h2>
-<p>Consider the worst-case scenario: a file tree with more than 1,000
-files that is committed to more than 10,000 times. The scariest
-possibility is that every commit changes all files, causing a decrease
-in write performance compared to the efficient implementation. Storing
-more than 10 million rows in a single table can make it difficult to
-separate them into partitioned tables.</p>
-<p>Suppose <span class="math inline">\(N\)</span> is the number of
-files, and <span class="math inline">\(M\)</span> is the number of
-commits. We need to ensure that the time complexity of fetching a
-snapshot of an arbitrary version is less than <span
-class="math inline">\(O(N\cdot log(M))\)</span>. This is theoretically
-possible.</p>
-<h2 id="latency">Latency</h2>
-<p>In the worst case, the query can still respond in less than
-100ms.</p>
-<h1 id="architecture">Architecture</h1>
-<h2 id="database-design">Database Design</h2>
-<p>Illustration of data structures.</p>
-<figure>
-<img
-src="/images/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/file-tree-version-rdbms.png"
-alt="Illustration of data structures." />
-<figcaption aria-hidden="true">Illustration of data
-structures.</figcaption>
-</figure>
-<h2 id="tech-details">Tech Details</h2>
-<blockquote>
-<p>Subqueries appearing in <code>FROM</code> can be preceded by the key
-word <code>LATERAL</code>. This allows them to reference columns
-provided by preceding <code>FROM</code> items.
-(Without <code>LATERAL</code>, each subquery is evaluated independently
-and so cannot cross-reference any other <code>FROM</code> item.) — <a
-target="_blank" rel="noopener" href="https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-LATERAL">https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-LATERAL</a></p>
-</blockquote>
-<p>PostgreSQL has a keyword called <code>LATERAL</code>. This keyword
-can be used in a join table to enable the use of an outside table in a
-<code>WHERE</code> condition. By doing so, we can directly tell the
-query optimizer how to use the index. Since data in a combined index is
-stored in an ordered tree, finding the maximum value or any arbitrarily
-value has a time complexity of <span
-class="math inline">\(O(log(n))\)</span>.</p>
-<p>Finally, we obtain a time complexity of <span
-class="math inline">\(O(N \cdot log(M))\)</span>.</p>
-<h3 id="performance">Performance</h3>
-<p>Result: Fetching an arbitrary version will be done in tens of
-milliseconds.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">explain analyse</span><br><span class="line"><span class="keyword">select</span> f.record_id, f.filename, latest.revision_id</span><br><span class="line"><span class="keyword">from</span> files f</span><br><span class="line"><span class="keyword">inner</span> <span class="keyword">join</span> <span class="keyword">lateral</span> (</span><br><span class="line">        <span class="keyword">select</span> <span class="operator">*</span></span><br><span class="line">        <span class="keyword">from</span> file_logs fl</span><br><span class="line">        <span class="keyword">where</span> f.filename <span class="operator">=</span> fl.filename</span><br><span class="line">          <span class="keyword">and</span> f.record_id <span class="operator">=</span> fl.record_id</span><br><span class="line">          <span class="comment">-- and revision_id &lt; 20000</span></span><br><span class="line">        <span class="keyword">order</span> <span class="keyword">by</span> revision_id <span class="keyword">desc</span></span><br><span class="line">        limit <span class="number">1</span></span><br><span class="line">    ) <span class="keyword">as</span> latest</span><br><span class="line"><span class="keyword">on</span> f.record_id <span class="operator">=</span> <span class="string">&#x27;f5c2049f-5a32-44f5-b0cc-b7e0531bf706&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Nested Loop  (cost<span class="operator">=</span><span class="number">0.86</span>.<span class="number">.979</span><span class="number">.71</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1445</span> width<span class="operator">=</span><span class="number">50</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.040</span>.<span class="number">.18</span><span class="number">.297</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1445</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">  <span class="operator">-</span><span class="operator">&gt;</span>  Index <span class="keyword">Only</span> Scan <span class="keyword">using</span> files_pkey <span class="keyword">on</span> files f  (cost<span class="operator">=</span><span class="number">0.29</span>.<span class="number">.89</span><span class="number">.58</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1445</span> width<span class="operator">=</span><span class="number">46</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.019</span>.<span class="number">.0</span><span class="number">.174</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1445</span> loops<span class="operator">=</span><span class="number">1</span>)</span><br><span class="line">        Index Cond: (record_id <span class="operator">=</span> <span class="string">&#x27;f5c2049f-5a32-44f5-b0cc-b7e0531bf706&#x27;</span>::uuid)</span><br><span class="line">        Heap Fetches: <span class="number">0</span></span><br><span class="line">  <span class="operator">-</span><span class="operator">&gt;</span>  Memoize  (cost<span class="operator">=</span><span class="number">0.57</span>.<span class="number">.0</span><span class="number">.65</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">4</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.012</span>.<span class="number">.0</span><span class="number">.012</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> loops<span class="operator">=</span><span class="number">1445</span>)</span><br><span class="line">&quot;        Cache Key: f.filename, f.record_id&quot;</span><br><span class="line">        Cache Mode: <span class="type">binary</span></span><br><span class="line">        Hits: <span class="number">0</span>  Misses: <span class="number">1445</span>  Evictions: <span class="number">0</span>  Overflows: <span class="number">0</span>  Memory Usage: <span class="number">221</span>kB</span><br><span class="line">        <span class="operator">-</span><span class="operator">&gt;</span>  Subquery Scan <span class="keyword">on</span> latest  (cost<span class="operator">=</span><span class="number">0.56</span>.<span class="number">.0</span><span class="number">.64</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">4</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.012</span>.<span class="number">.0</span><span class="number">.012</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> loops<span class="operator">=</span><span class="number">1445</span>)</span><br><span class="line">              <span class="operator">-</span><span class="operator">&gt;</span>  Limit  (cost<span class="operator">=</span><span class="number">0.56</span>.<span class="number">.0</span><span class="number">.63</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> width<span class="operator">=</span><span class="number">852</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.012</span>.<span class="number">.0</span><span class="number">.012</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> loops<span class="operator">=</span><span class="number">1445</span>)</span><br><span class="line">                    <span class="operator">-</span><span class="operator">&gt;</span>  Index <span class="keyword">Only</span> Scan Backward <span class="keyword">using</span> file_logs_pk <span class="keyword">on</span> file_logs fl  (cost<span class="operator">=</span><span class="number">0.56</span>.<span class="number">.11</span><span class="number">.72</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">158</span> width<span class="operator">=</span><span class="number">852</span>) (actual <span class="type">time</span><span class="operator">=</span><span class="number">0.011</span>.<span class="number">.0</span><span class="number">.011</span> <span class="keyword">rows</span><span class="operator">=</span><span class="number">1</span> loops<span class="operator">=</span><span class="number">1445</span>)</span><br><span class="line">                          Index Cond: ((record_id <span class="operator">=</span> f.record_id) <span class="keyword">AND</span> (filename <span class="operator">=</span> (f.filename)::text))</span><br><span class="line">                          Heap Fetches: <span class="number">0</span></span><br><span class="line">Planning <span class="type">Time</span>: <span class="number">0.117</span> ms</span><br><span class="line">Execution <span class="type">Time</span>: <span class="number">18.384</span> ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="test-datasets">Test Datasets</h3>
-<p>This dataset simulates the worst-case scenario of a table with 14.6
-million rows. Specifically, it contains 14.45 million rows representing
-a situation in which 1,400 files are changed 10,000 times.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- cnt: 14605858</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">0</span>) <span class="keyword">from</span> file_logs;</span><br><span class="line"><span class="comment">-- cnt: 14451538</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">0</span>) <span class="keyword">from</span> file_logs <span class="keyword">where</span> record_id <span class="operator">=</span> <span class="string">&#x27;f5c2049f-5a32-44f5-b0cc-b7e0531bf706&#x27;</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="schema">Schema</h3>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create table</span> public.file_logs</span><br><span class="line">(</span><br><span class="line">    file_key    ltree         <span class="keyword">not null</span>,</span><br><span class="line">    revision_id <span class="type">integer</span>       <span class="keyword">not null</span>,</span><br><span class="line">    record_id   uuid          <span class="keyword">not null</span>,</span><br><span class="line">    filename    <span class="type">varchar</span>(<span class="number">2048</span>) <span class="keyword">not null</span>,</span><br><span class="line">    create_time <span class="type">timestamp</span>,</span><br><span class="line">    update_time <span class="type">timestamp</span>,</span><br><span class="line">    delete_time <span class="type">timestamp</span>,</span><br><span class="line">    blob_sha256 <span class="type">char</span>(<span class="number">64</span>),</span><br><span class="line">    <span class="keyword">constraint</span> file_logs_pk</span><br><span class="line">        <span class="keyword">primary key</span> (record_id, filename, revision_id)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">alter table</span> public.file_logs</span><br><span class="line">    owner <span class="keyword">to</span> postgres;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create table</span> public.files</span><br><span class="line">(</span><br><span class="line">    record_id uuid          <span class="keyword">not null</span>,</span><br><span class="line">    filename  <span class="type">varchar</span>(<span class="number">2048</span>) <span class="keyword">not null</span>,</span><br><span class="line">    create_at <span class="type">timestamp</span>     <span class="keyword">not null</span>,</span><br><span class="line">    <span class="keyword">primary key</span> (record_id, filename)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">alter table</span> public.files</span><br><span class="line">    owner <span class="keyword">to</span> postgres;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="further-improvements"><strong>Further Improvements</strong></h1>
-<p>We can implement this using an intuitive approach in a graph
-database.</p>
-<figure>
-<img
-src="/images/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/file-tree-version-graph-database.png"
-alt="File tree version in graph database" />
-<figcaption aria-hidden="true">File tree version in graph
-database</figcaption>
-</figure>
 
       
     </div>
