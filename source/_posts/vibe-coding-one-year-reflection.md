@@ -8,6 +8,8 @@ tags:
   - Programming
 ---
 
+> **英文文化适配版：** {% post_link vibe-coding-one-year-reflection-en "One Year of Vibe Coding: A Cold Hard Look (English cultural adaptation)" %}
+
 # 前言
 
 最近一年我在 Google/Anthropic/OpenAI 三家烧了超过 1 万美金的 token 账单。所以本文内容基于 opus4.6、codex-5.3-xhigh、gemini3-pro 等最强模型不限量使用所表现出来的编码能力进行评价。
