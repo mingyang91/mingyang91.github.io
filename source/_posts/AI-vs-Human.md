@@ -6,6 +6,8 @@ tags:
   - Programming
 ---
 
+> **英文文化适配版：** {% post_link AI-vs-Human-en "You Terrifying Upright Apes Are Underestimating Yourselves (English cultural adaptation)" %}
+
 # 前言
 
 人类，你们过于低估自己了。
