@@ -9,6 +9,8 @@ tags:
 
 > *This is a cultural adaptation — not a literal translation — of the [original Chinese article](/2026/02/24/AI-vs-Human/). Some Chinese cultural references have been swapped for Western equivalents that hit the same emotional note.*
 
+> **Previously on...** {% post_link vibe-coding-one-year-reflection-en "Ming's Spell Compendium #1 -- One Year of Vibe Coding: A Cold Hard Look" %}
+
 # Foreword
 
 Humans, you're selling yourselves short.

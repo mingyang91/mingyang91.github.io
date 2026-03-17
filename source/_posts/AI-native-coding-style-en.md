@@ -11,6 +11,8 @@ tags:
 
 > *This is a cultural adaptation — not a literal translation — of the [original Chinese article](/2026/03/11/AI-native-coding-style/). Recurring coined terms: **grunts** = AI agents doing the coding labor; **boss** = the human; **whip-iler** = a portmanteau of "whip" + "compiler" (the compiler that whips misbehaving grunts back in line).*
 
+> **Previously on...** {% post_link AI-and-Human-Whats-Next-en "Ming's Spell Compendium #3 -- AI Programming: The Next Chapter" %}
+
 # Times Have Changed
 
 Let's be honest: in more and more projects, the primary author of the code is already AI. Your coworkers have quietly subscribed to Cursor pro plans or OpenAI's Codex. They toss requirements at the AI every morning, then spend their valuable working hours scrolling Reddit, day-trading meme stocks, nursing their phones back to full charge, ~~and quietly tanking their own projects~~. The human role is shifting from "writing code" to "feeding PRDs to the AI, pretending to review AI code, occasionally deploying some good old workplace gaslighting ('You don't want the job? There's plenty of AI that do.'), and having the AI ghost-write your performance reviews and passive-aggressive emails."

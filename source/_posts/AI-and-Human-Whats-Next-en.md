@@ -14,6 +14,8 @@ tags:
 
 # Previously On...
 
+> {% post_link AI-vs-Human-en "Ming's Spell Compendium #2 -- You Terrifying Upright Apes Are Underestimating Yourselves" %}
+
 In the last installment, we established: AI's knowledge reserves dwarf any individual's, but that knowledge is hard to awaken; your ability to discern quality sets the ceiling on output quality; the trigger for better results is always your own growth, not AI's spontaneous breakthrough.
 
 The natural follow-up questions: How do you awaken its knowledge? How do you verify its proposals? And when its proposals exceed your own understanding, how do you learn enough to accept or reject them?

@@ -8,6 +8,8 @@ tags:
 
 > **英文文化适配版：** {% post_link AI-vs-Human-en "You Terrifying Upright Apes Are Underestimating Yourselves (English cultural adaptation)" %}
 
+> **书接上回：** {% post_link vibe-coding-one-year-reflection "明系魔法吟唱之1 -- Vibe Coding 一年实践后的冷思考" %}
+
 # 前言
 
 人类，你们过于低估自己了。
