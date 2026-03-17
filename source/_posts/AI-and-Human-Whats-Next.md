@@ -7,6 +7,8 @@ tags:
   - Agent
 ---
 
+> **英文文化适配版：** {% post_link AI-and-Human-Whats-Next-en AI Programming: The Next Chapter (English cultural adaptation) %}
+
 > **利益声明**：本文不构成投资建议，不推荐任何 AI 工具购买或中转平台推广。所有内容均来自本人约 2 万美金 token 的实践经验。不同项目类别、不同编码品味可能会得出不一样的结论。
 
 # 书接上回
