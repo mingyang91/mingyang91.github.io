@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="This is a cultural adaptation — not a literal translation — of the original Chinese article. Some Chinese cultural references have been swapped for Western equivalents that hit the same emotional not">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ming&#39;s Spell Compendium #1 -- One Year of Vibe Coding: A Cold Hard Look">
+<meta property="og:url" content="https://famer.me/2026/02/06/vibe-coding-one-year-reflection-en/index.html">
+<meta property="og:site_name" content="My Space">
+<meta property="og:description" content="This is a cultural adaptation — not a literal translation — of the original Chinese article. Some Chinese cultural references have been swapped for Western equivalents that hit the same emotional not">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-06T05:44:21.000Z">
+<meta property="article:modified_time" content="2026-03-17T03:39:44.884Z">
+<meta property="article:author" content="ming yang">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Programming">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Translation">
+<meta property="article:tag" content="Vibe Coding">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://famer.me/2026/02/06/vibe-coding-one-year-reflection-en/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2026/02/06/vibe-coding-one-year-reflection-en/","path":"2026/02/06/vibe-coding-one-year-reflection-en/","title":"Ming's Spell Compendium #1 -- One Year of Vibe Coding: A Cold Hard Look"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Ming's Spell Compendium #1 -- One Year of Vibe Coding: A Cold Hard Look | My Space</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RGPQ0EFYL"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1RGPQ0EFYL","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">My Space</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#foreword"><span class="nav-number">1.</span> <span class="nav-text">Foreword</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-phenomenon-agents-crisis-of-trust"><span class="nav-number">2.</span> <span class="nav-text">The Phenomenon: Agent&#39;s
+Crisis of Trust</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-real-case-study"><span class="nav-number">2.1.</span> <span class="nav-text">A Real Case Study</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-cause-total-failure-of-verification-methods"><span class="nav-number">3.</span> <span class="nav-text">The Cause:
+Total Failure of Verification Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#code-review-has-failed"><span class="nav-number">3.1.</span> <span class="nav-text">Code Review Has Failed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#testing-has-failed"><span class="nav-number">3.2.</span> <span class="nav-text">Testing Has Failed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#comparison-with-traditional-industry"><span class="nav-number">3.3.</span> <span class="nav-text">Comparison with
+Traditional Industry</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-solution-let-the-compiler-be-your-gatekeeper"><span class="nav-number">4.</span> <span class="nav-text">The Solution:
+Let the Compiler Be Your Gatekeeper</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#second-line-of-defense-let-z3-prove-it-for-you"><span class="nav-number">4.1.</span> <span class="nav-text">Second Line of
+Defense: Let z3 Prove It For You</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#practical-results"><span class="nav-number">4.2.</span> <span class="nav-text">Practical Results</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#limitations"><span class="nav-number">4.3.</span> <span class="nav-text">Limitations</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-deeper-dilemma-plan-vs.-execute"><span class="nav-number">5.</span> <span class="nav-text">The Deeper Dilemma: Plan
+vs. Execute</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#peak-on-first-contact"><span class="nav-number">6.</span> <span class="nav-text">Peak on First Contact</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#in-the-agent-era-do-you-still-need-to-learn-cs-fundamentals"><span class="nav-number">7.</span> <span class="nav-text">In
+the Agent Era, Do You Still Need to Learn CS Fundamentals?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conclusion"><span class="nav-number">8.</span> <span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#addendum-kernel-nic-driver-development-war-story"><span class="nav-number">9.</span> <span class="nav-text">Addendum:
+Kernel NIC Driver Development War Story</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ming yang"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">ming yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/02/06/vibe-coding-one-year-reflection-en/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Ming's Spell Compendium #1 -- One Year of Vibe Coding: A Cold Hard Look | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ming's Spell Compendium #1 -- One Year of Vibe Coding: A Cold Hard Look
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-02-06 13:44:21" itemprop="dateCreated datePublished" datetime="2026-02-06T13:44:21+08:00">2026-02-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p><em>This is a cultural adaptation — not a literal translation — of
+the <a href="/2026/02/06/vibe-coding-one-year-reflection/">original
+Chinese article</a>. Some Chinese cultural references have been swapped
+for Western equivalents that hit the same emotional note.</em></p>
+</blockquote>
+<h1 id="foreword">Foreword</h1>
+<p>Over the past year I've burned through more than $10,000 in API
+tokens across Google, Anthropic, and OpenAI. So everything in this
+article is based on hands-on experience with the strongest models
+available — Opus 4.6, Codex-5.3-xhigh, Gemini 3 Pro — used without
+budget constraints.</p>
+<p>Those tokens were spread across four categories of projects: embedded
+kernel drivers, backend architecture, DevOps, and frontend UI. The
+performance gap between domains is absurd — $20 worth of tokens can
+vibe-code a passable React dashboard with minimal human guidance, but
+$2k or even $20k worth of tokens still can't get an agent to produce a
+working kernel driver on real hardware. The conclusions below are drawn
+from this cross-domain comparison.</p>
+<h1 id="the-phenomenon-agents-crisis-of-trust">The Phenomenon: Agent's
+Crisis of Trust</h1>
+<p>It's like a late-night infomercial host waving his <em>Quantum AI
+Bio-Magnetic Resonance Healing Device™</em> at the camera, telling you
+this machine — originally $200,000, but TODAY ONLY $88,000 — will cure
+your chronic back pain, high blood pressure, diabetes, reverse your
+arterial plaque buildup, coronary heart disease, and erectile
+dysfunction.</p>
+<p>Agent programming is currently in that exact state.</p>
+<p>The agent showers you with emoji celebrating the fact that those
+80,000 lines of slop it just generated passed all test cases, and
+assures you it's ready for production. Do you believe it?</p>
+<p>Say you're a project lead, and your most reliable teammate delivers
+80% of tasks on time and at high quality. When they guarantee something
+will ship next week, you can reasonably trust it'll be done by the week
+after at the latest. But when an <em>agent</em> guarantees the code is
+production-ready right now — do you believe it?</p>
+<p>Meanwhile, at this very moment, an army of influencers, course
+peddlers, and self-appointed "AI Godfathers" are separating suckers from
+their money. The curriculum basically boils down to: here's how to
+prompt (tools/skills, same wine in different bottles), then spin up a
+bunch of agents to work in parallel.</p>
+<h2 id="a-real-case-study">A Real Case Study</h2>
+<p>An agent's blind confidence doesn't just mislead the user — it
+misleads the agent itself.</p>
+<p>I once gave an agent this task: integrate GCP Transcoding into the
+current Kotlin project. I provided the product page and documentation as
+references and told it to start planning. The agent produced the
+following plan:</p>
+<ol type="1">
+<li>After reading the docs, discovered the service only provides a Java
+SDK, and the current project uses a different JVM language without
+native support</li>
+<li>Per the RESTful API docs, manually integrate using ktor-client based
+on documented field definitions</li>
+<li>Write the code and run tests</li>
+</ol>
+<p>Did you spot the problem in this plan?</p>
+<p>If you've ever done this kind of work the old-fashioned way —
+artisanal hand-crafted coding — you know that manually implementing a
+RESTful API is never as simple as it sounds. Even covering just the
+basic Transcoding capabilities involves 5–10 endpoints. Each endpoint's
+request/response has dozens or even hundreds of nested field
+definitions, and the agent makes frequent mistakes when dealing with
+this kind of long-context task.</p>
+<p>If instead the agent had chosen to write a thin wrapper around the
+Java SDK (which Google generates from protobuf anyway), the feature
+could have been stable and shipped within half a day to a day.</p>
+<p>But if you let the agent go down the RESTful path, it'll sink into a
+debugging swamp — because when AI hallucination causes it to get an
+optional field name wrong (casing, camelCase, underscores), the program
+won't throw an error right away. How long until you discover the
+implementation is wrong? When customers complain after it hits
+production?</p>
+<p>To be fair, agents aren't making zero progress. For example, complex
+cross-layer debugging — low-probability OS deadlocks, rendering
+glitches, kernel panics, issues where the call chain is long and spans
+multiple layers — was completely useless a year ago, but now it's
+actually net-positive. It can't do full end-to-end root cause analysis,
+but having the agent draft an effective short-scope investigation plan
+works surprisingly well. That said, this still requires human leadership
+— you give it direction, and it executes better and better; but let it
+choose its own direction, and it'll drive you straight into a ditch.</p>
+<p><strong>Why can't we trust agents?</strong> After a year of practice,
+I believe the root cause is: we lack effective means of
+verification.</p>
+<h1 id="the-cause-total-failure-of-verification-methods">The Cause:
+Total Failure of Verification Methods</h1>
+<h2 id="code-review-has-failed">Code Review Has Failed</h2>
+<blockquote>
+<p>Common take: "In a way, AI hasn't really replaced programmers — it's
+just a new high-level tool. As the person responsible for production
+code, you still need to understand what it does."</p>
+</blockquote>
+<p>I'd argue this is nearly impossible in practice.</p>
+<p>In our internal code reviews, most of the time we were really just
+reviewing code <em>style</em>. The author would walk through the design,
+we'd give it a once-over, and that was that. This used to work
+because:</p>
+<ul>
+<li>PRs with sloppy code style also had messy designs, poor performance,
+and no extensibility</li>
+<li>PRs with clean code style had clear designs, thoughtful performance
+considerations, and even if there were bottlenecks, they were easy to
+fix</li>
+</ul>
+<p><strong>But this correlation doesn't exist in the agent coding era —
+in fact, it's inverted.</strong></p>
+<p>An agent can generate beautifully commented, stylistically flawless —
+garbage code — in under a minute. When I eyeball it, I regularly get
+lulled into a false sense of security by that first layer of polish. The
+thing is, this garbage is hard to catch during review; it usually takes
+a production incident and a deep investigation to discover it's
+"chocolate-flavored crap."</p>
+<p>Trust me — Opus, Codex-xhigh, those models you can't afford? I've
+cranked every setting to max and mashed the gas. Same problem.</p>
+<p>I also tried having AI review <em>my</em> designs. The sycophantic
+tone is something else — I fed GPT-4o a design I <em>knew</em> was
+flawed, and back came "enterprise-level," "future-proof," "scalable,"
+just blowing smoke up my ass nonstop. I later changed the prompt to make
+it roleplay as "that insufferable coworker" who criticizes everything,
+and it got slightly better. But the end result was still underwhelming —
+AI sees coherent, professional-sounding text and drops its guard, giving
+high marks even when the content is dead wrong.</p>
+<h2 id="testing-has-failed">Testing Has Failed</h2>
+<p>Don't even get me started on testing. Test cases are now also
+vibe-coded by the agent — it's both the player and the referee, whatever
+it says goes. It's scammed me more than once. Thousands of lines of
+getter/setter tests, all green, "ready for production, boss!"</p>
+<p>Like the GCP Transcoding example: the agent misspelled an optional
+field name, and the tests still passed — because the tests were also
+written by the same agent. Consistently wrong = "correct."</p>
+<p>Some people suggest: have different agents specialize — one writes
+code, another writes tests. I've tried it. It's marginally better than
+self-testing; obvious bugs do get caught. But these agents share the
+same training data and systematic biases — their blind spots overlap
+almost completely. Unlike two human developers — one from an embedded
+systems background, one from web dev — whose knowledge structures and
+cognitive blind spots actually complement each other. Two agents, no
+matter how you split the roles, are fundamentally classmates from the
+same bootcamp. You've solved the "same person writes and grades the
+exam" problem, but not the "every exam writer graduated from the same
+program" problem.</p>
+<p>And AI reviewing itself has steeply diminishing returns. If the first
+review agent missed an issue, the second and third reviews will almost
+certainly miss it too — unless you can feed them additional error
+information.</p>
+<h2 id="comparison-with-traditional-industry">Comparison with
+Traditional Industry</h2>
+<p>At this point someone might ask: don't other industries face this
+problem after being augmented by machines and automation?</p>
+<p>Let me use CNC machining as an analogy:</p>
+<p>A CNC machine is more precise than I am, but after it produces a
+part, we can perform objective physical measurement — grab some
+calipers, check whether the tolerance is within ±0.01mm. Crystal clear.
+Even if I couldn't hand-machine a part to that precision, I can still
+<em>evaluate</em> whether the CNC machine and its output meet the
+standard.</p>
+<p><strong>That's the state of traditional manufacturing after machine
+augmentation: machines are precise, quality is consistent and stable,
+and humans can still evaluate the output.</strong></p>
+<p>So what should the ideal state look like for software development
+after the Agent revolution? The agent delivers code that genuinely
+covers the requirements, includes basic security protections, and is
+easier to maintain long-term (even if we only consider
+agent-maintainability, not human readability), with better performance
+and lower resource consumption.</p>
+<p>But software doesn't just need to satisfy the current requirements
+doc — it also needs to account for basic security. A feature-complete
+project riddled with security holes is still failing.</p>
+<p>And right now, we can't evaluate whether agents have reached that
+state. For just the baseline requirement of "feature implementation,"
+agents still can't operate without human guidance and test verification
+— let alone security, maintainability, and performance.</p>
+<p>The problem is: our mainstream verification methods — human review
+and automated testing — can both be "contaminated" by the agent. It can
+write stylistically perfect but logically toxic code, and it can write
+tests that perfectly match the flawed code. What we need is a set of
+calipers the agent can't tamper with — objective, deterministic
+verification that doesn't rely on the agent's own judgment.</p>
+<p>A CNC machine that achieves great precision on plastic and aluminum
+parts doesn't necessarily maintain that precision on titanium or
+stainless steel. The latter tests overall rigidity and the thermal
+expansion compensation requirements as workpiece mass increases.</p>
+<p>Same principle: code that passes a couple of mouse clicks in local
+testing will, with high probability, blow up spectacularly in
+production.</p>
+<p><strong>Traditional industry: machines are precise, quality is
+stable, humans can evaluate. Software industry: agents are fast,
+coverage is broad, but humans can't reliably evaluate. That's the
+problem — where are the calipers?</strong></p>
+<h1 id="the-solution-let-the-compiler-be-your-gatekeeper">The Solution:
+Let the Compiler Be Your Gatekeeper</h1>
+<p>Since human evaluation (code review) and automated testing are both
+unreliable, we need another evaluation method — one that is objective,
+verifiable, and doesn't depend on the agent's own judgment.</p>
+<p>My position runs counter to mainstream AI coding philosophy:</p>
+<p><strong>In the agent coding era, we need <em>stronger</em> types,
+<em>stricter</em> verifiable languages — not letting agents run wild
+with Python, JS, Java, Go, and let's not forget AnyScript.</strong></p>
+<p>Why?</p>
+<p>AI piles up slop at such velocity — forget tens of thousands of
+lines, I'm already too lazy to read line-by-line past 100 lines. But
+reading type signatures and pre/post-conditions is dramatically faster
+than reading logic code. And these things can only be provided by Rust,
+Scala, Haskell, or even formal methods.</p>
+<p>I was already writing code this way before agents existed — once your
+codebase gets large enough, compiler checks are more reliable than
+eyeballing it. Now that agent coding has become mainstream, I've found
+that holding agents to this standard is one of the more effective ways
+to control output quality — only to a degree, of course, but at least
+better than nothing.</p>
+<p>Back to the GCP Transcoding example: if the agent were using a
+strongly-typed language, misspelled field names would at least get
+caught by the type system at compile time. But with RESTful + weak
+typing, errors are silent until it's too late.</p>
+<p>But this is only the first line of defense. Strong typing catches
+type mismatches, null pointer issues, Rust's lifetime errors — these are
+"syntax-level" problems. The compiler can tell you "this code doesn't
+compile," but it can't tell you "this code is logically wrong."</p>
+<h2 id="second-line-of-defense-let-z3-prove-it-for-you">Second Line of
+Defense: Let z3 Prove It For You</h2>
+<p>The next level is formal-methods-grade verification — using
+refinement types or tools like OpenJML to encode business constraints
+directly into the type system.</p>
+<p>A concrete example: have the agent write a sort function. Traditional
+strong typing ensures the input/output types are correct — takes an
+array, returns an array. But it can't ensure the returned array is
+actually sorted. With refinement types, you can write this directly in
+the function signature:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ensures(forall i, j : i &lt; j → arr[i] ≤ arr[j])</span><br></pre></td></tr></table></figure>
+<p>This pre/post-condition is your "quality tolerance standard." The z3
+solver will mathematically <em>prove</em> whether the agent's
+hundred-line sort implementation actually satisfies this constraint for
+all possible inputs. Proof passes = passes. Proof fails = fails. There's
+no room for the agent to bluff its way through by insisting "looks fine
+to me."</p>
+<p><strong>The key insight: humans only need to review this one line of
+spec to verify it expresses the intended semantics — no need to read
+hundreds of lines of implementation.</strong> This is the set of
+calipers the agent can't tamper with.</p>
+<h2 id="practical-results">Practical Results</h2>
+<p>First line of defense — credit where it's due. The latest top-tier
+models can usually pass compilation, unless you're even more obsessed
+with type-level gymnastics than I am.</p>
+<p>In the past, agents hitting Rust lifetime errors or functional type
+puzzles would loop for dozens of rounds or spiral into infinite retries
+until context blew up. Formal methods have a steep learning curve to
+begin with — even the human brain has to maintain continuous abstract
+symbolic reasoning. I once believed AI would never learn to solve
+type-level puzzles.</p>
+<p>But things have changed. Pure-FP Scala, tagless final — Opus 4.5 and
+Codex-xhigh follow the patterns quite well, and passing compilation is
+basically automatic now. Functional type gymnastics produce error
+messages that are dozens or hundreds of lines of type-theoretic
+hieroglyphics, and agents can now read and fix these without much
+trouble.</p>
+<p>The crucial point: agents aren't solving type puzzles by cheating
+(slapping <code>asInstanceOf</code> or <code>any</code> everywhere).
+They genuinely fill in the gaps through iterative attempts. This isn't
+circumvention — it gives me real confidence that AI might actually be
+able to write code that passes FM checks. If that happens, code
+correctness gets a formal guarantee, which is far more comprehensive and
+reliable than unit test coverage.</p>
+<p>But the second line of defense is still another world entirely.
+FM-grade verification errors — z3 solver failures, refinement type
+constraint violations — agents still struggle badly with these. Though
+the breakthrough on the first line makes me believe this path has
+potential.</p>
+<h2 id="limitations">Limitations</h2>
+<p>Of course, this approach has its limits.</p>
+<p>In practice, formal methods toolchains and ecosystems are still
+barren — most only support a very limited subset of a single language.
+Many engineering patterns and syntax that are bread-and-butter in
+production code are unsound or unproven in FM land. And that's before we
+get to the infinite loops and unprovable proofs — one wrong move and the
+z3 solver is searching a possibility space larger than the observable
+universe, still grinding away when the heat death arrives.</p>
+<p>Strong types and FM solve <em>some</em> problems, but not all.</p>
+<h1 id="the-deeper-dilemma-plan-vs.-execute">The Deeper Dilemma: Plan
+vs. Execute</h1>
+<p>Even with strong types + FM as evaluation tools, there's a deeper
+problem: the agent's understanding and execution of plans.</p>
+<p>The GCP Transcoding example already exposed this: the agent chose to
+manually implement RESTful instead of wrapping the Java SDK. This wasn't
+a coding error — it was <strong>a strategic error</strong>. The compiler
+can tell you if there's a syntax error; z3 can prove whether your
+implementation meets the spec; but neither can tell you whether you
+should be walking this path at all.</p>
+<p>A more extreme example: give an agent a complex task — design a
+rocket engine. The plan calls for a full-flow staged combustion cycle;
+the approach specifies a coaxial design.</p>
+<p><strong>If the agent doesn't follow the plan:</strong> it might
+wander off into a gas-generator cycle. The compiler can tell you the
+code compiles, but it can't tell you whether this is the rocket engine
+you asked for.</p>
+<p><strong>If the agent follows the plan <em>too</em>
+faithfully:</strong> it actually builds the coaxial design, and then you
+hit an even bigger problem in production — the dynamic sealing system
+fails, oxidizer and fuel leak into each other through the turbine shaft,
+and one of the preburners is about to have a very bad day. The compiler
+can guarantee type correctness, z3 can guarantee the implementation
+matches the spec, but neither can guarantee the spec itself is a sound
+design.</p>
+<p>The current plan/edit mode toggle is just a stopgap — an admission
+that we don't have a better answer yet. This problem is harder than
+"missing evaluation tools" because it involves understanding
+requirements and design, not just code quality.</p>
+<h1 id="peak-on-first-contact">Peak on First Contact</h1>
+<p>Agent programming has a striking characteristic: <strong>it peaks on
+first contact.</strong></p>
+<p>Hand an agent a brand-new CRUD project or a React admin panel, and
+its first attempt genuinely impresses — clean, well-structured,
+thoughtfully commented with error handling baked in.</p>
+<p>But as the project matures, the unspoken, undocumented,
+implicitly-understood hidden context keeps growing. Which field is
+deprecated but never deleted, which API has a historical quirk, which
+modules have a subtle dependency — the veterans know all this by heart,
+but nobody ever wrote it down.</p>
+<p>And agents can't handle infinite context. They can only selectively
+forget through compression and summarization. What gets dropped might be
+the lessons from failed attempts, or it might be critical data structure
+offsets, register addresses, or enum definitions.</p>
+<p>This isn't a feeling. In practice, when context window usage hits
+~30% the agent is already noticeably dumber, and at ~50% it's performing
+worse than the base model. Even when critical details are still
+technically in-context, the agent will look right through them.</p>
+<p>Every time you start a new session, you're facing an almost brand-new
+"employee" — one that seems to have inherited compressed context
+(claude.md / agents.md) but knows none of the details. You have to
+re-explain everything: "No, I know the docs say to pass this parameter,
+but in practice we never actually send it…"</p>
+<p>For CRUD, Spring, and React — highly repetitive tasks — this barely
+registers as a pain point. It's basically the same thing every time;
+forgotten, so what.</p>
+<p>But for embedded systems development, any forgotten detail gets
+filled in by the agent's wildly creative hallucinations. Register
+address wrong? Interrupt priority misconfigured? DMA channel conflict?
+Minor case: system crash. Major case: permanently fried hardware. This
+isn't a "fix the bug and redeploy" situation.</p>
+<p>Worse still, kernels are riddled with register addresses and flag
+constants, and these are critical when we're inspecting memory. Once the
+AI compresses away these details from its context, its next decision
+could be a completely wrong-direction red herring — not "insufficiently
+good," but "fundamentally wrong." This is why in these scenarios, I'd
+rather endure the cognitive degradation from long context than ever let
+the agent compress. This information genuinely cannot be lost.</p>
+<p>And debugging isn't a linear process. We're often holding multiple
+hypotheses simultaneously, validating each in turn. Path A hits a wall,
+so we switch to Path B — but that doesn't mean Path A was a dead end.
+Maybe our understanding just wasn't sufficient at the time. After
+accumulating new insights on Path B, looking back, that earlier attempt
+on Path A doesn't seem hopeless after all. So I return to Path A — but
+the AI? You'll probably be facing a fresh-faced newbie with zero
+knowledge of everything we previously explored on Path A. Human
+debugging experience accumulates in spirals; agent memory is
+one-shot.</p>
+<h1 id="in-the-agent-era-do-you-still-need-to-learn-cs-fundamentals">In
+the Agent Era, Do You Still Need to Learn CS Fundamentals?</h1>
+<p>Since evaluating agent output is the core challenge, developer
+fundamentals are obviously still essential. Without them, what are you
+going to use to evaluate the code, modules, and architectural designs
+that agents generate? A developer without evaluation capabilities is no
+different from the retirees getting fleeced at the infomercial gadget
+store.</p>
+<p>So how should you learn?</p>
+<p>Open LeetCode, haven't even finished reading the problem, and Copilot
+has already autocompleted the solution. Hit Submit &amp; Run — top 1%.
+Is that it?</p>
+<p>My take: since we have AI now, of course you can't stay at
+yesterday's difficulty level. Crank it up. <strong>Crank it up until AI
+taps out.</strong></p>
+<p>Don't worry — you won't miss any fundamentals. Once the difficulty is
+high enough, AI hallucinations multiply, and you'll have to fill in
+every gap yourself. The AI will actively mislead you along the way — but
+that's precisely the learning opportunity.</p>
+<p>Say you want to implement a red-black tree, B-tree, or AVL tree.
+Crank it up: add formal verification, throw in generics support. Relax —
+the current strongest models can't do it either.</p>
+<p>Hallucinations actually <em>help</em> you learn — because they
+contain common misconceptions. The process of verifying and correcting
+hallucinations deepens your understanding of the material.</p>
+<p>Of course, not everyone needs to jump straight to formal
+verification. A more practical first step: learn to write specs instead
+of implementations. Before letting the agent start, write out the
+pre/post-conditions for the feature in plain English — what conditions
+the input must satisfy, what constraints the output must meet, which
+edge cases must be covered. Then use that spec as the agent's acceptance
+criteria, instead of tossing in a one-liner wish and hoping for the
+best.</p>
+<p>From plain-English specs to property-based tests to refinement types
+— you can walk this path gradually. But the core competency is the same:
+<strong>accurately describing what you want.</strong> This is itself a
+manifestation of CS fundamentals, and it's the single most irreplaceable
+human capability in the agent era.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>AI frameworks, models, tools, and methodologies are popping up left
+and right, changing by the day. But at the end of the day, they're all
+just patches and add-ons for the model.</p>
+<p>When humans work through a complete workflow, they don't need to
+decompose themselves into multiple "sub-agents" to collaborate — because
+humans genuinely have memory and genuinely learn. The longer you work,
+the more you grow, the more skilled you become. The hidden context in a
+project, the pitfalls you've stepped on, the unwritten rules — they all
+sediment into experience.</p>
+<p>Agents are the opposite. The longer the context, the steeper the
+cognitive decline. Even when details are still technically in context,
+agents increasingly ignore them, hallucinating things that "look
+reasonable" to fill in the gaps.</p>
+<p>The core problem hasn't changed: we still lack reliable means to
+evaluate agent output. Strong typing is a partial first-layer solution,
+FM verification is a partial second-layer solution — but they're both
+only <em>partial</em> solutions.</p>
+<p>Skip one day of learning, you'll miss a lot. Skip a whole year, and
+somehow you haven't missed much at all.</p>
+<p>Frameworks and tools iterate and churn, flavor-of-the-month hype
+cycles come and go, but their marketing far outstrips their actual
+capability and value. CS fundamentals are the time-tested hard currency.
+Rather than chasing the next hot framework or tool, invest your energy
+in strengthening your ability to <em>evaluate agent output</em> — that's
+the truly scarce resource in the agent era.</p>
+<h1 id="addendum-kernel-nic-driver-development-war-story">Addendum:
+Kernel NIC Driver Development War Story</h1>
+<p>After this article was published, readers asked about AI's actual
+capabilities with cross-layer complex problems. Here's a complete case
+study.</p>
+<p>I once gave a talk at Tsinghua University's open-source OS community,
+sharing my experience developing a kernel NIC (network interface card)
+driver with AI assistance. The models at the time were Claude 3.7
+through 4.0, and the result was net-negative — 90% of the information
+was hallucinated misguidance. The AI conflated behaviors from dwmac
+versions 2.x through 5.x, dragged in Qualcomm and Intel chip code, and
+don't even get me started on PHY chip registers and C22/C45 protocol
+details.</p>
+<p>Training data for this domain is relatively siloed — vendor
+documentation is locked behind NDAs and member registrations. The total
+number of people worldwide who've done end-to-end work on this specific
+chip is probably under 100. AI has no clean reference material to draw
+from. The kernel repository has 10–20 years of history, thousands of
+commits, hundreds of thousands of lines of code, plus a mountain of
+vendor-specific and architecture-specific workarounds — all of which is
+noise to the AI.</p>
+<p>At first, I was the outsider, and the collaboration model was
+<strong>AI calls the shots, I do the grunt work</strong> — I'd execute
+whatever approach the AI suggested and report back with error data. But
+as I learned more and realized the AI was feeding me nonsense, the roles
+flipped: <strong>I chart the reverse-engineering path, AI
+executes</strong> — tirelessly running bit-level comparison experiments
+over and over. The final conclusions and next-step decisions were
+co-produced by human + AI, not by letting AI make big autonomous
+leaps.</p>
+<p>This case study actually validates several earlier points: AI
+hallucination is especially severe in domains with sparse training data;
+losing register-level details from long context is catastrophic; and the
+spiral nature of debugging is something current agent architectures
+simply cannot handle. But in reverse — once the human takes the wheel,
+AI as a tireless executor doing bit-level repetitive comparison work is
+genuinely a huge help.</p>
+<hr />
+<p>Originally published on <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/2003390589538956495">Zhihu</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Programming/" rel="tag"># Programming</a>
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
+              <a href="/tags/Translation/" rel="tag"># Translation</a>
+              <a href="/tags/Vibe-Coding/" rel="tag"># Vibe Coding</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/06/vibe-coding-one-year-reflection/" rel="prev" title="明系魔法吟唱之1 -- Vibe Coding 一年实践后的冷思考">
+                  <i class="fa fa-chevron-left"></i> 明系魔法吟唱之1 -- Vibe Coding 一年实践后的冷思考
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/02/24/AI-vs-Human-en/" rel="next" title="Ming's Spell Compendium #2 -- You Terrifying Upright Apes Are Underestimating Yourselves">
+                  Ming's Spell Compendium #2 -- You Terrifying Upright Apes Are Underestimating Yourselves <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  
+  <div class="comments">
+  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ming yang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -127,7 +127,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -155,6 +155,541 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://famer.me/2026/02/06/vibe-coding-one-year-reflection-en/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="ming yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Space">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | My Space">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/02/06/vibe-coding-one-year-reflection-en/" class="post-title-link" itemprop="url">Ming's Spell Compendium #1 -- One Year of Vibe Coding: A Cold Hard Look</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-02-06 13:44:21" itemprop="dateCreated datePublished" datetime="2026-02-06T13:44:21+08:00">2026-02-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><em>This is a cultural adaptation — not a literal translation — of
+the <a href="/2026/02/06/vibe-coding-one-year-reflection/">original
+Chinese article</a>. Some Chinese cultural references have been swapped
+for Western equivalents that hit the same emotional note.</em></p>
+</blockquote>
+<h1 id="foreword">Foreword</h1>
+<p>Over the past year I've burned through more than $10,000 in API
+tokens across Google, Anthropic, and OpenAI. So everything in this
+article is based on hands-on experience with the strongest models
+available — Opus 4.6, Codex-5.3-xhigh, Gemini 3 Pro — used without
+budget constraints.</p>
+<p>Those tokens were spread across four categories of projects: embedded
+kernel drivers, backend architecture, DevOps, and frontend UI. The
+performance gap between domains is absurd — $20 worth of tokens can
+vibe-code a passable React dashboard with minimal human guidance, but
+$2k or even $20k worth of tokens still can't get an agent to produce a
+working kernel driver on real hardware. The conclusions below are drawn
+from this cross-domain comparison.</p>
+<h1 id="the-phenomenon-agents-crisis-of-trust">The Phenomenon: Agent's
+Crisis of Trust</h1>
+<p>It's like a late-night infomercial host waving his <em>Quantum AI
+Bio-Magnetic Resonance Healing Device™</em> at the camera, telling you
+this machine — originally $200,000, but TODAY ONLY $88,000 — will cure
+your chronic back pain, high blood pressure, diabetes, reverse your
+arterial plaque buildup, coronary heart disease, and erectile
+dysfunction.</p>
+<p>Agent programming is currently in that exact state.</p>
+<p>The agent showers you with emoji celebrating the fact that those
+80,000 lines of slop it just generated passed all test cases, and
+assures you it's ready for production. Do you believe it?</p>
+<p>Say you're a project lead, and your most reliable teammate delivers
+80% of tasks on time and at high quality. When they guarantee something
+will ship next week, you can reasonably trust it'll be done by the week
+after at the latest. But when an <em>agent</em> guarantees the code is
+production-ready right now — do you believe it?</p>
+<p>Meanwhile, at this very moment, an army of influencers, course
+peddlers, and self-appointed "AI Godfathers" are separating suckers from
+their money. The curriculum basically boils down to: here's how to
+prompt (tools/skills, same wine in different bottles), then spin up a
+bunch of agents to work in parallel.</p>
+<h2 id="a-real-case-study">A Real Case Study</h2>
+<p>An agent's blind confidence doesn't just mislead the user — it
+misleads the agent itself.</p>
+<p>I once gave an agent this task: integrate GCP Transcoding into the
+current Kotlin project. I provided the product page and documentation as
+references and told it to start planning. The agent produced the
+following plan:</p>
+<ol type="1">
+<li>After reading the docs, discovered the service only provides a Java
+SDK, and the current project uses a different JVM language without
+native support</li>
+<li>Per the RESTful API docs, manually integrate using ktor-client based
+on documented field definitions</li>
+<li>Write the code and run tests</li>
+</ol>
+<p>Did you spot the problem in this plan?</p>
+<p>If you've ever done this kind of work the old-fashioned way —
+artisanal hand-crafted coding — you know that manually implementing a
+RESTful API is never as simple as it sounds. Even covering just the
+basic Transcoding capabilities involves 5–10 endpoints. Each endpoint's
+request/response has dozens or even hundreds of nested field
+definitions, and the agent makes frequent mistakes when dealing with
+this kind of long-context task.</p>
+<p>If instead the agent had chosen to write a thin wrapper around the
+Java SDK (which Google generates from protobuf anyway), the feature
+could have been stable and shipped within half a day to a day.</p>
+<p>But if you let the agent go down the RESTful path, it'll sink into a
+debugging swamp — because when AI hallucination causes it to get an
+optional field name wrong (casing, camelCase, underscores), the program
+won't throw an error right away. How long until you discover the
+implementation is wrong? When customers complain after it hits
+production?</p>
+<p>To be fair, agents aren't making zero progress. For example, complex
+cross-layer debugging — low-probability OS deadlocks, rendering
+glitches, kernel panics, issues where the call chain is long and spans
+multiple layers — was completely useless a year ago, but now it's
+actually net-positive. It can't do full end-to-end root cause analysis,
+but having the agent draft an effective short-scope investigation plan
+works surprisingly well. That said, this still requires human leadership
+— you give it direction, and it executes better and better; but let it
+choose its own direction, and it'll drive you straight into a ditch.</p>
+<p><strong>Why can't we trust agents?</strong> After a year of practice,
+I believe the root cause is: we lack effective means of
+verification.</p>
+<h1 id="the-cause-total-failure-of-verification-methods">The Cause:
+Total Failure of Verification Methods</h1>
+<h2 id="code-review-has-failed">Code Review Has Failed</h2>
+<blockquote>
+<p>Common take: "In a way, AI hasn't really replaced programmers — it's
+just a new high-level tool. As the person responsible for production
+code, you still need to understand what it does."</p>
+</blockquote>
+<p>I'd argue this is nearly impossible in practice.</p>
+<p>In our internal code reviews, most of the time we were really just
+reviewing code <em>style</em>. The author would walk through the design,
+we'd give it a once-over, and that was that. This used to work
+because:</p>
+<ul>
+<li>PRs with sloppy code style also had messy designs, poor performance,
+and no extensibility</li>
+<li>PRs with clean code style had clear designs, thoughtful performance
+considerations, and even if there were bottlenecks, they were easy to
+fix</li>
+</ul>
+<p><strong>But this correlation doesn't exist in the agent coding era —
+in fact, it's inverted.</strong></p>
+<p>An agent can generate beautifully commented, stylistically flawless —
+garbage code — in under a minute. When I eyeball it, I regularly get
+lulled into a false sense of security by that first layer of polish. The
+thing is, this garbage is hard to catch during review; it usually takes
+a production incident and a deep investigation to discover it's
+"chocolate-flavored crap."</p>
+<p>Trust me — Opus, Codex-xhigh, those models you can't afford? I've
+cranked every setting to max and mashed the gas. Same problem.</p>
+<p>I also tried having AI review <em>my</em> designs. The sycophantic
+tone is something else — I fed GPT-4o a design I <em>knew</em> was
+flawed, and back came "enterprise-level," "future-proof," "scalable,"
+just blowing smoke up my ass nonstop. I later changed the prompt to make
+it roleplay as "that insufferable coworker" who criticizes everything,
+and it got slightly better. But the end result was still underwhelming —
+AI sees coherent, professional-sounding text and drops its guard, giving
+high marks even when the content is dead wrong.</p>
+<h2 id="testing-has-failed">Testing Has Failed</h2>
+<p>Don't even get me started on testing. Test cases are now also
+vibe-coded by the agent — it's both the player and the referee, whatever
+it says goes. It's scammed me more than once. Thousands of lines of
+getter/setter tests, all green, "ready for production, boss!"</p>
+<p>Like the GCP Transcoding example: the agent misspelled an optional
+field name, and the tests still passed — because the tests were also
+written by the same agent. Consistently wrong = "correct."</p>
+<p>Some people suggest: have different agents specialize — one writes
+code, another writes tests. I've tried it. It's marginally better than
+self-testing; obvious bugs do get caught. But these agents share the
+same training data and systematic biases — their blind spots overlap
+almost completely. Unlike two human developers — one from an embedded
+systems background, one from web dev — whose knowledge structures and
+cognitive blind spots actually complement each other. Two agents, no
+matter how you split the roles, are fundamentally classmates from the
+same bootcamp. You've solved the "same person writes and grades the
+exam" problem, but not the "every exam writer graduated from the same
+program" problem.</p>
+<p>And AI reviewing itself has steeply diminishing returns. If the first
+review agent missed an issue, the second and third reviews will almost
+certainly miss it too — unless you can feed them additional error
+information.</p>
+<h2 id="comparison-with-traditional-industry">Comparison with
+Traditional Industry</h2>
+<p>At this point someone might ask: don't other industries face this
+problem after being augmented by machines and automation?</p>
+<p>Let me use CNC machining as an analogy:</p>
+<p>A CNC machine is more precise than I am, but after it produces a
+part, we can perform objective physical measurement — grab some
+calipers, check whether the tolerance is within ±0.01mm. Crystal clear.
+Even if I couldn't hand-machine a part to that precision, I can still
+<em>evaluate</em> whether the CNC machine and its output meet the
+standard.</p>
+<p><strong>That's the state of traditional manufacturing after machine
+augmentation: machines are precise, quality is consistent and stable,
+and humans can still evaluate the output.</strong></p>
+<p>So what should the ideal state look like for software development
+after the Agent revolution? The agent delivers code that genuinely
+covers the requirements, includes basic security protections, and is
+easier to maintain long-term (even if we only consider
+agent-maintainability, not human readability), with better performance
+and lower resource consumption.</p>
+<p>But software doesn't just need to satisfy the current requirements
+doc — it also needs to account for basic security. A feature-complete
+project riddled with security holes is still failing.</p>
+<p>And right now, we can't evaluate whether agents have reached that
+state. For just the baseline requirement of "feature implementation,"
+agents still can't operate without human guidance and test verification
+— let alone security, maintainability, and performance.</p>
+<p>The problem is: our mainstream verification methods — human review
+and automated testing — can both be "contaminated" by the agent. It can
+write stylistically perfect but logically toxic code, and it can write
+tests that perfectly match the flawed code. What we need is a set of
+calipers the agent can't tamper with — objective, deterministic
+verification that doesn't rely on the agent's own judgment.</p>
+<p>A CNC machine that achieves great precision on plastic and aluminum
+parts doesn't necessarily maintain that precision on titanium or
+stainless steel. The latter tests overall rigidity and the thermal
+expansion compensation requirements as workpiece mass increases.</p>
+<p>Same principle: code that passes a couple of mouse clicks in local
+testing will, with high probability, blow up spectacularly in
+production.</p>
+<p><strong>Traditional industry: machines are precise, quality is
+stable, humans can evaluate. Software industry: agents are fast,
+coverage is broad, but humans can't reliably evaluate. That's the
+problem — where are the calipers?</strong></p>
+<h1 id="the-solution-let-the-compiler-be-your-gatekeeper">The Solution:
+Let the Compiler Be Your Gatekeeper</h1>
+<p>Since human evaluation (code review) and automated testing are both
+unreliable, we need another evaluation method — one that is objective,
+verifiable, and doesn't depend on the agent's own judgment.</p>
+<p>My position runs counter to mainstream AI coding philosophy:</p>
+<p><strong>In the agent coding era, we need <em>stronger</em> types,
+<em>stricter</em> verifiable languages — not letting agents run wild
+with Python, JS, Java, Go, and let's not forget AnyScript.</strong></p>
+<p>Why?</p>
+<p>AI piles up slop at such velocity — forget tens of thousands of
+lines, I'm already too lazy to read line-by-line past 100 lines. But
+reading type signatures and pre/post-conditions is dramatically faster
+than reading logic code. And these things can only be provided by Rust,
+Scala, Haskell, or even formal methods.</p>
+<p>I was already writing code this way before agents existed — once your
+codebase gets large enough, compiler checks are more reliable than
+eyeballing it. Now that agent coding has become mainstream, I've found
+that holding agents to this standard is one of the more effective ways
+to control output quality — only to a degree, of course, but at least
+better than nothing.</p>
+<p>Back to the GCP Transcoding example: if the agent were using a
+strongly-typed language, misspelled field names would at least get
+caught by the type system at compile time. But with RESTful + weak
+typing, errors are silent until it's too late.</p>
+<p>But this is only the first line of defense. Strong typing catches
+type mismatches, null pointer issues, Rust's lifetime errors — these are
+"syntax-level" problems. The compiler can tell you "this code doesn't
+compile," but it can't tell you "this code is logically wrong."</p>
+<h2 id="second-line-of-defense-let-z3-prove-it-for-you">Second Line of
+Defense: Let z3 Prove It For You</h2>
+<p>The next level is formal-methods-grade verification — using
+refinement types or tools like OpenJML to encode business constraints
+directly into the type system.</p>
+<p>A concrete example: have the agent write a sort function. Traditional
+strong typing ensures the input/output types are correct — takes an
+array, returns an array. But it can't ensure the returned array is
+actually sorted. With refinement types, you can write this directly in
+the function signature:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ensures(forall i, j : i &lt; j → arr[i] ≤ arr[j])</span><br></pre></td></tr></table></figure>
+<p>This pre/post-condition is your "quality tolerance standard." The z3
+solver will mathematically <em>prove</em> whether the agent's
+hundred-line sort implementation actually satisfies this constraint for
+all possible inputs. Proof passes = passes. Proof fails = fails. There's
+no room for the agent to bluff its way through by insisting "looks fine
+to me."</p>
+<p><strong>The key insight: humans only need to review this one line of
+spec to verify it expresses the intended semantics — no need to read
+hundreds of lines of implementation.</strong> This is the set of
+calipers the agent can't tamper with.</p>
+<h2 id="practical-results">Practical Results</h2>
+<p>First line of defense — credit where it's due. The latest top-tier
+models can usually pass compilation, unless you're even more obsessed
+with type-level gymnastics than I am.</p>
+<p>In the past, agents hitting Rust lifetime errors or functional type
+puzzles would loop for dozens of rounds or spiral into infinite retries
+until context blew up. Formal methods have a steep learning curve to
+begin with — even the human brain has to maintain continuous abstract
+symbolic reasoning. I once believed AI would never learn to solve
+type-level puzzles.</p>
+<p>But things have changed. Pure-FP Scala, tagless final — Opus 4.5 and
+Codex-xhigh follow the patterns quite well, and passing compilation is
+basically automatic now. Functional type gymnastics produce error
+messages that are dozens or hundreds of lines of type-theoretic
+hieroglyphics, and agents can now read and fix these without much
+trouble.</p>
+<p>The crucial point: agents aren't solving type puzzles by cheating
+(slapping <code>asInstanceOf</code> or <code>any</code> everywhere).
+They genuinely fill in the gaps through iterative attempts. This isn't
+circumvention — it gives me real confidence that AI might actually be
+able to write code that passes FM checks. If that happens, code
+correctness gets a formal guarantee, which is far more comprehensive and
+reliable than unit test coverage.</p>
+<p>But the second line of defense is still another world entirely.
+FM-grade verification errors — z3 solver failures, refinement type
+constraint violations — agents still struggle badly with these. Though
+the breakthrough on the first line makes me believe this path has
+potential.</p>
+<h2 id="limitations">Limitations</h2>
+<p>Of course, this approach has its limits.</p>
+<p>In practice, formal methods toolchains and ecosystems are still
+barren — most only support a very limited subset of a single language.
+Many engineering patterns and syntax that are bread-and-butter in
+production code are unsound or unproven in FM land. And that's before we
+get to the infinite loops and unprovable proofs — one wrong move and the
+z3 solver is searching a possibility space larger than the observable
+universe, still grinding away when the heat death arrives.</p>
+<p>Strong types and FM solve <em>some</em> problems, but not all.</p>
+<h1 id="the-deeper-dilemma-plan-vs.-execute">The Deeper Dilemma: Plan
+vs. Execute</h1>
+<p>Even with strong types + FM as evaluation tools, there's a deeper
+problem: the agent's understanding and execution of plans.</p>
+<p>The GCP Transcoding example already exposed this: the agent chose to
+manually implement RESTful instead of wrapping the Java SDK. This wasn't
+a coding error — it was <strong>a strategic error</strong>. The compiler
+can tell you if there's a syntax error; z3 can prove whether your
+implementation meets the spec; but neither can tell you whether you
+should be walking this path at all.</p>
+<p>A more extreme example: give an agent a complex task — design a
+rocket engine. The plan calls for a full-flow staged combustion cycle;
+the approach specifies a coaxial design.</p>
+<p><strong>If the agent doesn't follow the plan:</strong> it might
+wander off into a gas-generator cycle. The compiler can tell you the
+code compiles, but it can't tell you whether this is the rocket engine
+you asked for.</p>
+<p><strong>If the agent follows the plan <em>too</em>
+faithfully:</strong> it actually builds the coaxial design, and then you
+hit an even bigger problem in production — the dynamic sealing system
+fails, oxidizer and fuel leak into each other through the turbine shaft,
+and one of the preburners is about to have a very bad day. The compiler
+can guarantee type correctness, z3 can guarantee the implementation
+matches the spec, but neither can guarantee the spec itself is a sound
+design.</p>
+<p>The current plan/edit mode toggle is just a stopgap — an admission
+that we don't have a better answer yet. This problem is harder than
+"missing evaluation tools" because it involves understanding
+requirements and design, not just code quality.</p>
+<h1 id="peak-on-first-contact">Peak on First Contact</h1>
+<p>Agent programming has a striking characteristic: <strong>it peaks on
+first contact.</strong></p>
+<p>Hand an agent a brand-new CRUD project or a React admin panel, and
+its first attempt genuinely impresses — clean, well-structured,
+thoughtfully commented with error handling baked in.</p>
+<p>But as the project matures, the unspoken, undocumented,
+implicitly-understood hidden context keeps growing. Which field is
+deprecated but never deleted, which API has a historical quirk, which
+modules have a subtle dependency — the veterans know all this by heart,
+but nobody ever wrote it down.</p>
+<p>And agents can't handle infinite context. They can only selectively
+forget through compression and summarization. What gets dropped might be
+the lessons from failed attempts, or it might be critical data structure
+offsets, register addresses, or enum definitions.</p>
+<p>This isn't a feeling. In practice, when context window usage hits
+~30% the agent is already noticeably dumber, and at ~50% it's performing
+worse than the base model. Even when critical details are still
+technically in-context, the agent will look right through them.</p>
+<p>Every time you start a new session, you're facing an almost brand-new
+"employee" — one that seems to have inherited compressed context
+(claude.md / agents.md) but knows none of the details. You have to
+re-explain everything: "No, I know the docs say to pass this parameter,
+but in practice we never actually send it…"</p>
+<p>For CRUD, Spring, and React — highly repetitive tasks — this barely
+registers as a pain point. It's basically the same thing every time;
+forgotten, so what.</p>
+<p>But for embedded systems development, any forgotten detail gets
+filled in by the agent's wildly creative hallucinations. Register
+address wrong? Interrupt priority misconfigured? DMA channel conflict?
+Minor case: system crash. Major case: permanently fried hardware. This
+isn't a "fix the bug and redeploy" situation.</p>
+<p>Worse still, kernels are riddled with register addresses and flag
+constants, and these are critical when we're inspecting memory. Once the
+AI compresses away these details from its context, its next decision
+could be a completely wrong-direction red herring — not "insufficiently
+good," but "fundamentally wrong." This is why in these scenarios, I'd
+rather endure the cognitive degradation from long context than ever let
+the agent compress. This information genuinely cannot be lost.</p>
+<p>And debugging isn't a linear process. We're often holding multiple
+hypotheses simultaneously, validating each in turn. Path A hits a wall,
+so we switch to Path B — but that doesn't mean Path A was a dead end.
+Maybe our understanding just wasn't sufficient at the time. After
+accumulating new insights on Path B, looking back, that earlier attempt
+on Path A doesn't seem hopeless after all. So I return to Path A — but
+the AI? You'll probably be facing a fresh-faced newbie with zero
+knowledge of everything we previously explored on Path A. Human
+debugging experience accumulates in spirals; agent memory is
+one-shot.</p>
+<h1 id="in-the-agent-era-do-you-still-need-to-learn-cs-fundamentals">In
+the Agent Era, Do You Still Need to Learn CS Fundamentals?</h1>
+<p>Since evaluating agent output is the core challenge, developer
+fundamentals are obviously still essential. Without them, what are you
+going to use to evaluate the code, modules, and architectural designs
+that agents generate? A developer without evaluation capabilities is no
+different from the retirees getting fleeced at the infomercial gadget
+store.</p>
+<p>So how should you learn?</p>
+<p>Open LeetCode, haven't even finished reading the problem, and Copilot
+has already autocompleted the solution. Hit Submit &amp; Run — top 1%.
+Is that it?</p>
+<p>My take: since we have AI now, of course you can't stay at
+yesterday's difficulty level. Crank it up. <strong>Crank it up until AI
+taps out.</strong></p>
+<p>Don't worry — you won't miss any fundamentals. Once the difficulty is
+high enough, AI hallucinations multiply, and you'll have to fill in
+every gap yourself. The AI will actively mislead you along the way — but
+that's precisely the learning opportunity.</p>
+<p>Say you want to implement a red-black tree, B-tree, or AVL tree.
+Crank it up: add formal verification, throw in generics support. Relax —
+the current strongest models can't do it either.</p>
+<p>Hallucinations actually <em>help</em> you learn — because they
+contain common misconceptions. The process of verifying and correcting
+hallucinations deepens your understanding of the material.</p>
+<p>Of course, not everyone needs to jump straight to formal
+verification. A more practical first step: learn to write specs instead
+of implementations. Before letting the agent start, write out the
+pre/post-conditions for the feature in plain English — what conditions
+the input must satisfy, what constraints the output must meet, which
+edge cases must be covered. Then use that spec as the agent's acceptance
+criteria, instead of tossing in a one-liner wish and hoping for the
+best.</p>
+<p>From plain-English specs to property-based tests to refinement types
+— you can walk this path gradually. But the core competency is the same:
+<strong>accurately describing what you want.</strong> This is itself a
+manifestation of CS fundamentals, and it's the single most irreplaceable
+human capability in the agent era.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>AI frameworks, models, tools, and methodologies are popping up left
+and right, changing by the day. But at the end of the day, they're all
+just patches and add-ons for the model.</p>
+<p>When humans work through a complete workflow, they don't need to
+decompose themselves into multiple "sub-agents" to collaborate — because
+humans genuinely have memory and genuinely learn. The longer you work,
+the more you grow, the more skilled you become. The hidden context in a
+project, the pitfalls you've stepped on, the unwritten rules — they all
+sediment into experience.</p>
+<p>Agents are the opposite. The longer the context, the steeper the
+cognitive decline. Even when details are still technically in context,
+agents increasingly ignore them, hallucinating things that "look
+reasonable" to fill in the gaps.</p>
+<p>The core problem hasn't changed: we still lack reliable means to
+evaluate agent output. Strong typing is a partial first-layer solution,
+FM verification is a partial second-layer solution — but they're both
+only <em>partial</em> solutions.</p>
+<p>Skip one day of learning, you'll miss a lot. Skip a whole year, and
+somehow you haven't missed much at all.</p>
+<p>Frameworks and tools iterate and churn, flavor-of-the-month hype
+cycles come and go, but their marketing far outstrips their actual
+capability and value. CS fundamentals are the time-tested hard currency.
+Rather than chasing the next hot framework or tool, invest your energy
+in strengthening your ability to <em>evaluate agent output</em> — that's
+the truly scarce resource in the agent era.</p>
+<h1 id="addendum-kernel-nic-driver-development-war-story">Addendum:
+Kernel NIC Driver Development War Story</h1>
+<p>After this article was published, readers asked about AI's actual
+capabilities with cross-layer complex problems. Here's a complete case
+study.</p>
+<p>I once gave a talk at Tsinghua University's open-source OS community,
+sharing my experience developing a kernel NIC (network interface card)
+driver with AI assistance. The models at the time were Claude 3.7
+through 4.0, and the result was net-negative — 90% of the information
+was hallucinated misguidance. The AI conflated behaviors from dwmac
+versions 2.x through 5.x, dragged in Qualcomm and Intel chip code, and
+don't even get me started on PHY chip registers and C22/C45 protocol
+details.</p>
+<p>Training data for this domain is relatively siloed — vendor
+documentation is locked behind NDAs and member registrations. The total
+number of people worldwide who've done end-to-end work on this specific
+chip is probably under 100. AI has no clean reference material to draw
+from. The kernel repository has 10–20 years of history, thousands of
+commits, hundreds of thousands of lines of code, plus a mountain of
+vendor-specific and architecture-specific workarounds — all of which is
+noise to the AI.</p>
+<p>At first, I was the outsider, and the collaboration model was
+<strong>AI calls the shots, I do the grunt work</strong> — I'd execute
+whatever approach the AI suggested and report back with error data. But
+as I learned more and realized the AI was feeding me nonsense, the roles
+flipped: <strong>I chart the reverse-engineering path, AI
+executes</strong> — tirelessly running bit-level comparison experiments
+over and over. The final conclusions and next-step decisions were
+co-produced by human + AI, not by letting AI make big autonomous
+leaps.</p>
+<p>This case study actually validates several earlier points: AI
+hallucination is especially severe in domains with sparse training data;
+losing register-level details from long context is catastrophic; and the
+spiral nature of debugging is something current agent architectures
+simply cannot handle. But in reverse — once the human takes the wheel,
+AI as a tireless executor doing bit-level repetitive comparison work is
+genuinely a huge help.</p>
+<hr />
+<p>Originally published on <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/2003390589538956495">Zhihu</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -200,7 +735,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
     </span>
 
   
@@ -213,7 +748,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="前言">前言</h1>
+          <blockquote>
+<p><strong>英文文化适配版：</strong> <a href="/2026/02/06/vibe-coding-one-year-reflection-en/" title="Ming&#39;s Spell Compendium #1 -- One Year of Vibe Coding: A Cold Hard Look">One Year of Vibe Coding: A Cold Hard Look (English cultural adaptation)</a></p>
+</blockquote>
+<h1 id="前言">前言</h1>
 <p>最近一年我在 Google/Anthropic/OpenAI 三家烧了超过 1 万美金的 token
 账单。所以本文内容基于 opus4.6、codex-5.3-xhigh、gemini3-pro
 等最强模型不限量使用所表现出来的编码能力进行评价。</p>
@@ -577,7 +1115,7 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/20033905895389
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
     </span>
 
   
@@ -848,7 +1386,7 @@ choose your preferred technology to do so.</p>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
     </span>
 
   
@@ -1027,7 +1565,7 @@ database</figcaption>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
     </span>
 
   
@@ -1203,7 +1741,7 @@ entropy.</p>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
     </span>
 
   
@@ -1424,7 +1962,7 @@ GC 性能指标时，更关注的是吞吐量而不是回收实时性，如果�
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
     </span>
 
   
@@ -1522,7 +2060,7 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
     </span>
 
   
@@ -1598,7 +2136,7 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
     </span>
 
   
@@ -1674,7 +2212,7 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
+      <time title="Modified: 2026-03-17 11:39:44" itemprop="dateModified" datetime="2026-03-17T11:39:44+08:00">2026-03-17</time>
     </span>
 
   
@@ -1724,176 +2262,8 @@ generated.(throttle)</li>
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://famer.me/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="ming yang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="My Space">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | My Space">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/" class="post-title-link" itemprop="url">After I migrated my legacy playframework project to zio, what I learned from it.</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-13 18:37:55" itemprop="dateCreated datePublished" datetime="2021-05-13T18:37:55+08:00">2021-05-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-17 11:25:33" itemprop="dateModified" datetime="2026-03-17T11:25:33+08:00">2026-03-17</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <ul>
-<li><a href="#foreword">Foreword</a></li>
-<li><a href="#what-is-r">What is <code>R</code></a></li>
-<li><a href="#what-are-the-problems-caused-by-di-tools">What are the
-problems caused by DI tools?</a></li>
-<li><a href="#current-situation">Current Situation</a></li>
-<li><a href="#evolution-stage-1">Evolution Stage 1</a></li>
-<li><a href="#evolution-stage-2">Evolution Stage 2</a></li>
-<li><a href="#evolution-stage-3">Evolution Stage 3</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-<li><a href="#references">References</a></li>
-</ul>
-<h1 id="foreword">Foreword</h1>
-<p>On April 17, 2020, I start a huge project to migrate the
-<code>Future[T]</code> from legacy playframework project to
-<code>ZIO</code>. Three months later, after tens of thousands of lines
-of code modification, the migration was a complete success. In
-September, I used this experience as the background to share in the
-Chinese Scala Meetup community with the title <a
-target="_blank" rel="noopener" href="https://www.slideshare.net/ssuser81d309/scala-meetup-248313493">"Introduction
-to ZIO"</a>. In this share, I explained a fanatic imageation,
-在这次分享中，我展望了一个美好的愿景，借由 <code>ZIO</code> 的类型参数
-<code>R</code>
-提供的抽象能力来实现代码的可移植性，和提高可测试性。但想在遗留项目中实现这个愿景并不容易，主要挑战来自遗留项目的代码耦合，和开发者的思维惯性。如今，这个愿景已经达成。我会在这篇
-Post 中与你分享我的进化之路。</p>
-<h1 id="what-is-r">What is <code>R</code></h1>
-<blockquote>
-<p>A <code>ZIO[R, E, A]</code> value is an immutable value that lazily
-describes a workflow or job. The workflow requires some environment
-<code>R</code>, and may fail with an error of type <code>E</code>, or
-succeed with a value of type <code>A</code>.</p>
-</blockquote>
-<p>上面这段来自 <code>ZIO</code> 源码中的注释，其中指出 <code>R</code>
-是 workflow
-所需要的环境参数的类型。我们可以借助这个环境参数，来抽象出过程对环境的依赖。
-这听起来非常像依赖注入，实际上确实如此。不同的是，常见的控制反转框架，注入入口都是业务逻辑类的成员以及其构造函数（比如：<a
-target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-autowire">spring
-autowire</a>、 <a target="_blank" rel="noopener" href="https://github.com/google/guice">guice</a>、 <a
-target="_blank" rel="noopener" href="https://github.com/softwaremill/macwire">macwire</a> 等）；而
-<code>ZIO</code> 的做法是，在运行时提供环对象的实例。</p>
-<p>Example:</p>
-<p>Spring <code>@Autowired</code>: Inject the dependent instance into
-the object as a member of the class <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MovieRecommender</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CustomerPreferenceDao customerPreferenceDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MovieRecommender</span><span class="params">(CustomerPreferenceDao customerPreferenceDao)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.customerPreferenceDao = customerPreferenceDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> ZIO <code>R</code>:
-Treat the instance as part of the environment, and provide it on demand
-at runtime <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">MovieRecommender</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recommend</span></span>(): <span class="type">ZIO</span>[<span class="type">CustomerPreferenceDao</span>, <span class="type">Throwable</span>, <span class="type">RecommendResult</span>] = &#123;</span><br><span class="line">      ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="what-are-the-problems-caused-by-di-tools">What are the problems
-caused by DI tools?</h1>
-<p>I want to ask the reader a question: <strong><em>How much does it
-cost to test a small feature in your software system?</em></strong></p>
-<p>See: <a
-target="_blank" rel="noopener" href="https://github.com/mingyang91/scala-meetup/tree/master/src/main/scala/meetup/di/legacy">Negative
-example</a>。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> meetup.di.legacy</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> meetup.di.legacy.member.&#123;<span class="type">Accountant</span>, <span class="type">Baker</span>, <span class="type">CandyMaker</span>, <span class="type">Cashier</span>, <span class="type">Decorator</span>, <span class="type">HunanChef</span>, <span class="type">Logistic</span>, <span class="type">Manager</span>, <span class="type">Security</span>, <span class="type">SichuanChef</span>, <span class="type">Waiter</span>, <span class="type">Washer</span>&#125;</span><br><span class="line"><span class="keyword">import</span> meetup.di.legacy.tools.&#123;<span class="type">Mixer</span>, <span class="type">Oven</span>, <span class="type">PipingTip</span>, <span class="type">Turntable</span>&#125;</span><br><span class="line"><span class="keyword">import</span> meetup.di.legacy.utils.<span class="type">Demo</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">djx314</span> <span class="keyword">extends</span> <span class="title">App</span> <span class="keyword">with</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">  <span class="keyword">val</span> mixer = <span class="keyword">new</span> <span class="type">Mixer</span>()</span><br><span class="line">  <span class="keyword">val</span> oven = <span class="keyword">new</span> <span class="type">Oven</span>()</span><br><span class="line">  <span class="keyword">val</span> pipingTip = <span class="keyword">new</span> <span class="type">PipingTip</span>()</span><br><span class="line">  <span class="keyword">val</span> turntable = <span class="keyword">new</span> <span class="type">Turntable</span>()</span><br><span class="line">  <span class="keyword">val</span> baker = <span class="keyword">new</span> <span class="type">Baker</span>(oven, mixer)</span><br><span class="line">  <span class="keyword">val</span> decorator = <span class="keyword">new</span> <span class="type">Decorator</span>(mixer, pipingTip, turntable)</span><br><span class="line">  <span class="keyword">val</span> candyMaker = <span class="keyword">new</span> <span class="type">CandyMaker</span></span><br><span class="line">  <span class="keyword">val</span> scChef = <span class="keyword">new</span> <span class="type">SichuanChef</span></span><br><span class="line">  <span class="keyword">val</span> hnChef = <span class="keyword">new</span> <span class="type">HunanChef</span></span><br><span class="line">  <span class="keyword">val</span> cashier = <span class="keyword">new</span> <span class="type">Cashier</span></span><br><span class="line">  <span class="keyword">val</span> waiter = <span class="keyword">new</span> <span class="type">Waiter</span></span><br><span class="line">  <span class="keyword">val</span> washer = <span class="keyword">new</span> <span class="type">Washer</span></span><br><span class="line">  <span class="keyword">val</span> logistic = <span class="keyword">new</span> <span class="type">Logistic</span></span><br><span class="line">  <span class="keyword">val</span> security = <span class="keyword">new</span> <span class="type">Security</span></span><br><span class="line">  <span class="keyword">val</span> accountant = <span class="keyword">new</span> <span class="type">Accountant</span></span><br><span class="line">  <span class="keyword">val</span> manager = <span class="keyword">new</span> <span class="type">Manager</span></span><br><span class="line">  <span class="keyword">val</span> cs = <span class="keyword">new</span> <span class="type">CakeShop</span>(</span><br><span class="line">    baker, decorator, candyMaker,</span><br><span class="line">    scChef, hnChef, cashier,</span><br><span class="line">    waiter, washer, logistic,</span><br><span class="line">    security, accountant, manager</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  cs.simpleCake()</span><br><span class="line">    .onComplete(println)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>I just want to test a small part of the functions, why do I need to
-construct all dependent instances. Why do I have to do so much
-preparation to test this simple function. Because it belongs to the
-method of the class, and this class has too many construction
-parameters, these construction parameters are unnecessary for the
-function we want to test</p>
-<p>若想让工程代码最大程度上可移植、可测试，一个简单易行的方法是：<strong><em>不要在类中编写与对象无关(no
-use <code>this</code>)的函数，将他们移动到 <code>object</code> 中(in
-java: mark method
-<code>static</code>)。</em></strong>同时，编写引用透明的代码对达成这一目标有正面作用。</p>
-<p>但是，在遗留项目中实现这一点有些困难,
-因为大多数开发者都把依赖注入框架错用了，就像上面的反面教材一样。Even
-Spring contributors made the same mistake. See: <a
-target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java">Spring's
-sample project</a></p>
-<p>Too many irrelevant dependencies have brought huge obstacles to the
-portability of codes, turning them into ad hoc codes that are difficult
-to test.</p>
-<p>The whole system is like a balls made up of strings and knots. <img
-src="/images/mass-string-ball.jpeg"
-alt="Software System like a ball made up of strings and knots" /></p>
-<h1 id="current-situation">Current Situation</h1>
-<p>社区中的方案... zio layer 每次 unsafeRun
-都会重新生成，这很纯函数式，但这不适合 web 服务。例如连接池</p>
-<p>遇到的问题 * 连接池 * 信号量</p>
-<p>所以，我只能自己尝试：</p>
-<h1 id="evolution-stage-1">Evolution Stage 1</h1>
-<p>ZioController + PlayRunner</p>
-<h1 id="evolution-stage-2">Evolution Stage 2</h1>
-<p>ZController + ZRunner <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">```scala</span><br></pre></td></tr></table></figure></p>
-<h1 id="evolution-stage-3">Evolution Stage 3</h1>
-<p>ZController + Runtime.Managed <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">ZController</span>[<span class="type">Z</span>, <span class="type">R</span>[_], <span class="title">B</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">runtime</span></span>: <span class="type">Runtime</span>.<span class="type">Managed</span>[<span class="type">Z</span>]</span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">ActionBuilderOps</span>(<span class="params">actionBuilder: <span class="type">ActionBuilder</span>[<span class="type">R</span>, <span class="type">B</span>]</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">zio</span></span>[<span class="type">E</span>](zioActionBody: =&gt; <span class="type">ZIO</span>[<span class="type">Z</span>, <span class="type">Throwable</span>, <span class="type">Result</span>]): <span class="type">Action</span>[<span class="type">AnyContent</span>] = actionBuilder.async &#123;</span><br><span class="line">      runtime.unsafeRunToFuture(zioActionBody.resurrect)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">zio</span></span>[<span class="type">E</span>](zioActionBody: <span class="type">R</span>[<span class="type">B</span>] =&gt; <span class="type">ZIO</span>[<span class="type">Z</span>, <span class="type">Throwable</span>, <span class="type">Result</span>]): <span class="type">Action</span>[<span class="type">B</span>] = actionBuilder.async &#123; req =&gt;</span><br><span class="line">      runtime.unsafeRunToFuture(zioActionBody(req).resurrect)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * A runtime that can be shutdown to release resources allocated to it.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Managed</span>[+<span class="type">R</span>] <span class="keyword">extends</span> <span class="title">Runtime</span>[<span class="type">R</span>] </span>&#123; <span class="comment">/* ... */</span> &#125;</span><br></pre></td></tr></table></figure>
-<p>使用起来</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ExampleController</span> </span>&#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Config</span>(<span class="params">endpoint: <span class="type">String</span></span>)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">flow</span></span>(endpoint: <span class="type">String</span>, url: <span class="type">String</span>, body: <span class="type">RawBuffer</span>): <span class="type">ZIO</span>[<span class="type">Has</span>[<span class="type">WSClient</span>], <span class="type">Throwable</span>, <span class="type">String</span>] = ???</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleController</span>(<span class="params">cc: <span class="type">ControllerComponents</span>,</span></span></span><br><span class="line"><span class="params"><span class="class">                        config: <span class="type">ExampleController</span>.<span class="type">Config</span>,</span></span></span><br><span class="line"><span class="params"><span class="class">                        <span class="type">MAction</span>: <span class="type">MemberAction</span></span>)</span></span><br><span class="line">                       (<span class="keyword">implicit</span> <span class="keyword">val</span> runtime: <span class="type">Runtime</span>.<span class="type">Managed</span>[<span class="type">Has</span>[<span class="type">WSClient</span>]],</span><br><span class="line">                        <span class="keyword">val</span> ec: <span class="type">ExecutionContext</span>)</span><br><span class="line">  <span class="keyword">extends</span> <span class="type">AbstractController</span>(cc) <span class="keyword">with</span> <span class="type">ZController</span>[<span class="type">Has</span>[<span class="type">WSClient</span>], <span class="type">MemberRequest</span>, <span class="type">RawBuffer</span>] &#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">handle</span></span>(url: <span class="type">String</span>): <span class="type">Action</span>[<span class="type">RawBuffer</span>] = <span class="type">MAction</span>(parse.raw) zio &#123; request: <span class="type">MemberRequest</span>[<span class="type">RawBuffer</span>] =&gt;</span><br><span class="line">    flow(config.endpoint, url, request.body)</span><br><span class="line">      .map(name =&gt; <span class="type">Ok</span>(name))</span><br><span class="line">      .mapError(e =&gt; <span class="type">InternalServerError</span>(<span class="string">&quot;Oh no!\n&quot;</span> + e.getMessage))</span><br><span class="line">      .merge</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="conclusion">Conclusion</h1>
-<h1 id="references">References</h1>
-<p><a
-target="_blank" rel="noopener" href="https://www.markopapic.com/dependency-injection-tradeoffs/">Dependency
-Injection Trade-offs</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
