@@ -600,7 +600,7 @@ float Q_rsqrt(float number)
 
 所以在这里我要开始插入卖课链接了——
 
-![AI 导师介绍](/images/cyber-moneyball/ai_tutor_ip_card.jpg)
+![AI 导师介绍](/images/cyber-moneyball/ai_tutor_ip_card.png)
 不开玩笑了。
 
 ---
