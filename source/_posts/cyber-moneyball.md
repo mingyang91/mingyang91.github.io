@@ -156,6 +156,14 @@ L17-L18 是 token 黑洞——两个级别消耗全程约 40% 的 token，无论
 
 ![Levels Passed](/images/cyber-moneyball/levels_passed.png)
 
+### Default vs QG 每级别 token 消耗对比
+
+![Default vs QG](/images/cyber-moneyball/default_vs_qg.png)
+
+上图：蓝线=屎山组 (Default)，红线=QG 组，平均跨所有语言和轮次。下图：QG/Default 比率，红柱 (>1.0) 表示 QG 更贵。
+
+关键发现：两组的 token 消耗曲线高度重合。L18 (call/cc) 是唯一明显的峰——两组都在这里烧掉大量 token。QG 组在 L22 (syntax-case) 和 L24 (集成测试) 略贵，但差异远不到"QG 被拖死"的程度。QG 组输掉的不是单级别效率，而是累计的规范摩擦导致更多级别未完赛。
+
 <!-- TODO: 补充思考链统计: 长思考次数、长度、总思考时间 -->
 
 ## 实验过程中的多次反转
@@ -165,7 +173,11 @@ L17-L18 是 token 黑洞——两个级别消耗全程约 40% 的 token，无论
 
 ## 多模型对比
 
-<!-- TODO: Claude vs Codex vs 国内模型的对比数据 -->
+### Claude vs Codex 成本效率
+
+![Agent Comparison](/images/cyber-moneyball/agent_comparison.png)
+
+R32 数据：Codex 在所有语言上的单位成本 ($0.8-1.1/级) 是 Claude ($4.2-10.0/级) 的 1/6 到 1/10。但注意柱上方的通过数：Claude 在 Rust 上 26/26 全通，Codex 也是 26/26——在完赛的前提下 Codex 便宜一个数量级。
 
 Claude is the better builder, Codex is a surprisingly competitive debugger.
 
