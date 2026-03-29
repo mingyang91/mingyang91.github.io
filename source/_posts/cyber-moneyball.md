@@ -164,7 +164,15 @@ L17-L18 是 token 黑洞——两个级别消耗全程约 40% 的 token，无论
 
 关键发现：两组的 token 消耗曲线高度重合。L18 (call/cc) 是唯一明显的峰——两组都在这里烧掉大量 token。QG 组在 L22 (syntax-case) 和 L24 (集成测试) 略贵，但差异远不到"QG 被拖死"的程度。QG 组输掉的不是单级别效率，而是累计的规范摩擦导致更多级别未完赛。
 
-<!-- TODO: 补充思考链统计: 长思考次数、长度、总思考时间 -->
+### 思考链强度分析
+
+![Thinking Chain Intensity](/images/cyber-moneyball/thinking.png)
+
+上图：每级别平均思考链长度 (chars)。下图：思考/输出比率，红色 (>50%) 表示 agent 花在"想"上的字符数超过了"写"。
+
+L18 (call/cc) 是思考黑洞——平均 130k chars 的思考链，思考/输出比率接近 200%，说明 agent 在反复推演 CEK 机器的状态转换。L24 (集成测试) 也触发了大量思考 (102k)。相比之下，基础级别 L01-L09 的思考量极低 (<5k)。
+
+这解释了为什么 L18 是所有级别中成本最高的——不只是输出 token 多，思考链本身就消耗了大量计算。
 
 ## 实验过程中的多次反转
 
@@ -442,6 +450,16 @@ CC 的主要计费来自两部分：过半的费用是 output token，而 input 
 ![Cost Rate](/images/cyber-moneyball/cost_rate.png)
 
 R28-R32 之间的轮次间成本变化率。大多数语言在 R32 趋于稳定或下降，说明框架和策略在迭代中逐步收敛。
+
+### 成本构成拆解
+
+![Token Cost Breakdown](/images/cyber-moneyball/token_breakdown.png)
+
+R32 所有 Claude 运行的成本构成。红色=output token (单价最高 $75/M)，蓝色=cache read ($1.5/M)，绿色=cache write ($18.75/M)，灰色=input ($15/M)。
+
+Output token 虽然只占总 token 量的 0.6%，但因为单价是 cache read 的 50 倍，实际占账单的 **15-25%**。Cache read 占 token 量的 95%+ 但因为单价极低，只占账单的 **55-65%**。Cache write 占约 **25%**。
+
+这意味着：优化 output token (减少不必要的代码生成和重复) 对账单的影响远大于优化上下文长度。
 
 # "人类看不懂怎么办"
 
