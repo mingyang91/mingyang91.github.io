@@ -200,7 +200,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
@@ -246,6 +246,20 @@ AI 可以替代人类，且旗帜鲜明的反对任何宣传 agent
 issue，修好，提交，结束。但真实的软件开发不是这样的。真实的代码要被反复修改、扩展、调试，需求持续变化，昨天写好的模块今天就要改。技术债务的痛感不在第一次提交，在第
 N 次维护。</p>
 <p>我需要一个能测出<strong>持续维护压力</strong>的实验。</p>
+<h2 id="为什么是-scheme-解释器">为什么是 Scheme 解释器</h2>
+<p>选 Scheme 解释器不是因为情怀，是因为它恰好满足所有实验约束：</p>
+<ol type="1">
+<li><strong>足够难</strong>——不是
+CRUD，需要处理递归、宏展开、continuation 等真正的架构挑战。</li>
+<li><strong>成本可控</strong>——短时间能跑完一轮，输出 token
+不会太夸张，不然账单扛不住。</li>
+<li><strong>边界清晰</strong>——R7RS
+标准白纸黑字，我不用自己设想一个充满未定义行为的假想需求说明。</li>
+<li><strong>测试用例现成</strong>——Scheme
+社区有大量通用测试套件，我不用自己设计验收标准。</li>
+<li><strong>无人值守友好</strong>——最有可能让 agent
+全自动自行设计开发。我可没有时间反复干预，并且一旦加入个人主观干预，无法保证公平性。</li>
+</ol>
 <h2 id="实验设计">实验设计</h2>
 <p>我设计了一个 27
 级持续维护压力测试。同一段代码反复修改、扩展、调试，需求持续变化，使用真实输入数据。专门加了惩罚技术债务堆积的关卡，目的是找到屎山从什么时候开始反噬
@@ -370,7 +384,8 @@ session 会话记录分析：统计轮次和 token 消耗。</p>
 <p>最震惊的发现：5000+ 行上帝函数的屎山组，调试成本（轮次/token）约等于
 QG 组，有时甚至略低。</p>
 <p>其中 scheme interpreter
-一直是难度最大的，也是最不利于我严格规则的场景。主办方是我，规则是我定的，裁判是我，参赛的也是我——我想让我自己赢，竟然费了这么大周折。</p>
+一直是难度最大的，也是最不利于我严格规则的场景。主办方是我，规则是我定的，裁判是我，参赛的也是我——我想让我自己赢，竟然费了这么大周折。
+<img src="/images/cyber-moneyball/少林足球.png" alt="少林足球" /></p>
 <h3 id="完赛数据总览">完赛数据总览</h3>
 <table>
 <thead>
@@ -1182,7 +1197,7 @@ target="_blank" rel="noopener" href="https://github.com/mingyang91/ming-bench">g
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
@@ -2380,7 +2395,7 @@ vs 5.9，差距2.4）。如果D2只有5个子项，其对总分的拉动力会�
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
@@ -3431,7 +3446,7 @@ OpenClaw。</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
@@ -3743,7 +3758,7 @@ vs 静态标签、技术细节密度差异）暗示了某种价值判断？ 4.
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
@@ -5455,7 +5470,7 @@ class="footnote-back" role="doc-backlink">↩︎</a></p></li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
@@ -6690,7 +6705,7 @@ opus，一个扮演"激进重构派"，一个扮演"稳定优先派"，它们有
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
@@ -7340,7 +7355,7 @@ for development</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
@@ -8064,7 +8079,7 @@ role="doc-backlink">↩︎</a></p></li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
@@ -8500,7 +8515,7 @@ Zero 是架构和训练方法的根本性重新设计。</p>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 19:02:24" itemprop="dateModified" datetime="2026-03-29T19:02:24+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 19:11:46" itemprop="dateModified" datetime="2026-03-29T19:11:46+08:00">2026-03-29</time>
     </span>
 
   
