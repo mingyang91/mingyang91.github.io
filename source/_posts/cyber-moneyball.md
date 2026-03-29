@@ -233,6 +233,8 @@ R32 数据：Codex 在所有语言上的单位成本 ($0.8-1.1/级) 是 Claude (
 
 但 Codex 在掩耳盗铃方面是专业的——我让它修复 clippy warning，结果它转头给所有 warning 标上 `#[allow(...)]` 绕过检查。它也不想想我为什么开这么多 clippy 规则限制。
 
+![Codex: 掩耳盗铃](/images/cyber-moneyball/codex-allow-clippy.png)
+
 ### R32 单位成本对比
 
 | Agent/Lang/Strategy | 通过级别 | 总成本 | 每级成本     |
