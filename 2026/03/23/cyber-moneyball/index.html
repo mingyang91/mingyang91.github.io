@@ -29,13 +29,15 @@
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/heatmap.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/levels_passed.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/default_vs_qg.png">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/thinking.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/agent_comparison.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/cost_trend.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/level_cost_rate.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/strict_vs_nonstrict.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/cost_rate.png">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/token_breakdown.png">
 <meta property="article:published_time" content="2026-03-23T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-29T05:49:43.665Z">
+<meta property="article:modified_time" content="2026-03-29T05:54:35.851Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -122,11 +124,11 @@
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E4%B8%8D%E6%98%AF%E8%A6%81%E6%8E%A8%E7%BF%BB%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">本文不是要推翻软件工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%88%91%E5%9C%A8%E6%89%BE%E5%B1%8E%E5%B1%B1%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">2.</span> <span class="nav-text">实验：我在找屎山的边界</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8-swe-bench"><span class="nav-number">2.1.</span> <span class="nav-text">为什么不用 SWE-Bench</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.</span> <span class="nav-text">实验设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BA%A7%E5%88%AB%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.1.</span> <span class="nav-text">测试级别设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E9%A2%84%E6%83%B3%E8%BF%87%E5%BE%88%E5%A4%9A%E7%A7%8D%E7%BB%93%E6%9E%9C"><span class="nav-number">2.3.</span> <span class="nav-text">我预想过很多种结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E5%87%BA%E4%B9%8E%E6%84%8F%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">结果：出乎意料</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E8%B5%9B%E6%95%B0%E6%8D%AE%E6%80%BB%E8%A7%88"><span class="nav-number">3.0.1.</span> <span class="nav-text">完赛数据总览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#r32-%E6%AF%8F%E7%BA%A7%E5%88%AB-token-%E5%AF%B9%E6%AF%94-rust-default-vs-qg"><span class="nav-number">3.0.2.</span> <span class="nav-text">R32 每级别 token 对比
 (Rust default vs QG)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%88%90%E7%8E%87%E7%83%AD%E5%8A%9B%E5%9B%BE"><span class="nav-number">3.0.3.</span> <span class="nav-text">完成率热力图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E8%BD%AE%E5%AE%8C%E8%B5%9B%E6%83%85%E5%86%B5"><span class="nav-number">3.0.4.</span> <span class="nav-text">每轮完赛情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#default-vs-qg-%E6%AF%8F%E7%BA%A7%E5%88%AB-token-%E6%B6%88%E8%80%97%E5%AF%B9%E6%AF%94"><span class="nav-number">3.0.5.</span> <span class="nav-text">Default vs QG 每级别 token
-消耗对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%AC%A1%E5%8F%8D%E8%BD%AC"><span class="nav-number">3.1.</span> <span class="nav-text">实验过程中的多次反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E5%9E%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">3.2.</span> <span class="nav-text">多模型对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#claude-vs-codex-%E6%88%90%E6%9C%AC%E6%95%88%E7%8E%87"><span class="nav-number">3.2.1.</span> <span class="nav-text">Claude vs Codex 成本效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#r32-%E5%8D%95%E4%BD%8D%E6%88%90%E6%9C%AC%E5%AF%B9%E6%AF%94"><span class="nav-number">3.2.2.</span> <span class="nav-text">R32 单位成本对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9C%9F%E6%AD%A3%E6%B5%8B%E5%88%B0%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">4.</span> <span class="nav-text">实验真正测到了什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E7%BA%A7%E5%88%AB%E6%88%90%E6%9C%AC%E5%A2%9E%E9%95%BF%E7%8E%87"><span class="nav-number">4.0.1.</span> <span class="nav-text">每级别成本增长率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E7%B1%BB%E5%9E%8B-vs-%E9%9D%9E%E4%B8%A5%E6%A0%BC%E7%B1%BB%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%88%90%E6%9C%AC%E5%AF%B9%E6%AF%94"><span class="nav-number">4.0.2.</span> <span class="nav-text">严格类型 vs
+消耗对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%93%BE%E5%BC%BA%E5%BA%A6%E5%88%86%E6%9E%90"><span class="nav-number">3.0.6.</span> <span class="nav-text">思考链强度分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%AC%A1%E5%8F%8D%E8%BD%AC"><span class="nav-number">3.1.</span> <span class="nav-text">实验过程中的多次反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E5%9E%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">3.2.</span> <span class="nav-text">多模型对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#claude-vs-codex-%E6%88%90%E6%9C%AC%E6%95%88%E7%8E%87"><span class="nav-number">3.2.1.</span> <span class="nav-text">Claude vs Codex 成本效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#r32-%E5%8D%95%E4%BD%8D%E6%88%90%E6%9C%AC%E5%AF%B9%E6%AF%94"><span class="nav-number">3.2.2.</span> <span class="nav-text">R32 单位成本对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9C%9F%E6%AD%A3%E6%B5%8B%E5%88%B0%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">4.</span> <span class="nav-text">实验真正测到了什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E7%BA%A7%E5%88%AB%E6%88%90%E6%9C%AC%E5%A2%9E%E9%95%BF%E7%8E%87"><span class="nav-number">4.0.1.</span> <span class="nav-text">每级别成本增长率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E7%B1%BB%E5%9E%8B-vs-%E9%9D%9E%E4%B8%A5%E6%A0%BC%E7%B1%BB%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%88%90%E6%9C%AC%E5%AF%B9%E6%AF%94"><span class="nav-number">4.0.2.</span> <span class="nav-text">严格类型 vs
 非严格类型语言成本对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">4.1.</span> <span class="nav-text">实验的局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E6%96%87%E7%9A%84%E5%AE%9A%E4%BD%8D"><span class="nav-number">4.2.</span> <span class="nav-text">关于本文的定位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E7%BB%93%E8%AE%BA%E4%BA%BA%E7%B1%BB%E6%A0%87%E5%87%86%E6%98%AF-ai-%E7%9A%84%E6%9E%B7%E9%94%81"><span class="nav-number">5.</span> <span class="nav-text">导出结论：人类标准是 AI
 的枷锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%B7%E9%94%81%E5%B1%80%E9%83%A8%E6%80%A7"><span class="nav-number">5.1.</span> <span class="nav-text">为什么是枷锁？——局部性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%B1%8E%E5%B1%B1"><span class="nav-number">5.2.</span> <span class="nav-text">两种屎山</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E8%BF%98%E5%80%BA%E4%BE%9D%E7%84%B6%E6%98%AF%E5%BF%85%E9%A1%BB%E7%9A%84%E8%80%8C%E4%B8%94-ai-native-%E6%9B%B4%E8%A6%81%E8%AD%A6%E6%83%95"><span class="nav-number">5.3.</span> <span class="nav-text">持续还债依然是必须的——而且
 AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%A3%E8%AF%A5%E5%9C%A8%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%BF%98%E5%80%BA"><span class="nav-number">5.4.</span> <span class="nav-text">那该在什么时候还债？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E8%AE%A4%E7%9F%A5%E5%85%83%E7%BC%96%E7%A8%8B%E5%85%83%E6%9E%B6%E6%9E%84%E5%85%83%E5%B7%A5%E7%A8%8B%E5%85%83%E9%9E%AD%E7%AD%96%E4%B8%80%E5%88%87%E7%9A%86%E5%8F%AF%E5%85%83"><span class="nav-number">5.5.</span> <span class="nav-text">元认知、元编程、元架构、元工程、元鞭策——一切皆可元</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">5.6.</span> <span class="nav-text">Agent 的边界</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%82%A3%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%88%86%E5%B1%82"><span class="nav-number">6.</span> <span class="nav-text">那应该怎么分层？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%80%BA%E5%8A%A1%E7%9A%84%E8%A1%A1%E9%87%8F%E6%A0%87%E5%87%86%E9%9C%80%E8%A6%81%E6%9B%B4%E6%96%B0"><span class="nav-number">7.</span> <span class="nav-text">技术债务的衡量标准需要更新</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A1%E5%AE%9E%E9%9C%80%E8%A6%81%E9%87%8D%E6%96%B0%E5%AE%9A%E4%B9%89"><span class="nav-number">7.1.</span> <span class="nav-text">&quot;务实&quot;需要重新定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-code-review%E5%AE%9A%E5%90%91%E5%AE%A1%E8%AE%A1"><span class="nav-number">7.2.</span> <span class="nav-text">Agent Code Review：定向审计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-ai-%E5%9C%A8%E6%96%B0-session-%E4%B8%AD%E8%AF%84%E5%AE%A1%E4%BB%A3%E7%A0%81"><span class="nav-number">7.3.</span> <span class="nav-text">关于 AI 在新 session
-中评审代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%A0%E6%AD%A3-token-%E7%BB%8F%E6%B5%8E%E5%AD%A6"><span class="nav-number">7.4.</span> <span class="nav-text">纠正 Token 经济学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E8%BD%AE%E6%AC%A1%E6%88%90%E6%9C%AC%E5%8F%98%E5%8C%96%E7%8E%87"><span class="nav-number">7.4.1.</span> <span class="nav-text">跨轮次成本变化率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%BA%E7%B1%BB%E7%9C%8B%E4%B8%8D%E6%87%82%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">8.</span> <span class="nav-text">&quot;人类看不懂怎么办&quot;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E7%9A%84%E5%8F%82%E7%85%A7"><span class="nav-number">9.</span> <span class="nav-text">历史的参照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">10.</span> <span class="nav-text">结论</span></a></li></ol></div>
+中评审代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%A0%E6%AD%A3-token-%E7%BB%8F%E6%B5%8E%E5%AD%A6"><span class="nav-number">7.4.</span> <span class="nav-text">纠正 Token 经济学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E8%BD%AE%E6%AC%A1%E6%88%90%E6%9C%AC%E5%8F%98%E5%8C%96%E7%8E%87"><span class="nav-number">7.4.1.</span> <span class="nav-text">跨轮次成本变化率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%90%E6%9C%AC%E6%9E%84%E6%88%90%E6%8B%86%E8%A7%A3"><span class="nav-number">7.4.2.</span> <span class="nav-text">成本构成拆解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%BA%E7%B1%BB%E7%9C%8B%E4%B8%8D%E6%87%82%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">8.</span> <span class="nav-text">&quot;人类看不懂怎么办&quot;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E7%9A%84%E5%8F%82%E7%85%A7"><span class="nav-number">9.</span> <span class="nav-text">历史的参照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">10.</span> <span class="nav-text">结论</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -215,7 +217,7 @@ AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class=
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 13:49:43" itemprop="dateModified" datetime="2026-03-29T13:49:43+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 13:54:35" itemprop="dateModified" datetime="2026-03-29T13:54:35+08:00">2026-03-29</time>
     </span>
 
   
@@ -542,7 +544,20 @@ alt="Default vs QG" />
 是唯一明显的峰——两组都在这里烧掉大量 token。QG 组在 L22 (syntax-case) 和
 L24 (集成测试) 略贵，但差异远不到"QG 被拖死"的程度。QG
 组输掉的不是单级别效率，而是累计的规范摩擦导致更多级别未完赛。</p>
-<!-- TODO: 补充思考链统计: 长思考次数、长度、总思考时间 -->
+<h3 id="思考链强度分析">思考链强度分析</h3>
+<figure>
+<img src="/images/cyber-moneyball/thinking.png"
+alt="Thinking Chain Intensity" />
+<figcaption aria-hidden="true">Thinking Chain Intensity</figcaption>
+</figure>
+<p>上图：每级别平均思考链长度 (chars)。下图：思考/输出比率，红色
+(&gt;50%) 表示 agent 花在"想"上的字符数超过了"写"。</p>
+<p>L18 (call/cc) 是思考黑洞——平均 130k chars 的思考链，思考/输出比率接近
+200%，说明 agent 在反复推演 CEK 机器的状态转换。L24 (集成测试)
+也触发了大量思考 (102k)。相比之下，基础级别 L01-L09 的思考量极低
+(&lt;5k)。</p>
+<p>这解释了为什么 L18 是所有级别中成本最高的——不只是输出 token
+多，思考链本身就消耗了大量计算。</p>
 <h2 id="实验过程中的多次反转">实验过程中的多次反转</h2>
 <!-- TODO: 展开实验过程中的关键反转节点 -->
 <!-- 通过反复试验，为了得到我想要的数据，又做了什么 -->
@@ -929,6 +944,21 @@ agent code review 登场了。</p>
 </figure>
 <p>R28-R32 之间的轮次间成本变化率。大多数语言在 R32
 趋于稳定或下降，说明框架和策略在迭代中逐步收敛。</p>
+<h3 id="成本构成拆解">成本构成拆解</h3>
+<figure>
+<img src="/images/cyber-moneyball/token_breakdown.png"
+alt="Token Cost Breakdown" />
+<figcaption aria-hidden="true">Token Cost Breakdown</figcaption>
+</figure>
+<p>R32 所有 Claude 运行的成本构成。红色=output token (单价最高
+$75/M)，蓝色=cache read ($1.5/M)，绿色=cache write
+($18.75/M)，灰色=input ($15/M)。</p>
+<p>Output token 虽然只占总 token 量的 0.6%，但因为单价是 cache read 的
+50 倍，实际占账单的 <strong>15-25%</strong>。Cache read 占 token 量的
+95%+ 但因为单价极低，只占账单的 <strong>55-65%</strong>。Cache write
+占约 <strong>25%</strong>。</p>
+<p>这意味着：优化 output token (减少不必要的代码生成和重复)
+对账单的影响远大于优化上下文长度。</p>
 <h1 id="人类看不懂怎么办">"人类看不懂怎么办"</h1>
 <p>说得好像你 debug 过汇编似的。</p>
 <p>我有过 RISC-V MMU 的调试经验——从内核第 1
