@@ -462,7 +462,7 @@ DocumentController.create() {
 
 **对 AI 的务实**：该改就全改，改得起。重构成本趋近于零时，保守才是最大的浪费。
 
-KISS 和 YAGNI 对 AI 同样适用，但要抑制 AI 的过度设计倾向。DRY 原则保留，但不能让 AI 自行决定什么该抽象——AI 倾向于过早抽象，三处重复它就想提个 util，但那个 util 可能只活一天。
+KISS 和 YAGNI 对 AI 同样适用，但要抑制 AI 的过度设计倾向。DRY 原则保留，但不能让 AI 自行决定什么该抽象——AI 倾向于过早抽象，三处重复它就想提个 util，但同功能的 util 他这个月已经在不同 session 里写了 10 个了。
 
 ## Agent Code Review：定向审计
 
