@@ -35,11 +35,12 @@
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/cost_trend.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/level_cost_rate.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/strict_vs_nonstrict.png">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/struggle_zone.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/cost_rate.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/token_breakdown.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/ai_tutor_ip_card.png">
 <meta property="article:published_time" content="2026-03-23T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-29T15:24:05.079Z">
+<meta property="article:modified_time" content="2026-03-29T15:31:06.553Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -224,7 +225,7 @@ AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class=
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 23:24:05" itemprop="dateModified" datetime="2026-03-29T23:24:05+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 23:31:06" itemprop="dateModified" datetime="2026-03-29T23:31:06+08:00">2026-03-29</time>
     </span>
 
   
@@ -430,7 +431,72 @@ USD）。每个语言+策略组合的样本量较小（尤其 Codex/QG 仅 5
 AI 原生 QG 组和周期性还债组作为对照。欢迎有资源的读者复现和扩展。</p>
 </blockquote>
 <p>调试成本通过 session 会话记录分析：统计轮次和 token 消耗。
-<!-- TODO: 这里需要补充更直接的调试难度指标，例如：调试轮次数、agent thinking 中尝试方案的次数、测试回归出现频次。token 消耗是间接指标，不能直接等同于调试难度。 --></p>
+更直接的挣扎指标——每级别平均调试轮次、测试重跑次数和挣扎率（turns&gt;40
+或 test_runs&gt;5）：</p>
+<table>
+<thead>
+<tr class="header">
+<th>级别</th>
+<th>平均轮次</th>
+<th>平均测试重跑</th>
+<th>挣扎率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>L01-L09</td>
+<td>17.4</td>
+<td>1.7</td>
+<td>~1%</td>
+</tr>
+<tr class="even">
+<td>L10 宏</td>
+<td>18.5</td>
+<td>1.8</td>
+<td>0%</td>
+</tr>
+<tr class="odd">
+<td>L14 Vectors</td>
+<td>35.5</td>
+<td>2.2</td>
+<td>9%</td>
+</tr>
+<tr class="even">
+<td>L16 TCO</td>
+<td>25.5</td>
+<td>1.9</td>
+<td>0%</td>
+</tr>
+<tr class="odd">
+<td><strong>L17 Pair</strong></td>
+<td><strong>67.4</strong></td>
+<td><strong>6.6</strong></td>
+<td><strong>86%</strong></td>
+</tr>
+<tr class="even">
+<td><strong>L18 call/cc</strong></td>
+<td><strong>61.3</strong></td>
+<td><strong>8.8</strong></td>
+<td><strong>68%</strong></td>
+</tr>
+<tr class="odd">
+<td>L22 syntax-case</td>
+<td>52.5</td>
+<td>4.2</td>
+<td>41%</td>
+</tr>
+<tr class="even">
+<td><strong>L26 集成</strong></td>
+<td><strong>88.1</strong></td>
+<td><strong>9.5</strong></td>
+<td><strong>100%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>L17-L18 是真正的挣扎区：86% 和 68%
+的运行在这两个级别陷入反复调试（轮次&gt;40 或重跑&gt;5 次）。L26
+集成测试更夸张——100% 的运行都在挣扎。这不是 token 消耗的间接推断，而是从
+session 会话记录中直接统计的调试行为。</p>
 <p>我观察到：5000+
 行上帝函数的屎山组，调试和修改成本（轮次/token）远低于早期 QG 组。
 我逐渐意识到 scheme interpreter
@@ -836,6 +902,64 @@ AI 是枷锁。</strong></p>
 行甚至更长时，AI
 可以分批读取后整体理解——那是不同的工作模式，不能用单次读取的舒适区来推断整体处理的极限。</p>
 <!-- 审稿提醒：过度泛化——实验任务是 Scheme 解释器（纯计算、无 IO、无并发、无外部依赖），从中得出的数字直接推广到 CRUD 后端开发需要额外论证。建议明确标注这是跨领域的个人实践经验，而非本实验的直接结论。 -->
+<p>但实验数据给出了更精确的答案。下图是 Claude 在 R28-R32
+所有运行中，按累积代码量（估算行数）分桶的"挣扎率"（轮次&gt;40
+或测试重跑&gt;5）：</p>
+<figure>
+<img src="/images/cyber-moneyball/struggle_zone.png"
+alt="Struggle Zone" />
+<figcaption aria-hidden="true">Struggle Zone</figcaption>
+</figure>
+<table>
+<thead>
+<tr class="header">
+<th>估算代码量</th>
+<th>挣扎率</th>
+<th>样本数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&lt;1000 行</td>
+<td>0%</td>
+<td>62</td>
+</tr>
+<tr class="even">
+<td>1000-2000</td>
+<td>1%</td>
+<td>89</td>
+</tr>
+<tr class="odd">
+<td>2000-3000</td>
+<td>0%</td>
+<td>50</td>
+</tr>
+<tr class="even">
+<td>3000-4000</td>
+<td>7%</td>
+<td>46</td>
+</tr>
+<tr class="odd">
+<td>4000-5000</td>
+<td>9%</td>
+<td>56</td>
+</tr>
+<tr class="even">
+<td><strong>5000-6000</strong></td>
+<td><strong>26%</strong></td>
+<td><strong>39</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>6000+</strong></td>
+<td><strong>42%</strong></td>
+<td><strong>178</strong></td>
+</tr>
+</tbody>
+</table>
+<p>3000 行以下基本不挣扎 (0-1%)。4000-5000 行开始偶尔出错
+(9%)。<strong>5000 行是拐点</strong>——超过 5000 行后挣扎率跳涨到
+26-42%。这与 DESIGN_EVOLUTION 中 R24 数据独立交叉验证的结论一致：1500
+行的 QG 文件上限恰好卡在安全区上缘。</p>
 <p>经验主义的数字：函数 500 行，文件 1500 行，在 CRUD
 后端开发中是安全的，这是我的实践经验（注意：这个数字来自我的日常开发体感，而非本文
 Scheme
