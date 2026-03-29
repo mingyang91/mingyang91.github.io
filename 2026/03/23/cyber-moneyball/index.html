@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/strict_vs_nonstrict.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/cost_rate.png">
 <meta property="article:published_time" content="2026-03-23T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-29T05:41:51.062Z">
+<meta property="article:modified_time" content="2026-03-29T05:48:04.606Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -212,7 +212,7 @@ AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class=
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 13:41:51" itemprop="dateModified" datetime="2026-03-29T13:41:51+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 13:48:04" itemprop="dateModified" datetime="2026-03-29T13:48:04+08:00">2026-03-29</time>
     </span>
 
   
@@ -753,12 +753,13 @@ AI-native 更要警惕</h2>
 的技术债务像动脉瘤</strong>，平时毫无感觉，爆的时候直接致命。</p>
 <p>所以放宽模块内的规则，不是放松警惕，而是把警惕的重心从"模块内整洁"转移到"模块间隔离"和"债务监控"上。</p>
 <h2 id="那该在什么时候还债">那该在什么时候还债？</h2>
-<p>对人类的最佳实践是 Boy Scout Rule——编码时就保持整洁。但对 AI
-来说，最佳实践是<strong>把质量门控从编码时移到提交时</strong>。</p>
+<p>我过去以为对 AI
+来说最佳实践是全程保持整洁，从第一行代码开始。但实验结果告诉我我错了，AI
+和人类一样，堆屎山比写干净整洁代码更快。不同的是，人类堆完了屎山就不想动了，AI
+堆完了屎山，你让它重构它是真的干。</p>
 <p>AI
 在编码、调试的循环中不要干预它的质量风格——让它自由发挥，用它最高效的方式工作。但提交和
 merge 时必须干预——这是债务的闸门。</p>
-<p>类比：工人用自己习惯的方式操作，但产品出厂前必须过质检。这不是"延迟还债"，而是"在正确的时机还债"——编码时干预是摩擦，提交时干预是质检。</p>
 <p>实践中，我测试下来最平衡的工作流是分三个阶段：</p>
 <ol type="1">
 <li><strong>实现</strong>——怎么快怎么来，别管屎不屎</li>
