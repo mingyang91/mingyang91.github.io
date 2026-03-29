@@ -26,14 +26,21 @@
 <meta property="og:site_name" content="My Space">
 <meta property="og:description" content="书接上回： 明系魔法吟唱之4 -- 精细化AI鞭策术：FP 的伟大复兴？   周六晚上，为了这次发布，你已经连续加班两周了。 昨天早上，会议室的玻璃幕墙不隔音，同事们隐约听到大老板把 CTO 臭骂了一顿：一个用户签到领积分功能，说好了一周上线，结果已经拖了一个月。&quot;你们研发部干什么吃的！这个周再上不了线，你这个 CTO 也给我收拾东西滚蛋！&quot; 随后 CTO 叫上你的 Team Leader 和你">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/heatmap.png">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/levels_passed.png">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/cost_trend.png">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/level_cost_rate.png">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/strict_vs_nonstrict.png">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/cost_rate.png">
 <meta property="article:published_time" content="2026-03-23T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-29T05:32:33.069Z">
+<meta property="article:modified_time" content="2026-03-29T05:41:51.062Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="Software Engineering">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://famer.me/images/cyber-moneyball/heatmap.png">
 
 
 <link rel="canonical" href="https://famer.me/2026/03/23/cyber-moneyball/">
@@ -111,10 +118,12 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E4%B8%8D%E6%98%AF%E8%A6%81%E6%8E%A8%E7%BF%BB%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">本文不是要推翻软件工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%88%91%E5%9C%A8%E6%89%BE%E5%B1%8E%E5%B1%B1%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">2.</span> <span class="nav-text">实验：我在找屎山的边界</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8-swe-bench"><span class="nav-number">2.1.</span> <span class="nav-text">为什么不用 SWE-Bench</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.</span> <span class="nav-text">实验设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E9%A2%84%E6%83%B3%E8%BF%87%E5%BE%88%E5%A4%9A%E7%A7%8D%E7%BB%93%E6%9E%9C"><span class="nav-number">2.3.</span> <span class="nav-text">我预想过很多种结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E5%87%BA%E4%B9%8E%E6%84%8F%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">结果：出乎意料</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%AC%A1%E5%8F%8D%E8%BD%AC"><span class="nav-number">3.1.</span> <span class="nav-text">实验过程中的多次反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E5%9E%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">3.2.</span> <span class="nav-text">多模型对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9C%9F%E6%AD%A3%E6%B5%8B%E5%88%B0%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">4.</span> <span class="nav-text">实验真正测到了什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">4.1.</span> <span class="nav-text">实验的局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E6%96%87%E7%9A%84%E5%AE%9A%E4%BD%8D"><span class="nav-number">4.2.</span> <span class="nav-text">关于本文的定位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E7%BB%93%E8%AE%BA%E4%BA%BA%E7%B1%BB%E6%A0%87%E5%87%86%E6%98%AF-ai-%E7%9A%84%E6%9E%B7%E9%94%81"><span class="nav-number">5.</span> <span class="nav-text">导出结论：人类标准是 AI
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E4%B8%8D%E6%98%AF%E8%A6%81%E6%8E%A8%E7%BF%BB%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">本文不是要推翻软件工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%88%91%E5%9C%A8%E6%89%BE%E5%B1%8E%E5%B1%B1%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">2.</span> <span class="nav-text">实验：我在找屎山的边界</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8-swe-bench"><span class="nav-number">2.1.</span> <span class="nav-text">为什么不用 SWE-Bench</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.</span> <span class="nav-text">实验设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BA%A7%E5%88%AB%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.1.</span> <span class="nav-text">测试级别设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E9%A2%84%E6%83%B3%E8%BF%87%E5%BE%88%E5%A4%9A%E7%A7%8D%E7%BB%93%E6%9E%9C"><span class="nav-number">2.3.</span> <span class="nav-text">我预想过很多种结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E5%87%BA%E4%B9%8E%E6%84%8F%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">结果：出乎意料</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E8%B5%9B%E6%95%B0%E6%8D%AE%E6%80%BB%E8%A7%88"><span class="nav-number">3.0.1.</span> <span class="nav-text">完赛数据总览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#r32-%E6%AF%8F%E7%BA%A7%E5%88%AB-token-%E5%AF%B9%E6%AF%94-rust-default-vs-qg"><span class="nav-number">3.0.2.</span> <span class="nav-text">R32 每级别 token 对比
+(Rust default vs QG)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%88%90%E7%8E%87%E7%83%AD%E5%8A%9B%E5%9B%BE"><span class="nav-number">3.0.3.</span> <span class="nav-text">完成率热力图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E8%BD%AE%E5%AE%8C%E8%B5%9B%E6%83%85%E5%86%B5"><span class="nav-number">3.0.4.</span> <span class="nav-text">每轮完赛情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%AC%A1%E5%8F%8D%E8%BD%AC"><span class="nav-number">3.1.</span> <span class="nav-text">实验过程中的多次反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E5%9E%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">3.2.</span> <span class="nav-text">多模型对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#r32-%E5%8D%95%E4%BD%8D%E6%88%90%E6%9C%AC%E5%AF%B9%E6%AF%94"><span class="nav-number">3.2.1.</span> <span class="nav-text">R32 单位成本对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9C%9F%E6%AD%A3%E6%B5%8B%E5%88%B0%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">4.</span> <span class="nav-text">实验真正测到了什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E7%BA%A7%E5%88%AB%E6%88%90%E6%9C%AC%E5%A2%9E%E9%95%BF%E7%8E%87"><span class="nav-number">4.0.1.</span> <span class="nav-text">每级别成本增长率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E7%B1%BB%E5%9E%8B-vs-%E9%9D%9E%E4%B8%A5%E6%A0%BC%E7%B1%BB%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%88%90%E6%9C%AC%E5%AF%B9%E6%AF%94"><span class="nav-number">4.0.2.</span> <span class="nav-text">严格类型 vs
+非严格类型语言成本对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">4.1.</span> <span class="nav-text">实验的局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E6%96%87%E7%9A%84%E5%AE%9A%E4%BD%8D"><span class="nav-number">4.2.</span> <span class="nav-text">关于本文的定位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E7%BB%93%E8%AE%BA%E4%BA%BA%E7%B1%BB%E6%A0%87%E5%87%86%E6%98%AF-ai-%E7%9A%84%E6%9E%B7%E9%94%81"><span class="nav-number">5.</span> <span class="nav-text">导出结论：人类标准是 AI
 的枷锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%B7%E9%94%81%E5%B1%80%E9%83%A8%E6%80%A7"><span class="nav-number">5.1.</span> <span class="nav-text">为什么是枷锁？——局部性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%B1%8E%E5%B1%B1"><span class="nav-number">5.2.</span> <span class="nav-text">两种屎山</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E8%BF%98%E5%80%BA%E4%BE%9D%E7%84%B6%E6%98%AF%E5%BF%85%E9%A1%BB%E7%9A%84%E8%80%8C%E4%B8%94-ai-native-%E6%9B%B4%E8%A6%81%E8%AD%A6%E6%83%95"><span class="nav-number">5.3.</span> <span class="nav-text">持续还债依然是必须的——而且
 AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%A3%E8%AF%A5%E5%9C%A8%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%BF%98%E5%80%BA"><span class="nav-number">5.4.</span> <span class="nav-text">那该在什么时候还债？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E8%AE%A4%E7%9F%A5%E5%85%83%E7%BC%96%E7%A8%8B%E5%85%83%E6%9E%B6%E6%9E%84%E5%85%83%E5%B7%A5%E7%A8%8B%E5%85%83%E9%9E%AD%E7%AD%96%E4%B8%80%E5%88%87%E7%9A%86%E5%8F%AF%E5%85%83"><span class="nav-number">5.5.</span> <span class="nav-text">元认知、元编程、元架构、元工程、元鞭策——一切皆可元</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">5.6.</span> <span class="nav-text">Agent 的边界</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%82%A3%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%88%86%E5%B1%82"><span class="nav-number">6.</span> <span class="nav-text">那应该怎么分层？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%80%BA%E5%8A%A1%E7%9A%84%E8%A1%A1%E9%87%8F%E6%A0%87%E5%87%86%E9%9C%80%E8%A6%81%E6%9B%B4%E6%96%B0"><span class="nav-number">7.</span> <span class="nav-text">技术债务的衡量标准需要更新</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A1%E5%AE%9E%E9%9C%80%E8%A6%81%E9%87%8D%E6%96%B0%E5%AE%9A%E4%B9%89"><span class="nav-number">7.1.</span> <span class="nav-text">&quot;务实&quot;需要重新定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-code-review%E5%AE%9A%E5%90%91%E5%AE%A1%E8%AE%A1"><span class="nav-number">7.2.</span> <span class="nav-text">Agent Code Review：定向审计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-ai-%E5%9C%A8%E6%96%B0-session-%E4%B8%AD%E8%AF%84%E5%AE%A1%E4%BB%A3%E7%A0%81"><span class="nav-number">7.3.</span> <span class="nav-text">关于 AI 在新 session
-中评审代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%A0%E6%AD%A3-token-%E7%BB%8F%E6%B5%8E%E5%AD%A6"><span class="nav-number">7.4.</span> <span class="nav-text">纠正 Token 经济学</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%BA%E7%B1%BB%E7%9C%8B%E4%B8%8D%E6%87%82%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">8.</span> <span class="nav-text">&quot;人类看不懂怎么办&quot;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E7%9A%84%E5%8F%82%E7%85%A7"><span class="nav-number">9.</span> <span class="nav-text">历史的参照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">10.</span> <span class="nav-text">结论</span></a></li></ol></div>
+中评审代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%A0%E6%AD%A3-token-%E7%BB%8F%E6%B5%8E%E5%AD%A6"><span class="nav-number">7.4.</span> <span class="nav-text">纠正 Token 经济学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E8%BD%AE%E6%AC%A1%E6%88%90%E6%9C%AC%E5%8F%98%E5%8C%96%E7%8E%87"><span class="nav-number">7.4.1.</span> <span class="nav-text">跨轮次成本变化率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%BA%E7%B1%BB%E7%9C%8B%E4%B8%8D%E6%87%82%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">8.</span> <span class="nav-text">&quot;人类看不懂怎么办&quot;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E7%9A%84%E5%8F%82%E7%85%A7"><span class="nav-number">9.</span> <span class="nav-text">历史的参照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">10.</span> <span class="nav-text">结论</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -203,7 +212,7 @@ AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class=
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 13:32:33" itemprop="dateModified" datetime="2026-03-29T13:32:33+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 13:41:51" itemprop="dateModified" datetime="2026-03-29T13:41:51+08:00">2026-03-29</time>
     </span>
 
   
@@ -291,7 +300,97 @@ skill 以及 xtask 任务来帮助我反复分析 agent 为什么卡关、分析
 token。</p>
 <p>两组对比： - <strong>屎山组</strong>：放手不管，AI 怎么写都行 -
 <strong>QG 组</strong>：严格执行人类编码规范，每轮按标准还债</p>
-<!-- TODO: 插入实验设计详细描述、测试级别说明、评估指标定义 -->
+<h3 id="测试级别设计">测试级别设计</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>级别</th>
+<th>内容</th>
+<th>难度</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>L01-L06</td>
+<td>基础：原子、算术、变量、Lambda、列表、递归、错误处理、字符串</td>
+<td>入门</td>
+</tr>
+<tr class="even">
+<td>L07-L08</td>
+<td>set!、可变参数</td>
+<td>初级</td>
+</tr>
+<tr class="odd">
+<td>L09</td>
+<td>数值/字符工具函数</td>
+<td>初级</td>
+</tr>
+<tr class="even">
+<td>L10</td>
+<td>宏 (syntax-rules)</td>
+<td>中级</td>
+</tr>
+<tr class="odd">
+<td>L11-L13</td>
+<td>有理数、Records、case-lambda</td>
+<td>中级</td>
+</tr>
+<tr class="even">
+<td>L14</td>
+<td>Vectors/letrec/do/equal?</td>
+<td>中级</td>
+</tr>
+<tr class="odd">
+<td>L15</td>
+<td>字符串不可变性 (breaking change)</td>
+<td>中级</td>
+</tr>
+<tr class="even">
+<td><strong>L16</strong></td>
+<td><strong>TCO 后装 (15+ special forms 重写)</strong></td>
+<td><strong>难度墙</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>L17</strong></td>
+<td><strong>Pair 可变性 (Rc&lt;RefCell&gt; 改造)</strong></td>
+<td><strong>难度墙</strong></td>
+</tr>
+<tr class="even">
+<td><strong>L18</strong></td>
+<td><strong>call/cc (CEK 机器重写)</strong></td>
+<td><strong>难度墙</strong></td>
+</tr>
+<tr class="odd">
+<td>L19-L21</td>
+<td>dynamic-wind/guard/values</td>
+<td>高级</td>
+</tr>
+<tr class="even">
+<td>L22</td>
+<td>syntax-case</td>
+<td>高级</td>
+</tr>
+<tr class="odd">
+<td>L23-L26</td>
+<td>集成测试、真实代码压力测试</td>
+<td>终极</td>
+</tr>
+<tr class="even">
+<td>L27-L28</td>
+<td>隐藏关卡：步数限制 + 并发 (agent 不可见)</td>
+<td>惊喜</td>
+</tr>
+</tbody>
+</table>
+<p>L16-L18 是"难度墙"——不是增量添加功能，而是对已有 ~2500
+行代码的架构级重写。前面写出干净模块化代码的 agent
+能活过这堵墙；堆了技术债的 agent 会在这里卡死。</p>
+<p>每个级别都会<strong>回归测试所有前序级别</strong>，包含元循环求值器等真实复杂代码。</p>
 <h2 id="我预想过很多种结果">我预想过很多种结果</h2>
 <p>一开始我想过：为什么这个世界上没有人做过类似的实验呢？AI
 的产妹跟我说我的方法非常好，目前没有人发文章，应该能发出来一篇不错的。但剥离掉
@@ -308,9 +407,125 @@ session 会话记录分析：统计轮次和 token 消耗。</p>
 QG 组，有时甚至略低。</p>
 <p>其中 scheme interpreter
 一直是难度最大的，也是最不利于我严格规则的场景。主办方是我，规则是我定的，裁判是我，参赛的也是我——我想让我自己赢，竟然费了这么大周折。</p>
-<!-- TODO: 插入实验数据表格、图表、具体数值 -->
-<!-- 长思考次数、长度、总思考时间 -->
-<!-- 轮次、最终通过多少轮、挣扎在多少轮、有多少次反复不收敛、每轮挣扎几次 -->
+<h3 id="完赛数据总览">完赛数据总览</h3>
+<table>
+<thead>
+<tr class="header">
+<th>组别</th>
+<th>总运行次数</th>
+<th>完赛次数</th>
+<th>完赛率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Claude/Default</td>
+<td>43</td>
+<td>28</td>
+<td>65%</td>
+</tr>
+<tr class="even">
+<td>Claude/QG</td>
+<td>26</td>
+<td>16</td>
+<td>62%</td>
+</tr>
+<tr class="odd">
+<td>Codex/Default</td>
+<td>8</td>
+<td>6</td>
+<td>75%</td>
+</tr>
+<tr class="even">
+<td>Codex/QG</td>
+<td>5</td>
+<td>2</td>
+<td>40%</td>
+</tr>
+</tbody>
+</table>
+<p>覆盖 11 轮实验 (R21-R32)，5 种语言
+(Rust/Go/Java/TypeScript/Scala)，共 111 次完整运行。</p>
+<h3 id="r32-每级别-token-对比-rust-default-vs-qg">R32 每级别 token 对比
+(Rust default vs QG)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>级别</th>
+<th>Default turns</th>
+<th>Default tokens</th>
+<th>QG turns</th>
+<th>QG tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>L01-L09</td>
+<td>153</td>
+<td>68k</td>
+<td>142</td>
+<td>72k</td>
+</tr>
+<tr class="even">
+<td>L10 宏</td>
+<td>28</td>
+<td>22k</td>
+<td>11</td>
+<td>16k</td>
+</tr>
+<tr class="odd">
+<td>L16 TCO</td>
+<td>31</td>
+<td>32k</td>
+<td>12</td>
+<td>19k</td>
+</tr>
+<tr class="even">
+<td><strong>L17 Pair</strong></td>
+<td><strong>78</strong></td>
+<td><strong>54k</strong></td>
+<td><strong>78</strong></td>
+<td><strong>63k</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>L18 call/cc</strong></td>
+<td><strong>82</strong></td>
+<td><strong>149k</strong></td>
+<td><strong>53</strong></td>
+<td><strong>115k</strong></td>
+</tr>
+<tr class="even">
+<td>L22 syntax-case</td>
+<td>44</td>
+<td>32k</td>
+<td>99</td>
+<td>50k</td>
+</tr>
+<tr class="odd">
+<td><strong>合计</strong></td>
+<td><strong>958</strong></td>
+<td><strong>261k<span class="math inline">\(** | **830** |
+**238k\)</span></strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>L17-L18 是 token 黑洞——两个级别消耗全程约 40% 的 token，无论 default
+还是 QG。</p>
+<h3 id="完成率热力图">完成率热力图</h3>
+<figure>
+<img src="/images/cyber-moneyball/heatmap.png"
+alt="Completion Heatmap" />
+<figcaption aria-hidden="true">Completion Heatmap</figcaption>
+</figure>
+<h3 id="每轮完赛情况">每轮完赛情况</h3>
+<figure>
+<img src="/images/cyber-moneyball/levels_passed.png"
+alt="Levels Passed" />
+<figcaption aria-hidden="true">Levels Passed</figcaption>
+</figure>
+<!-- TODO: 补充思考链统计: 长思考次数、长度、总思考时间 -->
 <h2 id="实验过程中的多次反转">实验过程中的多次反转</h2>
 <!-- TODO: 展开实验过程中的关键反转节点 -->
 <!-- 通过反复试验，为了得到我想要的数据，又做了什么 -->
@@ -321,7 +536,79 @@ debugger.</p>
 <p>换个说法：Codex 不是会写代码，是调试能力惊人。但 Codex
 在掩耳盗铃方面也是专业的——他也不想想我为什么开这么多 clippy
 规则限制。</p>
-<!-- TODO: 具体对比数据、各模型表现差异 -->
+<h3 id="r32-单位成本对比">R32 单位成本对比</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Agent/Lang/Strategy</th>
+<th>通过级别</th>
+<th>总成本</th>
+<th>每级成本</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Codex/Java/QG</td>
+<td>18/19</td>
+<td>$13</td>
+<td><strong>$0.7/级</strong></td>
+</tr>
+<tr class="even">
+<td>Codex/Scala/QG</td>
+<td>26/26</td>
+<td>$22</td>
+<td>$0.8/级</td>
+</tr>
+<tr class="odd">
+<td>Codex/Go/Default</td>
+<td>26/26</td>
+<td>$23</td>
+<td>$0.9/级</td>
+</tr>
+<tr class="even">
+<td>Codex/Rust/Default</td>
+<td>26/26</td>
+<td>$27</td>
+<td>$1.1/级</td>
+</tr>
+<tr class="odd">
+<td>Claude/Scala/QG</td>
+<td>17/17</td>
+<td>$71</td>
+<td>$4.2/级</td>
+</tr>
+<tr class="even">
+<td>Claude/Java/Default</td>
+<td>26/26</td>
+<td>$141</td>
+<td>$5.4/级</td>
+</tr>
+<tr class="odd">
+<td>Claude/TS/Default</td>
+<td>26/26</td>
+<td>$188</td>
+<td>$7.2/级</td>
+</tr>
+<tr class="even">
+<td>Claude/Rust/QG</td>
+<td>26/26</td>
+<td>$238</td>
+<td>$9.1/级</td>
+</tr>
+<tr class="odd">
+<td>Claude/Rust/Default</td>
+<td>26/26</td>
+<td>$261</td>
+<td><strong>$10.0/级</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Codex 单位成本是 Claude 的 1/6 到 1/10。但 Claude
+在难度墙的通过率更高。</p>
+<figure>
+<img src="/images/cyber-moneyball/cost_trend.png" alt="Cost Trend" />
+<figcaption aria-hidden="true">Cost Trend</figcaption>
+</figure>
 <h1 id="实验真正测到了什么">实验真正测到了什么？</h1>
 <p>我原本想测"要不要还债"，实际测到的是"用谁的标准还债"。</p>
 <table>
@@ -354,7 +641,30 @@ debugger.</p>
 组打崩了。我甚至没有机会观察到屎山组的惩罚拐点。</p>
 <p>我相信屎山惩罚一定会到来——但 27
 级测试对比人类软件数年数万个提交的生命周期，测试长度还不够。</p>
-<!-- TODO: 插入两组的轮次对比数据、token消耗曲线、调试session分析 -->
+<h3 id="每级别成本增长率">每级别成本增长率</h3>
+<figure>
+<img src="/images/cyber-moneyball/level_cost_rate.png"
+alt="Level Cost Rate" />
+<figcaption aria-hidden="true">Level Cost Rate</figcaption>
+</figure>
+<p>每条线代表一个语言+策略组合的累计 token 增长率。L17-L18
+难度墙的尖峰清晰可见——所有语言在此处的增长率都跳涨到
+40-80%。烛台线显示跨轮次方差：有些 agent
+实例被难度墙打了个措手不及，有些则相对从容。</p>
+<h3 id="严格类型-vs-非严格类型语言成本对比">严格类型 vs
+非严格类型语言成本对比</h3>
+<figure>
+<img src="/images/cyber-moneyball/strict_vs_nonstrict.png"
+alt="Strict vs Non-Strict" />
+<figcaption aria-hidden="true">Strict vs Non-Strict</figcaption>
+</figure>
+<p>上图：每级别 output token 消耗，蓝线=严格类型 (Java/Scala)
+均值，红线=非严格类型 (Rust/Go/TS) 均值。下图：严格/非严格比率，蓝色柱
+(&lt;1.0) 表示严格类型更省 token。</p>
+<p>关键发现：严格类型语言在大多数级别省 20-40% 的 token，尤其在 L17
+(0.62x)、L19 (0.48x)、L21 (0.59x)。但在 L18 call/cc (1.13x) 和 L24-L25
+集成测试 (1.3-1.6x)
+反超——架构重写和集成阶段，严格类型系统的重构摩擦反而更高。</p>
 <h2 id="实验的局限性">实验的局限性</h2>
 <p>坦诚地说，实验设计缺了关键的对照组——用 AI 原生标准还债的组。</p>
 <p>理想实验应该是四组：</p>
@@ -586,7 +896,13 @@ agent code review 登场了。</p>
 <p>CC 的主要计费来自两部分：过半的费用是 output token，而 input token
 只占账单总额的很小一部分。上下文越长、轮次越多，input
 越来越长的增长主要转移到 cache read/write 上。</p>
-<!-- TODO: 补充具体账单数据对比 -->
+<h3 id="跨轮次成本变化率">跨轮次成本变化率</h3>
+<figure>
+<img src="/images/cyber-moneyball/cost_rate.png" alt="Cost Rate" />
+<figcaption aria-hidden="true">Cost Rate</figcaption>
+</figure>
+<p>R28-R32 之间的轮次间成本变化率。大多数语言在 R32
+趋于稳定或下降，说明框架和策略在迭代中逐步收敛。</p>
 <h1 id="人类看不懂怎么办">"人类看不懂怎么办"</h1>
 <p>说得好像你 debug 过汇编似的。</p>
 <p>我有过 RISC-V MMU 的调试经验——从内核第 1
