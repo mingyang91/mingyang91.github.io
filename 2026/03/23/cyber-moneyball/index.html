@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/cost_rate.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/token_breakdown.png">
 <meta property="article:published_time" content="2026-03-23T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-29T05:54:35.851Z">
+<meta property="article:modified_time" content="2026-03-29T06:00:03.999Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
@@ -128,7 +128,7 @@
 非严格类型语言成本对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">4.1.</span> <span class="nav-text">实验的局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E6%96%87%E7%9A%84%E5%AE%9A%E4%BD%8D"><span class="nav-number">4.2.</span> <span class="nav-text">关于本文的定位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E7%BB%93%E8%AE%BA%E4%BA%BA%E7%B1%BB%E6%A0%87%E5%87%86%E6%98%AF-ai-%E7%9A%84%E6%9E%B7%E9%94%81"><span class="nav-number">5.</span> <span class="nav-text">导出结论：人类标准是 AI
 的枷锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E6%9E%B7%E9%94%81%E5%B1%80%E9%83%A8%E6%80%A7"><span class="nav-number">5.1.</span> <span class="nav-text">为什么是枷锁？——局部性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%B1%8E%E5%B1%B1"><span class="nav-number">5.2.</span> <span class="nav-text">两种屎山</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E8%BF%98%E5%80%BA%E4%BE%9D%E7%84%B6%E6%98%AF%E5%BF%85%E9%A1%BB%E7%9A%84%E8%80%8C%E4%B8%94-ai-native-%E6%9B%B4%E8%A6%81%E8%AD%A6%E6%83%95"><span class="nav-number">5.3.</span> <span class="nav-text">持续还债依然是必须的——而且
 AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%A3%E8%AF%A5%E5%9C%A8%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%BF%98%E5%80%BA"><span class="nav-number">5.4.</span> <span class="nav-text">那该在什么时候还债？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E8%AE%A4%E7%9F%A5%E5%85%83%E7%BC%96%E7%A8%8B%E5%85%83%E6%9E%B6%E6%9E%84%E5%85%83%E5%B7%A5%E7%A8%8B%E5%85%83%E9%9E%AD%E7%AD%96%E4%B8%80%E5%88%87%E7%9A%86%E5%8F%AF%E5%85%83"><span class="nav-number">5.5.</span> <span class="nav-text">元认知、元编程、元架构、元工程、元鞭策——一切皆可元</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-number">5.6.</span> <span class="nav-text">Agent 的边界</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%82%A3%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%88%86%E5%B1%82"><span class="nav-number">6.</span> <span class="nav-text">那应该怎么分层？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%80%BA%E5%8A%A1%E7%9A%84%E8%A1%A1%E9%87%8F%E6%A0%87%E5%87%86%E9%9C%80%E8%A6%81%E6%9B%B4%E6%96%B0"><span class="nav-number">7.</span> <span class="nav-text">技术债务的衡量标准需要更新</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A1%E5%AE%9E%E9%9C%80%E8%A6%81%E9%87%8D%E6%96%B0%E5%AE%9A%E4%B9%89"><span class="nav-number">7.1.</span> <span class="nav-text">&quot;务实&quot;需要重新定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-code-review%E5%AE%9A%E5%90%91%E5%AE%A1%E8%AE%A1"><span class="nav-number">7.2.</span> <span class="nav-text">Agent Code Review：定向审计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-ai-%E5%9C%A8%E6%96%B0-session-%E4%B8%AD%E8%AF%84%E5%AE%A1%E4%BB%A3%E7%A0%81"><span class="nav-number">7.3.</span> <span class="nav-text">关于 AI 在新 session
-中评审代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%A0%E6%AD%A3-token-%E7%BB%8F%E6%B5%8E%E5%AD%A6"><span class="nav-number">7.4.</span> <span class="nav-text">纠正 Token 经济学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E8%BD%AE%E6%AC%A1%E6%88%90%E6%9C%AC%E5%8F%98%E5%8C%96%E7%8E%87"><span class="nav-number">7.4.1.</span> <span class="nav-text">跨轮次成本变化率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%90%E6%9C%AC%E6%9E%84%E6%88%90%E6%8B%86%E8%A7%A3"><span class="nav-number">7.4.2.</span> <span class="nav-text">成本构成拆解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%BA%E7%B1%BB%E7%9C%8B%E4%B8%8D%E6%87%82%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">8.</span> <span class="nav-text">&quot;人类看不懂怎么办&quot;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E7%9A%84%E5%8F%82%E7%85%A7"><span class="nav-number">9.</span> <span class="nav-text">历史的参照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">10.</span> <span class="nav-text">结论</span></a></li></ol></div>
+中评审代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%A0%E6%AD%A3-token-%E7%BB%8F%E6%B5%8E%E5%AD%A6"><span class="nav-number">7.4.</span> <span class="nav-text">纠正 Token 经济学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E8%BD%AE%E6%AC%A1%E6%88%90%E6%9C%AC%E5%8F%98%E5%8C%96%E7%8E%87"><span class="nav-number">7.4.1.</span> <span class="nav-text">跨轮次成本变化率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%90%E6%9C%AC%E6%9E%84%E6%88%90%E6%8B%86%E8%A7%A3"><span class="nav-number">7.4.2.</span> <span class="nav-text">成本构成拆解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%BA%E7%B1%BB%E7%9C%8B%E4%B8%8D%E6%87%82%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">8.</span> <span class="nav-text">&quot;人类看不懂怎么办&quot;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E7%BE%8E%E5%AD%A6%E4%BA%BA%E7%B1%BB%E5%AE%A1%E7%BE%8E%E4%B9%9F%E4%BC%9A%E8%BF%81%E7%A7%BB%E7%9A%84"><span class="nav-number">8.1.</span> <span class="nav-text">暴力美学：人类审美也会迁移的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E7%9A%84%E5%8F%82%E7%85%A7"><span class="nav-number">9.</span> <span class="nav-text">历史的参照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">10.</span> <span class="nav-text">结论</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -217,7 +217,7 @@ AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class=
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-29 13:54:35" itemprop="dateModified" datetime="2026-03-29T13:54:35+08:00">2026-03-29</time>
+      <time title="Modified: 2026-03-29 14:00:03" itemprop="dateModified" datetime="2026-03-29T14:00:03+08:00">2026-03-29</time>
     </span>
 
   
@@ -308,9 +308,9 @@ token。</p>
 <h3 id="测试级别设计">测试级别设计</h3>
 <table>
 <colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
+<col style="width: 9%" />
+<col style="width: 77%" />
+<col style="width: 12%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -454,6 +454,13 @@ QG 组，有时甚至略低。</p>
 <h3 id="r32-每级别-token-对比-rust-default-vs-qg">R32 每级别 token 对比
 (Rust default vs QG)</h3>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 22%" />
+<col style="width: 23%" />
+<col style="width: 13%" />
+<col style="width: 15%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>级别</th>
@@ -735,7 +742,7 @@ AI
 时代？这就像要把自己解剖了和另一个普通人放在一起对比。所以原定计划的第五篇"人类协作关系"大概率会难产。</p>
 <p>但测试结果过于耀眼，以至于我私心给了这篇文章正传 5
 号位。过去我的观点都是民科经验主义分享，无测试数据。这次测试来了。我相信本文的测试数据反而更能佐证前面四篇文章中的多数民科经验主义观点。</p>
-<!-- 重见无风大桥不公大因牺牲大相无形 -->
+<!-- 重剑无锋，大巧不工，大音希声，大象无形 -->
 <!-- TODO: 从评论区关注者借鉴的规则，叠加后效果 -->
 <h1 id="导出结论人类标准是-ai-的枷锁">导出结论：人类标准是 AI
 的枷锁</h1>
@@ -967,6 +974,26 @@ $75/M)，蓝色=cache read ($1.5/M)，绿色=cache write
 <p>答案：人类看懂模块边界和接口，需要深入时让 AI
 解读。这和用反编译器、profiler、debugger
 没有本质区别——你不需要裸眼读汇编来排查线上问题。</p>
+<h2 id="暴力美学人类审美也会迁移的">暴力美学：人类审美也会迁移的</h2>
+<p>别急着嫌 AI 写的代码丑。先回忆两个老朋友：</p>
+<p><strong>达夫设备（Duff's Device）</strong>——Tom Duff 在 1983
+年写出的这段代码，把 switch 语句和 do-while 循环交织在一起，利用 C 语言
+case 穿透的特性实现循环展开。第一眼看上去像是编译器
+bug，实际上是对指令流水线的极致压榨。任何 code review
+工具都会把它标红：圈复杂度爆表、结构化设计全部违反、可读性约等于零。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">send</span><span class="params">(<span class="type">short</span> *to, <span class="type">short</span> *from, <span class="type">int</span> count)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> n = (count + <span class="number">7</span>) / <span class="number">8</span>;</span><br><span class="line">    <span class="keyword">switch</span> (count % <span class="number">8</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>: <span class="keyword">do</span> &#123; *to = *from++;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>:      *to = *from++;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>:      *to = *from++;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>:      *to = *from++;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>:      *to = *from++;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">3</span>:      *to = *from++;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>:      *to = *from++;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>:      *to = *from++;</span><br><span class="line">            &#125; <span class="keyword">while</span> (--n &gt; <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>快速平方根倒数（Fast Inverse Square Root）</strong>——Quake
+III 引擎里那个著名的 <code>0x5f3759df</code>
+魔法数字。把浮点数强制转换为整数，位移一下，再用牛顿迭代法修正一次。那行
+<code>i = 0x5f3759df - ( i &gt;&gt; 1 )</code> 旁边的注释写的是 "what
+the
+fuck?"——据说是后来维护者加的。从软件工程视角看，它充满了未定义行为和不可理解的魔法常量。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> <span class="title function_">Q_rsqrt</span><span class="params">(<span class="type">float</span> number)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">long</span> i;</span><br><span class="line">    <span class="type">float</span> x2, y;</span><br><span class="line">    <span class="type">const</span> <span class="type">float</span> threehalfs = <span class="number">1.5F</span>;</span><br><span class="line"></span><br><span class="line">    x2 = number * <span class="number">0.5F</span>;</span><br><span class="line">    y  = number;</span><br><span class="line">    i  = *(<span class="type">long</span> *) &amp;y;                       <span class="comment">// evil floating point bit level hacking</span></span><br><span class="line">    i  = <span class="number">0x5f3759df</span> - ( i &gt;&gt; <span class="number">1</span> );            <span class="comment">// what the fuck?</span></span><br><span class="line">    y  = *(<span class="type">float</span> *) &amp;i;</span><br><span class="line">    y  = y * ( threehalfs - ( x2 * y * y ) ); <span class="comment">// 1st iteration of Newton&#x27;s method</span></span><br><span class="line"><span class="comment">//  y  = y * ( threehalfs - ( x2 * y * y ) ); // 2nd iteration, this can be removed</span></span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两段代码，从规范视角看一无是处。但它们凭借对硬件、数学和语言特性的极致压榨，实现了碾压常规写法的性能，最终成为程序员群体中代代传颂的经典，被赋予了独有的<strong>暴力美学</strong>。</p>
+<p>人类审美不是固定的。如果未来 AI 写的代码正确性能得到验证，且更适合 AI
+自己维护，并且执行效率也更高——人类会觉得这些天书代码美不胜收，主动学习。就像棋手学习
+AlphaGo 棋路一样。没有人觉得 AlphaGo
+的棋丑，大家只觉得看不懂，然后去学了。</p>
 <h1 id="历史的参照">历史的参照</h1>
 <p><strong>四色定理</strong>：Appel 和 Haken（1976）将问题归约为 1,936
 个不可避免构型的计算机穷举验证，后由 Robertson 等人（1997）简化到 633
