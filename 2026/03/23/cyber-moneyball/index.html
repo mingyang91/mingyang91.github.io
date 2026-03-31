@@ -19,13 +19,14 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="书接上回： 明系魔法吟唱之4 -- 精细化AI鞭策术：FP 的伟大复兴？  本文要推翻以人为本的软件工程方法 软件工程的核心原则：关注点分离、模块化、可验证性等理论依然是成立的。我要推翻的是围绕这些原则建立的大部分规则、工具和度量指标：它们以人类为模型设计，且只以人类为模型设计。——已经不适合这个版本了.jpg 圈复杂度假设人类难以同时追踪过多分支，函数行数上限假设人类一屏能看到的代码量，三层架">
+    <meta name="description" content="书接上回： 明系魔法吟唱之4 -- 精细化AI鞭策术：FP 的伟大复兴？  本文要推翻以人为本的软件工程方法   美人鱼  软件工程的核心原则：关注点分离、模块化、可验证性等理论依然是成立的。我要推翻的是围绕这些原则建立的大部分规则、工具和度量指标：它们以人类为模型设计，且只以人类为模型设计。——已经不适合这个版本了.jpg 圈复杂度假设人类难以同时追踪过多分支，函数行数上限假设人类一屏能看到的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="明系魔法吟唱之5 -- 我要说的事，你们千万别害怕">
 <meta property="og:url" content="https://famer.me/2026/03/23/cyber-moneyball/index.html">
 <meta property="og:site_name" content="My Space">
-<meta property="og:description" content="书接上回： 明系魔法吟唱之4 -- 精细化AI鞭策术：FP 的伟大复兴？  本文要推翻以人为本的软件工程方法 软件工程的核心原则：关注点分离、模块化、可验证性等理论依然是成立的。我要推翻的是围绕这些原则建立的大部分规则、工具和度量指标：它们以人类为模型设计，且只以人类为模型设计。——已经不适合这个版本了.jpg 圈复杂度假设人类难以同时追踪过多分支，函数行数上限假设人类一屏能看到的代码量，三层架">
+<meta property="og:description" content="书接上回： 明系魔法吟唱之4 -- 精细化AI鞭策术：FP 的伟大复兴？  本文要推翻以人为本的软件工程方法   美人鱼  软件工程的核心原则：关注点分离、模块化、可验证性等理论依然是成立的。我要推翻的是围绕这些原则建立的大部分规则、工具和度量指标：它们以人类为模型设计，且只以人类为模型设计。——已经不适合这个版本了.jpg 圈复杂度假设人类难以同时追踪过多分支，函数行数上限假设人类一屏能看到的">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://famer.me/images/cyber-moneyball/%E7%BE%8E%E4%BA%BA%E9%B1%BC.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/%E5%B0%91%E6%9E%97%E8%B6%B3%E7%90%83.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/heatmap.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/levels_passed.png">
@@ -42,14 +43,14 @@
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/token_breakdown.png">
 <meta property="og:image" content="https://famer.me/images/cyber-moneyball/ai_tutor_ip_card.png">
 <meta property="article:published_time" content="2026-03-23T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-31T14:18:37.017Z">
+<meta property="article:modified_time" content="2026-03-31T14:56:40.308Z">
 <meta property="article:author" content="ming yang">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Programming">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="Software Engineering">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://famer.me/images/cyber-moneyball/%E5%B0%91%E6%9E%97%E8%B6%B3%E7%90%83.png">
+<meta name="twitter:image" content="https://famer.me/images/cyber-moneyball/%E7%BE%8E%E4%BA%BA%E9%B1%BC.png">
 
 
 <link rel="canonical" href="https://famer.me/2026/03/23/cyber-moneyball/">
@@ -226,7 +227,7 @@ AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class=
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-31 22:18:37" itemprop="dateModified" datetime="2026-03-31T22:18:37+08:00">2026-03-31</time>
+      <time title="Modified: 2026-03-31 22:56:40" itemprop="dateModified" datetime="2026-03-31T22:56:40+08:00">2026-03-31</time>
     </span>
 
   
@@ -244,6 +245,10 @@ AI-native 更要警惕</span></a></li><li class="nav-item nav-level-2"><a class=
 </blockquote>
 <h1
 id="本文要推翻以人为本的软件工程方法">本文要推翻以人为本的软件工程方法</h1>
+<figure>
+<img src="/images/cyber-moneyball/美人鱼.png" alt="美人鱼" />
+<figcaption aria-hidden="true">美人鱼</figcaption>
+</figure>
 <p>软件工程的核心原则：关注点分离、模块化、可验证性等理论依然是成立的。我要推翻的是围绕这些原则建立的大部分规则、工具和度量指标：它们以人类为模型设计，且只以人类为模型设计。——已经不适合这个版本了.jpg</p>
 <p>圈复杂度假设人类难以同时追踪过多分支，函数行数上限假设人类一屏能看到的代码量，三层架构假设人类需要通过目录结构来导航代码。</p>
 <p>当代码的主要作者、读者、维护者都变成 AI
