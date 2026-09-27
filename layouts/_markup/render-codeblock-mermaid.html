@@ -1,0 +1,13 @@
+{{- $source := strings.TrimSuffix "\n" .Inner -}}
+<figure class="mermaid-diagram">
+  <div class="mermaid-diagram__canvas">
+    <pre class="mermaid">{{- $source | htmlEscape | safeHTML -}}</pre>
+  </div>
+  <figcaption class="mermaid-diagram__source">
+    <details>
+      <summary>Mermaid diagram source</summary>
+      <pre><code>{{- $source | htmlEscape | safeHTML -}}</code></pre>
+    </details>
+  </figcaption>
+</figure>
+{{- .Page.Store.Set "hasMermaid" true -}}

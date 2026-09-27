@@ -1,0 +1,90 @@
+baseURL: https://famer.me/
+title: My Space
+theme: PaperMod
+locale: en
+defaultContentLanguage: en
+hasCJKLanguage: true
+timeZone: Asia/Shanghai
+disablePathToLower: true
+enableRobotsTXT: true
+buildFuture: true
+refLinksErrorLevel: ERROR
+pagination:
+  pagerSize: 10
+permalinks:
+  posts: /:year/:month/:day/:contentbasename/
+taxonomies:
+  tag: tags
+  category: categories
+services:
+  googleAnalytics:
+    ID: G-1RGPQ0EFYL
+params:
+  author: ming yang
+  mainSections: [posts]
+  keywords:
+    - fullstack
+    - kubernetes
+    - rust
+    - scala
+    - nodejs
+    - typescript
+    - scheme
+    - SICP
+    - risc-v
+    - functional programming
+  defaultTheme: auto
+  DateFormat: "2006-01-02"
+  ShowReadingTime: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowToc: true
+  UseHugoToc: true
+  comments: true
+  giscus:
+    repo: mingyang91/mingyang91.github.io
+    repoID: MDEwOlJlcG9zaXRvcnkzNTI5MTk3Njc=
+    category: Announcements
+    categoryID: DIC_kwDOFQkg184DGhAs
+  assets:
+    favicon: /favicon.svg
+    favicon16x16: /favicon-16x16.png
+    favicon32x32: /favicon-32x32.png
+    apple_touch_icon: /apple-touch-icon.png
+    safari_pinned_tab: /favicon.svg
+  label:
+    text: My Space
+    icon: /images/avatar.jpg
+    iconHeight: 35
+  socialIcons:
+    - name: github
+      url: https://github.com/mingyang91
+menu:
+  main:
+    - name: Archives
+      pageRef: /archives
+      weight: 10
+    - name: Tags
+      pageRef: /tags
+      weight: 20
+    - name: GitHub
+      url: https://github.com/mingyang91
+      weight: 30
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+    extensions:
+      passthrough:
+        enable: true
+        delimiters:
+          block: [['\[', '\]'], ['$$', '$$']]
+          inline: [['\(', '\)']]
+  highlight:
+    noClasses: false
+    lineNos: true
+  tableOfContents:
+    startLevel: 1
+    endLevel: 6
+    ordered: true

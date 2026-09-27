@@ -1,0 +1,8 @@
+{{- if .Page.Store.Get "hasMermaid" -}}
+  {{- with resources.Get "js/diagrams/vendor/mermaid.min.js" | fingerprint "sha384" -}}
+<script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+  {{- end -}}
+  {{- with resources.Get "js/diagrams/mermaid-init.js" | minify | fingerprint "sha384" -}}
+<script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+  {{- end -}}
+{{- end -}}

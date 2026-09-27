@@ -1,62 +1,96 @@
-name: CI
+name: Build and deploy Hugo site
 
 on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hugo-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
-  GIT_USER: mingyang91
-  GIT_EMAIL: my@famer.me
-  DEPLOY_REPO: mingyang91/mingyang91.github.io
-  DEPLOY_BRANCH: gh-pages
+  TZ: Asia/Shanghai
+  HUGO_VERSION: 0.166.0
+  HUGO_ARCHIVE: hugo_extended_0.166.0_linux-amd64.tar.gz
+  HUGO_SHA256: 0e39b901e3f919f1daae05c8ff64f0c14c8a348ef46886d63f8e6d1bb2653885
 
 jobs:
   build:
-    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node_version: [18.x]
-
+    name: Build Hugo site
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Check out source and recursive submodules
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
-          submodules: true
+          submodules: recursive
+          persist-credentials: false
 
-      - name: Checkout deploy repo
-        uses: actions/checkout@v2
+      - name: Install pinned Hugo release
+        run: |
+          curl --fail --location --silent --show-error \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${HUGO_ARCHIVE}" \
+            --output "${RUNNER_TEMP}/${HUGO_ARCHIVE}"
+          printf '%s  %s\n' "${HUGO_SHA256}" "${RUNNER_TEMP}/${HUGO_ARCHIVE}" | sha256sum --check --strict
+          tar -xzf "${RUNNER_TEMP}/${HUGO_ARCHIVE}" -C "${RUNNER_TEMP}" hugo
+          sudo install -m 0755 "${RUNNER_TEMP}/hugo" /usr/local/bin/hugo
+          hugo version
+
+      - name: Build production site
+        run: |
+          hugo --environment production --minify --panicOnWarning
+          python3 scripts/check_site.py
+          test -s public/CNAME
+          touch public/.nojekyll
+
+      - name: Upload built site for deployment
+        if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master') }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
-          repository: ${{ env.DEPLOY_REPO }}
-          ref: ${{ env.DEPLOY_BRANCH }}
+          name: hugo-site-${{ github.run_id }}-${{ github.run_attempt }}
+          path: public/
+          if-no-files-found: error
+          retention-days: 1
+          include-hidden-files: true
+
+  deploy:
+    name: Publish to gh-pages
+    needs: build
+    if: ${{ needs.build.result == 'success' && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')) }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download built site
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3
+        with:
+          name: hugo-site-${{ github.run_id }}-${{ github.run_attempt }}
+          path: public
+
+      - name: Check out legacy Pages branch
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: gh-pages
           path: .deploy_git
+          ssh-key: ${{ secrets.HEXO_DEPLOY_PRI }}
 
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node_version }}
-
-      - name: Configuration environment
-        env:
-          HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
+      - name: Commit and push generated site
         run: |
-          sudo timedatectl set-timezone "Asia/Shanghai"
-          mkdir -p ~/.ssh/
-          echo "$HEXO_DEPLOY_PRI" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config --global user.name $GIT_USER
-          git config --global user.email $GIT_EMAIL
-          cp _config.theme.yml themes/next/_config.yml
-
-      - name: Install dependencies
-        run: |
-          sudo apt install pandoc
-          npm install -g pnpm
-          pnpm install
-
-      - name: Deploy hexo
-        run: |
-          npm run deploy
+          test -s public/CNAME
+          touch public/.nojekyll
+          git -C .deploy_git config user.name "mingyang91"
+          git -C .deploy_git config user.email "my@famer.me"
+          git -C .deploy_git rm -r --ignore-unmatch .
+          cp -a public/. .deploy_git/
+          git -C .deploy_git add --all
+          if git -C .deploy_git diff --cached --quiet; then
+            echo "gh-pages already has this site"
+          else
+            git -C .deploy_git commit -m "Deploy Hugo site (${GITHUB_SHA})"
+            git -C .deploy_git push origin HEAD:gh-pages
+          fi

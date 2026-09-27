@@ -1,0 +1,8 @@
+{{- $opts := dict "output" "mathml" "displayMode" (eq .Type "block") "throwOnError" true -}}
+{{- with try (transform.ToMath .Inner $opts) -}}
+  {{- with .Err -}}
+    {{- errorf "Unable to render mathematical markup with transform.ToMath: %s: see %s." . $.Position -}}
+  {{- else -}}
+    {{- .Value -}}
+  {{- end -}}
+{{- end -}}
