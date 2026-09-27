@@ -25,7 +25,6 @@ url: /2026/08/20/generalized-curry-howard-proof-search-and-program-synthesizer/
 
 ![pegasus](/images/pegasus.png)
 
-
 现在只有明（民）科看出来了：形式化方法的应用成本正在越来越低.jpg
 
 
@@ -230,40 +229,11 @@ Service 从任意一个满足 invariant 的 repo 状态出发，产出新的合�
 
 Repo 负责实际数据库的读写，Bridge 调用同一份决策，再把 action 交给执行器。
 
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:240-241；发言者：My
-原话开始：
-我现在是尽可能让这些执行器做纯计算，输入和输出是 lean 编写的，限死输入输出合约。
-lean 建模了一次 pg 和对象存储这些，所有计算逻辑都由 lean 来驱动
-原话结束。
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:5-22（非作者原话）
-编辑说明：原话说明 Lean 驱动执行器的方向；Service、Repo、Bridge 的具体职责来自源码审计，不是该发言的逐字内容。生产分工与形式化覆盖范围的区别为编辑澄清。
-补充来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/article-v2.pdf，第 8 页作者批注。Table 模型、不变量保持和归纳式状态转换的说明来自该批注。
--->
-
 真实数据库这一侧，用 SQL + 约束实现和内存模型相同的 repository interface。内存模型里的 invariant 与数据库里的 table constraint 相互对应，两边的结构保持同构。SQL 和内存模型都摊开了，逻辑透明，审计难度也低，连低参数量的 AI 也能对照它们的行为是否一致。
 
 PG 检查就是偏离检查：让内存模型和真实 PostgreSQL 中的 SQL 实现执行同一组操作，对照结果和状态。这是防止内存模型与 SQL 模型跑偏的一道自动化保险。
 
-SQL、事务、锁、RLS、DDL、CAS 还是 PostgreSQL 管；Firebase、对象存储、媒体、GPU 这些，交给 Rust/native sidecar。另有 wire 模块，检查 Lean 和 sidecar 之间的互操作 schema 是否对齐。数据迁移和整体验收，则分别由 migration、acceptance 检查负责。
-
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:232；发言者：My
-原话开始：
-实际做下来，我这边的外部函数基本上都是GPU 计算型，推理任务居多，所以本身就是无法验证的
-原话结束。
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:240-241；发言者：My
-原话开始：
-我现在是尽可能让这些执行器做纯计算，输入和输出是 lean 编写的，限死输入输出合约。
-lean 建模了一次 pg 和对象存储这些，所有计算逻辑都由 lean 来驱动
-原话结束。
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:23-52（非作者原话）
-编辑说明：完整数据库/Rust/native/wire/gate 分工来自源码审计；原话中的“无法验证”在正文中限定为当前模型外的 GPU 计算，不泛指形式化原则上做不到。
-补充来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/article-v2.pdf，第 9 页作者批注，以及本轮关于 PG 检查的澄清。
-本轮原话：pg 检查应该是偏离检查，内存模型与sql模型是否一致的一道自动化保险。
--->
+SQL、事务、锁、RLS、DDL、CAS 还是 PostgreSQL 实现；Firebase、对象存储、媒体、GPU 这些，交给 Rust/native sidecar。另有 wire 模块，检查 Lean 和 sidecar 之间的互操作 schema 是否对齐。数据迁移和整体验收，则分别由 migration、acceptance 检查负责。
 
 ```text
 人定义目标、状态迁移和不可牺牲的能力
@@ -282,31 +252,38 @@ Lean kernel 检查模型内的候选
 AI 滥用 `axiom` 和 `sorry` 欺骗验证可以直接被 `grep` 捕捉到，这反而是最不容易作弊的。而 AI 翻译的一个或多个定理是否忠实反映原始需求，是否完全覆盖了需求，无法覆盖的裂隙是什么？
 
 不需要在编码开始前把 spec 全部定死。我实际做下来发现，有些想当然的要求根本实现不了，只能一边实现一边补。
-设计阶段觉得退款和到账是一步完成，写着写着才发现至少要经过支付网关，而且提交退款申请，银行卡到账都不是 100% 成功。这时候就把中间状态和失败路径补出来，拆成两条命题分别约束。也就是：当“一切正常”的前提下，退款最终会到账。
-
+设计阶段觉得退款和到账是一步完成，写着写着才发现至少要经过支付网关，而且提交退款申请，银行卡到账都不是 100% 成功。
+```lean
+inductive Status where | processing | refunded | failed
+variable (submit : Nat → Nat → Status)
+variable (settle : (s : Status) → s = .processing → Bool → Status)
+def Eligible (amount balance : Nat) : Prop := 0 < amount ∧ amount ≤ balance
+```
+这时候就把中间状态和失败路径补出来，拆成两条命题分别约束。也就是：当“一切正常”的前提下，退款最终会到账。
+```lean
+structure WeakSpec : Prop where
+  submit_range : ∀ a b, submit a b = .processing ∨ submit a b = .failed
+  settle_range : ∀ ok, settle .processing rfl ok = .refunded ∨ settle .processing rfl ok = .failed
+```
 最后，一共就 3 条原则：
-1. 外部可信组件建模（例如 SQL 数据库，向量库，对象存储，SMS，支付网关等）
-2. 内部开发的组件约束输入输出合约
-3. 业务需求翻译成定理
+1. 对外部可信组件建模（例如 SQL 数据库，向量库，对象存储，SMS，支付网关等）
+2. 对内部开发的组件约束输入输出合约
+3. 将业务需求翻译成定理
 
 最终，被严格验证的 Lean 来驱动，调度所有组件。
 
-# 5. 它不能乱做，也不能什么都不做
+# 5. 还能这样偷懒？
 
-我早期那份注册规格，失败路径写得挺像那么回事：如果 IP 受限，用户和订阅状态都保持原样。
+刚才退款到账的例子中，失败路径写得挺像那么回事：如果退款申请失败，用户余额不会增加，订单状态不会改变。
+那我所有请求都返回退款失败，不就完了？数据库一行不动，失败后置条件全都满足。唯一的问题是，谁也无法退款。因为规格没说，什么条件下才能判定退款成功。
 
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-06/early-draft-2026-04-10.md:67-70；发言者：My／用户早期原稿
-原话开始：
-  // ❌ 失败路径（IP 限制）：一切保持原样
-  userSvc == old(userSvc)
-    && subSvc == old(subSvc)
-    if result == Left(RestrictedIPAddress)
-原话结束。
--->
-
-那我所有请求都返回 `RestrictedIPAddress`，不就完了？数据库一行不动，不重复送套餐，也不制造脏数据，失败后置条件全都满足。唯一的问题是，谁也注册不了。因为规格根本没说清楚，什么条件下才能判定 IP 受限。
+```lean
+structure StrongSpec : Prop extends WeakSpec submit settle where
+  submit_ok : ∀ a b, Eligible a b → submit a b = .processing
+  submit_fail : ∀ a b, ¬Eligible a b → submit a b = .failed
+  settle_ok : settle .processing rfl true = .refunded
+  settle_fail : settle .processing rfl false = .failed
+```
 
 <!--
 作者原话与出处（正文为整理或展开，并非逐字引述）：
