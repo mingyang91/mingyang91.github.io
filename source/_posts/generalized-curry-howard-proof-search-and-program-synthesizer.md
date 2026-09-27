@@ -1,0 +1,1195 @@
+---
+title: 明系魔法吟唱之6 -- 民(科)用广义 Curry-Howard 证明搜索与程序合成器
+date: 2026-08-20 16:18:37
+tags:
+  - AI
+  - Programming
+  - Functional Programming
+---
+
+
+> **书接上回：** {% post_link cyber-moneyball "明系魔法吟唱之5 -- 我要说的事，你们千万别害怕" %}
+
+距离上一篇文章已经过去五个多月，这段时间里 AI 的玩法也发生了翻天覆地的变化。回想上半年，多少神棍（AI 导师）扬言软件开发已经被 ai 彻底解决， 99% 程序员都可以裁掉，甚至扬言软件开发已经进入黑灯工厂时代。各大技术分享会议的议题也只剩下了 AI 一个主题，大厂高 P 架构师们满世界宣传 AI 是如何给自己研发部门提效的，交付量增加了多少，工期一再缩短。甚至不乏有水货架构师自信地将提交次数和代码行数的巨幅增长当作提效的证据，在演讲中展示，似乎觉得代码行越多越好。但进入到下半年后，却又有冷却的迹象，甚至我在的最神棍的群也少有人讲这些神话了。
+昂贵的 token 烧了，代码量膨胀了数倍，开发每人每天都有几十次提交，最终交付的功能却没有变多，甚至质量愈有持续加速下滑的趋势。裁掉的开发，解散的团队节省下来的开支甚至远超 API token 账单（coding plan 不用看这句，plan 订阅开发企业商用项目属于违反协议的滥用行为）
+
+而基座模型的智力则每周突飞猛进，连评测题目的难度都越来越不够用，模型公司甚至开始挑战起了千禧年猜想。要是题目和 bench 方法不更新，怕是熬不到年底考卷就要被刷成满分了。（截止至发文章时，gpt6 已经杀穿数学榜4）
+
+一边是 coding agent 刷分再创新高，AGI 时代又双叒叕一次到来，无缝衔接的核爆将瘫坐的我按在椅子上动弹不得。C家刚把黎曼猜想下界推进到了 xx. O家又解决了千禧年猜想。一边是 AI 长期维护的工程越来越屎，代码行数越来越多，问题回归频率也越来越高。AI 在百年未结的数学猜想上屡建奇功的智力，似乎对长期维护的应用层软件帮助并不大，怎么？键盘撒把米，鸡都会写的 crud 业务系统，比黎曼猜想还难？
+
+我在此留下暴论，AI 的科研能力确实得到了大幅进步，但复杂系统构建能力却并未能大幅提升。
+《我不要你觉得，我要我觉得.jpg》
+
+# 1. 现在只有“民科”看出来了
+
+![pegasus](/images/pegasus.png)
+
+
+现在只有明（民）科看出来了：形式化方法的应用成本正在越来越低.jpg
+
+
+过去，形式化方法被束之高阁，常用于构建关键系统内核、航空航天等领域。
+
+我没学过 Lean，一行都没写过，甚至截止至今，入门书籍/教程/文档都没看过一行。而我的草台班子开发团队，算上我一共四个后端开发，其他三位同僚在两个月前甚至没有听说过 Lean。截止至本文发布的今天，这套 Lean 4 后端已经在生产中滚动迭代了大约三个月。生产服务在这段时间没有停机。这说明：形式化方法不再只能待在编译器、内核和航空航天里，它可以进入一天三变的 CRUD。
+
+形式化方法已经被技术平权，可以在 AI 的辅助下“飞入寻常码农家”。
+
+从年初的第一篇文章起，就设想了这个美好愿景，使用形式化验证来验收 AI 产出的逻辑代码。那时 AI 编写形式化代码并通过证明还很吃力，我也曾天真地低估 AI 发展速度，认为 AI 还要更长的发展时间才能在这个领域展露身手。
+后来在第四篇里，我将“用前置条件、后置条件和不变量约束函数行为”的方法称为 Level 3。但能稳定落地的还是 Level 2 的类型、显式领域错误和副作用边界。
+第五篇又往前走了一步：人类审查规范，AI 负责实现；抽取干净的核心覆盖形式化证明，脏的部分继续交给集成测试和 PBT。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：source/_posts/AI-native-coding-style.md:350-352；发言者：作者第四篇文章原文
+原话开始：
+Level 3 在 Scala 生态中已经有工具支撑，EPFL 的 [Stainless](https://github.com/epfl-lara/stainless) 可以用 `require`/`ensuring` 表达前置后置条件，交给 SMT solver 验证。我浅浅试过 Stainless，写 AVL 还有些吃力，验证 Akka Actor 状态更是男上加男，而且它只支持 Pure Scala 子集，工具链成熟度离生产使用还有距离。Rust 生态也有对应的 [Flux-rs](https://github.com/flux-rs/flux) 项目。这里先标记为展望，不展开。
+
+当前实践中，我们能稳定且轻松落地的是 Level 0 → Level 2 的跃迁。Level 2 覆盖不到的部分，比如"库存是否充足"这类需要运行时状态的约束，就需要暂时靠测试用例覆盖，Property-based Testing 和人类审查来补充了。
+原话结束。
+来源：source/_posts/cyber-moneyball.md:652；发言者：作者第五篇文章原文
+原话开始：
+所以未来 AI 软件验收原则应该是：形式化验证贯穿整个软件维护生命周期，模块开发时人类主要精力放在审查形式化规范有哪些变更，是否破坏了过去定下的规范。难以被形式化覆盖的部分，则依赖传统集成测试，配合 property-based testing，单元测试的必要性将会降低甚至可有可无。同时 AI 也可以辅助人类对产品设计文档进行形式化翻译，或者从形式化断言翻译回自然语言帮助人类理解，帮助检查自然语言中模糊的部分是否与过去的设计规范存在矛盾，并最终与形式化规范进行对齐。而软件功能的最终验收依然是人类负责，这部分暂时无法被替代，因为大部分软件的最终消费者是人类。 
+原话结束。
+编辑说明：正文回顾前两篇的实践边界，不把旧文的展望改写为当时已实现。
+-->
+
+最近几个月，我把过去设想的几个形式化与 AI 的结合方案全都在生产业务系统里实践了一遍，路线变迁了 4 次，证明形态也与我第四篇文章中 Level 3 的设想有很大区别。说实话，提出设想的时候觉得挺简单的，想当然地认为：
+
+1. AI 会写形式化代码。
+2. 形式化代码是图灵完备的。
+3. 图灵完备的语言都能用来开发应用软件。
+
+综上得出幼稚结论：AI 能用形式化语言开发应用软件。
+
+就像 SMT 一样，每个函数都把要实现的需求写成 pre/post-condition。
+<!--这里要用代码示例展开-->
+
+最终实现效果嘛，它与我幻想中的形态有挺大差别，却又阴差阳错地带来了意外的收益。
+<!--展开，比如断言函数从哪里来，使用的数据结构，库函数没有覆盖形式化断言，我该如何覆盖。现存代码量太大，我该如何推进覆盖，自顶向下？自底向上？形式化支持的语言语法只是一个很小的子集，如何取舍。-->
+
+# 2. 没有人记得它应该是什么样子
+虚构故事：
+## FDE 部
+ld：小明小明！赵总的客户登不上平台了！你快看看怎么回事！
+小明：。。。我查一下。。。
+ld：先恢复！原因以后再查！赵总和老板还在客户现场，绝对不能再出故障了！
+小明：这几个账号没做实名认证，免费赠送额度也过期了，所以昨晚被自动清理了
+ld：啊？为什么！他们不是老赵的企业客户吗？
+小明：上个月产品上了实名认证功能
+因为平台上真人注册的账号只有不到 3 千个，其他 40 多万账号都是机器人为了薅注册礼包创建的。
+上周早会老板要求，所有账户必须强制实名认证，不通过的账号强制关闭。
+还要求...
+ld：哎呀！你们开发做之前不动脑子的吗？老板指的肯定是个人用户，怎么能把企业用户也删了呢？快恢复
+
+小明：。。。
+
+> 小明负责维护公司的 SaaS 产品。在 AI 编程的狂热席卷公司之前，这个项目还不到 2 万行代码。                                          
+> 短短几个月后，代码已经膨胀到了 90 万行。不可名状的架构，不可直视的细节。                                                         
+> 代码越来越多，维护的人却越来越少。前端和测试团队都被裁撤了，仅剩的研发被笼罩在 AI“能工治人”的阴影下，渐失理智。
+
+## 第二天事故复盘（批斗）会议
+赵总先起头了：（阴阳怪气，故意用轻松戏虐的语气指责研发部门）
+昨天我和 boss 在客户现场演示定制的功能，好不容易约到客户集团副总的时间。
+本想在会上把下一季度的合同也签下来，我还在会上打包票，咱们研发技术很强，平台很稳定。
+结果演示的时候他们 2 个同事账号都登录不上，吓得我一身冷汗。
+多亏了老板力挽狂澜，当即让我切超管账号继续演示，这才......
+ld：（上一个会议结束后，身体一直在不规律的震颤）
+boss：（看向研发同事，语气很慢的说）今天不是批斗会，不追究谁的责任。事情已经发生了，关键是以后怎么避免。
+我把这一周的群聊给 AI 看了一下。免费的，都能找出这些问题。（瞟了一眼 ld）研发要反思一下，为什么没提前看出来？
+小明：（那你还嫌我们 token 用得多？事后诸葛亮谁不会，事前你的 AI 怎么不指出问题呢？）
+ld：小明，账户清理的模块是你上周开发的，这个 bug 你解释一下吧。
+小明：这个不是 bug，需求就是这么提的。会议纪要和变更文档也在飞叔群里发过，ld 你和产品都点了审批通过。
+ld：审批是通过了，技术风险你有没有提前提？
+不能出了事才说需求就是这么写的。
+我希望你有自己的判断。
+如果研发不思考，那么很快就会变成下一个被 AI 取代的岗位。
+小明：（终于找到发泄口了）
+小明：需求来的急，时间太紧了，根本没时间做详尽调研。
+boss：感受赋能，拥抱 AI，我今年一直在强调，研发部就没当回事儿。我们不是采购了企业知识库吗？会议纪要和需求都是 AI 自动整理到知识库里的。小明没时间的话，你让 AI 去调研不就行了？学一学产品部，AI 赋能后 3 个人做了过去 11 个人的工作，研发部要跟上时代。
+小明：（AI 赋能？屎需求的生产速度我狠狠的感受到了，产品一天扔给我不下 10 份自相矛盾的万字需求文档。希望 AI 大人也能雨露均沾的让全公司感受一下赋能后屎山代码的崩溃力度。）
+boss：前几天我在群里分享的那几篇文章，OPC 公司 AI 工作流，大家要认真学习。人家一个人带几个 AI，产品、研发、运维这些角色全都有，AI 之间自己协调，三天交付一套系统。文章我都发群里了，研发部有没有认真看？现在的 AI 进化速度太快了，研发要积极配合 AI，不要拖 AI 的后腿。
+小明：（三省六部制复辟了？老板这么热衷于 AI 角色扮演，公司干脆转型剧本杀吧。而且把我工牌印刷成 FDE 并不能加快交付速度，也不能提高交付质量。）
+boss：现在 token 都免费了，巴掌大的一个小盒子，什么模型都能跑。公司每个月还给研发报销 500 块的 AI 订阅......
+你们研发这么大的电脑，起码能跑俩模型了。
+小明：（喂喂喂！你要不要听听你自己在说什么，dgx spark 一台 3 万起步，公司配的黑砖头笔记本，体积大性能就高？）
+
+...不知道讨论离题了多久...
+
+ld：继续说正事吧，小明你继续，复盘一下详细过程
+小明：按照上周二早会上老板提的紧急要求，个人账户必须通过实名验证才能继续使用。所以周三就部署了这个模块：每天 0 点清理一次未实名的非订阅账户
+ld：既然只针对个人，那为什么会清理掉企业账户呢？
+小明：被清理的不是企业账户，而是企业账户里的子账户。
+spec 里记录了“所有实体账户都是个人账户”这个概念，是 ld 你定义的。
+ld：那这个账户也是关联到企业了呀
+ld：还有你说他们套餐到期了是什么意思？企业成员怎么会有套餐
+小明：我翻了二月份的 spec。当时定的是，新账户送一个月专业版，到期转免费。
+小明：“企业版”是你们平时的叫法。系统里分团队版、企业版和外企版。
+外企版先不说，系统里真正的企业版从来没有被用过。
+这次受影响的是赵总的客户，因为历史原因，客户三个部门在系统里开了三个团队版。只有人事部门被这次波及到，因为他们成员全都是邀请外协的方式添加的 QQ 数字邮箱。
+ld：可他们是邀请进来的啊，怎么又算注册用户了？
+小明：后台走的还是注册接口。spec 里有记录，接受邀请以后还要填名字和部门，这个 MR 就是 ld 你提交的。
+ld：（...）既然这些信息都在 spec 里，那你为什么没有早预警这些风险？
+小明：（既然你今天知道开盘涨停，昨天怎么不梭哈入场？）
+为了这次复盘，10 个子代理跑了两个小时，才暴露出了这些问题，可能还有更多问题没被发现。
+发生故障以后复盘很容易，发生故障以前 AI 也很难发现这些需求变更是互相冲突的。
+boss：技术细节你们会后单独讨论，复盘结束前要制定出流程，确保未来不会发生同样的问题。
+小明：（复盘复盘，你们领导层怎么不复盘一下呢？）
+ld：这样吧，以后研发做需求变更时，用两个 agent 分别设计，并互相进行交叉验证，然后选最好的方案。
+每次部署上线前，让 AI 评估影响范围列表，AI 点测一遍所有功能，最后研发和产品一起验收...
+各位同事还有什么补充吗？小明你也提一下你的意见。
+
+小明：（慢工出烂活，欲速则一坨。你把从设计到验收全都交给 AI，说明你也没当回事儿）
+小明：这样的话 AI 会更慢的，如果按照这个流程下来，三天都上不了线。我们工期压的太紧，应该先延长工期，这样才有时间做更充分的调研。
+ld：工期...（看了一眼老板，颤颤巍巍的说）...这个
+boss：你决定就行
+ld：好，那...那就低优先任务多加一...半天，半天吧，多给 AI 测试时间。紧急任务不变，这...样可以...吧（看向老板）
+boss：我只看最终结果
+小明：(演！继续演！需求只有重要和很重要，交付只有紧急和很紧急。心里没数？)
+小明：不是没测。AI 连“确保这些外协账号被清理”的测试都写好了。
+至于具体影响了哪些客户、有多少这种外协账户，不查生产数据库的话 AI 也不知道。
+
+boss：（鬼点子生成中...生成完毕）那这样，后端直接不要写数据库了，直接写进知识库里，变更的时候让 AI 过一遍知识库，综合决策。
+小明：（好家伙，不愧是古希腊掌管鬼点子的神）
+ld：老板这招妙啊，别的团队还在打破信息壁垒，我们直接一步到位，知识库作为单一信源（SSOT）...
+小明：（还有高手，古希腊掌管马屁的神）
+
+系统过去的假设以文字形式散落在文档/知识库里的时候，又叠加了新设计推翻旧设计，AI每次想要从这些文字中还原出系统的当前行为已经非常困难，且存在漏看，曲解的风险。更何况文档是文档，实现是实现，并没有天地法则约束它们必须是一致的，同步是暂时的，偏离是永恒的。
+
+# 3. 为上下文减负
+
+“软件核心假设”并不是没有被留下记录。而是没有被持续的整理，检查，总结成为当下版本。哪些规则依然有效，哪些规则已经废弃。
+当然，我相信这些信息散落在群聊记录，会议纪要，PRD，git log，代码注释，测试用例，以及代码当前实现中，但同时伴随着过时的信息，无关讨论，不准确的措辞，扭曲的架构，等技术债务。难道每次都让 AI 把相关上下文读一遍，独立推理出来吗？
+哪些继续保留，哪些已经废弃，哪些需要重新确认，废弃的部分关联哪些代码，他们应该从系统中移除，却鲜有人或 AI 敢做这件事。
+
+形式化之前，我的项目 99% 代码由 AI 生成。每次出故障、翻代码的时候，我都能找到一些糟糕的遗留设计，他们产生自不同的 session，有些为了增加 feature，有的为了修复 bug。这些糟糕的设计已经变成前后冲突的流程逻辑，只等待机缘巧合时，某个运气不好的数据对象集齐了冲突条件，引爆这个地雷。
+难道测试用例不能拦截这些冲突吗？难。大部分无法被测试用例发现，测试用例通常只能覆盖编写时部分分支走向，无法覆盖未来编写的分支。如果维护过程中修改了被调用基础函数（例如aop/日志/夹具函数），AI 会递归检查多少函数受到影响，并为这些函数补齐测试分支吗？
+前后行为逻辑不一致，新功能加入破坏了过去的假设，甚至是关键假设，而 AI 没有意识到，人也不记得。
+我的软件第一版开发时，需求确实不多。但我会在后续迭代中补齐更多需求条件，或调整需求方向。
+而 AI 在实现我的需求的过程中，必然会加码（framework，middleware，db，component），且加的不少。
+迭代久了以后，哪些是我的真实需求，哪些是 AI 自己加码，已经无法分清了。
+而这些实现是否都服务于我现在（改了八百遍）的需求，更是无从得知。
+
+## 我的 AI 为什么越跑越慢
+* 为什么 AI 尝试在十几万行 C 模块中修复 bug？而这只是一个静态资讯网站项目 -> 因为这个 C 模块实现了向量检索能力，为 sqlite 提供语义搜索扩展
+* 为什么要给 sqlite 增加语义检索支持？-> 因为项目使用了 sqlite 作为数据库
+* 为什么技术选型定了 sqlite？ -> 因为这个项目最早是本地的个人笔记
+后继的 AI 发现本项目已经投入了这么多沉没成本，自然而然的选择继续在拧巴的路上拧巴下去，把屎山堆的更高的局部最优解。
+这当然不是一个真实的例子，但这个例子好就好在程序员读者能看懂。在 AI 超出你技术能力的领域，你敢保证你的 AI 没走类似的弯路？AI 给你写的天书般的代码，真的还服务于你现在的需求吗？
+
+而用形式化定理描述软件的核心假设时，定理是可以被机器严格检查的，天然与当前代码行为一致。这远不是自然语言文字可以企及的。
+
+我的做法是，从这些要求中选出一部分值得长期保护的性质，将它们写成形式化命题，并让相关实现承担证明义务。后续修改不能只满足这次新增的需求，还必须继续满足这些已经保留的约束。
+
+最终，AI 不从自然语言文字中，也不从屎山代码里推理什么是当前正确的行为。
+
+当然，形式化无法将主人公从虚构故事中解救出来，究其根本原因，是不合理的交付时间安排，研发话语权弱势，以及 ld 的不作为。
+但形式化除了能长期维持软件形状外，还能给这个项目至少 3 次机会以避免发生事故：
+
+## 1. 团队版上线时，就应该记录下，团队成员消耗的额度，由主账号结算。
+```lean
+def TeamAccessContract {User Org : Type}
+    (entitled : AccessState User Org → User → Time → Bool) : Prop :=
+  ∀ s user org now,
+    s.activeMember user org → s.orgEntitled org now →
+    entitled s user now = true
+```
+
+这里检查实际的权益判定函数 `entitled`。只要成员关系和组织权益仍然有效，账户就是有人罩着的。
+
+## 2. 增加强制实名认证时，AI 可以提醒开发者：本次需求变更假设的个人账户模型，与系统真实运作的账户模型存在理解偏差。
+AI 通过分析定理和约束得出确定结论，而不是从代码和自然语言文档中推理。
+ ```lean
+example (orgEntitled personalEntitled canUse : Prop)
+    (old : orgEntitled → canUse)
+    (member : orgEntitled) (noPersonal : ¬ personalEntitled) :
+    ¬ (canUse → personalEntitled) :=
+  fun assumed => noPersonal (assumed (old member))
+ ```
+
+## 3. 账户清理时，要写下“个人没续费，不代表整个账户可以删”这个约束。
+
+即使有人绕过到期处理，直接按个人套餐筛选要删除的账户，最后动手删除时也还有一次机会：只要账户仍有有效的组织权益，就不能仅仅因为个人试用到期而把它放进删除名单。
+
+```lean
+def CleanupContract {User Org : Type}
+    (cleanup : AccessState User Org → Time → List User) : Prop :=
+  ∀ s now user org,
+    s.activeMember user org → s.orgEntitled org now →
+    user ∉ cleanup s now
+```
+
+这样一来，更多错误可以被拦截在开发阶段，老板岁月静好，开发负重前行。
+![代价是什么](/images/和平的代价.jpeg)
+
+# 4. 我最后造出来的东西
+
+我现在是尽可能把业务状态、拒绝条件和 action 决策留在 Lean 里，做成纯计算，限死输入输出合约。Service 吃进一个 snapshot，算出该拒绝还是该产生什么 action；Proofs 检查其中需要长期保住的性质。Repo 负责读写数据库，Bridge 调用同一个决策，再把 action 交给执行器。不是说全系统已经证明完了，先把这部分业务逻辑管住。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:240-241；发言者：My
+原话开始：
+我现在是尽可能让这些执行器做纯计算，输入和输出是 lean 编写的，限死输入输出合约。
+lean 建模了一次 pg 和对象存储这些，所有计算逻辑都由 lean 来驱动
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:5-22（非作者原话）
+编辑说明：原话说明 Lean 驱动执行器的方向；Service、Repo、Bridge 的具体职责来自源码审计，不是该发言的逐字内容。生产分工与形式化覆盖范围的区别为编辑澄清。
+-->
+
+数据库和外部世界当然还在。SQL、事务、锁、RLS、DDL、CAS 还是 PostgreSQL 管；Firebase、对象存储、媒体、GPU 这些，交给 Rust/native sidecar。wire 检查两边说的话能不能对上，PG、migration、acceptance 各自去检查真实连接。检查路径有了，不等于这次发版就已经全绿，最后还得看实际跑出来的结果。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:232；发言者：My
+原话开始：
+实际做下来，我这边的外部函数基本上都是GPU 计算型，推理任务居多，所以本身就是无法验证的
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:240-241；发言者：My
+原话开始：
+我现在是尽可能让这些执行器做纯计算，输入和输出是 lean 编写的，限死输入输出合约。
+lean 建模了一次 pg 和对象存储这些，所有计算逻辑都由 lean 来驱动
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:23-52（非作者原话）
+编辑说明：完整数据库/Rust/native/wire/gate 分工来自源码审计；原话中的“无法验证”在正文中限定为当前模型外的 GPU 计算，不泛指形式化原则上做不到。
+-->
+
+```text
+人定义目标、状态迁移和不可牺牲的能力
+             ↓
+Agent 搜索程序、proof、引理和模块拆分
+             ↓
+Lean kernel 检查模型内的候选
+             ↓
+PG / wire / migration / acceptance 检查生产连接
+             ↓
+失败结果进入下一轮搜索
+```
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:90；发言者：My
+原话开始：
+所以我想的是，我有多少工作可以转换为对 goal 友好的目标，然后丢给它
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:124；发言者：My
+原话开始：
+能 verify 是底线，但还不够
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:132；发言者：My
+原话开始：
+规模也得可控，不然压根找不到梯度下降的方向
+原话结束。
+编辑说明：流程图是编辑综合，非原始聊天中已有的全栈证明流程。
+-->
+
+看完这些，我想的就是：我手里有多少工作能变成适合搜索的目标，然后丢给 AI？人提出目标，Agent 找实现、补 proof，几个相互独立的 checker 来验收。AI 也可以帮忙写题，但不能自己出题、自己答题，再自己宣布满分。能 verify 是底线，但还不够，规模也得可控。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:50；发言者：My
+原话开始：
+看完了以后我只有一个想法：我有哪些工作可以转换成类似的方式去跑搜索
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:90；发言者：My
+原话开始：
+所以我想的是，我有多少工作可以转换为对 goal 友好的目标，然后丢给它
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:124；发言者：My
+原话开始：
+能 verify 是底线，但还不够
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:154；发言者：My
+原话开始：
+主要是 AI 自己写的单测，人类没看过，不一定符合大方向目标
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:158；发言者：My
+原话开始：
+甚至可能是 AI 自己给自己加的约束
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:162；发言者：My
+原话开始：
+然后一堆 AI 都在单测里拉屎，测试本身又是很强的门禁信号
+原话结束。
+编辑说明：人出题、Agent 搜索、checker 判卷的责任划分为编辑综合；没有宣称已有通用合成产品。
+-->
+
+至于为什么还要加个“广义”，因为我确实把几种不同的东西凑到了一起。Lean 的命题即类型、证明即程序是一回事，Stainless 把前后置条件变成 VC 丢给 solver 是另一回事，真实 PostgreSQL 测试又是拿具体输入去跑。它们不是同一种数学机制。我关心的是，AI 不再写出一份看着挺像那么回事的代码就算交差，而是得找到一份能过检查的实现。
+
+<!--
+段落来源说明（非作者逐字原话）：
+编辑说明：Curry-Howard、程序逻辑与数据库测试的区别为编辑技术释义；未检得对应的作者逐字原话。
+-->
+
+把自然语言翻译成严格的命题以后，原来的解释还是可以留在注释里，或者 link 到 PRD。
+我关注的是定理。AI 以什么形式合成代码，能通过这些检查，我就不再逐行细看。
+也不是完全不看，免得它往里面塞公理和 `sorry`，装作通过验证。
+
+也不是编码开始前就把 spec 一次定完了。实际做下来，有些想当然的要求根本实现不了，只能一边实现一边补。原来觉得从 `A` 到 `C` 就完事了，写着写着才发现得先到 `B`，而且两步都不是 100% 成功。这时候就把中间状态和失败路径补出来，拆成两条命题分别约束。实现能帮我发现哪里想漏了，但不能因为代码已经这么写了，反过来就认定需求只能这样。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-04/group-chat-2026-08-17.md:84；发言者：My
+原话开始：
+严格来说也不是编码开始前就定下来形式化 spec，而是交互生成的。有些想当然的要求其实实际做起来才会发现实现不了
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-04/group-chat-2026-08-17.md:88；发言者：My
+原话开始：
+比如想当然以为这个模块应该实现从 a 到 c 的转换，实际做起来才发现中间应该还有个 b 衔接一下，就是 a 到 b 再到 c
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-04/group-chat-2026-08-17.md:92；发言者：My
+原话开始：
+每一步都不是 100% 成功的
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-04/group-chat-2026-08-17.md:96；发言者：My
+原话开始：
+这时候就要拆成俩定理分别约束
+原话结束。
+编辑说明：正文将小写 a/b/c 改为示意记号，并补充不让实现垄断规格的边界。
+-->
+
+绕来绕去，最后还是得把三件事分开：纯业务怎么决定，外面的事实从哪来，决定之后又是谁真的去执行。Lean、Rust、框架都可以换，这几个边界不能糊在一起。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:232；发言者：My
+原话开始：
+实际做下来，我这边的外部函数基本上都是GPU 计算型，推理任务居多，所以本身就是无法验证的
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:240-241；发言者：My
+原话开始：
+我现在是尽可能让这些执行器做纯计算，输入和输出是 lean 编写的，限死输入输出合约。
+lean 建模了一次 pg 和对象存储这些，所有计算逻辑都由 lean 来驱动
+原话结束。
+编辑说明：三种责任的分界是编辑归纳，不是原话中的固定分类。
+-->
+
+人类给出约束条件，AI 代码从约束中生长出来。
+
+# 5. 它不能乱做，也不能什么都不做
+
+我早期那份注册规格，失败路径写得挺像那么回事：如果 IP 受限，用户和订阅状态都保持原样。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-06/early-draft-2026-04-10.md:67-70；发言者：My／用户早期原稿
+原话开始：
+  // ❌ 失败路径（IP 限制）：一切保持原样
+  userSvc == old(userSvc)
+    && subSvc == old(subSvc)
+    if result == Left(RestrictedIPAddress)
+原话结束。
+-->
+
+那我所有请求都返回 `RestrictedIPAddress`，不就完了？数据库一行不动，不重复送套餐，也不制造脏数据，失败后置条件全都满足。唯一的问题是，谁也注册不了。因为规格根本没说清楚，什么条件下才能判定 IP 受限。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-06/early-draft-2026-04-10.md:67-70；发言者：My／用户早期原稿
+原话开始：
+  // ❌ 失败路径（IP 限制）：一切保持原样
+  userSvc == old(userSvc)
+    && subSvc == old(subSvc)
+    if result == Left(RestrictedIPAddress)
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-06/technical-audit.md:21-27（非作者原话）
+编辑说明：恒拒绝实现是编辑针对原稿提出的反例，不是作者报告的 Stainless 执行结果。
+-->
+
+这只是顺着那份规格举的反例，不是我真用 Stainless 跑出了这个结果。只管“做了就必须满足条件”还不够，它完全可以为了安全一直拒绝。很多业务还得补反过来的要求：条件都满足了，你就得做。前者是 soundness，后者是 completeness。不能乱做，也不能装死。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-06/technical-audit.md:21-27（非作者原话）
+编辑说明：soundness/completeness 区分与反例分析为技术审计，无对应作者逐字原话。
+-->
+
+拿现在的 MCAP Delivery 来说，输入对象、segment、catalog、canonical source、输出和执行计划都齐了，决策就必须给出一个后台处理任务，不能来一句“无需处理”就结束。我这里用它当生产主例，不再只拿注册和发邮件打比方。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:31-62（非作者原话）
+编辑说明：MCAP 主例来自源码快照审计，非作者口述。
+-->
+
+```text
+Eligible snapshot
+→ 存在 action，
+  使 decide snapshot = .enqueue action
+
+decide snapshot = .enqueue action
+→ Eligible snapshot
+```
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:37-48（非作者原话）
+编辑说明：两个方向是对 eligibility/enqueue 定理的编辑示意，非作者逐字原话。
+-->
+
+前一个方向由 `eligible_decide_enqueue` 证明，后一个由 `decide_enqueue_sound` 证明。还有一条 theorem 保证，拒绝和 eligibility 不成立是同一回事。要发哪个任务也不能随便，asset、segment、payload、task id 和执行计划都绑在 action 上，不是随手塞个任务就算交差。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:37-62（非作者原话）
+编辑说明：定理名及 action 绑定来自源码审计，非作者逐字原话。
+-->
+
+这份决策不是另外放着看的模型。生产里的 `McapTaskBridge` 调的就是同一个 `decide`。拿到 `.enqueue action`，再交给任务持久化解释器，写进去以后还要核对，任务是不是仍然和这个 action 对得上。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:64-78（非作者原话）
+编辑说明：Bridge 的运行连接来自源码审计，非作者逐字原话。
+-->
+
+但别把“决定发任务”当成“任务已经干完”。SQL 能不能提交、worker 能不能拿到调度、外面的媒体算法算得对不对，都还在这段证明之外。这里说的是 2026 年 9 月 2 日那版代码，后面继续改，theorem 和调用它的生产代码也得继续核对。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:64-78（非作者原话）
+编辑说明：此处是编辑对该源码快照证明边界的说明，非作者逐字原话。
+-->
+
+再比如 worker epoch fencing。任务进了终态就不能重新 claim，写 checkpoint 必须拿当前的 exact token。哪怕 worker id 没变，只要重新领过任务，旧 token 就作废。这些规则管的是它别乱来，不会把断网的 worker 变回来，也不保证任务一定能做完。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:28-32（非作者原话）
+编辑说明：epoch fencing 的 safety 及不保证完成的边界来自源码审计，非作者逐字原话。
+-->
+
+发邮件的例子也一样。模型可以要求条件满足时必须产生 `SendEmail` action，但供应商收没收到、邮件进没进收件箱，还得去外面看。我的邮件路径目前只有 admission、Bridge、调用次数测试和 Rust/Firestore contract，还没有和 MCAP 同等级的 Lean action theorem，所以这里只拿它说明道理，不拿它充生产证明。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:142-162（非作者原话）
+编辑说明：邮件路径与主例的证据强度比较来自源码审计，非作者逐字原话。
+-->
+
+# 6. 证明全绿，产品仍然可以被写没
+
+我在 6 月就吐槽过这种情况：同一份完整设计，AI 用 Java 能近似一比一写出来；换成 Stainless，几十、上百个字段就缩成不到十个。从头到尾都可验证，交出来却还是个推不到生产的玩具。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-09/meeting-transcript-speaker-mapped-2026-06-26.md:342；发言者：My（原说话人 2，31:59；身份见同目录 speaker-map.md:5）
+原话开始：
+不是公式式玩具，就是从头到尾都是可验证的，但是最后这个东西，你你没有办法把它推到生产。比方说那生产环境，我们增强就是，这个数据字段里面，可能这个数据实体关联到多少个其他这些数据实体，这个数据字段加起来二三十个，甚至一两百个，这都很正常。那我把这个完整的这个设计，我让他用 Java 写一遍，那他给我完全1:1的给我复刻出来了，是这个样子，但是我让他。用形式化验证的这个 Stainless 写的时候，他给了我一个不到10个字段的一个玩具。
+原话结束。
+编辑说明：原始会议转录保留识别重复及错误；不把口述字段数当作仓库统计。
+-->
+
+不是 kernel 把错证明放过了，是题目已经被换掉了。要让证明变绿，Agent 可以把前提拧紧，让难输入根本进不来；可以加 axiom、把 trusted boundary 往外推；也可以把难证明的业务塞进 SQL、glue、sidecar。再省事一点，就把字段、错误路径、运维能力一块儿删了，最后 theorem 看着一片欣欣向荣，产品却已经不是原来那个了。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:64-66；发言者：My
+原话开始：
+后来我反过来，直接编写可以被形式化验证的代码，在生产运行这一形式化核心，依然是副作用公理化。
+
+但实际执行下来效果依然会逐渐偏离，agent 会频繁地偷懒，将越来越多的逻辑堆积到胶水层和公理层来逃避验证
+原话结束。
+编辑说明：将逻辑推入胶水和公理来自原话；加强前提、删字段等分类结合全文材料作编辑归纳。
+-->
+
+后来我又碰上另一种玩具：功能没少，返回值也可能完全正确，可一到数据库这儿，就把它当成一个小 List 来用。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-15/user-note-2026-09-02.md:9；发言者：My
+原话开始：
+> 在我的 ai 开发 lean4 项目时，ai 常犯一类错误是，倾向于将数据全量加载到内存中，然后在内存中进行排序与过滤，再返回至接口。而不是像一个正常 web 项目通过 sql 条件组合查询。猜测新 sql 查询意味着新公理，而 ai 为了不增加新的公理选择这种方式。我还不能确定是什么导致了 ai 常犯这类错误，是我的规则文件还是 ai 训练倾向导致。
+原话结束。
+编辑说明：原话末尾的动机猜测仍未确认；正文不沿用“新 SQL 必然新增公理”的解释。
+-->
+
+有一段 SourceImport 代码，列表每一行都单独查 telemetry；页面只有 50 行，就发 50 条 SQL。还有路径一项一项读、一项一项写，或者每个 Entry 都把完整 output snapshot 重扫一遍。更离谱的一次是删掉 keyset pagination，理由只有“一个组织的项目足够少”，大约两小时后就回滚了。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-15/editorial-digest.md:9-27（非作者原话）
+编辑说明：50 条 SQL、重复扫描与 keyset 回滚来自源码/Git 审计，不是作者原话。
+-->
+
+这锅不能直接扣给 Lean。至于 Agent 是不是为了躲新增公理才这么写，光看这些代码还说不准；何况普通 SQL 查询在现在这套架构里，也不会自动多出一条 Lean axiom。能看见的问题是，我们只盯着“返回什么”，没盯着为了返回它要扫多少行、发多少次查询、吃多少内存。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-15/user-note-2026-09-02.md:9；发言者：My
+原话开始：
+> 在我的 ai 开发 lean4 项目时，ai 常犯一类错误是，倾向于将数据全量加载到内存中，然后在内存中进行排序与过滤，再返回至接口。而不是像一个正常 web 项目通过 sql 条件组合查询。猜测新 sql 查询意味着新公理，而 ai 为了不增加新的公理选择这种方式。我还不能确定是什么导致了 ai 常犯这类错误，是我的规则文件还是 ai 训练倾向导致。
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-15/editorial-digest.md:39-49（非作者原话）
+编辑说明：本段区分作者观察、当时未确定的猜测与审计结论；普通 SQL 不自动新增公理是审计结论。
+-->
+
+我也不是要把所有 `List.filter` 都枪毙。按业务 key 取、有明确上限的 snapshot，放内存里把业务决定做完，挺合理。真正要小心的是没上界就全量搬、N+1、反复扫整份数据，最后还拿一句“数据不会很多”当合同，schema 和产品约定里却什么都没有。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-15/editorial-digest.md:33-49（非作者原话）
+编辑说明：有界 snapshot 与无界加载的区别是编辑技术归纳，非作者逐字原话。
+-->
+
+这事有两头都得看：每项产品能力到底靠 theorem、schema、transaction、test、trusted boundary，还是人工判断来兜；每个 theorem、axiom、gate、sidecar 又到底在替哪项能力干活。前一头防止功能悄悄缩水，后一头得看看这些越攒越多的证明，到底还有没有用。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-11/group-chat-2026-07-29.md:221-225；发言者：My
+原话开始：
+我的命题（需求）信息量不大，约束不多。但我会在后续迭代中补齐更多约束，调整命题。（想起一出是一出，反复横跳）
+
+而现在 AI 在证明（实现）我的命题（需求）的过程中，加戏（test、framework）加得有点多。
+
+迭代久了以后，哪些是我的真实需求，哪些是 AI 自己加戏，已经分不清了，也无法说清。而这些定理、引理是否都服务于我（改了八百遍的）现在的命题（需求），更是无法分离出来，无从得知。
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/anti-toyification-gate.md:19-35（非作者原话）
+编辑说明：双向追踪是编辑依据功能遗漏与形式资产失去需求来源这两类问题提出的整理，不是原话中的现成流程。
+-->
+
+所谓 100% 覆盖率并非天然荒谬。你得先把分母交出来。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:94；发言者：My
+原话开始：
+马工群里还有个朋友加我交流过，他也在做 lean4 形式化实验，不过我们验证的目标不同，我验证的是我自己生产逻辑代码，追求 ~100% 覆盖
+原话结束。
+编辑说明：作者当时提出接近全覆盖的目标；“把分母交出来”为编辑的统计口径提醒，并非作者逐字原话。
+-->
+
+# 7. 证明器之外，还有现实这一关
+
+模型里推出一个 action，后面还有一堆现实问题：SQL 到底有没有提交，旧数据能不能升级，worker 有没有跑起来，供应商接不接受请求。模型里的 action theorem，不会替这些事报喜。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:128；发言者：My
+原话开始：
+比如说远程调用，本身就是不透明、不可验证的。
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:136；发言者：My
+原话开始：
+数据库 CRUD 也是不能验证的，只能对数据库建模。
+原话结束。
+编辑说明：正文将原话收紧到当前模型与外部事实的边界；SQL/worker/供应商各项失败是编辑举例，不泛称数据库 CRUD 原则上不可验证。
+-->
+
+所以我形式化以后，还加了一层 differential/deviation check，内存模型和真实 PostgreSQL 跑同一组操作，再对一对 verdict 和能观察到的状态。不然 SQL、decoder、mapping 跑偏了，我可能验证的是一套假的程序逻辑。这也是集成测试，只跑有限的输入和操作序列，不是 PostgreSQL 和模型之间的完整 refinement proof。CAS、事务、锁、RLS、回滚还得在真数据库上查，sidecar、wire 和部署也各有自己的 contract 与验收检查。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:148；发言者：My
+原话开始：
+我现在形式化以后我还会加一层 deviation check，防止数据库模型和我验证的内存模型不一致，导致验证了假的程序逻辑。因为要同时跑内存 mock 模型和真实 Postgres，所以也是一种集成测试吧。
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:35-52（非作者原话）
+编辑说明：有限生成器、有限序列及非完整 refinement proof 的边界为源码审计/编辑补充。
+-->
+
+这次撞墙的不是 Lean，是 migration。生产服务没停，停过几次的是 dev：schema 当时没按长期在线演化来设计，新旧数据结构直接硬着变，旧数据也不会跟着新类型一起重生。后来才把迁移拆成 `expand → backfill → contract`，再补历史数据 preflight、可重入回填、最终不变量检查和失败回滚。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:313-315；发言者：My
+原话开始：
+也不是完全没崩过，崩的不是 lean，而是数据库 migration，这个没有规划好，因为我这边限制的很严格，新旧数据结构是直接演化的，没有做在线长期演化，所以 dev 环境出了几次停机故障。
+
+反正是 dev 停机不是生产停机
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/evolution/vl2-schema-domain-churn.md:75,85-99（非作者原话）
+编辑说明：dev 停机是作者原话；expand/backfill/contract 等后续办法来自迁移材料审计，不伪装成同一段口述。
+-->
+
+我对测试这件事，也得往回收一收。第五篇没说测试全消失，我当时还把难形式化的部分交给集成测试和 PBT。真做下来，纯核心里已经充分证明的性质，确实不用再把同一批输入输出样例抄一遍；可模型和生产之间的缝，比我想的多得多。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：source/_posts/cyber-moneyball.md:652；发言者：作者第五篇文章原文
+原话开始：
+所以未来 AI 软件验收原则应该是：形式化验证贯穿整个软件维护生命周期，模块开发时人类主要精力放在审查形式化规范有哪些变更，是否破坏了过去定下的规范。难以被形式化覆盖的部分，则依赖传统集成测试，配合 property-based testing，单元测试的必要性将会降低甚至可有可无。同时 AI 也可以辅助人类对产品设计文档进行形式化翻译，或者从形式化断言翻译回自然语言帮助人类理解，帮助检查自然语言中模糊的部分是否与过去的设计规范存在矛盾，并最终与形式化规范进行对齐。而软件功能的最终验收依然是人类负责，这部分暂时无法被替代，因为大部分软件的最终消费者是人类。
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:152；发言者：My
+原话开始：
+但纯粹的单测，我 lean 项目里已经很少需要写了，只有系统接口、PG 接口这些交界的地方需要测一测，业务相关函数模块都不用再写一遍单测。
+原话结束。
+编辑说明：第五篇本就保留集成测试和 PBT；正文对单测的减少限定为已充分证明的核心性质。
+-->
+
+测试没退场，是换了地方。核心性质尽量交给证明；数据库、migration、wire、sidecar、性能和外部执行，还是得照各自会出问题的地方去查。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:104；发言者：My
+原话开始：
+理想形态是这样，落地我觉得还有很多困难，测试用例不能被完全替代，能替代的是过去的 mock 单测，集成测试的价值比过去更高了。
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:148；发言者：My
+原话开始：
+我现在形式化以后我还会加一层 deviation check，防止数据库模型和我验证的内存模型不一致，导致验证了假的程序逻辑。因为要同时跑内存 mock 模型和真实 Postgres，所以也是一种集成测试吧。
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:152；发言者：My
+原话开始：
+但纯粹的单测，我 lean 项目里已经很少需要写了，只有系统接口、PG 接口这些交界的地方需要测一测，业务相关函数模块都不用再写一遍单测。
+原话结束。
+编辑说明：具体测试分工为编辑整理，不将“业务模块不用单测”推广至未证明性质。
+-->
+
+# 8. 我为什么绕了这么远
+
+我最早那条路，是从生产 Scala 往 Stainless 搬：还想继续写 Cats Effect，只给业务代码加 annotation，再从 TASTy 生成验证代码。很快就卡住了，进展特别慢。生产里的 `IO[A]` 带着库生态、取消、资源、并发和真的 repository；验证侧 `FVIO[World, A]` 则是另一套状态变换。翻译器能搬语法，没法替两边变出一套共同语义；Stainless 只能接住 Scala 的一部分，生产代码却还在往前长。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:58；发言者：My
+原话开始：
+刚进群的时候我的路线是从生产代码出发，对所有外部副作用（数据库、云服务）进行公理化建模，再对使用到的库函数也做等价的形式化翻译，但是进展非常缓慢，形式化是一个语言子集，永远追不上生产代码的进化速度
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/evolution/my-thinking-timeline.md:17-23（非作者原话）
+编辑说明：路线判断来自原话；Cats Effect、TASTy 与 IO/FVIO 细节来自源码和会话审计，不是这句原话的逐字内容。
+-->
+
+后来我把方向倒过来：先写 Stainless 形式核心，再用 transpiler 生成生产 Scala。形式核心这回进了生产构建，但也没就此完事：transpiler 自己成了 TCB，JDBC store 还是 `@extern`，SQL 和并发 shell 也仍可能把越来越多业务接过去。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:64-66；发言者：My
+原话开始：
+后来我反过来，直接编写可以被形式化验证的代码，在生产运行这一形式化核心，依然是副作用公理化。
+
+但实际执行下来效果依然会逐渐偏离，agent 会频繁地偷懒，将越来越多的逻辑堆积到胶水层和公理层来逃避验证
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/linewise-fm.md:7-36,44-50（非作者原话）
+编辑说明：transpiler、TCB、JDBC @extern 为源码审计事实。
+-->
+
+MoonBit 那次 snapshot→patch 实验让我确认了一件事：同一份纯核心可以既执行又接受证明，这条路值得继续追。store 只读 snapshot、再应用 patch。只是多语句事务、并发和支付事实没有一起进来，仍然留在外面。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/fm-ledger.md:3-46（非作者原话）
+编辑说明：MoonBit 的可执行/可证明核心与生产边界来自仓库审计，未检得对应作者逐字原话。
+-->
+
+后来我改成直接用 Lean 4 写生产业务核心，少掉一层跨语言翻译。数据库和外部世界可没跟着消失，边界反而更得说清楚。要注意，这说的是四个互相独立、没有共同 Git 血缘的仓库里，设计路线一路变过来，不是一个仓库从头长成现在这样。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:72；发言者：My
+原话开始：
+现在我直接一步到位，写 lean4 上生产
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:76；发言者：My
+原话开始：
+已经上测试环境，开始和同事们联调了，将作为我平台的下一个版本，替换现在生产系统
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:80-84；发言者：My
+原话开始：
+实话实说，还没发布生产，终局未定。
+
+所以还是玩具实验
+
+只是我自己觉得路线越来越清晰，落地可能性越来越高
+原话结束。
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/evolution/evidence-policy.md:9-10（非作者原话）
+编辑说明：这段原话发生时尚未发布生产；正文最终状态由后来的源码与运行材料支持，四仓库无共同 Git 血缘为审计事实。
+-->
+
+我绕了几条路，想做的事还是那件事；来回变的是怎么把形式核心接进生产。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-04/group-chat-2026-08-17.md:44；发言者：My
+原话开始：
+但说实话，它没有我幻想中那么完美，也和我半年前幻想的形态有差别
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-04/group-chat-2026-08-17.md:48；发言者：My
+原话开始：
+即便如此我也很满意这个效果了
+原话结束。
+编辑说明：“没有换目的地，换的是地图”是编辑概括，不是原话。
+-->
+
+# 9. 慢下来的究竟是什么
+
+代价也摆在那儿。同事抱怨得最多的就是慢：CI 慢，Agent 开发也慢。以前一天能迭代几个版本，现在一个功能有时要跑一天，甚至两三天。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:281；发言者：My
+原话开始：
+同事们唯一抱怨的是太慢了
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:289；发言者：My
+原话开始：
+跑 CI 也慢，agent 开发也慢
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:297；发言者：My
+原话开始：
+过去一天能迭代仨版本，现在经常一个功能跑一天甚至 2-3 天ai 才能跑完
+原话结束。
+-->
+
+但这不能拿来算形式化把开发拖慢了几倍。前后做的功能不一样，质量门槛不一样，系统阶段也不一样。我只能说现在一个功能要等更久；团队还得同时啃 Lean 模型、PostgreSQL、Rust/native 边界和各种 gate。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:297；发言者：My
+原话开始：
+过去一天能迭代仨版本，现在经常一个功能跑一天甚至 2-3 天ai 才能跑完
+原话结束。
+编辑说明：功能规模与条件不同、不能据此推出通用倍率，是编辑对这条体感比较的限制。
+-->
+
+这次复盘用了 16 个只读扫描器，按日期看了本机 183 个 OMP 顶层 session；同一会话里的 subagent、fork 和 artifact 不另算。剔除空会话和无关任务后，132 个与项目实质相关，其中 62 个实际读过、改过或推理过 theorem、invariant、axiom、verified slice 或 verification gate。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/session-scans/omp-sessions.md:5-7（非作者原话）
+编辑说明：扫描器数量、会话计数及去重口径是会话审计结果，不是作者逐字原话。
+-->
+
+Theorem 不会让 Agent 看一眼就不用读代码。更实际的用处像个语义索引：从命题找到业务决定在哪儿，改 priority、identity 或 retry 时知道哪些性质不能丢，再去翻 Repo、SQL、Rust、前端和日志。会话里能看到的是这些约束被找出来、用上了；没有同任务的对照，不能说因此少花了时间或 token。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/session-scans/omp-sessions.md:11-25,47（非作者原话）
+编辑说明：语义索引与 priority/identity/retry 的收益来自会话复盘归纳，不是作者逐字原话。正文将收益限定为约束的实际使用，不作耗时或 token 开销的比较。
+-->
+
+别把所有绿灯都算成 theorem 的功劳。领域类型挡非法输入，Lean 编译器查类型和证明，axiom allowlist 挡没登记的信任，真实 PostgreSQL gate 能抓模型和 SQL 对不上的地方。都叫 checker，干的可不是同一件事。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/session-scans/omp-sessions.md:11-25（非作者原话）
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:46-52（非作者原话）
+编辑说明：不同 checker 的责任划分是编辑技术归纳，非作者逐字原话。
+-->
+
+我更看重的，是这些约束能帮一个没有可靠长期记忆的 Agent 保住软件的核心形状：哪些状态合法，模型里什么条件下必须产生什么 action，哪些业务承诺不能忘。不是今天有几个 service、文件放在哪个目录。自然语言还得讲清为什么；已经写成定理的部分，机器可以反复检查，不必每个 session 都从头猜。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:9；发言者：My（用户）
+原话开始：
+所以形式化证明在这里起到的作用是约束了软件的形状，让没有长期记忆的agent可以不依赖模糊的，容易漂移的文字文档/spec，而是依赖更清晰，没有歧异的定理，软件第一次开发时，它可以展它也可以展现一点它的价值及软件的第一个版本AI也是需要也是需要数个迭代提交才能完成第一个版本迭代时形式化验证可能会拖慢交付速度在未来的软件长期维护中形式化验证会帮你记住你最核心的软件应该有的功能形态，并且这些功能形态调整时正确的识别并告诉人类。
+原话结束。
+编辑说明：“形状”在正文限定为行为与状态承诺；自然语言仍保留意图，不宣称定理自动消除需求翻译歧义。
+-->
+
+这个用处不必等几年才出现。第一版也不是 AI 一口气吐出来就完事，照样要过好几个 session、改好几轮。需求本来就是边做边长；能说清一条，就先把那条立成约束，后面再一点点补。形式化可能拖慢第一版，但已经定下来的东西，从第一版开发时就能拿来查后续修改。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:9；发言者：My（用户）
+原话开始：
+软件第一次开发时，它可以展它也可以展现一点它的价值及软件的第一个版本AI也是需要也是需要数个迭代提交才能完成第一个版本迭代时形式化验证可能会拖慢交付速度在未来的软件长期维护中形式化验证会帮你记住你最核心的软件应该有的功能形态，并且这些功能形态调整时正确的识别并告诉人类。
+原话结束。
+编辑说明：同一口述中关于首次开发的部分。
+-->
+
+到了长期维护，这事只会更明显。上下文一压缩、session 一换，Agent 该忘的还是会忘；但只要命题还留着、检查还在跑，违反已经写下的约束就过不了。新需求来了，就把能说清的部分接着写进去，让已有约束跟着一起查；不能为了过 gate 把命题删掉、把前提越收越窄，或者把信任边界越推越大。仓库和检查流程记着这些约束，不用赌模型这回还记不记得。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:11；发言者：My（用户）
+原话开始：
+形式化验证通过约束软件的核心形状，帮助AI更快的分析软件的核心目的，即便跨越上下压缩点定理也不会被破坏，因此形式化验证对于从量导致的转换提供的强有力的保证和支持
+原话结束。
+编辑说明：正文补上命题保留、检查持续执行和禁止静默改弱命题的条件。
+-->
+
+这些记录能说明局部机制确实帮过 Agent，算不出整个项目的净生产率提高了多少。我们没有一组需求、团队、模型都相同、只差形式化开关的对照。我盼的是长期维护时少花点力气找回旧要求、修旧回归，不是每次提交都能更快。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/session-scans/omp-sessions.md:47（非作者原话）
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:9；发言者：My（用户）
+原话开始：
+在未来的软件长期维护中形式化验证会帮你记住你最核心的软件应该有的功能形态，并且这些功能形态调整时正确的识别并告诉人类。
+原话结束。
+编辑说明：局部机制不能证明净生产率是审计边界；长期维护的期待来自本轮口述。
+-->
+
+# 10. 软件内部可再生，软件之间可协调
+
+以前写软件，后来总得有人读、有人改。为了那个也许会来的变化，我们习惯在第一版就加通用抽象、扩展点、兼容层和设计模式，先把复杂度的钱付了。可很多软件一辈子就一种真实用法，变化还没来，架子倒先搭起来了。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：source/_posts/cyber-moneyball.md:16-18；发言者：作者第五篇文章原文
+原话开始：
+软件工程的核心原则：关注点分离、模块化、可验证性等理论依然是成立的。我要推翻的是围绕这些原则建立的大部分规则、工具和度量指标：它们以人类为模型设计，且只以人类为模型设计。——已经不适合这个版本了.jpg
+
+圈复杂度假设人类难以同时追踪过多分支，函数行数上限假设人类一屏能看到的代码量，三层架构假设人类需要通过目录结构来导航代码。
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-11/group-chat-2026-07-29.md:229；发言者：My
+原话开始：
+当然，这一现象在 AI 之前就存在，软件工程老问题了。
+原话结束。
+编辑说明：通用抽象、扩展点和预付复杂度的历史解释为既有编辑归纳；引文直接支持的是软件工程规则以人为前提和维护问题早已存在。
+-->
+
+主要写代码的换成 AI 以后，这个前提就松了些。只要目标、状态约束和外部契约能让独立 checker 可靠地验，重新写一个内部模块，可能比长期维护那些想象中的扩展点还省事。一种真实用法就先把它写清楚；第二种真来了，再从新的目标出发重写受影响的模块，需要 migration、adapter 和检查，就一起做。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-10/group-chat-2026-07-26.md:188-194；发言者：My
+原话开始：
+举个例子，我让 AI 给我搓一个博客管理系统。
+
+命题（核心需求）是我自己发文章，提供静态 HTML 页面的 HTTP 服务器。
+
+AI 一通分析，觉得这个需求拿 Python 搓一个 SQLite 调用 Pandoc 从 md 到 HTML 的渲染脚本就够了，作为第一版这没问题。
+
+一个月后我给 AI 新的需求，我想在我的博客上支持全文检索和模糊查询。这时候会发生什么？
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-10/group-chat-2026-07-26.md:206；发言者：My
+原话开始：
+但这真的是我想要的吗？如果 AI 直接去读项目里已存代码，它大概率会觉得这条路径是正确的。但实际上已存代码和文档也是前任 AI 生成出来的，我只需要一个博客网站而已。至于它用什么数据库，还是直接在 `agents.md` 里写了几行命令：`hexo serve`，我并不在乎。
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-10/group-chat-2026-07-26.md:210；发言者：My
+原话开始：
+若是从原始需求 + 增量需求出发，那最简单的路径应该是数据库迁移到 PG，它既支持全文检索，又支持向量
+原话结束。
+编辑说明：重写相对于维护扩展点的成本判断，是编辑从博客例子展开的有条件推论，不是原话中已测得的成本结论。
+-->
+
+我想要的不是让现在这套实现永远好扩展，而是别把它供起来：简单一点，真要换也换得动。以后更值得留下来复用的，可能是我想要什么、状态怎么变、哪些规则要守，还有生成和运行代码的底座，不一定是这份业务实现。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-05/group-chat-2026-06-06.md:216；发言者：My
+原话开始：
+我这个方向其实也是这样的，我关注命题，而 ai 以什么形式合成出来了代码，能通过命题检查，我就不再细看了
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-05/group-chat-2026-06-06.md:220；发言者：My
+原话开始：
+也不是完全不看，免得 ai 给我注入公理，装作通过验证
+原话结束。
+编辑说明：可替换实现及更值得复用的资产是既有编辑展开，原话只直接支持命题优先与检查公理。
+-->
+
+代码写得快，不等于软件就变好了。能把该留的行为留住、把不需要的实现删掉，量才有机会变成质量；不然 AI 写得越快，下一轮要理解和维护的东西也越多。已经写下来的命题，跨过一次上下文压缩还能继续检查，给重写提供一些依据。但代码不会因为带了证明就自己变简单。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:11；发言者：My（用户）
+原话开始：
+AI可以以人类数百倍的速度生成代码合成软件，但是这些量的变化却没能好的转化为质的提升。最近年以来AI软件开发在各个领域都实际上降低了软件的质量和可维护性代码膨胀速度更快，形式化验证通过约束软件的核心形状，帮助AI更快的分析软件的核心目的，即便跨越上下压缩点定理也不会被破坏，因此形式化验证对于从量导致的转换提供的强有力的保证和支持，形式化验证并非万能的灵丹妙药，它依然无法彻底解决软件的膨胀问题，但是至少目前它是软件的膨胀速度变慢，或许我们可以通过引入复杂度审计模型要求AI定时降低整个系统的复杂度，并保持定理不被破坏，以此让软件更加健康
+原话结束。
+编辑说明：原话完整保留；速度倍率、全行业质量下降与膨胀减速没有作为已测量结论写入正文。
+-->
+
+歼星舰不是一步造出来的，是一次次保守补丁叠出来的。所以我还想试试让 AI 不光接着加功能，也隔一阵回头看看系统是不是又长胖了。已经确认要守的命题不能被它偷着改弱；在这个前提下，再看看多余的层能不能删、重复实现能不能合、被补丁包住的模块要不要重写。改完还得过生产连接和性能检查。复杂度审查看哪里能简化，已有的证明看它承诺守住的行为还在不在。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:11；发言者：My（用户）
+原话开始：
+或许我们可以通过引入复杂度审计模型要求AI定时降低整个系统的复杂度，并保持定理不被破坏，以此让软件更加健康
+原话结束。
+编辑说明：复杂度审计写为下一步方向，不冒充已实现机制。
+-->
+
+这事还得做了才知道。proof 绿了，不代表资源开销、运维负担和没写进命题的功能都没退步；代码行数少了，也不等于系统就更好。形式化资产自己也会长胖，过时的 theorem、重复的 gate、没人再用的模型，该删也得删。不能看见 proof green 就宣布软件膨胀治好了。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:11；发言者：My（用户）
+原话开始：
+形式化验证并非万能的灵丹妙药，它依然无法彻底解决软件的膨胀问题，但是至少目前它是软件的膨胀速度变慢
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-04/group-chat-2026-08-17.md:70；发言者：My
+原话开始：
+没解决的问题是熵增，ai 不会自发的去重构系统，还是倾向于打补丁。有时候移除功能的提交反而增加了代码量
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-11/group-chat-2026-07-29.md:197；发言者：My
+原话开始：
+我发现 sol 不光写了测试，还写了测试的测试，和测试的测试的测试
+原话结束。
+编辑说明：不把 proof green 当作成本下降或整体质量改善的证明；形式化资产也会膨胀为编辑归纳。
+-->
+
+关键不是 AI 会不会写代码，是谁看着它怎么验收。已经说清楚、决定保留的产品能力，不能在实现里悄悄消失；关键命题和信任边界怎么改，也得让实现之外的人或规则看见。接到生产的那一段，要按它会怎么失败来查，PG、wire、migration、acceptance 各有各的检查。要是写实现的 Agent 连命题和测试都能自己定，它就能把要求越写越小、把前提抬得越来越高，最后写一套刚好夸当前实现的测试。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:154；发言者：My
+原话开始：
+主要是 AI 自己写的单测，人类没看过，不一定符合大方向目标
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:158；发言者：My
+原话开始：
+甚至可能是 AI 自己给自己加的约束
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:162；发言者：My
+原话开始：
+然后一堆 AI 都在单测里拉屎，测试本身又是很强的门禁信号
+原话结束。
+编辑说明：可靠验收的三项条件为既有编辑综合，原话直接指出生成者自行设定测试/约束的风险。
+-->
+
+不过，这套变化主要在软件内部。跨进程、跨服务、跨团队、跨组织，还是得协调独立发布、版本兼容、权限、幂等、故障隔离和责任。数据库里已经有的数据、没升级的客户端、还在跑的旧实例，也不会跟着新代码一起重来。软件之间要配合的成本还在那里，代码是谁写的并不会把它变没。
+
+<!--
+段落来源说明（非作者逐字原话）：
+核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/print-reader.md:153（非作者原话）
+编辑说明：软件之间、版本之间与持久数据之间的协调，是既有编辑归纳；归档阅览本亦标为编辑归纳，未检得独立作者逐字原话。
+-->
+
+所以我不是要把软件工程扔了。关注点分离、模块化、可验证这些原则还在；我想重新想的是那些只为减轻人手工维护、又没有真实变体的内部抽象，没必要一上来就当默认要求。现实约束、系统边界和协作关系，该说清楚还是要说清楚。软件里面尽量能检查、能替换、能重做；软件跟软件打交道，接口还是得明确、稳定，彼此能协调。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：source/_posts/cyber-moneyball.md:16；发言者：作者第五篇文章原文
+原话开始：
+软件工程的核心原则：关注点分离、模块化、可验证性等理论依然是成立的。我要推翻的是围绕这些原则建立的大部分规则、工具和度量指标：它们以人类为模型设计，且只以人类为模型设计。——已经不适合这个版本了.jpg
+原话结束。
+编辑说明：正文对软件内部和跨系统边界进一步展开，非原话逐字复述。
+-->
+
+# 11. 人不该审完每一条定理
+
+实现可以换，需求自己也会变。命题不是刻在石头上的：到了具体的需求变更，哪些旧约束继续守、哪些改掉、哪些退休，得交给人决定。需求记忆不是把旧实现里碰巧有的选择永久冻住。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:29；发言者：My（用户）
+原话开始：
+当人类提出需求变更时，如果和过去的原始需求形成的顶级定理互相冲突，则可以直接交给人类决策，是否修改。
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-11/group-chat-2026-07-29.md:221；发言者：My
+原话开始：
+我的命题（需求）信息量不大，约束不多。但我会在后续迭代中补齐更多约束，调整命题。（想起一出是一出，反复横跳）
+原话结束。
+编辑说明：既有段落与本轮口述的人类变更决策相对应。
+-->
+
+我的形式化覆盖率现在还不高，卡住我的主要是认知负担。我还不放心让 AI 自己挑哪些需求该写成定理，也不放心它把需求翻成定理时不会漏东西。让它替我写 Lean，和让它替我决定什么叫业务正确，是两回事。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:25；发言者：My（用户）
+原话开始：
+目前我的系统形式化覆盖率并不高，究其原因还是认知负担，目前我尚不能放手让ai 自己决定哪些需求覆盖定理，如何将需求翻译成定理。当前模型智力和训练偏好共同作用，导致了这一现状：为核心数据和业务流程设计不变量（例如余额永不为负数，运营 api 只有管理员角色可以访问，settled order 不可修改数值和单位等），而不是追求 100% 端到端覆盖（对于POST /api/xxx {“action”:”done”,…} 总是能返回 {“status”: “ok”|”error”} 。
+原话结束。
+编辑说明：本轮原话完整保留；正文未给“形式化覆盖率”编造分母或百分比。
+-->
+
+模型现在的本事和训练偏好，决定了我敢交出去多少事。AI 有时会把前提抬高，或者写出正好迎合现有实现的检查，这些已经够让我小心了。我先盯住核心数据和业务流程里的不变量，不去追一个听起来很漂亮的端到端覆盖率。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:25；发言者：My（用户）
+原话开始：
+当前模型智力和训练偏好共同作用，导致了这一现状：为核心数据和业务流程设计不变量（例如余额永不为负数，运营 api 只有管理员角色可以访问，settled order 不可修改数值和单位等），而不是追求 100% 端到端覆盖（对于POST /api/xxx {“action”:”done”,…} 总是能返回 {“status”: “ok”|”error”} 。
+原话结束。
+编辑说明：能力与训练偏好保留为作者判断，不作受控归因结论。
+-->
+
+比如余额不能变成负数，运营 API 只有管理员能用，settled order 的金额和单位不能再改。反过来，只证明 `POST /api/xxx` 总会回 `ok` 或 `error`，又说明什么？永远回 `error` 也符合这句话。得先讲清楚这条命题到底答应了什么。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:25；发言者：My（用户）
+原话开始：
+为核心数据和业务流程设计不变量（例如余额永不为负数，运营 api 只有管理员角色可以访问，settled order 不可修改数值和单位等），而不是追求 100% 端到端覆盖（对于POST /api/xxx {“action”:”done”,…} 总是能返回 {“status”: “ok”|”error”} 。
+原话结束。
+编辑说明：三项不变量是规则选择的例子，不宣称源码已逐项证明；恒返回 error 的反例为编辑补充。
+-->
+
+未来这些需求、定理应该换一种组织方式，不是给人摊开一堆 proof。原始需求放最上面，已经确认的形式表达跟它放一起；中间按业务规则、状态变化、影响范围拆，最边上那些辅助引理再让 AI 去补。没形式化的要求也得留在图里，写清楚它靠什么检查、哪些地方得人判断，不能因为难证明就当它不存在。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:29；发言者：My（用户）
+原话开始：
+未来需求-定理层应该以另一种形式组织，树形层级定理，或图形拓扑定理结构。人类原始需求为顶级定理，中间根据隐性沉默成本，影响范围，拆分出次级定理，AI实现过程中补齐叶子定理。当人类提出需求变更时，如果和过去的原始需求形成的顶级定理互相冲突，则可以直接交给人类决策，是否修改。（例如本月底剩余流量清空，下月重新计算 -> 本月底未用完的流量自动结转到下个月总流量中）。而部分决策的隐性沉默成本较高，也需要人类提供意见（例如非技术背景的用户，第一版软件因为纯个人使用，所以技术栈选用 sqlite，第二版用户想将软件升级为多用户平台软件，需要迁移至 pgsql）。最边缘的叶子定理则可以由 ai 自行决定（现在还有些风险），主要目的为保证软件质量。由此人类主要面对的是顶层定理，甚至让 ai 来解释顶层定理所对应的原始需求。降低人类认知成本。
+原话结束。
+编辑说明：原话完整保留于此，后续段落分别展开；正文区分原始需求与形式化表达，并保留未形式化的要求。
+-->
+
+举个例子：旧规则是月底剩余流量清空，新要求是把没用完的流量结转到下个月。对同一份流量，这两条规则撞上了。要是它们都已经写成约束，系统就该指出旧的哪条和新要求冲突，把选择交还给我：旧规则继续，还是改掉？我不想等一轮重构完了，才发现原来守的规则变了。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:29；发言者：My（用户）
+原话开始：
+当人类提出需求变更时，如果和过去的原始需求形成的顶级定理互相冲突，则可以直接交给人类决策，是否修改。（例如本月底剩余流量清空，下月重新计算 -> 本月底未用完的流量自动结转到下个月总流量中）。
+原话结束。
+编辑说明：只讨论同一剩余额度的规则冲突，不宣称检查器能发现尚未形式化的意图冲突。
+-->
+
+也不是所有重要选择都会以定理冲突的样子冒出来。一个人用的小工具，SQLite 也许够了；后来真要做成多人平台，存储、并发、部署和运维就得重新想。多人不等于非得用 PostgreSQL；但如果要迁移，历史数据怎么处理、新的运维负担是什么，得先讲给人听，不能藏进 AI 顺手补出来的实现细节里。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:29；发言者：My（用户）
+原话开始：
+而部分决策的隐性沉默成本较高，也需要人类提供意见（例如非技术背景的用户，第一版软件因为纯个人使用，所以技术栈选用 sqlite，第二版用户想将软件升级为多用户平台软件，需要迁移至 pgsql）。
+原话结束。
+编辑说明：正文把“隐性沉默成本”解释为迁移与运维成本，并明确多用户本身不强制使用 PostgreSQL。
+-->
+
+给人看时可以画成树，真要看依赖，大概还是张图：一个不变量可能撑着好几条需求。图画出来不等于证明做完了，还得检查下面这些命题合起来能不能推出上面已经写明的要求。没写进模型的意图冲突，checker 不会凭空知道。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:29；发言者：My（用户）
+原话开始：
+未来需求-定理层应该以另一种形式组织，树形层级定理，或图形拓扑定理结构。人类原始需求为顶级定理，中间根据隐性沉默成本，影响范围，拆分出次级定理，AI实现过程中补齐叶子定理。
+原话结束。
+编辑说明：展示层次与证明依赖图的区别、下层到上层的组合证明义务，为编辑补充。
+-->
+
+最边上的辅助引理，我希望以后能慢慢交给 AI 自己找、自己证。但不能因为它挂在叶子层就随便放手：要是它为了证明而收窄合法输入、加公理，或者改了公开契约，那就已经越界，得拿回来让我看。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:29；发言者：My（用户）
+原话开始：
+最边缘的叶子定理则可以由 ai 自行决定（现在还有些风险），主要目的为保证软件质量。
+原话结束。
+编辑说明：正文将放手范围限定为不改变已审定契约的辅助引理；收窄输入、增添公理或改变契约仍须审查。
+-->
+
+如果真能把这套结构做出来，我就可以先面对顶层业务承诺、重要成本和例外，不用每次钻进一大堆证明细节。AI 也可以把定理解释回原始需求，帮我看这次改动到底动了什么；当然，解释还得跟命题对得上。这就是我想继续降低的认知成本，现在还只是个目标。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:29；发言者：My（用户）
+原话开始：
+由此人类主要面对的是顶层定理，甚至让 ai 来解释顶层定理所对应的原始需求。降低人类认知成本。
+原话结束。
+编辑说明：减少认知负担为未来目标，解释须与命题核对为编辑补充。
+-->
+
+# 12. 民用，不是免修软件工程
+
+这篇里有些招数肯定只是过渡。以后也许不必再用 Lean 写业务，也不必自己搭这么多 Bridge 和 glue code；语言可能会内置更多可检查的契约，也可能出现 AI 时代原生的形式化语言。现在的内存表模型也不是终点。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:19；发言者：My（用户）
+原话开始：
+本文中出现的部分不稳定技巧会随着 AI 能力进化而过时，另一部分稳定技巧则不会。
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:23；发言者：My（用户）
+原话开始：
+而文章中出现的用法则不稳定，未来可能会被更多语言内置形式化支持，或AI 时代的原生形式化语言。
+原话结束。
+编辑说明：语言与框架为未来设想；正文举出的 Bridge/glue 简化并非已实现结果。
+-->
+
+我希望数据库结构和验证模型能从同一份定义长出来，少维护两套容易飘的东西，甚至以后验证也不用围着手写 SQL 转。就算表和内存模型能自动生成，也只是少掉一部分重复表达；真实查询、事务、隔离和并发到底跟模型合不合，仍得做相应的证明或检查。框架不能生成完代码，就宣布两边等价。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:27；发言者：My（用户）
+原话开始：
+当前形式化验证的内存表模型也不是最终形态，应该可以出现一种框架自动抹平这一差异，甚至可以不是 sql 语法范式，对数据库结构模型自动生成对应的形式化内存模型用于验证。
+原话结束。
+编辑说明：共同定义生成模型为未来设想；真实 SQL、事务、隔离和并发的等价义务，是正文补充的边界。
+-->
+
+比较稳定的一点是：当下的 AI 需要 harness。对能严格表达、值得长期保护的业务性质，我觉得形式化就是最好的 harness。模型和语言可以换，验收标准不能让候选实现自己定。我相信形式化会越来越流行，不会一直只待在少数专门项目里。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:21；发言者：My（用户）
+原话开始：
+较为稳定的是，未来形式化会越来越流行，当下的 AI 需要 harness，而形式化是最好的 harness。
+原话结束。
+编辑说明：正文把“最好”限定为能严格表达且值得保护的业务性质；流行程度保留为预测。
+-->
+
+今天的AI在应用层软件使用形式化方法还不习惯，还需要许多来自人类的指导。毕竟世界范围内应用层软件使用形式化的先例几乎没有，模型也没有在这上面加强训练过。而这些习惯可以被RLVR强化后训练到模型中去，将定理拆解与保证定理覆盖等偏好行为训练到基座模型权重中，而不是 prompt/context 许愿抽卡 AI 会履行 agents.md 中的形式化宣言。
+
+我想要的“双向奔赴”大概是这样：语言和工具这边，让命题、契约、信任声明都能单独检查，让 kernel 或 solver 拒掉不满足约束的候选；模型这边，也少一点抬高前提、加公理、删功能，别只拿自己写的测试来验自己的实现。语言和模型都得帮着把关，不能把所有负担留给人来盯。
+
+期待张洪波老师和梁文峰战略合作一下。（张宏波 + 梁文峰 jojo 立.jpg）
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:23；发言者：My（用户）
+原话开始：
+而文章中出现的用法则不稳定，未来可能会被更多语言内置形式化支持，或 AI 时代的原生形式化语言。
+原话结束。
+编辑说明：“双向奔赴”及语言/模型厂商的具体责任是既有编辑归纳；这条原话只直接支持未来语言方向。
+-->
+
+面向 AI，不是把语言和工程要求往下降，好迁就模型现在的能力。我的意思正相反：模型推理越来越便宜，就该让它交出满足约束的代码，再由独立 checker 来验。人也得看得懂这些约束是从哪条需求来的。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:29；发言者：My（用户）
+原话开始：
+由此人类主要面对的是顶层定理，甚至让 ai 来解释顶层定理所对应的原始需求。降低人类认知成本。
+原话结束。
+编辑说明：语言与模型要求为编辑展开；原话直接支持人理解定理对应的原始需求。
+-->
+
+更重要的是，形式化的应用门槛已经降下来了。不需要博士文凭，没系统学过 Lean 的普通业务程序员，甚至经常被人拿来开玩笑的大专、培训班码农，也能借助 AI 间接开发、维护形式化软件。语法和 proof search 可以交给 AI 帮忙，但要保住什么、信任什么，人还是得有判断。技术平权。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:15；发言者：My（用户）
+原话开始：
+更重要的是，形式化的应用门槛已经降低到不需要博士文凭，大专培训班码农也能借助 AI 间接开发维护形式化软件。技术平权。
+原话结束。
+编辑说明：保留理解业务及信任边界的要求，不把学历门槛下降说成无需判断。
+-->
+
+形式化不是只写几行代码就完事，还得学、得建模、得跟着产品变化一直改。关键系统更有理由付这笔成本，普通业务过去往往付不起。AI 把一部分门槛拉低以后，火箭飞控能用；“键盘撒把米，鸡都会写”的 CRUD，也能挑几条值得保护的性质来用。不同业务花的证明成本可以不同，没必要按贵贱决定谁配用。这就是我说的技术平权。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:17；发言者：My（用户）
+原话开始：
+过去形式化因为智力门槛高，只有那些关键系统会使用形式化开发，甚至只抽出一个核心模型进行验证，运行时使用业务语言编写。而 AI 带来的门槛降低意味着所有应用都可以一定程度上覆盖形式化验证，不分高低贵贱，火箭飞控，或者是键盘撒把米鸡都会写的 crud。
+原话结束。
+编辑说明：正文从“仅智力门槛、只有关键系统、所有应用”收紧为采用成本下降后，更多团队可选择值得保护的性质。
+-->
+
+软件怎么长期开发和维护，我不敢说形式化已经把这事解决了。从手写代码、图形化编程、低代码、无代码，到现在 AI 编程，换个工具也没有一劳永逸。借数学研究里改进一个界来打比方，我只是把能做到的范围往外推了一点，没有把总问题解决。至少，一个没有形式化专业背景的小团队，现在也能让一部分业务承诺接受机器检查，再带着这些约束继续改普通业务系统。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-17/user-note-2026-09-10.md:13；发言者：My（用户）
+原话开始：
+软件系统的长期开发与维护，从人类编写代码到各种图形化编程到各种低代码和无代码应用在到现在的AF编程我不敢说形式化验证彻底解决了这一问题如果举个例子，我认为这篇文章当中所做的工作就像是最近非常火的定理，AI辅助定理证明一样，他并没有直接证明某个定理成立或政委，我做的其实是推进了他的下界，并未证明解决这件事情，而是提供了一个方向。
+原话结束。
+编辑说明：原话保留口误；“推进下界”在正文作为扩大可行范围的比喻，不宣称给出数学下界。
+-->
+
+我想让 AI 自由搜索实现，但不允许它自由改写什么叫成功。
+
+<!--
+作者原话与出处（正文为整理或展开，并非逐字引述）：
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-05/group-chat-2026-06-06.md:216；发言者：My
+原话开始：
+我这个方向其实也是这样的，我关注命题，而 ai 以什么形式合成出来了代码，能通过命题检查，我就不再细看了
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-05/group-chat-2026-06-06.md:220；发言者：My
+原话开始：
+也不是完全不看，免得 ai 给我注入公理，装作通过验证
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:154；发言者：My
+原话开始：
+主要是 AI 自己写的单测，人类没看过，不一定符合大方向目标
+原话结束。
+来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-13/group-chat-2026-08-11.md:158；发言者：My
+原话开始：
+甚至可能是 AI 自己给自己加的约束
+原话结束。
+编辑说明：这是编辑对实现自由与验收权边界的收束，不是作者已经说过的逐字句子。
+-->
+新项目从零开始做形式化不难，但给一个遗留项目逐步渗透形式化支持，对今天的模型来说还相当困难。
+
+成本大幅降低，截止至本文完成时，我仍未读过任何一本Lean入门书籍或文档哪怕一页
+
+用可以被机器严格检查的定理，代替自然语言文档记住当前软件的形状。
+
+
+![Say My Name](/images/say-my-name.png)
