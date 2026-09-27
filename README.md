@@ -26,6 +26,8 @@ The checker follows local page links, fragment links, and asset references throu
 
 Articles and drafts live in `content/posts/`. Existing articles have explicit `url` values that preserve their original date-based addresses, including case and Unicode characters. Keep those values when editing titles or moving files. Dates use the Asia/Shanghai timezone. Old archive URLs redirect to the unified archive.
 
+The two legacy Reactive Stream tag URLs redirect to `/tags/reactive-streams/`. This keeps the aliases and canonical page from colliding on case-insensitive filesystems.
+
 Images live in `static/images/` and are referenced as `/images/filename.png`. Use Hugo links such as `[another article]({{< relref "/posts/another-article.md" >}})` instead of hard-coded article dates. Private working material in `materials/` remains ignored and is not published.
 
 Mathematics uses Hugo's native `transform.ToMath` through a Goldmark passthrough render hook. Write inline expressions as `\(O(n)\)` and display expressions between `\[` and `\]` or `$$` delimiters. The generated MathML needs no client-side math library or stylesheet. A single dollar sign remains ordinary text, so prices and code examples are not mistaken for formulas. Invalid mathematical markup fails the build. See [Hugo's native math documentation](https://gohugo.io/functions/transform/tomath/).
