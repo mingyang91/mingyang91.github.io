@@ -308,6 +308,21 @@ decide snapshot = .enqueue action
 
 另一个真实案例，同样来自我生产代码库：worker epoch fencing。任务进了终态就不能重新 claim，写 checkpoint 必须拿当前的 exact token。哪怕 worker id 没变，只要重新领过任务，旧 token 就作废。
 
+```lean
+def LiveExact (t : Task) (tok : Token) (now : Int) : Prop :=
+  t.terminal = false ∧ t.holder = some tok ∧ tok.2 = t.epoch ∧ now ≤ t.leaseExpiry
+
+structure Spec (claim : Task → Nat → Int → Option (Task × Token))
+    (checkpoint : Task → Token → Int → Nat → Option Task) : Prop where
+  terminal_no_claim : ∀ t w now, t.terminal = true → claim t w now = none
+  checkpoint_exact : ∀ t tok now seq t',
+    checkpoint t tok now seq = some t' → LiveExact t tok now
+  claim_new_epoch : ∀ t w now t' tok, claim t w now = some (t', tok) →
+    t'.epoch = t.epoch + 1 ∧ tok = (w, t'.epoch) ∧ t'.holder = some tok
+  old_token_fenced : ∀ t w claimAt t' tok now seq,
+    claim t w claimAt = some (t', tok) → checkpoint t' (w, t.epoch) now seq = none
+```
+
 发邮件的例子也一样。模型可以要求条件满足时必须产生 `SendEmail` action，但供应商收没收到、邮件进没进收件箱，还得在真实世界验证。
 
 # 6. 证明全绿，产品仍然可以被写没
