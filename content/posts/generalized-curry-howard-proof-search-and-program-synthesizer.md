@@ -254,16 +254,17 @@ AI 滥用 `axiom` 和 `sorry` 欺骗验证可以直接被 `grep` 捕捉到，这
 不需要在编码开始前把 spec 全部定死。我实际做下来发现，有些想当然的要求根本实现不了，只能一边实现一边补。
 设计阶段觉得退款和到账是一步完成，写着写着才发现至少要经过支付网关，而且提交退款申请，银行卡到账都不是 100% 成功。
 ```lean
-inductive Status where | processing | refunded | failed
-variable (submit : Nat → Nat → Status)
-variable (settle : (s : Status) → s = .processing → Bool → Status)
-def Eligible (amount balance : Nat) : Prop := 0 < amount ∧ amount ≤ balance
+inductive Status where | approved | processing | refunded
+structure State where
+  balance : Nat
+  order : Status
+abbrev Step := State → Except State State -- 失败和成功都返回处理后的完整状态
 ```
 这时候就把中间状态和失败路径补出来，拆成两条命题分别约束。也就是：当“一切正常”的前提下，退款最终会到账。
 ```lean
-structure WeakSpec : Prop where
-  submit_range : ∀ a b, submit a b = .processing ∨ submit a b = .failed
-  settle_range : ∀ ok, settle .processing rfl ok = .refunded ∨ settle .processing rfl ok = .failed
+structure WeakSpec (amount : Nat) (submit settle : Step) : Prop where
+  submit_post : ∀ s, submit s = .ok {s with order := .processing} ∨ submit s = .error s
+  settle_post : ∀ s, settle s = .ok ⟨s.balance + amount, .refunded⟩ ∨ settle s = .error s
 ```
 最后，一共就 3 条原则：
 1. 对外部可信组件建模（例如 SQL 数据库，向量库，对象存储，SMS，支付网关等）
@@ -278,41 +279,19 @@ structure WeakSpec : Prop where
 那我所有请求都返回退款失败，不就完了？数据库一行不动，失败后置条件全都满足。唯一的问题是，谁也无法退款。因为规格没说，什么条件下才能判定退款成功。
 
 ```lean
-structure StrongSpec : Prop extends WeakSpec submit settle where
-  submit_ok : ∀ a b, Eligible a b → submit a b = .processing
-  submit_fail : ∀ a b, ¬Eligible a b → submit a b = .failed
-  settle_ok : settle .processing rfl true = .refunded
-  settle_fail : settle .processing rfl false = .failed
+def alwaysFail : Step := fun s => .error s
+theorem alwaysFail_passes (amount : Nat) : WeakSpec amount alwaysFail alwaysFail :=
+  ⟨fun _ => Or.inr rfl, fun _ => Or.inr rfl⟩
+
+structure StrongSpec (amount : Nat) (gatewayOK bankOK : State → Prop)
+    (submit settle : Step) : Prop extends WeakSpec amount submit settle where
+  submit_ok : ∀ s, s.order = .approved ∧ gatewayOK s → submit s = .ok {s with order := .processing}
+  submit_fail : ∀ s, ¬(s.order = .approved ∧ gatewayOK s) → submit s = .error s
+  settle_ok : ∀ s, s.order = .processing ∧ bankOK s → settle s = .ok ⟨s.balance + amount, .refunded⟩
+  settle_fail : ∀ s, ¬(s.order = .processing ∧ bankOK s) → settle s = .error s
 ```
 
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-06/early-draft-2026-04-10.md:67-70；发言者：My／用户早期原稿
-原话开始：
-  // ❌ 失败路径（IP 限制）：一切保持原样
-  userSvc == old(userSvc)
-    && subSvc == old(subSvc)
-    if result == Left(RestrictedIPAddress)
-原话结束。
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-06/technical-audit.md:21-27（非作者原话）
-编辑说明：恒拒绝实现是编辑针对原稿提出的反例，不是作者报告的 Stainless 执行结果。
--->
-
-这只是顺着那份规格举的反例，不是我真用 Stainless 跑出了这个结果。只管“做了就必须满足条件”还不够，它完全可以为了安全一直拒绝。很多业务还得补反过来的要求：条件都满足了，你就得做。前者是 soundness，后者是 completeness。不能乱做，也不能装死。
-
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-06/technical-audit.md:21-27（非作者原话）
-编辑说明：soundness/completeness 区分与反例分析为技术审计，无对应作者逐字原话。
--->
-
-拿现在的 MCAP Delivery 来说，输入对象、segment、catalog、canonical source、输出和执行计划都齐了，决策就必须给出一个后台处理任务，不能来一句“无需处理”就结束。我这里用它当生产主例，不再只拿注册和发邮件打比方。
-
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:31-62（非作者原话）
-编辑说明：MCAP 主例来自源码快照审计，非作者口述。
--->
+在我实际生产业务的交付模块中，输入对象、输出和执行计划都齐了，决策就必须给出一个后台处理任务，不能返回“无需处理”就结束。
 
 ```text
 Eligible snapshot
@@ -323,51 +302,13 @@ decide snapshot = .enqueue action
 → Eligible snapshot
 ```
 
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:37-48（非作者原话）
-编辑说明：两个方向是对 eligibility/enqueue 定理的编辑示意，非作者逐字原话。
--->
+前一个方向由 `eligible_decide_enqueue` 证明，后一个由 `decide_enqueue_sound` 证明。还有一条 theorem 保证，拒绝和 eligibility 不成立是同一回事。要发哪个任务也不能随便，输入和执行计划都绑在 action 上，可以被定理检查。
 
-前一个方向由 `eligible_decide_enqueue` 证明，后一个由 `decide_enqueue_sound` 证明。还有一条 theorem 保证，拒绝和 eligibility 不成立是同一回事。要发哪个任务也不能随便，asset、segment、payload、task id 和执行计划都绑在 action 上，不是随手塞个任务就算交差。
+这份决策不是可验证玩具，而是来自生产代码定理，调的就是同一个 `decide`。拿到 `.enqueue action`，再交给任务持久化解释器，写进去以后还要核对，任务是不是仍然和这个 action 对得上。
 
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:37-62（非作者原话）
-编辑说明：定理名及 action 绑定来自源码审计，非作者逐字原话。
--->
+另一个真实案例，同样来自我生产代码库：worker epoch fencing。任务进了终态就不能重新 claim，写 checkpoint 必须拿当前的 exact token。哪怕 worker id 没变，只要重新领过任务，旧 token 就作废。
 
-这份决策不是另外放着看的模型。生产里的 `McapTaskBridge` 调的就是同一个 `decide`。拿到 `.enqueue action`，再交给任务持久化解释器，写进去以后还要核对，任务是不是仍然和这个 action 对得上。
-
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:64-78（非作者原话）
-编辑说明：Bridge 的运行连接来自源码审计，非作者逐字原话。
--->
-
-但别把“决定发任务”当成“任务已经干完”。SQL 能不能提交、worker 能不能拿到调度、外面的媒体算法算得对不对，都还在这段证明之外。这里说的是 2026 年 9 月 2 日那版代码，后面继续改，theorem 和调用它的生产代码也得继续核对。
-
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:64-78（非作者原话）
-编辑说明：此处是编辑对该源码快照证明边界的说明，非作者逐字原话。
--->
-
-再比如 worker epoch fencing。任务进了终态就不能重新 claim，写 checkpoint 必须拿当前的 exact token。哪怕 worker id 没变，只要重新领过任务，旧 token 就作废。这些规则管的是它别乱来，不会把断网的 worker 变回来，也不保证任务一定能做完。
-
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:28-32（非作者原话）
-编辑说明：epoch fencing 的 safety 及不保证完成的边界来自源码审计，非作者逐字原话。
--->
-
-发邮件的例子也一样。模型可以要求条件满足时必须产生 `SendEmail` action，但供应商收没收到、邮件进没进收件箱，还得去外面看。我的邮件路径目前只有 admission、Bridge、调用次数测试和 Rust/Firestore contract，还没有和 MCAP 同等级的 Lean action theorem，所以这里只拿它说明道理，不拿它充生产证明。
-
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-16/current-vl2-effect-action-proofs-2026-09-02.md:142-162（非作者原话）
-编辑说明：邮件路径与主例的证据强度比较来自源码审计，非作者逐字原话。
--->
+发邮件的例子也一样。模型可以要求条件满足时必须产生 `SendEmail` action，但供应商收没收到、邮件进没进收件箱，还得在真实世界验证。
 
 # 6. 证明全绿，产品仍然可以被写没
 
