@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Play Framework on My Space</title><link>https://famer.me/tags/Play-Framework/</link><description>Recent content in Play Framework on My Space</description><generator>Hugo</generator><language>en</language><lastBuildDate>Thu, 13 May 2021 18:37:55 +0800</lastBuildDate><atom:link href="https://famer.me/tags/Play-Framework/index.xml" rel="self" type="application/rss+xml"/><item><title>After I migrated my legacy playframework project to zio, what I learned from it.</title><link>https://famer.me/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/</link><pubDate>Thu, 13 May 2021 18:37:55 +0800</pubDate><guid>https://famer.me/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/</guid><description>&lt;ul&gt;
+&lt;li&gt;&lt;a href="#foreword"&gt;Foreword&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#what-is-r"&gt;What is &lt;code&gt;R&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#what-are-the-problems-caused-by-di-tools"&gt;What are the problems caused by DI tools?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#current-situation"&gt;Current Situation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#evolution-stage-1"&gt;Evolution Stage 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#evolution-stage-2"&gt;Evolution Stage 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#evolution-stage-3"&gt;Evolution Stage 3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#conclusion"&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#references"&gt;References&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="foreword"&gt;Foreword&lt;/h1&gt;
+&lt;p&gt;On April 17, 2020, I start a huge project to migrate the &lt;code&gt;Future[T]&lt;/code&gt; from legacy playframework project to &lt;code&gt;ZIO&lt;/code&gt;. Three months later, after tens of thousands of lines of code modification, the migration was a complete success. In September, I used this experience as the background to share in the Chinese Scala Meetup community with the title &lt;a href="https://www.slideshare.net/ssuser81d309/scala-meetup-248313493"&gt;&amp;ldquo;Introduction to ZIO&amp;rdquo;&lt;/a&gt;.
+In this share, I explained a fanatic imageation,
+在这次分享中，我展望了一个美好的愿景，借由 &lt;code&gt;ZIO&lt;/code&gt; 的类型参数 &lt;code&gt;R&lt;/code&gt; 提供的抽象能力来实现代码的可移植性，和提高可测试性。但想在遗留项目中实现这个愿景并不容易，主要挑战来自遗留项目的代码耦合，和开发者的思维惯性。如今，这个愿景已经达成。我会在这篇 Post 中与你分享我的进化之路。&lt;/p&gt;</description></item></channel></rss>

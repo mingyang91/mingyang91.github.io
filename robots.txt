@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://famer.me/sitemap.xml

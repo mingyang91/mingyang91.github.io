@@ -1,286 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"famer.me","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time int">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture">
-<meta property="og:url" content="https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/index.html">
-<meta property="og:site_name" content="My Space">
-<meta property="og:description" content="Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time int">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-04-14T16:31:35.000Z">
-<meta property="article:modified_time" content="2026-03-31T14:58:23.041Z">
-<meta property="article:author" content="ming yang">
-<meta property="article:tag" content="System design">
-<meta property="article:tag" content="Reactive stream">
-<meta name="twitter:card" content="summary">
-
-
-<link rel="canonical" href="https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/">
-
-
-
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/","path":"2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/","title":"Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture | My Space</title>
-  
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1RGPQ0EFYL"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1RGPQ0EFYL","only_pageview":false}</script>
-  <script src="/js/third-party/analytics/google-analytics.js"></script>
-
-
-
-
-
-
-
-
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-
-  <main class="main">
-    <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">My Space</p>
-      <i class="logo-line"></i>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-</header>
-        
-  
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#terminologies-and-context"><span class="nav-number">1.</span> <span class="nav-text">Terminologies and Context</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#functional-requirements"><span class="nav-number">1.1.</span> <span class="nav-text">Functional Requirements</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#architecture"><span class="nav-number">2.</span> <span class="nav-text">Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#high-level-overview"><span class="nav-number">2.1.</span> <span class="nav-text">High-Level Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#application-component-level-design-lld"><span class="nav-number">2.2.</span> <span class="nav-text">Application &#x2F;
-Component Level Design (LLD)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#failure-modes"><span class="nav-number">2.3.</span> <span class="nav-text">Failure Modes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fast-producer-slow-consumer"><span class="nav-number">2.3.1.</span> <span class="nav-text">Fast Producer-Slow Consumer</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#alternative-design"><span class="nav-number">3.</span> <span class="nav-text">Alternative Design</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="ming yang"
-      src="/images/avatar.jpg">
-  <p class="site-author-name" itemprop="name">ming yang</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">22</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">26</span>
-        <span class="site-state-item-name">tags</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/mingyang91" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mingyang91" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-  </div>
-
-        </div>
-      </div>
-    </div>
-
-    
-  </aside>
-
-
-    </div>
-
-    <div class="main-inner post posts-expand">
-
-
-  
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="ming yang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="My Space">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture | My Space">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-04-15 00:31:35" itemprop="dateCreated datePublished" datetime="2023-04-15T00:31:35+08:00">2023-04-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-03-31 22:58:23" itemprop="dateModified" datetime="2026-03-31T22:58:23+08:00">2026-03-31</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-        <p>Many data systems use polling refresh to display lists, which can
-cause a delay in updating content status and cannot immediately provide
-feedback to users on the page. Shortening the refresh time interval on
-the client side can lead to an excessive load on the server, which
-should be avoided.</p>
-<p>To solve this problem, this article proposes an event subscription
-mechanism. This mechanism provides real-time updates to the client,
-eliminating the need for polling refresh and improving the user
-experience.</p>
-<h1 id="terminologies-and-context">Terminologies and Context</h1>
-<p>This article introduces the following concepts:</p>
-<ul>
-<li><strong>Hub</strong>: An event aggregation center that receives
-events from producers and sends them to subscribers.</li>
-<li><strong>Buffer</strong>: An event buffer that caches events from
-producers and waits for the Hub to dispatch them to subscribers.</li>
-<li><strong>Filter</strong>: An event filter that only sends events
-meeting specified conditions to subscribers.</li>
-<li><strong>Broadcast</strong>: An event broadcaster that broadcasts the
-producer's events to all subscribers.</li>
-<li><strong>Observer</strong>: An event observer that allows subscribers
-to receive events through observers.</li>
-</ul>
-<p>The document discusses some common concepts such as:</p>
-<ul>
-<li>Pub-Sub pattern: It is a messaging pattern where the sender
-(publisher) does not send messages directly to specific recipients
-(subscribers). Instead, published messages are divided into different
-categories without needing to know which subscribers (if any) exist.
-Similarly, subscribers can express interest in one or more categories
-and receive all messages related to that category, without the publisher
-needing to know which subscribers (if any) exist.</li>
-<li>Filter:
-<ul>
-<li>Topic-based content filtering mode is based on topic filtering
-events. Producers publish events to one or more topics, and subscribers
-can subscribe to one or more topics. Only events that match the
-subscribed topics will be sent to subscribers. However, when a terminal
-client subscribes directly, this method has too broad a subscription
-range and is not suitable for a common hierarchical structure.</li>
-<li>Content-based content filtering mode is based on message content
-filtering events. Producers publish events to one or more topics, and
-subscribers can use filters to subscribe to one or more topics. Only
-events that match the subscribed topics will be sent to subscribers.
-This method is suitable for a common hierarchical structure.</li>
-</ul></li>
-</ul>
-<h2 id="functional-requirements">Functional Requirements</h2>
-<ul>
-<li>Client users can subscribe to events through gRPC Stream, WebSocket,
-or ServerSentEvent.</li>
-<li>Whenever a record's status changes (e.g. when the record is updated
-by an automation task) or when other collaborators operate on the same
-record simultaneously, an event will be triggered and pushed to the
-message center.</li>
-<li>Events will be filtered using content filtering mode, ensuring that
-only events that meet the specified conditions are sent to
-subscribers.</li>
-</ul>
-<h1 id="architecture">Architecture</h1>
-<pre><code class="highlight mermaid">flowchart TD
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture | My Space</title><meta name=keywords content="Reactive stream,System design"><meta name=description content="Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time interval on the client side can lead to an excessive load on the server, which should be avoided.
+To solve this problem, this article proposes an event subscription mechanism. This mechanism provides real-time updates to the client, eliminating the need for polling refresh and improving the user experience."><meta name=author content="ming yang"><link rel=canonical href=https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/><link crossorigin=anonymous href=/assets/css/stylesheet.cd9298b33628769aa1bc1acebbbfd7aa11ce81dfe03484d479e1907760249a1d.css integrity="sha256-zZKYszYodpqhvBrOu7/XqhHOgd/gNITUeeGQd2Akmh0=" rel="preload stylesheet" as=style><link rel=icon href=https://famer.me/favicon.svg><link rel=icon type=image/png sizes=16x16 href=https://famer.me/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://famer.me/favicon-32x32.png><link rel=apple-touch-icon href=https://famer.me/apple-touch-icon.png><link rel=mask-icon href=https://famer.me/favicon.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><link rel=stylesheet href=/css/diagrams/mermaid.min.57bf722095685d73b400c41ca8eff5ba9965d515e72dcab2a4ad7ef6956ac55acebb0bc2fc1ea520cb8c3cc2b342dc3b.css integrity=sha384-V79yIJVoXXO0AMQcqO/1upll1RXnLcqypK1+9pVqxVrOuwvC/B6lIMuMPMKzQtw7 crossorigin=anonymous><script async src="https://www.googletagmanager.com/gtag/js?id=G-1RGPQ0EFYL"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-1RGPQ0EFYL")}</script><meta property="og:url" content="https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/"><meta property="og:site_name" content="My Space"><meta property="og:title" content="Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture"><meta property="og:description" content="Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time interval on the client side can lead to an excessive load on the server, which should be avoided.
+To solve this problem, this article proposes an event subscription mechanism. This mechanism provides real-time updates to the client, eliminating the need for polling refresh and improving the user experience."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-04-15T00:31:35+08:00"><meta property="article:modified_time" content="2023-04-15T00:31:35+08:00"><meta property="article:tag" content="Reactive Stream"><meta property="article:tag" content="System Design"><meta name=twitter:card content="summary"><meta name=twitter:title content="Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture"><meta name=twitter:description content="Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time interval on the client side can lead to an excessive load on the server, which should be avoided.
+To solve this problem, this article proposes an event subscription mechanism. This mechanism provides real-time updates to the client, eliminating the need for polling refresh and improving the user experience."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://famer.me/posts/"},{"@type":"ListItem","position":2,"name":"Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture","item":"https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture","name":"Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture","description":"Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time interval on the client side can lead to an excessive load on the server, which should be avoided.\nTo solve this problem, this article proposes an event subscription mechanism. This mechanism provides real-time updates to the client, eliminating the need for polling refresh and improving the user experience.\n","keywords":["Reactive stream","System design"],"articleBody":"Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time interval on the client side can lead to an excessive load on the server, which should be avoided.\nTo solve this problem, this article proposes an event subscription mechanism. This mechanism provides real-time updates to the client, eliminating the need for polling refresh and improving the user experience.\nTerminologies and Context This article introduces the following concepts:\nHub: An event aggregation center that receives events from producers and sends them to subscribers. Buffer: An event buffer that caches events from producers and waits for the Hub to dispatch them to subscribers. Filter: An event filter that only sends events meeting specified conditions to subscribers. Broadcast: An event broadcaster that broadcasts the producer’s events to all subscribers. Observer: An event observer that allows subscribers to receive events through observers. The document discusses some common concepts such as:\nPub-Sub pattern: It is a messaging pattern where the sender (publisher) does not send messages directly to specific recipients (subscribers). Instead, published messages are divided into different categories without needing to know which subscribers (if any) exist. Similarly, subscribers can express interest in one or more categories and receive all messages related to that category, without the publisher needing to know which subscribers (if any) exist. Filter: Topic-based content filtering mode is based on topic filtering events. Producers publish events to one or more topics, and subscribers can subscribe to one or more topics. Only events that match the subscribed topics will be sent to subscribers. However, when a terminal client subscribes directly, this method has too broad a subscription range and is not suitable for a common hierarchical structure. Content-based content filtering mode is based on message content filtering events. Producers publish events to one or more topics, and subscribers can use filters to subscribe to one or more topics. Only events that match the subscribed topics will be sent to subscribers. This method is suitable for a common hierarchical structure. Functional Requirements Client users can subscribe to events through gRPC Stream, WebSocket, or ServerSentEvent. Whenever a record’s status changes (e.g. when the record is updated by an automation task) or when other collaborators operate on the same record simultaneously, an event will be triggered and pushed to the message center. Events will be filtered using content filtering mode, ensuring that only events that meet the specified conditions are sent to subscribers. Architecture flowchart TD Hub([Hub]) Buffer0[\\\"Buffer drop oldest\"/] Buffer1[\\\"Buffer1 drop oldest\"/] Buffer2[\\\"Buffer2 drop oldest\"/] Buffer3[\\\"Buffer3 drop oldest\"/] Filter1[\\\"File(Record = 111)\"/] Filter2[\\\"Workflow(Project = 222)\"/] Filter3[\\\"File(Project = 333)\"/] Broadcast((Broadcast)) Client1(Client1) Client2(Client2) Client3(Client3) Hub --\u003e Buffer0 subgraph Server Buffer0 --\u003e Broadcast Broadcast --\u003e Filter1 --\u003e Buffer1 --\u003e Observer1 Broadcast --\u003e Filter2 --\u003e Buffer2 --\u003e Observer2 Broadcast --\u003e Filter3 --\u003e Buffer3 --\u003e Observer3 end subgraph Clients Observer1 -.-\u003e Client1 Observer2 -.-\u003e Client2 Observer3 -.-\u003e Client3 end Mermaid diagram source flowchart TD Hub([Hub]) Buffer0[\\\"Buffer drop oldest\"/] Buffer1[\\\"Buffer1 drop oldest\"/] Buffer2[\\\"Buffer2 drop oldest\"/] Buffer3[\\\"Buffer3 drop oldest\"/] Filter1[\\\"File(Record = 111)\"/] Filter2[\\\"Workflow(Project = 222)\"/] Filter3[\\\"File(Project = 333)\"/] Broadcast((Broadcast)) Client1(Client1) Client2(Client2) Client3(Client3) Hub --\u003e Buffer0 subgraph Server Buffer0 --\u003e Broadcast Broadcast --\u003e Filter1 --\u003e Buffer1 --\u003e Observer1 Broadcast --\u003e Filter2 --\u003e Buffer2 --\u003e Observer2 Broadcast --\u003e Filter3 --\u003e Buffer3 --\u003e Observer3 end subgraph Clients Observer1 -.-\u003e Client1 Observer2 -.-\u003e Client2 Observer3 -.-\u003e Client3 end High-Level Overview flowchart TD Pipe#a[[...Pipe...]] Pipe#b[[...Pipe...]] subgraph Hub direction LR Event1((Event1)) Event2((Event2)) Event3((Event3)) Event4((Event4)) Event5((Event5)) Event6((Event6)) Event7((Event7)) Event8((Event8)) Event1 -.-\u003e Event2 -.-\u003e Event3 -.-\u003e Event4 -.-\u003e Event5 -.-\u003e Event6 -.-\u003e Event7 -.-\u003e Event8 end Pipe#a -.-\u003e Event1 Event8 -.-\u003e Pipe#b subgraph Client1 direction LR C1Subscribe((Start)) C1Cancel((End)) Event2 -.-\u003e C1Listen2 Event3 -.-\u003e C1Listen3 Event4 -.-\u003e C1Listen4 Event5 -.-\u003e C1Listen5 C1Subscribe -.-\u003e C1Listen2 -.-\u003e C1Listen3 -.-\u003e C1Listen4 -.-\u003e C1Listen5 -.-\u003e C1Cancel end subgraph Client2 direction LR C2Subscribe((Start)) C2Cancel((End)) Lag((\"❌\")) C2Subscribe -.-\u003e C2Listen1 -- \"Poor Network\" ---\u003e Lag --\"Packet loss\"---\u003e C2Listen5 -.-\u003e C2Listen6 -.-\u003e C2Listen7 -.-\u003e C2Listen8 -.-\u003e C2Cancel Event1 -.-\u003e C2Listen1 Event5 -.-\u003e C2Listen5 Event6 -.-\u003e C2Listen6 Event7 -.-\u003e C2Listen7 Event8 -.-\u003e C2Listen8 end Mermaid diagram source flowchart TD Pipe#a[[...Pipe...]] Pipe#b[[...Pipe...]] subgraph Hub direction LR Event1((Event1)) Event2((Event2)) Event3((Event3)) Event4((Event4)) Event5((Event5)) Event6((Event6)) Event7((Event7)) Event8((Event8)) Event1 -.-\u003e Event2 -.-\u003e Event3 -.-\u003e Event4 -.-\u003e Event5 -.-\u003e Event6 -.-\u003e Event7 -.-\u003e Event8 end Pipe#a -.-\u003e Event1 Event8 -.-\u003e Pipe#b subgraph Client1 direction LR C1Subscribe((Start)) C1Cancel((End)) Event2 -.-\u003e C1Listen2 Event3 -.-\u003e C1Listen3 Event4 -.-\u003e C1Listen4 Event5 -.-\u003e C1Listen5 C1Subscribe -.-\u003e C1Listen2 -.-\u003e C1Listen3 -.-\u003e C1Listen4 -.-\u003e C1Listen5 -.-\u003e C1Cancel end subgraph Client2 direction LR C2Subscribe((Start)) C2Cancel((End)) Lag((\"❌\")) C2Subscribe -.-\u003e C2Listen1 -- \"Poor Network\" ---\u003e Lag --\"Packet loss\"---\u003e C2Listen5 -.-\u003e C2Listen6 -.-\u003e C2Listen7 -.-\u003e C2Listen8 -.-\u003e C2Cancel Event1 -.-\u003e C2Listen1 Event5 -.-\u003e C2Listen5 Event6 -.-\u003e C2Listen6 Event7 -.-\u003e C2Listen7 Event8 -.-\u003e C2Listen8 end Clients should follow these steps:\nUpon entering the page, subscribe as necessary. After listening to the change event, debounce and re-request the list interface, and then render it. When leaving the page, cancel the subscription. Servers should follow these steps:\nSubscribe to push events based on the client’s filter. When the client’s backlog message becomes too heavy, delete the oldest message from the buffer. When the client cancels the subscription, the server should also cancel the broadcast to the client. Application / Component Level Design (LLD) flowchart LR Server([Server]) Client([Client: Web...]) MQ[Kafka or other] Broadcast((Broadcast)) subgraph ExternalHub direction LR Receiver --\u003e MQ --\u003e Sender end subgraph InMemoryHub direction LR Emit -.-\u003e OnEach end Server -.-\u003e Emit Sender --\u003e Broadcast OnEach -.-\u003e Broadcast Broadcast -.-\u003e gRPC Broadcast -.-\u003e gRPC Broadcast -.-\u003e gRPC Server -- \"if horizon scale is needed\" --\u003e Receiver gRPC --Stream--\u003e Client Mermaid diagram source flowchart LR Server([Server]) Client([Client: Web...]) MQ[Kafka or other] Broadcast((Broadcast)) subgraph ExternalHub direction LR Receiver --\u003e MQ --\u003e Sender end subgraph InMemoryHub direction LR Emit -.-\u003e OnEach end Server -.-\u003e Emit Sender --\u003e Broadcast OnEach -.-\u003e Broadcast Broadcast -.-\u003e gRPC Broadcast -.-\u003e gRPC Broadcast -.-\u003e gRPC Server -- \"if horizon scale is needed\" --\u003e Receiver gRPC --Stream--\u003e Client For a single-node server, a simple Hub can be implemented using an in-memory queue.\nFor multi-node servers, an external Hub implementation such as Kafka, MQ, or Knative eventing should be considered. The broadcasting logic is no different from that of a single machine.\nFailure Modes Fast Producer-Slow Consumer This is a common scenario that requires special attention. The publish-subscribe mechanism for terminal clients cannot always expect clients to consume messages in real time. However, message continuity must be maximally guaranteed. Clients may access our products in an uncontrollable network environment, such as over 4G or poor Wi-Fi. Thus, the server message queue cannot become too backlogged. When a client’s consumption rate cannot keep up with the server’s production speed, this article recommends using a bounded Buffer with the OverflowStrategy.DropOldest strategy. This ensures that subscriptions between consumers are isolated, avoiding too many unpushed messages on the server (which could lead to potential memory leak risks).\nAlternative Design VMware has publish a very similar design in 2013, but use Go RingChannel\nSummary This document proposes an event subscription mechanism to address the delay in updating content status caused by polling refresh. Clients can subscribe to events through any long connection protocol, and events will be filtered based on specified conditions. To avoid having too many unpushed messages on the server, a bounded buffer with the OverflowStrategy.DropOldest strategy is used.\nImplementing this in Reactive Streams is straightforward, but you can choose your preferred technology to do so.\n","wordCount":"1237","inLanguage":"en","datePublished":"2023-04-15T00:31:35+08:00","dateModified":"2023-04-15T00:31:35+08:00","author":{"@type":"Person","name":"ming yang"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://famer.me/2023/04/15/Improving-the-Display-of-Data-Lists-Designing-a-Real-Time-Event-Subscription-Architecture/"},"publisher":{"@type":"Organization","name":"My Space","logo":{"@type":"ImageObject","url":"https://famer.me/favicon.svg"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://famer.me/ accesskey=h title="My Space (Alt + H)"><img src=https://famer.me/images/avatar.jpg alt aria-label=logo height=35>My Space</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://famer.me/archives/ title=Archives><span>Archives</span></a></li><li><a href=https://famer.me/tags/ title=tags><span>Tags</span></a></li><li><a href=https://github.com/mingyang91 title=GitHub><span>GitHub</span>&nbsp;
+<svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=/>Home</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
+<a href=/posts/>Posts</a>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">Improving the Display of Data Lists: Designing a Real-Time Event Subscription Architecture</h1><div class=post-meta><span title='2023-04-15 00:31:35 +0800 CST'>2023-04-15</span>&nbsp;·&nbsp;<span>6 min</span>&nbsp;·&nbsp;<span>ming yang</span></div></header><details class=toc><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><nav id=TableOfContents><ol><li><a href=#terminologies-and-context>Terminologies and Context</a><ol><li><a href=#functional-requirements>Functional Requirements</a></li></ol></li><li><a href=#architecture>Architecture</a><ol><li><a href=#high-level-overview>High-Level Overview</a></li><li><a href=#application--component-level-design-lld><strong>Application / Component Level Design (LLD)</strong></a></li><li><a href=#failure-modes><strong>Failure Modes</strong></a><ol><li><a href=#fast-producer-slow-consumer>Fast Producer-Slow Consumer</a></li></ol></li></ol></li><li><a href=#alternative-design>Alternative Design</a></li><li><a href=#summary>Summary</a></li></ol></nav></div></details><div class="post-content md-content"><p>Many data systems use polling refresh to display lists, which can cause a delay in updating content status and cannot immediately provide feedback to users on the page. Shortening the refresh time interval on the client side can lead to an excessive load on the server, which should be avoided.</p><p>To solve this problem, this article proposes an event subscription mechanism. This mechanism provides real-time updates to the client, eliminating the need for polling refresh and improving the user experience.</p><h1 id=terminologies-and-context>Terminologies and Context<a hidden class=anchor aria-hidden=true href=#terminologies-and-context>#</a></h1><p>This article introduces the following concepts:</p><ul><li><strong>Hub</strong>: An event aggregation center that receives events from producers and sends them to subscribers.</li><li><strong>Buffer</strong>: An event buffer that caches events from producers and waits for the Hub to dispatch them to subscribers.</li><li><strong>Filter</strong>: An event filter that only sends events meeting specified conditions to subscribers.</li><li><strong>Broadcast</strong>: An event broadcaster that broadcasts the producer&rsquo;s events to all subscribers.</li><li><strong>Observer</strong>: An event observer that allows subscribers to receive events through observers.</li></ul><p>The document discusses some common concepts such as:</p><ul><li>Pub-Sub pattern: It is a messaging pattern where the sender (publisher) does not send messages directly to specific recipients (subscribers). Instead, published messages are divided into different categories without needing to know which subscribers (if any) exist. Similarly, subscribers can express interest in one or more categories and receive all messages related to that category, without the publisher needing to know which subscribers (if any) exist.</li><li>Filter:<ul><li>Topic-based content filtering mode is based on topic filtering events. Producers publish events to one or more topics, and subscribers can subscribe to one or more topics. Only events that match the subscribed topics will be sent to subscribers. However, when a terminal client subscribes directly, this method has too broad a subscription range and is not suitable for a common hierarchical structure.</li><li>Content-based content filtering mode is based on message content filtering events. Producers publish events to one or more topics, and subscribers can use filters to subscribe to one or more topics. Only events that match the subscribed topics will be sent to subscribers. This method is suitable for a common hierarchical structure.</li></ul></li></ul><h2 id=functional-requirements>Functional Requirements<a hidden class=anchor aria-hidden=true href=#functional-requirements>#</a></h2><ul><li>Client users can subscribe to events through gRPC Stream, WebSocket, or ServerSentEvent.</li><li>Whenever a record&rsquo;s status changes (e.g. when the record is updated by an automation task) or when other collaborators operate on the same record simultaneously, an event will be triggered and pushed to the message center.</li><li>Events will be filtered using content filtering mode, ensuring that only events that meet the specified conditions are sent to subscribers.</li></ul><h1 id=architecture>Architecture<a hidden class=anchor aria-hidden=true href=#architecture>#</a></h1><figure class=mermaid-diagram><div class=mermaid-diagram__canvas><pre class=mermaid>flowchart TD
   Hub([Hub])
-  Buffer0[\&quot;Buffer drop oldest&quot;/]
-  Buffer1[\&quot;Buffer1 drop oldest&quot;/]
-  Buffer2[\&quot;Buffer2 drop oldest&quot;/]
-  Buffer3[\&quot;Buffer3 drop oldest&quot;/]
-  Filter1[\&quot;File(Record = 111)&quot;/]
-  Filter2[\&quot;Workflow(Project = 222)&quot;/]
-  Filter3[\&quot;File(Project = 333)&quot;/]
+  Buffer0[\&#34;Buffer drop oldest&#34;/]
+  Buffer1[\&#34;Buffer1 drop oldest&#34;/]
+  Buffer2[\&#34;Buffer2 drop oldest&#34;/]
+  Buffer3[\&#34;Buffer3 drop oldest&#34;/]
+  Filter1[\&#34;File(Record = 111)&#34;/]
+  Filter2[\&#34;Workflow(Project = 222)&#34;/]
+  Filter3[\&#34;File(Project = 333)&#34;/]
   Broadcast((Broadcast))
   Client1(Client1)
   Client2(Client2)
@@ -296,9 +31,31 @@ subscribers.</li>
     Observer1 -.-&gt; Client1
     Observer2 -.-&gt; Client2
     Observer3 -.-&gt; Client3
-  end</code></pre>
-<h2 id="high-level-overview">High-Level Overview</h2>
-<pre><code class="highlight mermaid">flowchart TD
+  end</pre></div><figcaption class=mermaid-diagram__source><details><summary>Mermaid diagram source</summary><pre><code>flowchart TD
+  Hub([Hub])
+  Buffer0[\&#34;Buffer drop oldest&#34;/]
+  Buffer1[\&#34;Buffer1 drop oldest&#34;/]
+  Buffer2[\&#34;Buffer2 drop oldest&#34;/]
+  Buffer3[\&#34;Buffer3 drop oldest&#34;/]
+  Filter1[\&#34;File(Record = 111)&#34;/]
+  Filter2[\&#34;Workflow(Project = 222)&#34;/]
+  Filter3[\&#34;File(Project = 333)&#34;/]
+  Broadcast((Broadcast))
+  Client1(Client1)
+  Client2(Client2)
+  Client3(Client3)
+  Hub --&gt; Buffer0
+  subgraph Server
+    Buffer0 --&gt; Broadcast
+    Broadcast --&gt; Filter1 --&gt; Buffer1 --&gt; Observer1
+    Broadcast --&gt; Filter2 --&gt; Buffer2 --&gt; Observer2
+    Broadcast --&gt; Filter3 --&gt; Buffer3 --&gt; Observer3
+  end
+  subgraph Clients
+    Observer1 -.-&gt; Client1
+    Observer2 -.-&gt; Client2
+    Observer3 -.-&gt; Client3
+  end</code></pre></details></figcaption></figure><h2 id=high-level-overview>High-Level Overview<a hidden class=anchor aria-hidden=true href=#high-level-overview>#</a></h2><figure class=mermaid-diagram><div class=mermaid-diagram__canvas><pre class=mermaid>flowchart TD
   Pipe#a[[...Pipe...]]
   Pipe#b[[...Pipe...]]
   subgraph Hub
@@ -329,32 +86,52 @@ subscribers.</li>
   direction LR
   C2Subscribe((Start))
   C2Cancel((End))
-  Lag((&quot;❌&quot;))
-  C2Subscribe -.-&gt; C2Listen1 -- &quot;Poor Network&quot; ---&gt; Lag --&quot;Packet loss&quot;---&gt; C2Listen5 -.-&gt; C2Listen6 -.-&gt; C2Listen7 -.-&gt; C2Listen8 -.-&gt; C2Cancel
+  Lag((&#34;❌&#34;))
+  C2Subscribe -.-&gt; C2Listen1 -- &#34;Poor Network&#34; ---&gt; Lag --&#34;Packet loss&#34;---&gt; C2Listen5 -.-&gt; C2Listen6 -.-&gt; C2Listen7 -.-&gt; C2Listen8 -.-&gt; C2Cancel
   Event1 -.-&gt; C2Listen1
   Event5 -.-&gt; C2Listen5
   Event6 -.-&gt; C2Listen6
   Event7 -.-&gt; C2Listen7
   Event8 -.-&gt; C2Listen8
-  end</code></pre>
-<p>Clients should follow these steps:</p>
-<ul>
-<li>Upon entering the page, subscribe as necessary.</li>
-<li>After listening to the change event, debounce and re-request the
-list interface, and then render it.</li>
-<li>When leaving the page, cancel the subscription.</li>
-</ul>
-<p>Servers should follow these steps:</p>
-<ul>
-<li>Subscribe to push events based on the client's filter.</li>
-<li>When the client's backlog message becomes too heavy, delete the
-oldest message from the buffer.</li>
-<li>When the client cancels the subscription, the server should also
-cancel the broadcast to the client.</li>
-</ul>
-<h2 id="application-component-level-design-lld"><strong>Application /
-Component Level Design (LLD)</strong></h2>
-<pre><code class="highlight mermaid">flowchart LR
+  end</pre></div><figcaption class=mermaid-diagram__source><details><summary>Mermaid diagram source</summary><pre><code>flowchart TD
+  Pipe#a[[...Pipe...]]
+  Pipe#b[[...Pipe...]]
+  subgraph Hub
+  direction LR
+  Event1((Event1))
+	Event2((Event2))
+  Event3((Event3))
+  Event4((Event4))
+  Event5((Event5))
+  Event6((Event6))
+  Event7((Event7))
+  Event8((Event8))
+  Event1 -.-&gt; Event2 -.-&gt; Event3 -.-&gt; Event4 -.-&gt; Event5 -.-&gt; Event6 -.-&gt; Event7 -.-&gt; Event8
+  end
+	Pipe#a -.-&gt; Event1
+  Event8 -.-&gt; Pipe#b
+  subgraph Client1
+  direction LR
+  C1Subscribe((Start))
+  C1Cancel((End))
+  Event2 -.-&gt; C1Listen2
+  Event3 -.-&gt; C1Listen3
+  Event4 -.-&gt; C1Listen4
+  Event5 -.-&gt; C1Listen5
+  C1Subscribe -.-&gt; C1Listen2 -.-&gt; C1Listen3 -.-&gt; C1Listen4 -.-&gt; C1Listen5 -.-&gt; C1Cancel
+  end
+  subgraph Client2
+  direction LR
+  C2Subscribe((Start))
+  C2Cancel((End))
+  Lag((&#34;❌&#34;))
+  C2Subscribe -.-&gt; C2Listen1 -- &#34;Poor Network&#34; ---&gt; Lag --&#34;Packet loss&#34;---&gt; C2Listen5 -.-&gt; C2Listen6 -.-&gt; C2Listen7 -.-&gt; C2Listen8 -.-&gt; C2Cancel
+  Event1 -.-&gt; C2Listen1
+  Event5 -.-&gt; C2Listen5
+  Event6 -.-&gt; C2Listen6
+  Event7 -.-&gt; C2Listen7
+  Event8 -.-&gt; C2Listen8
+  end</code></pre></details></figcaption></figure><p>Clients should follow these steps:</p><ul><li>Upon entering the page, subscribe as necessary.</li><li>After listening to the change event, debounce and re-request the list interface, and then render it.</li><li>When leaving the page, cancel the subscription.</li></ul><p>Servers should follow these steps:</p><ul><li>Subscribe to push events based on the client&rsquo;s filter.</li><li>When the client&rsquo;s backlog message becomes too heavy, delete the oldest message from the buffer.</li><li>When the client cancels the subscription, the server should also cancel the broadcast to the client.</li></ul><h2 id=application--component-level-design-lld><strong>Application / Component Level Design (LLD)</strong><a hidden class=anchor aria-hidden=true href=#application--component-level-design-lld>#</a></h2><figure class=mermaid-diagram><div class=mermaid-diagram__canvas><pre class=mermaid>flowchart LR
   Server([Server])
   Client([Client: Web...])
   MQ[Kafka or other]
@@ -373,144 +150,32 @@ Component Level Design (LLD)</strong></h2>
   Broadcast -.-&gt; gRPC
   Broadcast -.-&gt; gRPC
   Broadcast -.-&gt; gRPC
-  Server --  &quot;if horizon scale is needed&quot; --&gt; Receiver
-  gRPC --Stream--&gt; Client</code></pre>
-<p>For a single-node server, a simple Hub can be implemented using an
-in-memory queue.</p>
-<p>For multi-node servers, an external Hub implementation such as Kafka,
-MQ, or Knative eventing should be considered. The broadcasting logic is
-no different from that of a single machine.</p>
-<h2 id="failure-modes"><strong>Failure Modes</strong></h2>
-<h3 id="fast-producer-slow-consumer">Fast Producer-Slow Consumer</h3>
-<p>This is a common scenario that requires special attention. The
-publish-subscribe mechanism for terminal clients cannot always expect
-clients to consume messages in real time. However, message continuity
-must be maximally guaranteed. Clients may access our products in an
-uncontrollable network environment, such as over 4G or poor Wi-Fi. Thus,
-the server message queue cannot become too backlogged. When a client's
-consumption rate cannot keep up with the server's production speed, this
-article recommends using a bounded <code>Buffer</code> with the
-<code>OverflowStrategy.DropOldest</code> strategy. This ensures that
-subscriptions between consumers are isolated, avoiding too many unpushed
-messages on the server (which could lead to potential memory leak
-risks).</p>
-<h1 id="alternative-design">Alternative Design</h1>
-<p><a
-target="_blank" rel="noopener" href="https://tanzu.vmware.com/content/blog/a-channel-based-ring-buffer-in-go">VMware
-has publish a very similar design in 2013, but use Go
-RingChannel</a></p>
-<h1 id="summary">Summary</h1>
-<p>This document proposes an event subscription mechanism to address the
-delay in updating content status caused by polling refresh. Clients can
-subscribe to events through any long connection protocol, and events
-will be filtered based on specified conditions. To avoid having too many
-unpushed messages on the server, a bounded buffer with the
-<code>OverflowStrategy.DropOldest</code> strategy is used.</p>
-<p>Implementing this in Reactive Streams is straightforward, but you can
-choose your preferred technology to do so.</p>
-
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/System-design/" rel="tag"># System design</a>
-              <a href="/tags/Reactive-stream/" rel="tag"># Reactive stream</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/" rel="prev" title="Implementing Version Management of File Trees in PostgreSQL">
-                  <i class="fa fa-chevron-left"></i> Implementing Version Management of File Trees in PostgreSQL
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2026/02/06/vibe-coding-one-year-reflection/" rel="next" title="明系魔法吟唱之1 -- Vibe Coding 一年实践后的冷思考">
-                  明系魔法吟唱之1 -- Vibe Coding 一年实践后的冷思考 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
-
-
-
-
-
-
-    
-  
-  <div class="comments">
-  <script src="https://utteranc.es/client.js" repo="mingyang91/mingyang91.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
-  </div>
-  
-  
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2026</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">ming yang</span>
-</div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
-  </div>
-
-    </div>
-  </footer>
-
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-  <div class="sidebar-dimmer"></div>
-  <div class="back-to-top" role="button" aria-label="Back to top">
-    <i class="fa fa-arrow-up fa-lg"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
-
-  
-
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
-  <script src="/js/third-party/tags/mermaid.js"></script>
-
-
-
-  
-
-
-
-
-  
-
-  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="/js/third-party/math/mathjax.js"></script>
-
-
-
-</body>
-</html>
+  Server --  &#34;if horizon scale is needed&#34; --&gt; Receiver
+  gRPC --Stream--&gt; Client</pre></div><figcaption class=mermaid-diagram__source><details><summary>Mermaid diagram source</summary><pre><code>flowchart LR
+  Server([Server])
+  Client([Client: Web...])
+  MQ[Kafka or other]
+  Broadcast((Broadcast))
+  subgraph ExternalHub
+    direction LR
+    Receiver --&gt; MQ --&gt; Sender
+  end
+  subgraph InMemoryHub
+    direction LR
+    Emit -.-&gt; OnEach
+  end
+  Server -.-&gt; Emit
+  Sender --&gt; Broadcast
+  OnEach -.-&gt; Broadcast
+  Broadcast -.-&gt; gRPC
+  Broadcast -.-&gt; gRPC
+  Broadcast -.-&gt; gRPC
+  Server --  &#34;if horizon scale is needed&#34; --&gt; Receiver
+  gRPC --Stream--&gt; Client</code></pre></details></figcaption></figure><p>For a single-node server, a simple Hub can be implemented using an in-memory queue.</p><p>For multi-node servers, an external Hub implementation such as Kafka, MQ, or Knative eventing should be considered. The broadcasting logic is no different from that of a single machine.</p><h2 id=failure-modes><strong>Failure Modes</strong><a hidden class=anchor aria-hidden=true href=#failure-modes>#</a></h2><h3 id=fast-producer-slow-consumer>Fast Producer-Slow Consumer<a hidden class=anchor aria-hidden=true href=#fast-producer-slow-consumer>#</a></h3><p>This is a common scenario that requires special attention. The publish-subscribe mechanism for terminal clients cannot always expect clients to consume messages in real time. However, message continuity must be maximally guaranteed. Clients may access our products in an uncontrollable network environment, such as over 4G or poor Wi-Fi. Thus, the server message queue cannot become too backlogged. When a client&rsquo;s consumption rate cannot keep up with the server&rsquo;s production speed, this article recommends using a bounded <code>Buffer</code> with the <code>OverflowStrategy.DropOldest</code> strategy. This ensures that subscriptions between consumers are isolated, avoiding too many unpushed messages on the server (which could lead to potential memory leak risks).</p><h1 id=alternative-design>Alternative Design<a hidden class=anchor aria-hidden=true href=#alternative-design>#</a></h1><p><a href=https://tanzu.vmware.com/content/blog/a-channel-based-ring-buffer-in-go>VMware has publish a very similar design in 2013, but use Go RingChannel</a></p><h1 id=summary>Summary<a hidden class=anchor aria-hidden=true href=#summary>#</a></h1><p>This document proposes an event subscription mechanism to address the delay in updating content status caused by polling refresh. Clients can subscribe to events through any long connection protocol, and events will be filtered based on specified conditions. To avoid having too many unpushed messages on the server, a bounded buffer with the <code>OverflowStrategy.DropOldest</code> strategy is used.</p><p>Implementing this in Reactive Streams is straightforward, but you can choose your preferred technology to do so.</p></div><footer class=post-footer><ul class=post-tags><li><a href=https://famer.me/tags/Reactive-stream/>Reactive Stream</a></li><li><a href=https://famer.me/tags/System-design/>System Design</a></li></ul><nav class=paginav><a class=prev href=https://famer.me/2026/02/06/vibe-coding-one-year-reflection/><span class=title>« Prev</span>
+<span>明系魔法吟唱之1 -- Vibe Coding 一年实践后的冷思考</span>
+</a><a class=next href=https://famer.me/2023/03/19/Implementing-Version-Management-of-File-Trees-in-PostgreSQL/><span class=title>Next »</span>
+<span>Implementing Version Management of File Trees in PostgreSQL</span></a></nav></footer><div class=giscus data-repo=mingyang91/mingyang91.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzNTI5MTk3Njc=" data-category=Announcements data-category-id=DIC_kwDOFQkg184DGhAs data-mapping=pathname data-strict=1 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-lang=en data-loading=lazy></div><noscript><p><a href=https://github.com/mingyang91/mingyang91.github.io/discussions>Join the discussion on GitHub.</a></p></noscript><script src=/js/comments.min.aef1fe8ba90ac402edbc97e3036bfb161aa06237532ab37439cfb1674b1a8ffd.js integrity="sha256-rvH+i6kKxALtvJfjA2v7FhqgYjdTKrN0Oc+xZ0saj/0=" crossorigin=anonymous defer></script></article></main><footer class=footer><span>&copy; 2026 <a href=https://famer.me/>My Space</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script defer src=/js/diagrams/vendor/mermaid.min.c73821cf5190e6ef470a956c91e0cfa8cb1da200f5cafb8c41b10ae77fb08be1bbd3ee89d401b42f671f8bd3c78c3588.js integrity=sha384-xzghz1GQ5u9HCpVskeDPqMsdogD1yvuMQbEK53+wi+G70+6J1AG0L2cfi9PHjDWI crossorigin=anonymous></script><script defer src=/js/diagrams/mermaid-init.min.104f16eaaf3da31e3c79b7542df7e3899a6fb1fd9e303020a639e33a1ce6d8f6d18876222945a54c455627b8a9fd7d33.js integrity=sha384-EE8W6q89ox48ebdULffjiZpvsf2eMDAgpjnjOhzm2PbRiHYiKUWlTEVWJ7ip/X0z crossorigin=anonymous></script><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Webhook on My Space</title><link>https://famer.me/tags/Webhook/</link><description>Recent content in Webhook on My Space</description><generator>Hugo</generator><language>en</language><lastBuildDate>Fri, 14 May 2021 09:42:33 +0800</lastBuildDate><atom:link href="https://famer.me/tags/Webhook/index.xml" rel="self" type="application/rss+xml"/><item><title>Webhook system design - base ZIO</title><link>https://famer.me/2021/05/14/Webhook-system-design-base-ZIO/</link><pubDate>Fri, 14 May 2021 09:42:33 +0800</pubDate><guid>https://famer.me/2021/05/14/Webhook-system-design-base-ZIO/</guid><description>&lt;h1 id="goals"&gt;Goals&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Sending event message by http post&lt;/li&gt;
+&lt;li&gt;Recording success/error response from third-party reply.&lt;/li&gt;
+&lt;li&gt;It should re-send message after third-party reply error or down.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="features"&gt;Features&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Delivery (HTTP POST)&lt;/li&gt;
+&lt;li&gt;Success / Error Record&lt;/li&gt;
+&lt;li&gt;Re-send in the case of third-party failure.&lt;/li&gt;
+&lt;li&gt;Run in multi-process environment (e.g. Kubernetes)&lt;/li&gt;
+&lt;li&gt;Metrics of backlog message&lt;/li&gt;
+&lt;li&gt;Policy of record automatic archive&lt;/li&gt;
+&lt;li&gt;Prevent sent too fequencly after massive event generated.(throttle)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="results"&gt;Results&lt;/h1&gt;</description></item></channel></rss>

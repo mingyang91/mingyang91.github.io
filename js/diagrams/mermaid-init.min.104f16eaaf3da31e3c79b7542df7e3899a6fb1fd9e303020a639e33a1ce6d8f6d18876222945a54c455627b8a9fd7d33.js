@@ -1,0 +1,1 @@
+(()=>{const e=document.querySelectorAll(".mermaid-diagram pre.mermaid");if(e.length===0)return;mermaid.initialize({startOnLoad:!1,securityLevel:"strict",theme:"neutral"}),mermaid.run({nodes:e}).catch(e=>{console.error("Mermaid could not render a diagram; its source remains available below.",e)})})()

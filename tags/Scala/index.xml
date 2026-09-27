@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Scala on My Space</title><link>https://famer.me/tags/Scala/</link><description>Recent content in Scala on My Space</description><generator>Hugo</generator><language>en</language><lastBuildDate>Wed, 11 Mar 2026 20:00:00 +0800</lastBuildDate><atom:link href="https://famer.me/tags/Scala/index.xml" rel="self" type="application/rss+xml"/><item><title>Ming's Spell Compendium #4 -- The Art of Whipping AI Grunts: FP's Great Comeback?</title><link>https://famer.me/2026/03/11/AI-native-coding-style-en/</link><pubDate>Wed, 11 Mar 2026 20:00:00 +0800</pubDate><guid>https://famer.me/2026/03/11/AI-native-coding-style-en/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;This is a cultural adaptation — not a literal translation — of the &lt;a href="https://famer.me/2026/03/11/AI-native-coding-style/"&gt;original Chinese article&lt;/a&gt;. Recurring coined terms: &lt;strong&gt;grunts&lt;/strong&gt; = AI agents doing the coding labor; &lt;strong&gt;boss&lt;/strong&gt; = the human; &lt;strong&gt;whip-iler&lt;/strong&gt; = a portmanteau of &amp;ldquo;whip&amp;rdquo; + &amp;ldquo;compiler&amp;rdquo; (the compiler that whips misbehaving grunts back in line).&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Previously on&amp;hellip;&lt;/strong&gt; &lt;a href="https://famer.me/2026/03/09/AI-and-Human-Whats-Next-en/"&gt;Ming&amp;rsquo;s Spell Compendium #3 &amp;ndash; AI Programming: The Next Chapter&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="times-have-changed"&gt;Times Have Changed&lt;/h1&gt;
+&lt;p&gt;Let&amp;rsquo;s be honest: in more and more projects, the primary author of the code is already AI. Your coworkers have quietly subscribed to Cursor pro plans or OpenAI&amp;rsquo;s Codex. They toss requirements at the AI every morning, then spend their valuable working hours scrolling Reddit, day-trading meme stocks, nursing their phones back to full charge, &lt;del&gt;and quietly tanking their own projects&lt;/del&gt;. The human role is shifting from &amp;ldquo;writing code&amp;rdquo; to &amp;ldquo;feeding PRDs to the AI, pretending to review AI code, occasionally deploying some good old workplace gaslighting (&amp;lsquo;You don&amp;rsquo;t want the job? There&amp;rsquo;s plenty of AI that do.&amp;rsquo;), and having the AI ghost-write your performance reviews and passive-aggressive emails.&amp;rdquo;&lt;/p&gt;</description></item><item><title>明系魔法吟唱之4 -- 精细化AI鞭策术：FP 的伟大复兴？</title><link>https://famer.me/2026/03/11/AI-native-coding-style/</link><pubDate>Wed, 11 Mar 2026 20:00:00 +0800</pubDate><guid>https://famer.me/2026/03/11/AI-native-coding-style/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;英文文化适配版：&lt;/strong&gt; &lt;a href="https://famer.me/2026/03/11/AI-native-coding-style-en/"&gt;AI-Native Coding Style (English cultural adaptation)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;书接上回：&lt;/strong&gt; &lt;a href="https://famer.me/2026/03/09/AI-and-Human-Whats-Next/"&gt;明系魔法吟唱之3 &amp;ndash; AI 编程的下一章&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="时代变了大人"&gt;时代变了，大人&lt;/h1&gt;
+&lt;p&gt;事实上越来越多的项目中，代码的主要作者已经是 AI 了，你身边的同事已经悄悄买了 glm coding plan 甚至中转站的 Codex 套餐，每天上班需求扔给 AI 后，自己则聚焦于：把尿喝白，把股炒红，把电充绿，&lt;del&gt;把事办黄&lt;/del&gt;。人类的角色正在从&amp;quot;写代码&amp;quot;转向&amp;quot;把产品经理的 PRD 扔给 AI，装模作样 Review AI 代码，适当的调用一下 pua skills（你不干有的是 AI 干。），以及让 AI 代写工作总结和回怼邮件&amp;quot;。&lt;/p&gt;</description></item><item><title>Rethink CDC system design</title><link>https://famer.me/2021/05/14/Rethink-CDC-design/</link><pubDate>Fri, 14 May 2021 12:07:42 +0800</pubDate><guid>https://famer.me/2021/05/14/Rethink-CDC-design/</guid><description/></item><item><title>Webhook system design - base ZIO</title><link>https://famer.me/2021/05/14/Webhook-system-design-base-ZIO/</link><pubDate>Fri, 14 May 2021 09:42:33 +0800</pubDate><guid>https://famer.me/2021/05/14/Webhook-system-design-base-ZIO/</guid><description>&lt;h1 id="goals"&gt;Goals&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Sending event message by http post&lt;/li&gt;
+&lt;li&gt;Recording success/error response from third-party reply.&lt;/li&gt;
+&lt;li&gt;It should re-send message after third-party reply error or down.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="features"&gt;Features&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Delivery (HTTP POST)&lt;/li&gt;
+&lt;li&gt;Success / Error Record&lt;/li&gt;
+&lt;li&gt;Re-send in the case of third-party failure.&lt;/li&gt;
+&lt;li&gt;Run in multi-process environment (e.g. Kubernetes)&lt;/li&gt;
+&lt;li&gt;Metrics of backlog message&lt;/li&gt;
+&lt;li&gt;Policy of record automatic archive&lt;/li&gt;
+&lt;li&gt;Prevent sent too fequencly after massive event generated.(throttle)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="results"&gt;Results&lt;/h1&gt;</description></item><item><title>After I migrated my legacy playframework project to zio, what I learned from it.</title><link>https://famer.me/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/</link><pubDate>Thu, 13 May 2021 18:37:55 +0800</pubDate><guid>https://famer.me/2021/05/13/After-I-migrated-my-legacy-playframework-project-to-zio-what-I-learned-from-it/</guid><description>&lt;ul&gt;
+&lt;li&gt;&lt;a href="#foreword"&gt;Foreword&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#what-is-r"&gt;What is &lt;code&gt;R&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#what-are-the-problems-caused-by-di-tools"&gt;What are the problems caused by DI tools?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#current-situation"&gt;Current Situation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#evolution-stage-1"&gt;Evolution Stage 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#evolution-stage-2"&gt;Evolution Stage 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#evolution-stage-3"&gt;Evolution Stage 3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#conclusion"&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#references"&gt;References&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="foreword"&gt;Foreword&lt;/h1&gt;
+&lt;p&gt;On April 17, 2020, I start a huge project to migrate the &lt;code&gt;Future[T]&lt;/code&gt; from legacy playframework project to &lt;code&gt;ZIO&lt;/code&gt;. Three months later, after tens of thousands of lines of code modification, the migration was a complete success. In September, I used this experience as the background to share in the Chinese Scala Meetup community with the title &lt;a href="https://www.slideshare.net/ssuser81d309/scala-meetup-248313493"&gt;&amp;ldquo;Introduction to ZIO&amp;rdquo;&lt;/a&gt;.
+In this share, I explained a fanatic imageation,
+在这次分享中，我展望了一个美好的愿景，借由 &lt;code&gt;ZIO&lt;/code&gt; 的类型参数 &lt;code&gt;R&lt;/code&gt; 提供的抽象能力来实现代码的可移植性，和提高可测试性。但想在遗留项目中实现这个愿景并不容易，主要挑战来自遗留项目的代码耦合，和开发者的思维惯性。如今，这个愿景已经达成。我会在这篇 Post 中与你分享我的进化之路。&lt;/p&gt;</description></item></channel></rss>
