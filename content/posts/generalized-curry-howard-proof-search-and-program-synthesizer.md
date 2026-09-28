@@ -381,7 +381,7 @@ structure Spec (claim : Task → Nat → Int → Option (Task × Token))
 
 这是一个有点长且坎坷的故事
 
-最开始，我尝试平滑路线。
+## 最开始，我尝试平滑路线。
 从生产 Scala 代码出发，对所有外部副作用（数据库、云服务）进行公理化建模，对使用到的三方库函数也做形式化翻译。
 生产代码继续写 Cats Effect，并设计了一套 annotation DSL，给业务代码辅助标记 refinement type，和 pre/post-condition。
 这样一来我可以自己写一个编译器（翻译器），解析 TASTy 的脱糖 Scala AST，然后生成合法的 stainless 语法。
@@ -395,20 +395,15 @@ Scala 中的 `IO[A]` 同时具有管理资源释放，取消和安全取消，�
 实验之前我本以为我的 Pure FP 是距离形式化明月最近的水边楼台，实验中却发现，`IO[A]` 的模型将可变状态隔离在系统之外，同时给验证带来额外复杂度。
 我的 `FVIO[A]` 模型必须扩展成 `FVIO[World, A]` 才能承载真实业务，而且 `World` 在每个 proofs 中并不相同。
 同时 Scala 一行代码至少 3-5 个 lambda 的特性也加剧了验证时间/空间的劣化。
-在验证时我需要假设被验证函数是立即求值的（或可以等效为立即求值），`FVIO[World, A] = StateM[S = World, A]`。
+在验证时我需要假设被验证函数是立即求值的（或可以等效为立即求值），`FVIO[World, A] = StateMonad[S = World, A]`。因此我甚至放弃了结构化并发，粗暴的在验证阶段假设 `f1 join f2` 操作是有先后顺序的。
 
-从生产 Scala 代码往 Stainless 翻译：还想继续写 Cats Effect，只给业务代码加 annotation，再从 TASTy 生成验证代码。很快就卡住了，进展特别慢。生产里的 `IO[A]` 带着库生态、取消、资源、并发和真的 repository；验证侧 `FVIO[World, A]` 则是另一套状态变换。翻译器能搬语法，没法替两边变出一套共同语义；Stainless 只能接住 Scala 的一部分，生产代码却还在往前长。
+到这里我的 FP 信仰已经开始产生了一些动摇，我坚守 FP 是为了什么？ ~~能装B？~~ 引用透明？如果形式化能带来最终极的引用透明，所有副作用在形式化中显现，我又何必在 Pure FP 的路上走到黑？
+因此我甚至做出了违背祖训的决定，彻底放弃 `IO[A]` 抽象，全面拥抱 Direct-style algebraic，使用基于 VirtualThread 的 Ox 重写后端系统。
 
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:58；发言者：My
-原话开始：
-刚进群的时候我的路线是从生产代码出发，对所有外部副作用（数据库、云服务）进行公理化建模，再对使用到的库函数也做等价的形式化翻译，但是进展非常缓慢，形式化是一个语言子集，永远追不上生产代码的进化速度
-原话结束。
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/evolution/my-thinking-timeline.md:17-23（非作者原话）
-编辑说明：路线判断来自原话；Cats Effect、TASTy 与 IO/FVIO 细节来自源码和会话审计，不是这句原话的逐字内容。
--->
+而以上这些还不是平滑路线阶段最棘手的困难，最大的困难是，生产使用了太多语言特性，而功能开发永远是生产先行，形式化只能在生产完成后顺便进行验证，如果生产引入了未覆盖形式化断言的库/框架，那么形式化检查会立即失败，且可以预见在实际需求交付压力下，形式化是一定会被牺牲的，可有可无的累赘。
+形式化就像是蜗牛在追赶永不停下脚步的生产系统猎豹，形式化门禁必须前置！
 
+## 后来我不再追赶
 后来我把方向倒过来：先写 Stainless 形式核心，再用 transpiler 生成生产 Scala。形式核心这回进了生产构建，但也没就此完事：transpiler 自己成了 TCB，JDBC store 还是 `@extern`，SQL 和并发 shell 也仍可能把越来越多业务接过去。
 
 <!--
