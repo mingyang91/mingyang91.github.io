@@ -489,10 +489,10 @@ Theorem 比语义索引更能帮助 Agent 快速定位到实际代码：从命�
 
 无奖竞猜，本文标题《民(科)用广义 Curry-Howard 证明搜索与程序合成器》指的是谁？
 
-0. A: 我
-1. B: Lean4
-2. C: 本文主张的工作流
-3. D: 理解并执行该工作流的 AI
+* A: 我
+* B: Lean4
+* C: 本文主张的工作流
+* D: 理解并执行该工作流的 AI
 
 ![Say My Name](/images/say-my-name.png)
 
