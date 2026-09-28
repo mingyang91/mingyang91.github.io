@@ -352,8 +352,8 @@ structure Spec (claim : Task → Nat → Int → Option (Task × Token))
 
 所以若要避免今天 AI 在编写形式化代码时的玩具化倾向，明确的工作流指导（agents.md）必不可少，人类也需要根据自己需求期望补充软件规格，以封堵 AI 的偷懒路径。
 
-# 7. 证明器之外，还有现实这一关
-
+# 7. 拟像与仿真
+![Simulacra and Simulation](/images/Simulacra and Simulation.webp)
 模型里推出一个 action，后面还有一堆现实问题：SQL 到底有没有提交，旧数据能不能升级，worker 有没有跑起来，供应商接不接受请求。模型里的 action theorem，不会替这些事报喜。
 
 <!--
