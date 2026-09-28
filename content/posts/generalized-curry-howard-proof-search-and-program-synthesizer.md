@@ -356,7 +356,7 @@ structure Spec (claim : Task → Nat → Int → Option (Task × Token))
 
 ![Simulacra and Simulation](/images/simulacra-and-simulation.webp)
 
-模型里推出一个 action，后面还有一堆现实问题：SQL 到底有没有提交，旧数据能不能升级，worker 有没有跑起来，供应商接不接受请求。模型里的 action theorem，不会替这些事报喜。
+理想化模型可以保证 action 一定发生，但真实世界并不总是如理想所愿：SQL 事务有没有成功提交，远程调用是否如期望般成功返回，下游 worker 有没有收到任务，供应商接不接受请求。模型里的 action theorem，不会替这些事报喜。
 
 <!--
 作者原话与出处（正文为整理或展开，并非逐字引述）：
