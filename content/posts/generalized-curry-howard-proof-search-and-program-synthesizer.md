@@ -493,7 +493,7 @@ Theorem 比语义索引更能帮助 Agent 快速定位到实际代码：从命�
 2. C: 本文主张的工作流
 3. D: 理解并执行该工作流的 AI
 
+![Say My Name](/images/say-my-name.png)
+
 # 勘误
 文中出现的所有 lean4 代码均为演示用途的伪代码，经过大幅缩减以适合嵌入到文章内，不是可以直接运行的代码。
-
-![Say My Name](/images/say-my-name.png)
