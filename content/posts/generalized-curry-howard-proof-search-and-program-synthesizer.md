@@ -1,5 +1,5 @@
 ---
-title: 明系魔法吟唱之6 -- 民(科)用广义 Curry-Howard 证明搜索与程序合成器
+title: （草稿中）明系魔法吟唱之6 -- 民(科)用广义 Curry-Howard 证明搜索与程序合成器
 date: "2026-08-20T16:18:37+08:00"
 tags:
   - AI
@@ -406,124 +406,43 @@ Scala 中的 `IO[A]` 同时具有管理资源释放，取消和安全取消，�
 给生产系统补形式化，就像是给运行中的列车追着铺铁轨，铺铁轨的永远追不上开列车的。形式化门禁必须前置！
 
 ## 后来我不再追赶
-我把方向倒过来：直接使用 Stainless 开发可以被形式化验证的代码，再用 transpiler 生成生产 Scala。当我需要 Ox 结构化并发能力，我必须先在 Stainless 提供相应的 `@opaque` `@extern` 形式化类型断言，然后生产代码替换为
-形式核心这回进了生产构建，但也没就此完事：transpiler 自己成了 TCB，JDBC store 还是 `@extern`，SQL 和并发 shell 也仍可能把越来越多业务接过去。
+我把方向倒过来：直接使用 Stainless 开发可以被形式化验证的代码，再用 transpiler 生成生产 Scala。当我需要 Ox 结构化并发能力，我必须先在 Stainless 提供相应的 `@opaque` `@extern` 形式化桥梁，然后才能被引入到生产代码中。
+这样一来除了最外层的进程初始化，HTTP Server 启动，和路由处理的胶水部分在生产 Scala 侧，从 Service 层开始，所有逻辑都使用 Stainless 直接开发。
 
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:64-66；发言者：My
-原话开始：
-后来我反过来，直接编写可以被形式化验证的代码，在生产运行这一形式化核心，依然是副作用公理化。
 
-但实际执行下来效果依然会逐渐偏离，agent 会频繁地偷懒，将越来越多的逻辑堆积到胶水层和公理层来逃避验证
-原话结束。
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/linewise-fm.md:7-36,44-50（非作者原话）
-编辑说明：transpiler、TCB、JDBC @extern 为源码审计事实。
--->
+当然，数据库和外部 SDK 能力也留在 Scala 侧。这回形式化终于进了生产构建。
+但 AI 依然没让我省心，我发现了更多的 AI 逃逸路径：
+1. 原本应该很薄的 HTTP 胶水层，本应纯转发函数调用的路由，被 AI 越写越厚，甚至在路由函数中直接读写了缓存数据库。
+2. Scala 侧的外部能力也在变厚，原本是普通的写入对象存储逻辑，也只声明了这一种副作用，AI 却偷偷地把写入消息队列也混了进去。
 
-MoonBit 那次 snapshot→patch 实验让我确认了一件事：同一份纯核心可以既执行又接受证明，这条路值得继续追。store 只读 snapshot、再应用 patch。只是多语句事务、并发和支付事实没有一起进来，仍然留在外面。
+以上逃逸路径的共同点在于，AI 选择了能通过验证最近的路，而不是在 Stainless 侧实现并验证副作用。
+
+我甚至还尝试了 Flux-rs 和 MoonBit，可惜后天加入形式化支持的语言都有和 Stainless 一样的缺陷，形式化只能覆盖语言的子集，稍不注意就生成出来无法验证的代码。且限制太多，以至于 AI 处处碰壁。
 
 ## 革命不彻底，就是彻底不革命
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/fm-ledger.md:3-46（非作者原话）
-编辑说明：MoonBit 的可执行/可证明核心与生产边界来自仓库审计，未检得对应作者逐字原话。
--->
 
-后来我改成直接用 Lean 4 写生产业务核心，少掉一层跨语言翻译。数据库和外部世界可没跟着消失，边界反而更得说清楚。要注意，这说的是四个互相独立、没有共同 Git 血缘的仓库里，设计路线一路变过来，不是一个仓库从头长成现在这样。
+AI 为什么总是逃逸？因为始终有多条逃逸路线摆在 AI 眼前。
+那我干脆破釜沉舟，彻底转向 Lean4，不给 AI 逃逸的机会。总强得过做个监督孩子写作业的老母亲，频繁检查，频繁纠正，频繁心态崩溃。
 
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:72；发言者：My
-原话开始：
-现在我直接一步到位，写 lean4 上生产
-原话结束。
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:76；发言者：My
-原话开始：
-已经上测试环境，开始和同事们联调了，将作为我平台的下一个版本，替换现在生产系统
-原话结束。
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-07/group-chat-2026-07-03.md:80-84；发言者：My
-原话开始：
-实话实说，还没发布生产，终局未定。
+改成直接用 Lean 4 写生产代码后，我至少得到了以下几点收益
+1. 少掉一层跨语言翻译
+2. 不再需要纠结可变/不可变
+3. 不再为抽象世界模型发愁
+4. Lean4 已经被形式化过的 StdLib，和贫瘠的生态。在此刻变成了优势，AI 失去了大部分逃逸路径
 
-所以还是玩具实验
+最后，落地的是我第四节讲过的路线
 
-只是我自己觉得路线越来越清晰，落地可能性越来越高
-原话结束。
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/evolution/evidence-policy.md:9-10（非作者原话）
-编辑说明：这段原话发生时尚未发布生产；正文最终状态由后来的源码与运行材料支持，四仓库无共同 Git 血缘为审计事实。
--->
+# 9. 慢就是快
 
-我绕了几条路，想做的事还是那件事；来回变的是怎么把形式核心接进生产。
+全面形式化以后，同事抱怨得最多的就是慢：CI 慢，Agent 开发也慢。以前一天能迭代仨版本，现在一个功能有时要跑一天，甚至两三天。
 
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-04/group-chat-2026-08-17.md:44；发言者：My
-原话开始：
-但说实话，它没有我幻想中那么完美，也和我半年前幻想的形态有差别
-原话结束。
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-04/group-chat-2026-08-17.md:48；发言者：My
-原话开始：
-即便如此我也很满意这个效果了
-原话结束。
-编辑说明：“没有换目的地，换的是地图”是编辑概括，不是原话。
--->
-
-# 9. 慢下来的究竟是什么
-
-代价也摆在那儿。同事抱怨得最多的就是慢：CI 慢，Agent 开发也慢。以前一天能迭代几个版本，现在一个功能有时要跑一天，甚至两三天。
-
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:281；发言者：My
-原话开始：
-同事们唯一抱怨的是太慢了
-原话结束。
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:289；发言者：My
-原话开始：
-跑 CI 也慢，agent 开发也慢
-原话结束。
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:297；发言者：My
-原话开始：
-过去一天能迭代仨版本，现在经常一个功能跑一天甚至 2-3 天ai 才能跑完
-原话结束。
--->
-
-但这不能拿来算形式化把开发拖慢了几倍。前后做的功能不一样，质量门槛不一样，系统阶段也不一样。我只能说现在一个功能要等更久；团队还得同时啃 Lean 模型、PostgreSQL、Rust/native 边界和各种 gate。
-
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:297；发言者：My
-原话开始：
-过去一天能迭代仨版本，现在经常一个功能跑一天甚至 2-3 天ai 才能跑完
-原话结束。
-编辑说明：功能规模与条件不同、不能据此推出通用倍率，是编辑对这条体感比较的限制。
--->
+但这不等于形式化把交付拖慢了几倍。前后做的功能不一样，质量门槛不一样，系统规模也不一样。慢下来的是每个功能 AI 的开发速度，但部署交付后几乎没有 bug，也不会破坏掉已有功能，这反而给整个产品省下了大量擦屁股的时间。而且未来继续进行需求变更时，AI 面对形式化定理描述的业务架构，远远好过模棱两可的，存在过时信息的自然语言 spec，甚至说不清哪个功能还有什么用的屎山代码仓库。
 
 这次复盘用了 16 个只读扫描器，按日期看了本机 183 个 OMP 顶层 session；同一会话里的 subagent、fork 和 artifact 不另算。剔除空会话和无关任务后，132 个与项目实质相关，其中 62 个实际读过、改过或推理过 theorem、invariant、axiom、verified slice 或 verification gate。
 
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/session-scans/omp-sessions.md:5-7（非作者原话）
-编辑说明：扫描器数量、会话计数及去重口径是会话审计结果，不是作者逐字原话。
--->
-
 Theorem 不会让 Agent 看一眼就不用读代码。更实际的用处像个语义索引：从命题找到业务决定在哪儿，改 priority、identity 或 retry 时知道哪些性质不能丢，再去翻 Repo、SQL、Rust、前端和日志。会话里能看到的是这些约束被找出来、用上了；没有同任务的对照，不能说因此少花了时间或 token。
 
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/session-scans/omp-sessions.md:11-25,47（非作者原话）
-编辑说明：语义索引与 priority/identity/retry 的收益来自会话复盘归纳，不是作者逐字原话。正文将收益限定为约束的实际使用，不作耗时或 token 开销的比较。
--->
-
 别把所有绿灯都算成 theorem 的功劳。领域类型挡非法输入，Lean 编译器查类型和证明，axiom allowlist 挡没登记的信任，真实 PostgreSQL gate 能抓模型和 SQL 对不上的地方。都叫 checker，干的可不是同一件事。
-
-<!--
-段落来源说明（非作者逐字原话）：
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/session-scans/omp-sessions.md:11-25（非作者原话）
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:46-52（非作者原话）
-编辑说明：不同 checker 的责任划分是编辑技术归纳，非作者逐字原话。
--->
 
 我更看重的，是这些约束能帮一个没有可靠长期记忆的 Agent 保住软件的核心形状：哪些状态合法，模型里什么条件下必须产生什么 action，哪些业务承诺不能忘。不是今天有几个 service、文件放在哪个目录。自然语言还得讲清为什么；已经写成定理的部分，机器可以反复检查，不必每个 session 都从头猜。
 
