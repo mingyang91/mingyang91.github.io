@@ -354,7 +354,7 @@ structure Spec (claim : Task → Nat → Int → Option (Task × Token))
 
 # 7. 拟像与仿真
 
-![Simulacra and Simulation](/images/Simulacra and Simulation.webp)
+![Simulacra and Simulation](/images/simulacra-and-simulation.webp)
 
 模型里推出一个 action，后面还有一堆现实问题：SQL 到底有没有提交，旧数据能不能升级，worker 有没有跑起来，供应商接不接受请求。模型里的 action theorem，不会替这些事报喜。
 
