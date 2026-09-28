@@ -375,11 +375,29 @@ structure Spec (claim : Task → Nat → Int → Option (Task × Token))
 第五篇文章中我对测试的预言，在这三个月验证下来基本上是成立的，且实战经验更细化了测试的分工与组织。
 纯粹的单测，我 lean 项目里已经很少需要写了，只有系统接口、PG 接口这些交界的地方需要集成测试，业务相关函数模块都不用再写一遍单测。
 
-在符号化的形式模型进入真实的复杂世界之前，仿真测试（differential/deviation check）的重要性不可替代。
+在基于符号的形式模型进入真实的复杂世界之前，仿真测试的重要性不可替代。
 
-# 8. 我为什么绕了这么远
+# 8. 革命不是请客吃饭
 
-我最早那条路，是从生产 Scala 往 Stainless 搬：还想继续写 Cats Effect，只给业务代码加 annotation，再从 TASTy 生成验证代码。很快就卡住了，进展特别慢。生产里的 `IO[A]` 带着库生态、取消、资源、并发和真的 repository；验证侧 `FVIO[World, A]` 则是另一套状态变换。翻译器能搬语法，没法替两边变出一套共同语义；Stainless 只能接住 Scala 的一部分，生产代码却还在往前长。
+这是一个有点长且坎坷的故事
+
+最开始，我尝试平滑路线。
+从生产 Scala 代码出发，对所有外部副作用（数据库、云服务）进行公理化建模，对使用到的三方库函数也做形式化翻译。
+生产代码继续写 Cats Effect，并设计了一套 annotation DSL，给业务代码辅助标记 refinement type，和 pre/post-condition。
+这样一来我可以自己写一个编译器（翻译器），解析 TASTy 的脱糖 Scala AST，然后生成合法的 stainless 语法。
+但是进展非常缓慢，形式化是一个语言子集，永远追不上生产代码的进化速度。并且业务系统中使用到的高级编程技巧，在这一阶段成了巨大的阻碍。
+
+Scala 中的 `IO[A]` 同时具有管理资源释放，取消和安全取消，结构化并发等能力，常用的 `for`-comprehension 语法糖在 TASTy 被翻译成 nested `flatMap` 。
+所以我自己写了一个 `FVIO[A]` 来作为验证侧的模拟 `IO[A]`。
+
+我本以为我们大量应用 Tagless final 在这一阶段会方便形式化翻译器的编写，实践中却发现在形式化面前，Tagless final 不如直接函数传参，DSL 为我的翻译工作带来了非常大的不必要复杂度，Tagless final 在 stainless 中必须被翻译器抹掉。
+
+实验之前我本以为我的 Pure FP 是距离形式化明月最近的水边楼台，实验中却发现，`IO[A]` 的模型将可变状态隔离在系统之外，同时给验证带来额外复杂度。
+我的 `FVIO[A]` 模型必须扩展成 `FVIO[World, A]` 才能承载真实业务，而且 `World` 在每个 proofs 中并不相同。
+同时 Scala 一行代码至少 3-5 个 lambda 的特性也加剧了验证时间/空间的劣化。
+在验证时我需要假设被验证函数是立即求值的（或可以等效为立即求值），`FVIO[World, A] = StateM[S = World, A]`。
+
+从生产 Scala 代码往 Stainless 翻译：还想继续写 Cats Effect，只给业务代码加 annotation，再从 TASTy 生成验证代码。很快就卡住了，进展特别慢。生产里的 `IO[A]` 带着库生态、取消、资源、并发和真的 repository；验证侧 `FVIO[World, A]` 则是另一套状态变换。翻译器能搬语法，没法替两边变出一套共同语义；Stainless 只能接住 Scala 的一部分，生产代码却还在往前长。
 
 <!--
 作者原话与出处（正文为整理或展开，并非逐字引述）：
