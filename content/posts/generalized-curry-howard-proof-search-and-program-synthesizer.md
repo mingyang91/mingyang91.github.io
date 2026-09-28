@@ -356,32 +356,21 @@ structure Spec (claim : Task → Nat → Int → Option (Task × Token))
 
 ![Simulacra and Simulation](/images/simulacra-and-simulation.webp)
 
-理想化模型可以保证 action 一定发生，但真实世界并不总是如理想所愿：SQL 事务有没有成功提交，远程调用是否如期望般成功返回，下游 worker 有没有收到任务，供应商接不接受请求。模型里的 action theorem，不会替这些事报喜。
+验证模型能保证 action 必定会按逻辑执行，却无法保证 action 执行后对现实世界的影响是符合我们期望的。因为现实世界的复杂无法穷尽，所以验证并不能完全替代测试。
+一个退款功能，想当然的觉得调用了支付网关 API，资金就必然到账。但现实中：
+* 支付 SDK 是否使用了正确的 secret key 和签名算法
+* 是否填入正确参数，序列化协议与网关要求一致
+* 收款账户是否被禁用
+* 付款账户余额是否充足，是否预留足够的渠道手续费
+* 转账附加信息中包含特殊字符甚至黄赌暴恐
+等等，这些都是形式模型无法覆盖的。
 
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:128；发言者：My
-原话开始：
-比如说远程调用，本身就是不透明、不可验证的。
-原话结束。
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:136；发言者：My
-原话开始：
-数据库 CRUD 也是不能验证的，只能对数据库建模。
-原话结束。
-编辑说明：正文将原话收紧到当前模型与外部事实的边界；SQL/worker/供应商各项失败是编辑举例，不泛称数据库 CRUD 原则上不可验证。
--->
+这是一个极端的例子，对这个外部复杂系统进行完整的黑盒建模，是一件高投入，收益有限的工作。毕竟短信提供商，邮件提供商，乃至支付网关都是可以替换的。
+但数据库，缓存，文件系统，对象存储等重要组件，实现虽然复杂，大部分行为却可以被抽象为 `List/Map` 模型上的操作，开发者和 AI 都早已习惯于为这些组件编写集成测试以保证常用路径的通畅性，作为从模拟到真实世界的中间节点，仿真测试的重要性不言而喻。
 
-所以我形式化以后，还加了一层 differential/deviation check，内存模型和真实 PostgreSQL 跑同一组操作，再对一对 verdict 和能观察到的状态。不然 SQL、decoder、mapping 跑偏了，我可能验证的是一套假的程序逻辑。这也是集成测试，只跑有限的输入和操作序列，不是 PostgreSQL 和模型之间的完整 refinement proof。CAS、事务、锁、RLS、回滚还得在真数据库上查，sidecar、wire 和部署也各有自己的 contract 与验收检查。
+所以形式化检查通过后，我还加了一层 differential/deviation check，内存模型和真实 PostgreSQL 跑同一组操作，再对一对 verdict 和能观察到的状态。不然 SQL、decoder、mapping 跑偏了，我可能验证的是一套假的程序逻辑。虽然是集成测试，只跑有限的输入和操作序列，但也能部分作为 PostgreSQL 和模型之间的 refinement proof。
 
-<!--
-作者原话与出处（正文为整理或展开，并非逐字引述）：
-来源：materials/generalized-curry-howard-proof-search-and-program-synthesizer/segment-14/group-chat-2026-08-24.md:148；发言者：My
-原话开始：
-我现在形式化以后我还会加一层 deviation check，防止数据库模型和我验证的内存模型不一致，导致验证了假的程序逻辑。因为要同时跑内存 mock 模型和真实 Postgres，所以也是一种集成测试吧。
-原话结束。
-核查材料：materials/generalized-curry-howard-proof-search-and-program-synthesizer/project-scans/vision-lab-platform-v2.md:35-52（非作者原话）
-编辑说明：有限生成器、有限序列及非完整 refinement proof 的边界为源码审计/编辑补充。
--->
+并且支付网关也值得进行一次类似的仿真实验，大部分支付提供商都提供了测网环境，集成测试能在产品部署前暴露出更多问题，其中偏差检查部分也能暴露出对支付网关建模时遗漏的特性，提醒开发者需要补充到形式模型中。
 
 这次撞墙的不是 Lean，是 migration。生产服务没停，停过几次的是 dev：schema 当时没按长期在线演化来设计，新旧数据结构直接硬着变，旧数据也不会跟着新类型一起重生。后来才把迁移拆成 `expand → backfill → contract`，再补历史数据 preflight、可重入回填、最终不变量检查和失败回滚。
 
