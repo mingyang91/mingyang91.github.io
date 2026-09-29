@@ -230,40 +230,11 @@ Level 3 在 Scala 生态中已经有工具支撑，EPFL 的 [Stainless](https://
 
 最终，AI 不从自然语言文字中，也不从屎山代码里推理什么是当前正确的行为。
 
-当然，形式化无法将主人公从虚构故事中解救出来，究其根本原因，是不合理的交付时间安排，研发话语权弱势，以及 ld 的不作为。但形式化除了能长期维持软件形状外，还能给这个项目至少 3 次机会以避免发生事故：
+形式化不能替小明争取工期，也不能替老板决定哪些用户必须实名认证。它能帮助保留下来的，是那些已经确认、后续修改仍然需要满足的业务规则。
 
-## 1. 团队版上线时，就应该记录下，团队成员消耗的额度，由主账号结算。
-```lean
-def TeamAccessContract {User Org : Type}
-    (entitled : AccessState User Org → User → Time → Bool) : Prop :=
-  ∀ s user org now,
-    s.activeMember user org → s.orgEntitled org now →
-    entitled s user now = true
-```
+比如，个人套餐到期，不代表组织授予的使用权益也失效。后来增加“清理未实名的非订阅账户”这个需求时，AI 就更容易发现并提醒人类确认：这里的“非订阅”，指的是没有个人套餐，还是没有任何组织关系？
 
-这里检查实际的权益判定函数 `entitled`。只要成员关系和组织权益仍然有效，账户就是有人罩着的。
-
-## 2. 增加强制实名认证时，AI 可以提醒开发者：本次需求变更假设的个人账户模型，与系统真实运作的账户模型存在理解偏差。
-AI 通过分析定理和约束得出确定结论，而不是从代码和自然语言文档中推理。
- ```lean
-example (orgEntitled personalEntitled canUse : Prop)
-    (old : orgEntitled → canUse)
-    (member : orgEntitled) (noPersonal : ¬ personalEntitled) :
-    ¬ (canUse → personalEntitled) :=
-  fun assumed => noPersonal (assumed (old member))
- ```
-
-## 3. 账户清理时，要写下“个人没续费，不代表整个账户可以删”这个约束。
-
-即使有人绕过到期处理，直接按个人套餐筛选要删除的账户，最后动手删除时也还有一次机会：只要账户仍有有效的组织权益，就不能仅仅因为个人试用到期而把它放进删除名单。
-
-```lean
-def CleanupContract {User Org : Type}
-    (cleanup : AccessState User Org → Time → List User) : Prop :=
-  ∀ s now user org,
-    s.activeMember user org → s.orgEntitled org now →
-    user ∉ cleanup s now
-```
+如果我们把组织授权对应的权益规则写进规格，并要求新的判定和清理逻辑继续满足它，AI 就不能只按这次需求写完代码、补完测试便交差。新旧规则若有冲突，要么修正对新需求的理解或实现，要么明确修改旧规则。形式化不替人做这个业务决定，但可以让已经写进规格的规则成为修改时必须面对的约束，而不是等事故发生，再从 spec 里考古。
 
 这样一来，更多错误可以被拦截在开发阶段，老板岁月静好，开发负重前行。
 ![代价是什么](/images/和平的代价.jpeg)
@@ -320,7 +291,7 @@ structure WeakSpec (amount : Nat) (submit settle : Step) : Prop where
 
 最终，由经过严格验证的 Lean 代码来驱动和调度所有组件。
 
-# 5. 无孔不入
+# 5. 无孔不入的腐化
 
 刚才退款到账的例子中，失败路径写得挺像那么回事：如果退款申请失败，用户余额不会增加，订单状态不会改变。
 那我所有请求都返回退款失败，不就完了？数据库一行不动，失败后置条件全都满足。唯一的问题是，谁也无法退款。因为规格没说，什么条件下才能判定退款成功。
