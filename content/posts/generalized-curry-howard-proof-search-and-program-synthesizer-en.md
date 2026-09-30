@@ -23,17 +23,17 @@ Meanwhile, the underlying models get smarter by the week. Benchmark questions ca
 
 On one side, coding agents keep setting records. AGI has arrived. Again. And again. The back-to-back “nuclear” breakthroughs have blasted me into my chair so hard I can no longer move. Lab C has just pushed the known lower bound on the proportion of Riemann zeta zeros on the critical line to 67.2%; Lab O has cracked Navier–Stokes. On the other side, projects maintained by AI over the long haul keep turning to shit. More code, more regressions. The intelligence that works miracles on century-old mathematical problems seems to do surprisingly little for the upkeep of ordinary application software. What, is a CRUD app harder than the Riemann hypothesis? Scatter some grain over a keyboard and a chicken could write one.
 
-![“I don't care what you think. I care what I think.”](/images/我不要你觉得，我要我觉得.jpg)
+![A still from The Mandalorian captioned: “I have spoken.”](/images/mandalorian-i-have-spoken-en.webp)
 
-*“I don't care what you think. I care what I think.”*
+*“I have spoken.” Still from [The Mandalorian, via StarWars.com](https://www.starwars.com/news/20-favorite-quotes-the-mandalorian-season-one).*
 
 So here's my outrageous claim: AI has become much better at doing research, but it has not become much better at building complex systems.
 
 # 1. So Far, Only the Crackpot Has Noticed[^3]
 
-![“Only Ming has figured it out: the cost of applying formal methods keeps falling.”](/images/pegasus.png)
+![A Spider-Man (2002) still captioned: “I'm something of a scientist myself.”](/images/spiderman-scientist-en.webp)
 
-*“Only Ming has figured it out: the cost of applying formal methods keeps falling.”*
+*Formal methods are becoming accessible to ordinary developers. Still from [Spider-Man (2002)](https://en.meming.world/wiki/You_know,_I%27m_something_of_a_scientist_myself).*
 
 Formal methods used to live behind glass, reserved for the hearts of critical systems, aerospace, and similarly rarefied work.
 
@@ -518,6 +518,8 @@ Hongbo Zhang and Liang Wenfeng: please make this collaboration happen.
 
 ![Two reference portraits beside a combined JoJo-style portrait.](/images/jojo-duo-comparison.png)
 
+*A hoped-for collaboration between Hongbo Zhang (MoonBit) and Liang Wenfeng (DeepSeek): language design meets model training.*
+
 A language for AI shouldn't merely make code easier for AI to generate. Optimizing for a local pass and the smallest token count may actively harm engineering quality. Language design shouldn't bend to the model's current limitations.
 
 My view is the opposite. If the same money buys smarter models over time, we should demand better code from them. Spare intelligence, or computation, ought to become software quality. I think we've all felt the diminishing returns: if a billion tokens can produce a set of features, pouring in ten billion doesn't give you twice the functionality or half the bugs.
@@ -541,7 +543,7 @@ Who, or what, is the “Generalized Curry–Howard Proof Searcher and Program Sy
 * C: The workflow proposed in this article
 * D: The AI that understands and follows that workflow
 
-![“Say my name.” “A generalized Curry–Howard proof searcher and program synthesizer.” “You're goddamn right.”](/images/say-my-name.png)
+![“Say my name.” “A generalized Curry–Howard proof searcher and program synthesizer (Crackpotizen Edition).” “You're goddamn right.”](/images/say-my-name-en.webp)
 
 *“Say my name.” “A generalized Curry–Howard proof searcher and program synthesizer, Crackpotizen edition.” “You're goddamn right.”*
 
