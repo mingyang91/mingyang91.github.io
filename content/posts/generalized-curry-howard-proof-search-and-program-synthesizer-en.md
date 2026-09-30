@@ -65,15 +65,15 @@ A fictional story.
 
 ## The FDE Department
 
-> **Lead:** Ming! Ming! Mr. Zhao's clients can't log in! Find out what's going on!
+> **Lead:** Ming! Ming! Brad from Sales says his clients can't log in! Find out what's going on!
 >
 > **Ming:** ...Let me check...
 >
-> **Lead:** Restore access first! Investigate later! Zhao and the boss are still at the client's office. We cannot afford another problem!
+> **Lead:** Restore access first! Investigate later! Brad and the boss are still at the client's office. We cannot afford another problem!
 >
 > **Ming:** These accounts hadn't completed identity verification, and their free trial allowances had expired. The cleanup job deleted them last night.
 >
-> **Lead:** What? Why? Aren't they Zhao's enterprise clients?
+> **Lead:** What? Why? Aren't they Brad's enterprise clients?
 >
 > **Ming:** Product added identity verification last month.  
 > We had fewer than 3,000 accounts registered by actual people. The other 400,000-plus were bots farming signup bonuses.  
@@ -90,7 +90,7 @@ A fictional story.
 
 ## The Next Day's Blameless Postmortem, Now with Blame
 
-> **Mr. Zhao:** *(Opens with the carefully casual tone of someone about to stick a knife into engineering.)*  
+> **Brad:** *(Opens with the carefully casual tone of someone about to stick a knife into engineering.)*  
 > Yesterday, the boss and I were at the client's office to demo the custom features. It had taken ages to get time with their group's VP.  
 > We were hoping to sign next quarter's contract while we were there. I'd just finished assuring everyone that our engineers were excellent and the platform was rock solid.  
 > Then two of their people couldn't log in. I was sweating bullets.  
@@ -148,7 +148,7 @@ A fictional story.
 >
 > **Ming:** “Enterprise” is what you call it in conversation. The system distinguishes Team, Enterprise, and International Enterprise.  
 > Leaving International Enterprise aside, nobody has ever actually used the Enterprise tier.  
-> This incident affected Zhao's client. For historical reasons, three of their departments have three separate Team subscriptions. Only HR was hit, because its members had joined through external-collaborator invitations and all used number-based QQ email addresses.
+> This incident affected Brad's client. For historical reasons, three of their departments have three separate Team subscriptions. Only HR was hit, because its members had joined through external-collaborator invitations and all used number-based QQ email addresses.
 >
 > **Lead:** But they were invited. How did they become registered users?
 >
