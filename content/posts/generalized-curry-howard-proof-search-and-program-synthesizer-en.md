@@ -526,7 +526,7 @@ My view is the opposite. If the same money buys smarter models over time, we sho
 
 But what if we poured those tokens into formal verification?
 
-More importantly, the barrier to using formal methods has already fallen. You don't need a PhD. Ordinary application developers who have never formally studied Lean, including people from vocational colleges and coding bootcamps, can use AI to develop and maintain formally verified software.
+With AI, even developers with little formal CS training can build and maintain formally verified software.
 
 Formal methods used to belong to critical systems. Sometimes even those projects verified only an extracted core model while writing the actual production code in an ordinary implementation language. AI has lowered the cost enough that applications of all kinds can now receive some degree of formal verification. No caste system: rocket flight control or a CRUD app a chicken could write by pecking at a keyboard.
 
